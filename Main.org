@@ -1,0 +1,1898 @@
+#+TITLE:        Ordered structure of GIs
+#+AUTHOR:       Jean-Sauveur Ay \and Mohamed Hilal
+#+DATE:         UMR CESAER, AgroSup Dijon, INRA, Univ. Bourgogne Franche Comté
+#+OPTIONS:      LaTeX:t tags:nil toc:nil H:5
+#+LaTeX_CLASS:  ManueStat
+#+LANGUAGE:     en
+#+STARTUP:      hideblocks
+#+DRAWERS:      PROPERTIES BABEL BIND LATEX MACRO
+:BABEL:
+#+PROPERTY:     session *R*
+#+PROPERTY:     exports both
+#+PROPERTY:     eval no
+:END:
+:BIND:
+#+BIND:         org-latex-image-default-width ""
+#+BIND:         org-latex-tables-booktabs t
+:END:
+:LATEX:
+#+LaTex_CLASS:  ManueStat
+#+LaTeX_HEADER: \parindent 20pt \parskip 1ex  
+#+COLUMNS:      %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+LaTeX_HEADER: \usepackage[utf8]{inputenc} \usepackage[flushleft]{threeparttable}\renewcommand{\baselinestretch}{1.50} \newcommand\crule[3][black]{\textcolor{#1}{\rule{#2}{#3}}}
+#+LaTeX_HEADER: \usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, subfig,pdflscape, txfonts, rotfloat}
+#+LaTeX_HEADER: \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric, decorations.pathreplacing,decorations.pathmorphing,shapes, matrix,shapes.symbols}
+#+LaTeX_HEADER: \newcolumntype{Y}{>{\raggedleft\arraybackslash}X} \usepackage{caption} \captionsetup{font={stretch=.7}, position=top} \newcommand{\indep}{\;\rotatebox[origin=c]{90}{$\models$}\;}
+#+LaTeX_HEADER: \newtheorem*{mydef*}{Definition} \newtheorem*{myrem*}{Remark}
+#+LaTeX_HEADER: \newtheorem{mydef}{Definition}[section]  \newcommand{\mydefautorefname}{Definition}
+#+LaTeX_HEADER: \newtheorem{myhyp}{Assumption}[section]  \newcommand{\myhypautorefname}{Assumption} 
+#+LaTeX_HEADER: \newtheorem{myprp}{Proposition}[section] \newcommand{\myintautorefname}{Proposition}
+#+LaTeX_HEADER: \newtheorem{mycor}{Corollary}[section]   \newcommand{\mycorautorefname}{Corollary}
+#+LaTeX_HEADER: \newtheorem{myrem}{Remark}[section]   \newcommand{\myremautorefname}{Remark}
+:END:
+:MACRO:
+#+MACRO:         ffc @@latex: \superfullcite{$1}@@
+#+MACRO:         flc @@latex: \alert{\ding{220}}@@
+:END:
+
+https://stats.stackexchange.com/questions/97582/linear-mixed-effect-model-vs-ordered-probit-vs-ordered-logit-with-ordinal-resp?rq=1
+http://dwoll.de/rexrepos/posts/regressionOrdinal.html
+
+* Questions / ideas
+
+  - latent structure
+  - constant thresholds (vs /communes/, random)
+  - for the marginal effects of the ordered models, use quantile
+    values in abscissa (to represent better the number of plot behind)
+    and plot confidence interval around prediction lines.
+  - About the ventilation of explanatory variables between the latent
+    quality and impacting thresholds, we can use specification tests
+    as in PShi00 or explaining that the latent is intrinsic quality
+    and the threshold is arbitrary.
+  - The endogeneity is about the size or the shape of parcels, but not
+    the pedoclimatic variables. The endogeneity of the size/ shape of
+    parcel can be due both to simultaneity and omitted land quality
+    effects. Both seems to be intuitively treated.
+
+* Analysis
+** Data shaping
+*** Parcel data
+
+    NOTE : l'IDU est ici l'identifiant unique parcellaire, composé des champs :
+    - CODCOM : code commune sur 5 caractères (ex 56355)
+    - PREFIXE : préfixe de section sur 3 caractères (par défaut 000):
+    suite à fusion de communes
+    - SECTION : identifiant section cadastrale sur 2 caractères (ex AB)
+    - NUMPARC : numéro de parcelle sur 4 caractères (ex : 0255)
+    D'où un IDU sur 14 caractères (ex : 56355000AB0255)
+
+#+begin_src R :results output exemple
+library(rgdal)
+Geo.Cada <- readOGR("./Data/VITI_JSA_MH", "dicopar")
+names(Geo.Cada)
+#+end_src
+
+*** DEM at 5 meters
+
+    Mohamed rentre 3 septembre. 
+
+#+begin_src R :results output exemple
+Dat.Dem <- read.csv("Data/VITI_JSA_MH/vitidem.csv")
+yop <- Geo.Cada[!Geo.Cada$PAR2RAS %in% Dat.Dem$PAR2RAS, ]
+plot(yop[1: 10, ])
+
+Cad.Dem <- aggregate(Dat.Dem[, c("DEM", "SLOPE", "ASPECT",
+                                 "SOLAR", "PERMEABILITY")],
+                     by= list(Dat.Dem$PAR2RAS), mean)
+rm(Dat.Dem)
+names(Cad.Dem)[ 1] <- "PAR2RAS"
+
+Geo.CDem <- merge(Geo.Cada, Cad.Dem, by= "PAR2RAS")
+save(Geo.CDem, file= "Inter/Geo.CDem.Rda")
+#+end_src
+
+*** GI from old INAO
+**** loading
+
+    Waiting for the new version with /lieux-dits/.
+
+#+begin_src R :results output exemple
+BGOR <- readOGR("./Data/INAOlocal", "BGOR")
+BOUR <- readOGR("./Data/INAOlocal", "BOUR")
+VILL <- readOGR("./Data/INAOlocal", "VILL")
+PCRU <- readOGR("./Data/INAOlocal", "PCRU")
+GCRU <- readOGR("./Data/INAOlocal", "GCRU")
+head(GCRU@data)
+#+end_src
+
+**** merging
+
+#+begin_src R :results output exemple
+load("Inter/Geo.CDem.Rda")
+library(sp)
+GCDtmp <- Geo.CDem@data
+coordinates(GCDtmp) <- coordinates(Geo.CDem)
+proj4string(GCDtmp) <- proj4string(GCRU)
+Geo.CDgc <- over(GCDtmp, GCRU)
+Geo.CDpc <- over(GCDtmp, PCRU)
+Geo.CDvl <- over(GCDtmp, VILL)
+Geo.CDbr <- over(GCDtmp, BOUR)
+Geo.CDbg <- over(GCDtmp, BGOR)
+
+Geo.CDem$AOC <- ifelse(!is.na(Geo.CDgc$GCRU), "GCRU",
+                ifelse(!is.na(Geo.CDpc$PCRU), "PCRU",
+                ifelse(!is.na(Geo.CDvl$VILL), "VILL",
+                ifelse(!is.na(Geo.CDbr$BOUR), "BOUR",
+                ifelse(!is.na(Geo.CDbg$BGOR), "BGOR", "NONE")))))
+Geo.CDem$AOCo <- factor(Geo.CDem$AOC, ordered= TRUE,
+                        levels= c("NONE", "BGOR", "BOUR",
+                                  "VILL", "PCRU", "GCRU"))
+
+
+#+end_src
+
+*** Soil and subsoil
+
+#+begin_src R :results output exemple
+GEOL <- readOGR("./Data/GeolPedo", "GeolL93")
+PEDO <- readOGR("./Data/GeolPedo", "UCSCote2")
+## CODE FOR GEOL ; NOUC FOR PEDO
+
+names(Geo.CDem)
+
+GCDtmp <- Geo.CDem@data
+coordinates(GCDtmp) <- coordinates(Geo.CDem)
+proj4string(GCDtmp) <- proj4string(GEOL)
+Geo.GEO <- over(GCDtmp, GEOL)
+GCDtmp <- spTransform(GCDtmp, proj4string(PEDO))
+Geo.PED <- over(GCDtmp, PEDO)
+
+summary(Geo.PED)
+#+end_src
+
+#+RESULTS:
+
+** Models of GIs
+*** Ordered probit
+
+#+begin_src R :results output exemple
+library(MASS) ; library(texreg)
+names(Geo.CDem)
+Geo.CDem$SOLARc <- (Geo.CDem$SOLAR-
+                    mean(Geo.CDem$SOLAR, na.rm= T))/
+    sd(Geo.CDem$SOLAR, na.rm= T)
+yoo <- polr(AOCo~ DEM+ SLOPE+ ASPECT+ PERMEABILITY+ SOLARc,
+            data= Geo.CDem[!is.na(Geo.CDem$DEM), ], method= "probit")
+
+screenreg(yoo)
+summary(Geo.CDem@data)
+head(Geo.CDgc)
+dim(Geo.CDgc)
+#+end_src
+
+* Bibliography
+  :PROPERTIES:
+  :EXPORT_FILE_NAME:    Biblio.pdf
+  :EXPORT_LATEX_CLASS:  ManueBibt
+  :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:2
+  :EXPORT_LATEX_HEADER: \usepackage{hyperref, xcolor} \hypersetup{colorlinks=true, linkcolor=red, urlcolor=blue, citecolor=gray} \usepackage[utf8]{inputenc} \usepackage[T1]{fontenc} 
+  :EXPORT_TITLE:        Geographical Indications
+  :EXPORT_AUTHOR:       \textsc{Bibliography}
+  :END:
+** Parametric ordered
+*** [[latex:cite][PShi00]] [[file:Biblio/Trie/PShi00.pdf][JAE: Specification tests OP]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{PShi00,
+  title={Gender, race, pay and promotion in the British nursing
+                  profession: estimation of a generalized ordered
+                  probit model},
+  author={Pudney, Stephen and Shields, Michael},
+  journal={Journal of Applied Econometrics},
+  volume={15},
+  number={4},
+  pages={367--399},
+  year={2000},
+  publisher={Wiley Online Library}
+}
+#+end_src
+
+- specification tests and generalized models which relax two of the
+  restrictive features of the ordered probit model: the constancy of
+  threshold parameters and exogeneity of explanatory variables.
+- In general, if the same variables impact the threshold and the
+  latent variables, the two effects cannot be separated. According to
+  the author we have to force by dropping one possibility. We use the
+  threshold constancy test developed in Section 3.2 to allocate each
+  explanatory variable either to the thresholds.
+- Terza (1985) seems to be the seminal paper for non-constant
+  thresholds.
+- The test for non-constant thresholds is close to a parallel
+  assumption. It is tested through an extended definition of
+  coefficients from the latent variable. Then it is a score test.
+- The specification procedure is strange (with non-constant
+  thresholds), see p.374.
+- Endogeneity is treated exclusively through simultaneity questions,
+  tested through the generalized residuals (only possible for a
+  discrete endogenous explanatory variable, Pagan and Vella 1989),
+  Implemented by simulated likelihood.
+
+*** [[latex:cite][VDJo03]] [[file:Biblio/Trie/VDJo03.pdf][JHE: Scoring from ordered]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{VDJo03,
+  title={Inequalities in self-reported health: validation of a new approach to measurement},
+  author={Van Doorslaer, Eddy and Jones, Andrew M},
+  journal={Journal of health economics},
+  volume={22},
+  number={1},
+  pages={61--87},
+  year={2003},
+  publisher={Elsevier}
+}
+#+end_src
+
+- Re-scaling the latent variable with (y_i- y_min)/ (y_max- y_min)
+  [density uniform distribution]
+- Interval regression (with known thresholds) can be artificially
+  implemented with the cdf of an auxiliary continuous variable [not
+  interesting for us]
+- Allowing the thresholds to depend on explanatory variables is
+  equivalent to an heteroskedastic specification [and vice versa? an
+  heteroskedastic ordered probit present non-constant thresholds?]
+- Health concentration index, very close to a Gini index, measure the
+  inequality from the relation between the distribution of wealth and
+  health.
+- We can also decompose the health concentration index on the basis of
+  explanatory variables. These two last point justify to scale the
+  predictions from OP for inter-group comparisons: "impose cardinality
+  on the ordinal responses"
+- For the decomposition, the ordered probit work as the interval
+  regression.
+
+
+** Spatial Econometrics
+*** [[latex:cite][KPru01]] [[file:Biblio/Trie/KPru01.pdf][JoE: Moran's I for qualitative responses]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{KPru01,
+  title={On the asymptotic distribution of the Moran I test statistic
+                  with applications},
+  author={Kelejian, Harry H and Prucha, Ingmar R},
+  journal={Journal of Econometrics},
+  volume={104},
+  number={2},
+  pages={219--257},
+  year={2001},
+  publisher={Elsevier}
+}
+#+end_src
+
+- Formulas and asymptotic theory for the Moran's I on residuals from
+  discrete models, ordered in particular.
+
+* Commentaries
+* Tables
+** Data
+
+#+begin_src R :results output exemple
+source("myFcts.R") ; load("Inter/TRPR.Rda") ; s= mgcv:::s
+ctrl <- log(PXHASAU)~ log(M2PAR)+ log(DCHX)+ TENURE+ BATIM+ ANf
+terr <- update(ctrl, . ~ . + EXPOc+ ELEV+ I(ELEV^2)+ PENTE+ I(PENTE^2)+
+                         WET+ I(WET^2)+ HEAT+ I(HEAT^2)+
+                         ROUGH+ I(ROUGH^2)+ DEPTH+ I(DEPTH^2))
+## CODAGE DES AOCs
+TRPR$AOCc <- ifelse(TRPR$AOCf== "GCRU", 4,
+             ifelse(TRPR$AOCf== "PCRU", 3,
+             ifelse(TRPR$AOCf== "VILL", 2,
+             ifelse(TRPR$AOCf== "BOUR", 1, 0))))
+TRPR$AOCbg <- ifelse(TRPR$AOCc>= 0, 1, 0)
+TRPR$AOCbr <- ifelse(TRPR$AOCc>= 1, 1, 0)
+TRPR$AOCvl <- ifelse(TRPR$AOCc>= 2, 1, 0)
+TRPR$AOCpc <- ifelse(TRPR$AOCc>= 3, 1, 0)
+TRPR$AOCgc <- ifelse(TRPR$AOCc>= 4, 1, 0)
+TRPR$AOCbgor <- ifelse(TRPR$AOCf== "BGOR", 1, 0)
+TRPR$AOCbour <- ifelse(TRPR$AOCf== "BOUR", 1, 0)
+TRPR$AOCvill <- ifelse(TRPR$AOCf== "VILL", 1, 0)
+TRPR$AOCpcru <- ifelse(TRPR$AOCf== "PCRU", 1, 0)
+TRPR$AOCgcru <- ifelse(TRPR$AOCf== "GCRU", 1, 0)
+
+## DUMMY SPATIALES
+TRPR$Xdum1 <- cut(TRPR$X/ 1000, include.lowest= TRUE,
+                  unique(quantile(TRPR$X/ 1000, seq(0, 1, .2))))
+TRPR$Ydum1 <- cut(TRPR$Y/ 1000, include.lowest= TRUE,
+                  unique(quantile(TRPR$Y/ 1000, seq(0, 1, .2))))
+TRPR$SpDum1 <- factor(paste(substr(TRPR$Xdum1, 2, 8),
+                            substr(TRPR$Ydum1, 2, 10), sep= ","))
+TRPR$Xdum2 <- cut(TRPR$X/ 1000, include.lowest= TRUE,
+                  unique(quantile(TRPR$X/ 1000, seq(0, 1, .1))))
+TRPR$Ydum2 <- cut(TRPR$Y/ 1000, include.lowest= TRUE,
+                  unique(quantile(TRPR$Y/ 1000, seq(0, 1, .1))))
+TRPR$SpDum2 <- factor(paste(substr(TRPR$Xdum2, 2, 8),
+                            substr(TRPR$Ydum2, 2, 10), sep= ","))
+TRPR$Xdum3 <- cut(TRPR$X/ 100, include.lowest= TRUE,
+                  unique(quantile(TRPR$X/ 100, seq(0, 1, .05))))
+TRPR$Ydum3 <- cut(TRPR$Y/ 1000, include.lowest= TRUE,
+                  unique(quantile(TRPR$Y/ 1000, seq(0, 1, .05))))
+TRPR$SpDum3 <- factor(paste(substr(TRPR$Xdum3, 2, 10),
+                            substr(TRPR$Ydum3, 2, 10), sep= ","))
+#+end_src
+
+#+RESULTS:
+
+** Spatial proxy models
+
+#+begin_src R :results value :export code :file "Tables/Prime1.tex"
+GI1 <- lm(update(terr, . ~ . + AOCbr+ AOCvl+ AOCpc+ AOCgc), data= TRPR)
+
+TRPR$RS <- t(apply(rev(TRPR[, 47: 51]), 1, cumsum))
+
+TRPR$RS05gc <- TRPR$AOCgc- TRPR$RS[, 1]
+TRPR$RS05pc <- TRPR$AOCpc- TRPR$RS[, 2]
+TRPR$RS05vl <- TRPR$AOCvl- TRPR$RS[, 3]
+TRPR$RS05br <- TRPR$AOCbr- TRPR$RS[, 4]
+
+GI1 <- lm(update(terr, . ~ . + RS05br+ RS05vl+ RS05pc+ RS05gc), data= TRPR)
+summary(GI1)
+
+GI2 <- lm(update(terr, . ~ RS05br+ RS05vl+ RS05pc+ RS05gc), data= TRPR)
+summary(GI2)
+
+TRPR$RS <- t(apply(rev(TRPR[, 52: 56]), 1, cumsum))
+TRPR$RS10gc <- TRPR$AOCgc- TRPR$RS[, 1]
+TRPR$RS10pc <- TRPR$AOCpc- TRPR$RS[, 2]
+TRPR$RS10vl <- TRPR$AOCvl- TRPR$RS[, 3]
+TRPR$RS10br <- TRPR$AOCbr- TRPR$RS[, 4]
+
+GI3 <- lm(update(terr, . ~ . + RS10br+ RS10vl+ RS10pc+ RS10gc), data= TRPR)
+summary(GI3)
+
+library(mgcv)
+hh <- gam(RS05br~ s(X, Y), data= TRPR)
+summary(hh)
+
+library(AER)
+IV <- ivreg(log(PXHASAU) ~ log(M2PAR)+ log(DCHX)+ TENURE+ BATIM+ ANf
+            + EXPOc+ ELEV+ I(ELEV^2)+ PENTE+ I(PENTE^2)+ WET+ I(WET^2)
+            + HEAT+ I(HEAT^2)+ ROUGH+ I(ROUGH^2)+ DEPTH+ I(DEPTH^2)
+            + AOCbr+ AOCvl+ AOCpc+ AOCgc|
+            log(M2PAR)+ log(DCHX)+ TENURE+ BATIM+ ANf
+            + EXPOc+ ELEV+ I(ELEV^2)+ PENTE+ I(PENTE^2)+ WET+ I(WET^2)
+            + HEAT+ I(HEAT^2)+ ROUGH+ I(ROUGH^2)+ DEPTH+ I(DEPTH^2)
+            + RS05br+ RS05vl+ RS05pc+ RS05gc, data= TRPR)
+summary(IV, diagnostic= TRUE)
+
+
+gi1 <- lm(terr, data= TRPR)
+br1 <- lm(update(terr, AOCbr~ .), data= TRPR)
+vl1 <- lm(update(terr, AOCvl~ .), data= TRPR)
+pc1 <- lm(update(terr, AOCpc~ .), data= TRPR)
+gc1 <- lm(update(terr, AOCgc~ .), data= TRPR)
+Gi1 <- lm(resid(gi1)~ resid(br1)+ resid(vl1)+ resid(pc1)+ resid(gc1),
+          data= TRPR)
+gI1 <- polr(update(terr, AOCf ~ .), data= TRPR, method= "probit")
+
+GI2.1 <- lm(update(terr, . ~ . + SpDum1
+                   + AOCbr+ AOCvl+ AOCpc+ AOCgc), data= TRPR)
+gi2.1 <- lm(update(terr, . ~ . + SpDum1), data= TRPR)
+br2.1 <- lm(update(terr, AOCbr~ .+ SpDum1), data= TRPR)
+vl2.1 <- lm(update(terr, AOCvl~ .+ SpDum1), data= TRPR)
+pc2.1 <- lm(update(terr, AOCpc~ .+ SpDum1), data= TRPR)
+gc2.1 <- lm(update(terr, AOCgc~ .+ SpDum1), data= TRPR)
+Gi2.1 <- lm(resid(gi2.1)~ resid(br2.1)+ resid(vl2.1)
+            + resid(pc2.1)+ resid(gc2.1), data= TRPR)
+gI2.1 <- polr(update(terr, AOCf ~ .+ SpDum1), data= TRPR, method= "probit")
+
+GI2.2 <- lm(update(terr, . ~ . + SpDum2
+                   + AOCbr+ AOCvl+ AOCpc+ AOCgc), data= TRPR)
+gi2.2 <- lm(update(terr, . ~ . + SpDum2), data= TRPR)
+br2.2 <- lm(update(terr, AOCbr~ .+ SpDum2), data= TRPR)
+vl2.2 <- lm(update(terr, AOCvl~ .+ SpDum2), data= TRPR)
+pc2.2 <- lm(update(terr, AOCpc~ .+ SpDum2), data= TRPR)
+gc2.2 <- lm(update(terr, AOCgc~ .+ SpDum2), data= TRPR)
+Gi2.2 <- lm(resid(gi2.2)~ resid(br2.2)+ resid(vl2.2)
+            + resid(pc2.2)+ resid(gc2.2), data= TRPR)
+gI2.2 <- polr(update(terr, AOCf ~ .+ SpDum2), data= TRPR, method= "probit")
+
+GI2.3 <- lm(update(terr, . ~ . + SpDum3
+                   + AOCbr+ AOCvl+ AOCpc+ AOCgc), data= TRPR)
+gi2.3 <- lm(update(terr, . ~ . + SpDum3), data= TRPR)
+br2.3 <- lm(update(terr, AOCbr~ .+ SpDum3), data= TRPR)
+vl2.3 <- lm(update(terr, AOCvl~ .+ SpDum3), data= TRPR)
+pc2.3 <- lm(update(terr, AOCpc~ .+ SpDum3), data= TRPR)
+gc2.3 <- lm(update(terr, AOCgc~ .+ SpDum3), data= TRPR)
+Gi2.3 <- lm(resid(gi2.3)~ resid(br2.3)+ resid(vl2.3)
+            + resid(pc2.3)+ resid(gc2.3), data= TRPR)
+gI2.3 <- polr(update(terr, AOCf ~ .+ SpDum3), data= TRPR, method= "probit")
+
+## VERIFICATION GAM
+library(mgcv)
+GI3 <- gam(update(terr, . ~ . + s(Xreg, Yreg)
+                  + AOCbr+ AOCvl+ AOCpc+ AOCgc), data= TRPR)
+gi3 <- gam(update(terr, . ~ . + s(Xreg, Yreg)), data= TRPR)
+br3 <- gam(update(terr, AOCbr~ .+ s(Xreg, Yreg)), data= TRPR)
+vl3 <- gam(update(terr, AOCvl~ .+ s(Xreg, Yreg)), data= TRPR)
+pc3 <- gam(update(terr, AOCpc~ .+ s(Xreg, Yreg)), data= TRPR)
+gc3 <- gam(update(terr, AOCgc~ .+ s(Xreg, Yreg)), data= TRPR)
+Gi3 <- gam(resid(gi3)~ resid(br3)+ resid(vl3)
+            + resid(pc3)+ resid(gc3), data= TRPR)
+gI3 <- gam(update(terr, AOCc~ . + s(Xreg, Yreg)), data= TRPR)
+
+## POUR LES MORAN
+library(spdep)
+coord <- TRPR[, c("X", "Y")]
+wtri.nb <- tri2nb(coord)
+nb.B <- nb2listw(wtri.nb, style= "B", zero.policy= TRUE)
+
+library(multiwayvcov)
+efclust <- function(x){ sqrt(diag(cluster.vcov(x, ~ TRPR$COM3)))}
+MfadR2 <- function(mod){
+    return(1 - as.numeric(logLik(mod)/ logLik(update(mod, . ~ 1))))
+}
+
+moDD <- list(GI1, GI2.1, GI2.2, GI2.3, GI3)
+moDd <- list(Gi1, Gi2.1, Gi2.2, Gi2.3, Gi3)
+modD <- list(gI1, gI2.1, gI2.2, gI2.3, gI3)
+
+cofLM <- function(x){
+    zipFastener(data.frame(round(
+        x$coeff[regexpr("AOC", names(x$coeff))== 1], 3)),
+        data.frame(paste0("(", round(
+        efclust(x)[regexpr("AOC", names(efclust(x)))== 1], 2), ")")), 1)
+}
+
+cofGAM <- function(x){
+    zipFastener(data.frame(round(
+        x$coeff[regexpr("AOC", names(x$coeff))== 1], 3)),
+        data.frame(paste0("(", round(
+        sqrt(diag(summary(x)$cov.s[
+        regexpr("AOC", row.names(summary(x)$cov.s))== 1,
+        regexpr("AOC", row.names(summary(x)$cov.s))== 1])), 2), ")")), 1)
+}
+
+Tabb <- data.frame(c("Régional [$\\delta_{11}$]", "",
+                     "Village [$\\delta_{21}$]", "",
+                     "Premier Cru [$\\delta_{31}$]", "",
+                     "Grand Cru [$\\delta_{41}$]", "",
+                     "N (sales)", "$R^2$ (price)",
+                     "$R^2$ (GIs partial)", "$R^2$ (designation)",
+                     "Moran's $I$"),
+    rbind(cbind(cofLM(GI1), cofLM(GI2.1), cofLM(GI2.2),
+                cofLM(GI2.3), cofGAM(GI3)),
+          rep(nrow(TRPR), 5),
+          t(ldply(moDD, function(x) round(summary(x)$r.sq, 3))),
+          t(ldply(moDd, function(x) round(summary(x)$r.sq, 3))),
+          t(ldply(modD, function(x) round(MfadR2(x), 3))),
+          t(ldply(moDD, function(x)
+              round(moran.mc(residuals(x), nb.B, 999)$stat, 3)))))
+colnames(Tabb) <- c("Geo. Indications", "OLS", "Q05", "Q10", "Q20", "GAM")
+# lapply(moDD, function(x) moran.mc(residuals(x), nb.B, 999))
+print(xtable(Tabb, alig= "llXXXXX"), hline.after = NULL,
+      include.rownames= F,
+      add.to.row = list(pos = list(-1, 0, 8, nrow(Tabb)),
+          command = c("\\hline\\hline\\toprule\n", rep("\\midrule\n", 2),
+              "\\bottomrule\\hline\n")),
+      tabular.environment = "tabularx", width="\\textwidth",
+      sanitize.text.function = identity, floating= F)
+#+end_src
+
+#+RESULTS:
+[[file:Tables/Prime1.tex]]
+
+#+begin_src R :results value :export code :file "Tables/AppendP1.tex"
+lab1 <- c("Acreage [log]", "Distance Center [log]",
+          "Tenure1 [binary]", "Tenure2 [binary]", "Building [yes]",
+          paste0("Year:", 1998: 2008), "Exposition [North]",
+          "Exposition [South]", "Exposition [West]",
+          "Elevation [100 m]", "Elevation$^2$",
+          "Slope [degree]", "Slope$^2$",
+          "Wet [scaled]", "Wet$^2$", "Heat [scaled]", "Heat$^2$",
+          "Rough [scaled]", "Rough$^2$", "Depth [scaled]", "Depth$^2$",
+          "GI [\\emph{Régional}]", "GI [\\emph{Village}]",
+          "GI [\\emph{Premier Cru}]", "GI [\\emph{Grand Cru}]")
+library(stargazer) ; library(multiwayvcov)
+stargazer(GI1, GI2.1, GI2.2, GI2.3, GI3, covariate.labels= lab1,
+          omit= c("Cons","Dum","Xreg"), column.sep.width= "0pt",
+          align= FALSE, model.names = F, font.size= "footnotesize",
+          notes.align= "l", no.space= TRUE,
+          dep.var.caption= "Dependent variable: Log of vineyard per-ha price",
+          dep.var.labels.include= FALSE, model.numbers= FALSE,
+          intercept.bottom= FALSE, df= FALSE,
+          keep.stat = c("n", "ser", "rsq"),
+          column.labels= c("$OLS$", "$Q05$", "$Q10$", "$Q20$", "GAM"),
+          se=list(sqrt(diag(cluster.vcov(GI1, ~ CODGEO))),
+                  sqrt(diag(cluster.vcov(GI2.1, ~ CODGEO))),
+                  sqrt(diag(cluster.vcov(GI2.2, ~ CODGEO))),
+                  sqrt(diag(cluster.vcov(GI2.3, ~ CODGEO))),
+                  summary(GI3)$se), float= F, single.row= T)
+#+end_src
+
+#+RESULTS:
+[[file:Tables/AppendP1.tex]]
+
+#+begin_src R :results value :export code :file "Tables/AppendP11.tex"
+lab1 <- c("Acreage [log]", "Distance Center [log]",
+          "Tenure1 [binary]", "Tenure2 [binary]", "Building [yes]",
+          paste0("Year:", 1998: 2008), "Exposition [North]",
+          "Exposition [South]", "Exposition [West]",
+          "Elevation [100 m]", "Elevation$^2$",
+          "Slope [degree]", "Slope$^2$",
+          "Wet [scaled]", "Wet$^2$", "Heat [scaled]", "Heat$^2$",
+          "Rough [scaled]", "Rough$^2$", "Depth [scaled]", "Depth$^2$")
+library(stargazer) ; library(multiwayvcov)
+stargazer(gI1, gI2.1, gI2.2, gI2.3, gI3, covariate.labels= lab1,
+          omit= c("Cons","Dum","Xreg"), column.sep.width= "0pt",
+          align= FALSE, model.names = F, font.size= "footnotesize",
+          notes.align= "l", no.space= TRUE,
+          dep.var.caption= "Dependent variable: ordered GIs' designations",
+          dep.var.labels.include= FALSE, model.numbers= FALSE,
+          intercept.bottom= FALSE, df= FALSE,
+          keep.stat = c("n", "ser", "rsq"),
+          column.labels= c("$OP$", "$OP-Q05$", "$OP-Q10$", "$OP-Q20$",
+                           "GAM"), float= F, single.row= T)
+#+end_src
+
+#+RESULTS:
+[[file:Tables/AppendP11.tex]]
+
+* Figures
+** Map of spatial dummies
+*** Simple
+
+# https://stackoverflow.com/questions/36772304/sp-r-package-spatialpolygons-class-plot-transparent
+# https://stackoverflow.com/questions/14393172/intersect-the-contour-and-polygon-in-r
+
+#+name: Lst:SPDUM
+#+Header: :width 14 :height 6
+#+begin_src R :results graphics :file "Figures/SPDUM.pdf"
+load("Inter/TRPR.Rda")
+XX <- mean(TRPR$X)/ 1000 ; YY <- mean(TRPR$Y)/ 1000
+TRPR$DIST <- sqrt((TRPR$X/ 1000- XX)^2+ (TRPR$Y/ 1000- YY)^2)
+
+library(sp)
+gggg <- TRPR
+coordinates(gggg) <- c("X", "Y")
+load("Inter/Map.Rda")
+
+TRPR$Xdum1 <- cut(TRPR$X, include.lowest= TRUE, dig.lab= 6,
+                  breaks= unique(quantile(TRPR$X, seq(0, 1, .2))))
+TRPR$Ydum1 <- cut(TRPR$Y, include.lowest= TRUE, dig.lab= 7,
+                  breaks= unique(quantile(TRPR$Y, seq(0, 1, .2))))
+TRPR$SpDum1 <- factor(paste(substr(TRPR$Xdum1, 2, 14),
+                            substr(TRPR$Ydum1, 2, 16), sep= ","))
+ok1 <- data.frame(t(data.frame(lapply(levels(TRPR$SpDum1), function(x)
+    as.numeric(unlist(strsplit(x, "[,]")))))))
+ok1$TAILLE <- (ok1[, 2]- ok1[, 1])* (ok1[, 4]- ok1[, 3])/ 1000000
+ID <- paste0('sq', seq_len(nrow(ok1)))
+polys <- SpatialPolygons(list(Polygons(list(
+    Polygon(cbind(as.numeric(ok1[1, c(1, 1, 2, 2)]),
+                  as.numeric(ok1[1, c(4, 3, 3, 4)])))), ID[ 1])))
+for (i in 2: nrow(ok1)){
+    tmp <- SpatialPolygons(list(Polygons(list(
+        Polygon(cbind(as.numeric(ok1[i, c(1, 1, 2, 2)]),
+                      as.numeric(ok1[i, c(4, 3, 3, 4)])))), ID[ i])))
+    polys <- rbind(polys, tmp)
+}
+proj4string(polys) <- proj4string(Map[[2]])
+
+TRPR$Xdum2 <- cut(TRPR$X, include.lowest= TRUE, dig.lab= 6,
+                  breaks= unique(quantile(TRPR$X, seq(0, 1, .1))))
+TRPR$Ydum2 <- cut(TRPR$Y, include.lowest= TRUE, dig.lab= 7,
+                  breaks= unique(quantile(TRPR$Y, seq(0, 1, .1))))
+TRPR$SpDum2 <- factor(paste(substr(TRPR$Xdum2, 2, 14),
+                            substr(TRPR$Ydum2, 2, 16), sep= ","))
+ok2 <- data.frame(t(data.frame(lapply(levels(TRPR$SpDum2), function(x)
+    as.numeric(unlist(strsplit(x, "[,]")))))))
+ok2$TAILLE <- (ok2[, 2]- ok2[, 1])* (ok2[, 4]- ok2[, 3])/ 1000000
+ID <- paste0('sq', seq_len(nrow(ok2)))
+polys2 <- SpatialPolygons(list(Polygons(list(
+    Polygon(cbind(as.numeric(ok2[1, c(1, 1, 2, 2)]),
+                  as.numeric(ok2[1, c(4, 3, 3, 4)])))), ID[ 1])))
+for (i in 2: nrow(ok2)){
+    tmp <- SpatialPolygons(list(Polygons(list(
+        Polygon(cbind(as.numeric(ok2[i, c(1, 1, 2, 2)]),
+                      as.numeric(ok2[i, c(4, 3, 3, 4)])))), ID[ i])))
+    polys2 <- rbind(polys2, tmp)
+}
+proj4string(polys2) <- proj4string(Map[[2]])
+
+TRPR$Xdum3 <- cut(TRPR$X, include.lowest= TRUE, dig.lab= 6,
+                  breaks= unique(quantile(TRPR$X, seq(0, 1, .05))))
+TRPR$Ydum3 <- cut(TRPR$Y, include.lowest= TRUE, dig.lab= 7,
+                  breaks= unique(quantile(TRPR$Y, seq(0, 1, .05))))
+TRPR$SpDum3 <- factor(paste(substr(TRPR$Xdum3, 2, 14),
+                            substr(TRPR$Ydum3, 2, 16), sep= ","))
+ok3 <- data.frame(t(data.frame(lapply(levels(TRPR$SpDum3), function(x)
+    as.numeric(unlist(strsplit(x, "[,]")))))))
+ok3$TAILLE <- (ok3[, 2]- ok3[, 1])* (ok3[, 4]- ok3[, 3])/ 1000000
+ID <- paste0('sq', seq_len(nrow(ok3)))
+polys3 <- SpatialPolygons(list(Polygons(list(
+    Polygon(cbind(as.numeric(ok3[1, c(1, 1, 2, 2)]),
+                  as.numeric(ok3[1, c(4, 3, 3, 4)])))), ID[ 1])))
+for (i in 2: nrow(ok3)){
+    tmp <- SpatialPolygons(list(Polygons(list(
+        Polygon(cbind(as.numeric(ok3[i, c(1, 1, 2, 2)]),
+                      as.numeric(ok3[i, c(4, 3, 3, 4)])))), ID[ i])))
+    polys3 <- rbind(polys3, tmp)
+}
+proj4string(polys3) <- proj4string(Map[[2]])
+load("Data/CadP.Rda")
+CadP$Xdum4 <- cut(CadP$X, include.lowest= TRUE, dig.lab= 6,
+                  breaks= unique(quantile(CadP$X, seq(0, 1, .01))))
+CadP$Ydum4 <- cut(CadP$Y, include.lowest= TRUE, dig.lab= 7,
+                  breaks= unique(quantile(CadP$Y, seq(0, 1, .01))))
+CadP$SpDum4 <- factor(paste(substr(CadP$Xdum4, 2, 14),
+                            substr(CadP$Ydum4, 2, 16), sep= ","))
+ok4 <- data.frame(t(data.frame(lapply(levels(CadP$SpDum4), function(x)
+    as.numeric(unlist(strsplit(x, "[,]")))))))
+ok4$TAILLE <- (ok4[, 2]- ok4[, 1])* (ok4[, 4]- ok4[, 3])/ 1000000
+ID <- paste0('sq', seq_len(nrow(ok4)))
+
+polys4 <- SpatialPolygons(list(Polygons(list(
+    Polygon(cbind(as.numeric(ok4[1, c(1, 1, 2, 2)]),
+                  as.numeric(ok4[1, c(4, 3, 3, 4)])))), ID[ 1])))
+for (i in 2: nrow(ok4)){
+    tmp <- SpatialPolygons(list(Polygons(list(
+        Polygon(cbind(as.numeric(ok4[i, c(1, 1, 2, 2)]),
+                      as.numeric(ok4[i, c(4, 3, 3, 4)])))), ID[ i])))
+    polys4 <- rbind(polys4, tmp)
+}
+proj4string(polys4) <- proj4string(Map[[2]])
+
+par(mfrow= c(1, 4), mar = rep(0.1,4))
+plot(Map[[2]], col= as.character(Map[[2]]$RCOL), border= FALSE,
+     axes= T, bg= "grey90", xaxt='n', yaxt='n', ann= F)
+plot(gggg, add= T, col= "white", cex= .5)
+legend("topleft", "Panel A: Q05", cex= 2, bty= "n", pch= -1)
+plot(polys, add= T)
+plot(Map[[2]], col= as.character(Map[[2]]$RCOL), border= FALSE,
+     axes= T, bg= "grey90", xaxt='n', yaxt='n', ann= F)
+plot(gggg, add= T, col= "white", cex= .5)
+legend("topleft", "Panel B: Q10", cex= 2, bty= "n", pch= -1)
+plot(polys2, add= T)
+plot(Map[[2]], col= as.character(Map[[2]]$RCOL), border= FALSE,
+     axes= T, bg= "grey90", xaxt='n', yaxt='n', ann= F)
+plot(gggg, add= T, col= "white", cex= .5)
+legend("topleft", "Panel C: Q20", cex= 2, bty= "n", pch= -1)
+plot(polys3, add= T)
+plot(Map[[2]], col= as.character(Map[[2]]$RCOL), border= FALSE,
+     axes= T, bg= "grey90", xaxt='n', yaxt='n', ann= F)
+legend("topleft", "Panel D: Q100", cex= 2, bty= "n", pch= -1)
+plot(polys4, add= T)
+#+end_src
+
+#+name: Fig:SPDUM
+#+ATTR_LaTeX: :options scale= .5
+#+Caption: *Maps of the /communes/ (left), soil units (middle) and per-ha prices (right)*
+#+RESULTS: Lst:SPDUM
+[[file:Figures/SPDUM.pdf]]
+
+*** Caption
+
+#+Name: Lst:SDC
+#+Header: :width 14 :height 6
+#+begin_src R :results graphics :file "Figures/SDCap.pdf"
+par(mar = rep(0,4))
+plot(Map[[2]], bg= "grey90",border= "grey90", axes=FALSE, xlab="", ylab="")
+SpatialPolygonsRescale(layout.scale.bar(), offset=c(832500, 2213000),
+                           scale= 5000, fill= "black", plot.grid= F)
+text(832500+ 2500, 2213000, paste("5 km", "\n\n", sep= ""))
+text(832500+ 2500, 2213000+ 2000, paste("scale:", "\n\n", sep= ""))
+SpatialPolygonsRescale(layout.north.arrow(2), scale=5000,
+                           offset=c(832500+ 5000, 2213000), plot.grid= F)
+text(832500+ 9500, 2213000- 1000, paste("NORTH", "\n\n", sep= ""))
+legend("bottomleft", fill= c("indianred2", "gold1", NA, NA),
+       bty= "n", border= c("black", "black", "black", NA),
+       ncol= 4, cex= 1.8, pch= c(NA, NA, NA, 3),
+       col= c(NA, NA, NA, "white"), legend=
+       c("Côte de Nuits","Côte de Beaune","Dummy Cells","Vineyard Sales"))
+#+end_src
+
+#+Name: Fig:SDC
+#+ATTR_LaTeX: :options scale= .5
+#+Caption: 
+#+RESULTS: Lst:SDC
+[[file:Figures/SDCap.pdf]]
+
+*** Table
+
+#+begin_src R :results value :export code :file "Tables/SpDum1.tex"
+yop1 <- cbind(summary(data.frame(table(TRPR$SpDum1))[, 2]),
+              summary(data.frame(table(TRPR$SpDum2))[, 2]),
+              summary(data.frame(table(TRPR$SpDum3))[, 2]),
+              summary(data.frame(table(CadP$SpDum4))[, 2]))
+yop2 <- cbind(summary(ok1[, 5]), summary(ok2[, 5]),
+              summary(ok3[, 5]), summary(ok4[, 5]))
+Tabbb <- round(rbind(c(nrow(ok1), nrow(ok2), nrow(ok3), nrow(ok4)),
+                     yop2[-4, ]* 100, yop1[-4, ]))
+row.names(Tabbb)[ 1] <- "\\# of cells"
+Tad <- data.frame(c("", "Size (ha)", "", "", "", "",
+                    "\\# of obs.", "", "", "", ""),
+                  row.names(Tabbb), Tabbb)
+colnames(Tad) <- c("", "", "Panel A", "Panel B", "Panel C", "Panel D")
+print(xtable(Tad, alig= "XXXXXXX", digits= 0), hline.after = NULL,
+      include.rownames= F,
+      add.to.row = list(pos = list(-1, 0, 1, 6, nrow(Tad)),
+          command = c("\\hline\\hline\\toprule\n", rep("\\midrule\n", 3),
+              "\\bottomrule\\hline\n")),
+      tabular.environment = "tabularx", width="\\textwidth",
+      sanitize.text.function = identity, floating= F)
+#+end_src
+
+#+RESULTS:
+[[file:Tables/SpDum1.tex]]
+
+*** kmeans
+
+#+begin_src R :results output exemple
+library(datasets)
+dat = TRPR[, 4: 5]
+plot(dat, main = "% of favourable responses to
+     Learning and Privilege", pch =20, cex =2)
+km1 = kmeans(dat, 120, nstart= 10, iter.max= 100)
+plot(dat, col =(km1$cluster +1) , main="K-Means result with 2 clusters",
+     pch=20, cex=2)
+str(km1)
+table(km1$cluster)
+#+end_src
+
+
+*** Final
+
+#+Name: Lst:SDF
+#+Header: :width 5 :height 9
+#+begin_src R :results graphics :file "Figures/SpDumF.pdf"
+merc = CRS("+init=epsg:3857")
+WGS84 = CRS("+init=epsg:4326")
+ggh = spTransform(Map[[2]], WGS84)
+library(ggmap)
+bgMap = get_map(as.vector(bbox(ggh)), source = "google", zoom = 10)
+proj4string(gggg) <- proj4string(Map[[2]])
+par(mar = rep(0,4))
+plot(spTransform(gggg, merc), bgMap = bgMap, pch = 16, cex = .35)
+plot(spTransform(polys, merc), cex= .5, border= "blue", add= T)
+plot(spTransform(gggg, merc), bgMap = bgMap, pch = 16, cex = .35)
+plot(spTransform(polys2, merc), cex= .5, border= "blue", add= T)
+legend("topleft", c("Spatial Dummy Borders", "Vineyard Sales"), cex= 1.25,
+       bg= "white", col= c("blue", "black"), pch= c(NA, 16), lty= c(1,NA))
+DetMap(545000, 5930000)
+plot(spTransform(gggg, merc), bgMap = bgMap, pch = 16, cex = .35)
+plot(spTransform(polys3, merc), cex= .5, border= "blue", add= T)
+
+## Pour enlever le fond de carte à l'extérieur
+## A modifier, peut être utilisé pour du lissage
+#polypath(c(lat, NA, c(xbox, rev(xbox))),
+#         c(long, NA, rep(ybox, each=2)),
+#         col="white", rule="evenodd")
+## Pour spplot
+# spplot(spTransform(gggg, merc), "PXHASAU", colorkey = TRUE,
+#    sp.layout = list(panel.ggmap, bgMap, first = TRUE), cex= .5)
+
+add.alpha <- function(col, alpha=1){
+  if(missing(col))
+    stop("Please provide a vector of colours.")
+  apply(sapply(col, col2rgb)/255, 2, 
+                     function(x) 
+                       rgb(x[1], x[2], x[3], alpha=alpha))  
+}
+gggg$lPXHASAU <- log(gggg$PXHASAU)
+library(classInt) ; library(RColorBrewer)
+ic1 <- classIntervals(gggg$lPXHASAU, n= 9, style= "quantile")
+cr <- attr(findColours(ic1, brewer.pal(9, "Reds")), "palette")
+
+pdf("Figures/MapPx.pdf", width= 9, height= 12)
+m1 <- spplot(spTransform(gggg, merc)[, "lPXHASAU"], at= ic1$brks,
+             colorkey= T, col.regions= add.alpha(cr, .4),
+             sp.layout = list(rv, rw), cex= 1,
+             col="transparent",
+             xlim= c(515000, 565000), ylim= c(5926798.7, 6000000))
+m1$legend$right$args$key$at <- ic1$brks ; m1
+dev.off()
+
+#+end_src
+
+#+Name: Fig:SDF
+#+ATTR_LaTeX: :options scale= .5
+#+Caption: yop
+#+RESULTS: Lst:SDF
+[[file:Figures/SpDumF.pdf]]
+
+* Paper
+  :PROPERTIES:
+  :EXPORT_FILE_NAME:   Papier.pdf
+  :EXPORT_LATEX_CLASS: WorkinPap
+  :EXPORT_OPTIONS:     TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
+  :EXPORT_TITLE:       @@latex:\vspace{-1cm} Unobserved \emph{terroir} and the value of geographical indications: A spatial continuity approach\footnote{\scriptsize CESAER, AgroSup Dijon, INRA, Univ. Bourgogne Franche-Comté, 26 boulevard du Docteur Petitjean, F-21000 Dijon, France. Correspondance: \url{jean-sauveur.ay@inra.fr} and \url{julie.le-gallo@agrosupdijon.fr}. The authors are grateful to the data providers. Vineyard sale prices were obtained from SCAFR -- Terre d'Europe with the help of Jean Cavailh\`es and Mohamed Hilal (INRA Dijon). Spatial delineations of Geographical Indications are from the Institut National de l'Origine et de la Qualit\'e (INAO) and we are grateful to Catherine Burrier (INAO) and C\'ecile D\'etang-Dessandre (INRA Dijon) for securing the institutes' collaboration. Data about soil quality were obtained with the kind help of Jean-Marc Brayer and Pierre Curmi (AgroSup Dijon). Climate variables were obtained through the \emph{Observatoire du D\'eveloppement Rural} and we thank \'Eric Cahuzac (INRA Toulouse) and his colleagues for working on these variables and making them available. This paper has benefited from discussions at the econometric seminars of GREQAM (Marseille), \'Economie Publique (Paris), SFER (Anger), AAWE (Mendoza), VDQS (Colmar). We also thank Andrew Plantinga for his encouragement in the initial stage of this work. Alain Carpentier}@@ 
+  :EXPORT_AUTHOR:      Jean-Sauveur AY \and Mohamed Hilal
+  :END:
+** Abstract							  :noheading:
+#+BEGIN_abstract
+This paper presents a hedonic estimation of the value of Geographical
+Indications (GIs) as revealed by vineyard prices. We relax the central
+assumption that the /terroir/ is fully observed and take into account
+the resulting endogeneity of GIs. Our innovative identification
+strategy is based on the spatial continuity of /terroir/ in accordance
+with its biophysical definition. Using two plot-level datasets about
+GI designations and sale prices in the Burgundy region of France, we
+find that taking into account potential unobserved /terroir/ variables
+implies a decrease of the value of GIs, while staying highly
+significant. These results contrast significantly with previous
+results from hedonic approaches and show how the spatial continuity
+assumption allows to control for the general problem of unobserved
+spatial heterogeneity in hedonic studies.
+
+\textbf{Keywords}: hedonic model ; land price ; proxy approach ;
+confounding variables ; heterogeneous treatment effect.
+
+\textbf{J.E.L. Codes:} C25, C26, C51, R33.\\
+#+END_abstract
+
+** <<INTR>> Introduction 					   :noexport:
+*** Economic Context						  :noheading:
+
+    It is generally acknowledged that the taste of a wine depends on
+    Natural Conditions (NCs) prevailing where the grapes are grown
+    [[latex:citep][JLom93, Schn13]] and that consumers rarely taste a wine before
+    purchasing it [[latex:citep][ANau07, CMCM07]]. As a means to identify wines produced
+    in similar NCs and to provide such simplified, objective
+    information to potential consumers, the relevance of Geographical
+    Indications (GIs) is obvious [[latex:citep][Stan04, MMos12]]. What is less obvious
+    is the relative contributions of these two spatially nested NC and
+    GI characteristics in the final economic value of wines and
+    vineyards [[latex:citep][AALa95, CLVi97, GGin08, CPSt11]]. This hedonic pricing
+    decomposition is nevertheless central because, in addition to the
+    economic gains from signaling product quality [[latex:citep][Aker70, Nels70,
+    MMos12]], GIs are also potential sources of undeserved rents for
+    producers [[latex:citep][MRos78, BDWh87, MSex12]]. According to the economic
+    literature, the outcome of GIs is a combination of virtuous
+    informational content and deterious surplus extraction by limiting
+    supply and artificially segmenting wine markets. In particular,
+    this debate makes their recognition a source of conflict in actual
+    trade negotiations [[latex:citep][Barh03, Josl06]].
+
+*** Definition of /Terroir/					  :noheading:
+
+    /Terroir/ is a French term, draped in mystery but often invoked by
+    pro-GIs to justify their usefulness in wine markets. Accordingly,
+    GIs convey some information about /terroir/ that determines the
+    quality of wines. Empirically, /terroir/ has proven tricky to
+    define [[latex:citep][Barh03, LFCT04]]. It is generally understood as a complex
+    combination of natural non reproducible attributes that
+    differentiate one geographic space from the others
+    [[latex:citep][GGin08, CPSt11]].[fn:5] Here, we allow /terroir/ to
+    contain unobserved variables, while we restrict them to vary
+    smoothly in space. Defining /terroir/ from its spatial dimension
+    is not new but we make this definition empirically tractable with
+    a new identifying condition inspired from regression discontinuity
+    [[latex:citep][HTVK01, LLem10]]. Besides, the unobservable nature of some /terroir/
+    variables is exemplified by the recent discovery of the role of
+    microbes -- fungi, bacteria and the like growing on the skins and
+    stems of wine grapes [[latex:citep][BTRM14, KKFG15]] -- in explaining the quality
+    of wine. Hence, many aspects of the /terroir/ are neither actually
+    known nor systematically measured. As it derives mainly from
+    natural processes, we can nevertheless assume that it will
+    invariably produce a spatial smoothed pattern, because of flow
+    dispersion, climatic influences, and structural links with the
+    unchanging physical characteristics of the land [[latex:citep][PCad95, BTRM14]].
+
+*** Literature							  :noheading:
+
+    Many empirical studies investigate the determinants of the value of
+    wines and vineyards. With data about wine prices, it appears that
+    producer's reputation [[latex:citep][CLVi97, ANau07]], technology [[latex:citep][GGin08]], and expert
+    opinion [[latex:citep][ALVi08, DNau10]] are important explanatory
+    variables. Uninformed consumers also use bottle price as a signal
+    of quality, making the causal interpretation of the intrinsic
+    values more difficult [[latex:citep][Nerl95, CMCM07, SSto10]]. However, wine quality
+    is also signaled through GIs, which are found to provide positive
+    price premiums [[latex:citep][AALa95, CLVi00, CFlo10]] that increase with wine
+    prices [[latex:citep][CMCG10]]. Even if they are scarcer, some papers study the
+    effects of NCs such as year-to-year weather variations [[latex:citep][AALa95,
+    LVis06, Ashe08]] or land characteristics and exposure [[latex:citep][GGin08,
+    GMMo13]]. However, analyzing the effects of NCs on bottle price is
+    complicated by the need to match the wines precisely with the NCs
+    where the grapes are grown [[latex:citep][CPSt11]]. Consequently, the two closest
+    studies to the present one [[latex:citep][ASto10, CPSt11]] prefer using vineyard
+    sale prices to estimate the value of NCs. The results of these two
+    papers are contrasted, using respectively data from the Mosel
+    Valley (Germany) and the Willamette Valley (OR, United States). The
+    former finds a strong effect of NCs through solar radiation index
+    whereas the latter finds no significant effect of NCs, with or
+    without controlling by GIs. Both report a positive effect of GIs on
+    vineyard sale prices, up to \$7,000 per-acre ([[latex:citealp][CPSt11]], Table 2,
+    p. 155).
+
+    Ashenfelter JWE 2017, Cross et al, JWE 2018. Using IV as Gergaud,
+    we do not what it is estimated in a heterogeneous treatment
+    framework.
+
+*** Methodology							  :noheading:
+
+# other quasi-experimental hedonic methods
+
+    Fundamental Triangular structure between GI designations, land
+    market (buyer, seller) and econometrician. Smooth function of
+    coordinates to control for spatial heterogeneity in land price
+    equations [[latex:cite][LLue11]], Dell et al 2018 QJE. As it is well recognized in
+    the literature, including the spatial proxy variables in hedonic
+    regressions is justified by the biophysical nature of the omitted
+    variables that leads to smooth variations of price and GIs'
+    designations within the geographical space (Dell et autres).
+    Natura non facit saltus (nature does not make jumps), i.e. process
+    governing equations for natural things are continuous
+
+    Starting from the classical hedonic theory applied to farmland
+    [[latex:citep][Palm89]], we estimate the respective values of GIs and NCs on
+    vineyard sale prices through semi-parametric methods
+    [[latex:citep][LRac07]]. Allowing flexibility between NCs and sale prices is
+    necessary to capture the complex dependencies between NCs and wine
+    quality [[latex:citep][LFCT04, Schn13]]. Although, this is not sufficient as GIs
+    are historically designated to picture similar NCs while some NCs
+    are unobserved by the econometrician. We first show that, under
+    reasonable assumptions, this omitted variable bias produces
+    under-estimated values of NCs and over-estimated values of
+    GIs. The hedonic valuation framework is systematically biased
+    against the economic desirability of GIs. Second, assuming that
+    /terroir/ is a continuous spatial signal, we use spatial smoothed
+    functions (SSF) of geographical coordinates as proxies for the
+    unobserved /terroir/ variables [[latex:citep][MMil10, LVEP15]]. [[latex:cite][KPPo10]] This method can be
+    though as a spatial fixed effect strategy without relying on an
+    arbitrary spatial segmentation [[latex:citep][AKla11, LVEP15]]. Third, our
+    preferred strategy exploits a more extensive dataset on vineyard
+    plots to compute GIs' variations orthogonal to NCs. The basic idea
+    is to assume /terroir/ variables (both observed and unobserved) as
+    constants in the very close neighborhood of each vineyard
+    sales. Then, exogenous variations of GIs allow us to estimate the
+    value of GIs through both control functions [[latex:citep][HRob85, NPVe99]] and
+    instrumental variables [[latex:citep][HNLo04]]. This last empirical strategy
+    illustrates how auxiliary data about plot location can help to
+    control for unobserved spatial heterogeneity, an important matter
+    in many recent hedonic models.[fn:4]
+
+    The relevance of the hedonic framework proposed in [[latex:autoref][Def:SFR]] in
+    order to estimate the value of GIs is based on three points. Fixed
+    land quantity and /terroir/ characteristics advocate the
+    exogeneity of $X^*$, so the estimation of the supply function in a
+    second stage [[latex:citep][Bart87, Eppl87]] is useless. Moreover the nonparametric
+    specification of the hedonic function addresses the criticisms of
+    [[latex:cite][EHNe04]], as the temporal stability of GIs [[latex:citep][KPop14]]. this later paper
+    shows the interest of spatial fixed effects. specification hedonic
+    model spatial fixed effects [[latex:citep][KPPo10, AKla11]] and other spatial-based
+    identification geoadditive [[latex:citealp][KWan03, MMil10, LVEP15]]. La
+    discontinuité vient fondamentalement du besoin de discrétiser la
+    qualité pour pouvoir la faire comprendre, c'est à partir d'une
+    qualité continue que les désignations sont relativement arbitraire
+    et donc peuvent servir d'identification.
+
+    The value of GI is from the interaction of current vineyard buyers
+    and seller and the long history of GIs designation, both are based
+    on local information and on the ground analysis which are not
+    available for the econometrician and cause endogeneity. The
+    temporal stability of /terroir/ variables. Insister sur les
+    spatial proxy approach.
+
+*** Results							  :noheading:
+
+    /Terroir/ is a confounder to estimated GI values with both a
+    observed and a unobserved part. the unobservable nature of land
+    quality is a major question in land economics. (Greenstone, )
+
+    Our results indicate that GIs are a more important source of value
+    than NCs. However, taking into account the possibility of spatially
+    omitted /terroir/ effects implies at least more than a doubling of
+    the part accounted for by NCs (from 8% to 17%) while the GI part
+    falls drastically (from 51% to 37%). These results contrast sharply
+    with previous results from classical hedonic approaches and
+    illustrate how precise information about sale locations can be used
+    to control for unobserved spatial heterogeneity. GIs are
+    nevertheless still highly significant determinants of vineyard
+    prices, with a per-hectare hedonic premium of \EUR{}0.35 million
+    for the most famous /Grands Crus/, illustrating their high economic
+    importance.
+
+*** Outline							  :noheading:
+
+    The outline of the rest of the paper is as follows. We present the
+    context and the detailed vineyard data from the Burgundy region of
+    France in the forthcoming section [[latex:ref][DATA]]. Section [[latex:ref][HMOD]] present the
+    results from a first series of econometric models using vineyard
+    sales to estimate the hedonic values of GIs and NCs. From an
+    exhaustive dataset of vineyard plots for the whole region under
+    consideration, section [[latex:ref][EDAT]] proposes an alternative identification
+    strategy based on fine-scale continuity assumption of NCs' spatial
+    distribution. For all models, extensive robustness checks are
+    reported in Appendix XX and in Supplemental Material available
+    online (see. ). Finally, [[latex:autoref][CONC]] concludes.
+
+** <<DATA>> Data 						   :noexport:
+*** General background
+**** General description					  :noheading:
+
+    We study the capitalized values of GIs and NCs for the Burgundy
+    region of France, which is probably home to the most expensive
+    vineyards in the world.[fn:1] This region, located at South-East of
+    Paris, is subdivided in two wine regions named /Côtes de Beaune/
+    (CDB) and /Côtes de Nuits/ (CDN) presented in [[latex:autoref][Fig:RIN]] of
+    Supplemental Material (SM [[latex:ref][RIN]]). The two wine regions are spatially
+    segregated along a north--south gradient and, despite their spatial
+    contiguity, produce relatively different wines. Northern CDN region
+    has principally the /pinot noir/ as grape variety for making red
+    wines and southern CDB region has principally /chardonnay/ variety
+    for making white wines. Some exceptions exist, possibly the most
+    obvious being the /communes/ of /Pommard/ and /Volnay/ which
+    produce red wines mainly although in CDB. Two other wine regions
+    (/Hautes Côtes de Beaune/ and /Hautes Côtes de Nuits/) are also
+    present on the area ([[latex:autoref][Fig:CCOM]] of Appendix [[latex:ref][APP1]]) but do not share the
+    same structure in terms of GIs. These latter regions have younger
+    GIs and are spatially segregated from the other CDB and CDN
+    regions. That makes them hardly comparable so we decide to neglect
+    them in the subsequent analysis.
+
+**** Geographical Indications					  :noheading:
+
+     CDB and CDN regions share a common hierarchy of vineyard plots in
+     terms of GIs, and so the resulting wines. Classifying vineyards
+     has a long history in this part of Burgundy, the first
+     classification schemes being attributed to the monks from
+     /Cîteaux/ during the Xth century [[latex:citep][Stan04, Norm10]]. An important step
+     toward the actual hierarchy was the publication of [[latex:cite][Lava55]] which
+     operates a systematic census of vineyard plots, and convey
+     detailed informations about their cultivation history and their
+     NCs.[fn:7] GIs of vineyards have been merged in 1937 to an
+     official nationwide scheme named /Appellations d'Origine
+     Controlée/ actually managed by a national institute (/Institut
+     National de l'Origine et de la Qualitée/). Current GIs divide both
+     wine regions CDB and CDN into /Grands Ordinaires/, /Bourgognes
+     Régionaux/, /Villages/, /Premiers Crus/, and /Grands Crus/, listed
+     from the least to most prestigious.[fn:2] GIs from Burgundy have
+     some unique characteristics at the national and even world scale,
+     the most significant is probably the spatial precision of
+     designations as they are designated at the plot level. As an
+     emblematic exemple, the distinctive GI /Grand Cru de la
+     Romanée-Conti/ counts about 1.8 hectares (4.45 acres) for an
+     annual production of about 6,000 bottles. At about 50 meters from
+     this land parcel, one can found some /Premiers Crus/ as
+     /Vosne-Romanée premier cru Aux Raignots/ or even some
+     /Vosnes-Romanée village/, see
+     [[http://www.vins-bourgogne.fr/gallery_images/site/3/233/407/29457/29546/29582.jpg]].
+
+**** Interest of the case study					  :noheading:
+
+     In summary, Burgundy's vineyards constitute a well-shaped
+     application of this hedonic valuation exercise for three reasons:
+
+    1. GIs are delimited very finely (at the plot scale) and vineyard
+       sale prices can be perfectly matched with this
+       information. Moreover, the presence of GI names on the labels of
+       wine bottles is strictly regulated, imposing mandatory
+       information and font sizes, for example.
+    2. CDB and CDN produce overwhelmingly /terroir/ wines, implying
+       great homogeneity in terms of both grape variety, technology,
+       and wine making process [[latex:citep][Norm10]]. Two grape varieties
+       (/chardonnay/ and /pinot noir/) represent a big majority of the
+       acreages.
+    3. Wine production and vineyard classification have a long
+       history. This long-run temporal predetermination of GIs provides
+       some current gaps in GIs orthogonal to NCs. What was probably
+       the result of lobbying more than one century ago is today
+       arbitrary, so exogenous.
+
+    Point 1 allows us to model GIs without measurement errors and to
+    have marked variations of GIs at a fine scale, i.e., for locally
+    similar NCs. Moreover, this allows us to model the designation
+    scheme as ordered categories from a latent variable [[latex:citep][Stor05, ASto10]]
+    that is proven to have some strong identification properties in
+    non-parametric triangular systems [[latex:citep][NPVe99, DNVe03]]. Point 2
+    reinforces our choice to use the hedonic framework applied to
+    farmland, which replaces producers or consumers by landowners as
+    the agents from which the economic values are inferred. Burgundy
+    wine production presents less unobserved wine processing
+    differences than other French or, even, world wine regions. Point 3
+    provides us with some exclusion restrictions to properly identify
+    the value of GIs, independently from unobserved /terroir/
+    effects. We identify what we call the designation gaps of vineyard
+    classification through variation of GIs between both the /communes/
+    of the region (i.e., an administrative subdivision that dates back
+    to the French revolution of 1789), between the 5 or 10 most
+    adjacent vineyard plots, and from buffers with radius between 100
+    or 500 meters.
+
+*** Vineyard plots and vineyard sales
+**** Units of observations					  :noheading:
+
+    We use both an exhaustive dataset of all vineyard plots for the
+    two wine regions (57,269 observations) and a dataset of vineyard
+    sales operated on the 1992--2008 period (3,054 observations). The
+    former is extracted from the /cadastre numérique/ of the /Institut
+    Géographique National/ and the latter comes from /Société Centrale
+    d'Aménagement du Foncier Rural/. Following [[latex:autoref][Tab:1]] reports the
+    frequencies of plots and sales among the 2 wine regions and the 5
+    GIs of interest. On average, 5.33% of the whole vineyard plots
+    have been sold on the period. Frequencies are quite similarly
+    distributed for plots and sales, between wine regions and
+    GIs. Only the under-representativity of /Grands Ordinaires/ in
+    terms of sales for CDB produces a fewer number of sales relatively
+    to /Premiers Crus/, while there are more plots of /Premiers
+    Crus/. Note that GIs are also quite similarly distributed among
+    each wine region, both for plots and for sales. However, GIs
+    frequencies are not monotonically related to the hierarchy as the
+    highest numbers of plots and sales is found for the intermediate
+    GI /Village/ and the most famous GI /Grand Cru/ counts the
+    smallest number of plots and sales.
+
+#+BEGIN_LaTeX
+\begin{table}[htb]
+  \begin{threeparttable}
+    \caption{\textbf{Numbers of plots and sales according to wine regions and GIs.}}
+    \scriptsize\centering \label{Tab:1}
+    \input{Table/Table1pap.tex}
+    \begin{tablenotes}
+      \scriptsize 
+    \item \emph{Sources:} IGN / INAO / INRA / INSEE / SCAFER (see the
+      acknowledgements).
+    \item \emph{Notes:} ``\# plots'' columns correspond to the
+      frequencies and percentages of exhaustive vineyard data for the
+      two regions of interest. ``\# sales'' columns correspond to the
+      frequencies and percentages of vineyard plots that have been
+      sold on the period of interest 1992--2008. Percentages in
+      parenthesis are expressed relatively to plots or sales,
+      accordingly.
+    \end{tablenotes}
+  \end{threeparttable}
+\end{table}
+#+END_LaTeX
+
+    The dataset about sales is a subset of the whole land plots
+    presented above, it contains the plots that have been sold on the
+    1992--2008 period (see [[latex:autoref][Fig:CCOM]] of Appendix [[latex:ref][APP1]]). As a land
+    transaction could include numerous land plots, our sale data do
+    not contain a unique price for each plot. In particular, 907
+    transactions involve just one plot for a total of 1,476
+    transactions and 3,054 plots sold. On average, a transaction
+    counts 2.07 land plots, the transaction with the highest number of
+    plots counts 61 vineyard plots. To not duplicate the price values
+    that become our outcome variable, we aggregate the plots
+    corresponding to a same vineyard transaction. As some of our
+    explanatory variables are available at the plot scale, we average
+    the values (weighted by acreages) in the case of continuous
+    variables and we select the value of the biggest plot in case of
+    discrete variables. This point is particularly important as GIs
+    need to be aggregated when a transaction includes land plots with
+    different GIs. We have tested alternative aggregation rules for
+    GIs (reporting the most famous or the less famous GI) without that
+    changes our results.
+
+**** Vineyard prices						  :noheading:
+
+    Turning to the per-ha vineyard prices, we found an average price
+    of about \EUR{}265,000 without distinction of GIs. This
+    corresponds to about 40 ha of cropland in the region of
+    Burgundy. Price variability is high, some sales at the top of the
+    distribution are more than twice as expensive as buildable land in
+    the region of Burgundy.[fn:3] The maximum of \EUR{}4,000,000/ha
+    for a /Grand Cru/ of CDB is equivalent to the per-hectare price of
+    a buildable land in the center of Paris. The natural logarithm of
+    per-hectare price is highly variable between GIs, although it is
+    not much variable between wine regions for a given GI
+    ([[latex:autoref][Fig:DPX]]). This highlights the /a priori/ strong effect of GIs,
+    knowing the differences between wine regions mentioned above (red
+    wines for CDN and white wines for CDB). These grouped structure of
+    price distribution suggests both that there are strong variations
+    in vineyard prices at small scales (within each wine region) and
+    that GI effects have potentially the same magnitudes between wine
+    regions.
+
+#+BEGIN_LaTeX
+\begin{figure}
+  \caption{\textbf{Vineyard price distributions among wine regions and
+      Geographical Indications.}}\vspace{-.5cm}
+  \centering\label{Fig:DPX}
+\includegraphics[scale= .65]{Figures/DistribPx.pdf}\\[.25cm]
+   \begin{minipage}{\textwidth}
+     \scriptsize \emph{Sources:} IGN / INAO / INRA / INSEE / SCAFER
+     (see the acknowledgements).\\
+     \emph{Notes:} Geographical Indications are ordered between
+     subpanels from the least famous (\emph{Grands Ordinaires} at the
+     bottom) to the most (\emph{Grands Crus} at the top). \texttt{CDB}
+     counts for the wine region \emph{Côte de Beaune} and \texttt{CDN}
+     for \emph{Côte de Nuits}. Bold points represent the median prices
+     for each category, surrounded by the 25\% quantile in the boxes
+     and the 95\% quantile prices in the lines.
+    \end{minipage}
+\end{figure}
+#+END_LaTeX
+
+    [[latex:autoref][Fig:DPX]] also shows that the median per-ha prices within GIs are
+    approximately linear from the least famous GI of CDB to the most
+    famous GI of CDN. This means that the median price of one ha of
+    /Grands Crus/ is approximately twice that of one ha of /Premiers
+    Crus/, which in turn is twice as expensive as one ha of /Village/,
+    and so on. Finally, [[latex:autoref][Fig:DPX]] shows the presence of some potential
+    outliers within the GIs. Below, we report the econometric results
+    based on all sales, verifying systematically that the results are
+    not sensitive to the outliers. The right panel of [[latex:autoref][Fig:CCOM]] of the
+    Appendix [[latex:ref][APP1]] displays the spatial smoothed distribution of the
+    logarithm of per-ha prices, which shows that the two wine regions
+    present core(s)/ periphery structures. CDB presents two cores,
+    located at the center from the East--West gradient and regularly
+    along the South--North gradient. CDN displays only one core, in
+    the middle of the South--North gradient but shifted to the West.
+
+*** Explanatory variables
+**** Presentation						  :noheading:
+
+     We have merged a large number of additional variables about the
+     NCs of all vineyard plots, using different sources. A first set of
+     NC variables comes from a digital elevation model that computes
+     the elevation, slope, and exposition of each vineyard plot. The
+     resolution of this model is 50 meters, so we can consider these NC
+     variables as well observed at the plot scale. This is not the case
+     for the 9 climate and 6 soil variables that come from two datasets
+     available at more aggregated scales. To our knowledge, the finest
+     scale of availability for climate variables is the /commune/ scale
+     (i.e., the delineation at the left panel of [[latex:autoref][Fig:CCOM]] in the
+     Appendix [[latex:ref][APP1]]). We use average climate values for the period
+     1970--2000. Soil variables are available at the scale of soil
+     units (see the middle panel of [[latex:autoref][Fig:CCOM]] in the Appendix
+     [[latex:ref][APP1]]). Soil units are spatial delineations known to be homogeneous
+     in terms of geology and soils, according to a regional soil survey
+     [[latex:citep][Chre00]]. This survey was conducted by soil scientists,
+     independently of the current research. \emph{Communes} and soil
+     units count respectively 35 and 25 spatial entities. As they come
+     from aggregate values, the resulting NC variables have to be
+     considered as approximations that suffer from measurement errors.
+
+**** Summary statistics						  :noheading:
+
+   The following [[latex:autoref][Tab:2]] reports the usual summary statistics for the
+   continuous variables used in our analysis. The second row shows
+   that vineyard plots are very small compared with other farmland and
+   other wine regions in France. An average of 0.18 ha corresponds to
+   0.445 acres. We compute the distances from vineyards to the centers
+   of corresponding /communes/, which typically group the services
+   available to the population. They will be used as a proxy of urban
+   influences. The last 15 rows of [[latex:autoref][Tab:2]] concern the above-mentioned
+   NC variables from sources at coarser resolutions. They present
+   smaller coefficients of variations, this is particularly true for
+   climate variables compared with elevation and slope.
+
+#+BEGIN_LaTeX
+\begin{table}[htb]
+\centering \footnotesize
+  \begin{threeparttable}
+    \caption{\textbf{Summary statistics for vineyard plot dataset.}}
+    \footnotesize  \label{Tab:2}
+    \input{Table/SumStatAllPap.tex}
+    \begin{tablenotes}
+      \scriptsize 
+    \item \emph{Sources:} IGN / INAO / INRA / INSEE / SCAFER (see the
+    acknowledgements).
+  \item \emph{Notes:} The price variable of the first row is only
+    available for vineyard plots that have been sold. The surface
+    variable, the geographical coordinates (longitude and latitude)
+    and the distance to the centers of \emph{communes} are computed
+    with a Geographical Information System. The 2 variables about
+    topography come from a Digital Elevation Model at 50 m. The next 9
+    rows are climatic variables from the aggregated \emph{communes}
+    scale. The last 6 rows are soil variables from soil units.
+    \end{tablenotes}
+  \end{threeparttable}
+\end{table}
+#+END_LaTeX
+
+   In an unreported analysis, we find high correlations between the
+   numerous NC variables (climate and soils) that are relevant for our
+   analysis. Hence, we operate 2 Principal Component Analyses to
+   reduce the dimension of the explanatory variables and decrease
+   multicollinearity in hedonic models. The details of these results
+   are reported in [[latex:autoref][Fig:PCA]] of Appendix [[latex:ref][APP1]]. The first PCA concerns
+   climate variables (rows 8 to 16 of [[latex:autoref][Tab:2]]). The two first axis
+   explain 87\% of the total variance and we interpret them as proxies
+   of a wet and a heat climate. The second PCA concerns soil variables
+   (rows 17 to 22 of [[latex:autoref][Tab:2]]). The two first axis explain 72\% of the
+   total variance and we interpret them as proxies of a rough and
+   depth soils. Such dimension reductions are operated on coarse
+   variables that already contents measurement errors. The loss of
+   precision from these operations are not central as our framework
+   encompasses the presence of omitted variables and measurement
+   errors.
+
+** Supplemental Material (NOT FOR PUBLICATION)			   :noexport:
+*** <<RIN>> Regions of Interest
+
+#+BEGIN_LaTeX
+\begin{figure}[!h]\centering
+  \caption{\textbf{The Burgundy vineyards and the 2 wine regions of interest.} \\
+    \footnotesize Burgundy is a French administrative region located
+    between Lyon and Paris. Our data concern the \emph{département} of
+    \emph{Côte d'Or}, above the dased line of the left
+    panel. Vineyards of this \emph{département} are divided in two
+    wine regions, XXX see Figure XX.}
+ \includegraphics[scale= .75]{./Figures/Localisation.pdf}\label{Fig:RIN}
+\end{figure}
+\clearpage
+#+END_LaTeX
+
+*** <<BSP>> The B-spline functions
+
+   A popular and effective way of representing smooth functions of
+   continuous covariates is the regression spline approach. The basic
+   idea is to approximate a generic function $h_k(x_{ki})$ by a linear
+   combination of known spline basis functions, $b_{ks}(x_{ki})$, and
+   regression parameters, $\beta_{ks}$, 
+
+#+BEGIN_LaTeX
+\begin{equation}
+h_k(x_{ki})= \sum_{s=1}^{S_k}\beta_{ks}b_{ks}(x_{ki})=B_k(x_{ki})\beta_{k}
+\end{equation}
+#+END_LaTeX
+
+   @@latex:\noindent@@ where $S_k$ is the number of spline bases and
+   hence regression coefficients used to represent $h_k$,
+   $B_k(x_{ki})$ represents the $i^{th}$ $1\times S_k$ row vector
+   consisting of the basis functions evaluated at the observation
+   $x_{ki}$, i.e., $B_k(x_{ki})= \{b_{k1}(x_{ki}), b_{k2}(z_{ki}),
+   \dots, b_{kS_k}(x_{ki})\}$, and $\beta_k$ is the corresponding
+   parameter vector. Calculating $B_k(x_{ki})$ for each $i$ yields
+   $S_k$ curves encompassing different degrees of complexity. When
+   they are multiplied by some real valued parameter vector $\beta_k$
+   and then summed, they provide a curve estimate for
+   $h_k(x_{ki})$. In matrix form, the sum of spline functions with
+   parameter matrix is noted $B(X_i)\bm{\beta}$, as equation ([[latex:ref][Eq:OVB]])
+   in the main text. Basis functions are usually chosen to have
+   convenient mathematical properties and good numerical
+   stability. Possible choices are B-splines, cubic regression and
+   thin plate regression splines. We employ the former cubic splines
+   although, in the one dimension case, all specifications lead to
+   very similar results. Series methods select the number of knots as
+   a smoothing constrain (equivalent to bandwidth in kernel-based non
+   parametric regressions) estimated with backfitting methods, [[latex:citep][HTib90,
+   Wood04]].
+
+*** <<SSB>> Spatial patterns of elevation and slope
+
+#+BEGIN_LaTeX
+\begin{figure}[!h]\centering
+\caption{\textbf{Smoothed distribution of elevation (left), slope (middle) and per-ha price (right).} \\ \\
+                 \footnotesize The spatial smoothing functions are estimated by partially-linear splines of geographical coordinates with
+                              the same knots from the three variables. This shows that the 2 biophysical variables present
+                              some higher degrees of spatial dependence (greater for elevation than for slope) compared to an economic
+                              variable as per ha prices. This is true even if the latter contains a somehow high degree of
+                              spatial dependence with explained variance greater than 50\%.} 
+ \includegraphics[scale= .5]{./Figures/SpDistPx.pdf}\label{Fig:SSB}
+\end{figure}
+\clearpage
+#+END_LaTeX
+
+*** Polynomials from classical hedonic models
+
+#+LATEX: \input{Table/ResHED.tex}
+
+*** Polynomials from selection models
+
+#+LATEX: \input{Table/ResSEL_2b.tex}
+
+*** Polynomials from designation models
+
+#+LATEX: \input{Table/ResOP.tex}
+
+*** Polynomials from control function models
+
+#+LATEX: \input{Table/ResCF.tex}
+
+*** <<SPA>> Spatial autocorrelation				   :noexport:
+   
+   As we argue in the main text, testing for spatial autocorrelation
+   of the errors $\epsilon_i^o$ can be used to determinate the
+   trade-off for the complexity of the SFs and the proxy solution. The
+   following [[latex:autoref][Fig:MPT]] displays Moran's plots for the models (I) to (VI)
+   with, on the x-axis, the estimated errors for each sale $i$ and, on
+   the y-axis, the average errors of these neighbors, weighted
+   according to their distances to $i$. The spatial weight matrix is a
+   Gaussian spatial kernel with a bandwidth chosen in order to have at
+   least one neighbor for each observation.
+
+#+BEGIN_LaTeX
+\begin{figure}[h]
+\caption{\textbf{Moran's plots for spatial autocorrelation of residuals}\\ \\
+\footnotesize Notes: Residuals from pooled samples, the same results are obtained on each wine subregion.
+ From the top left to the bottom right, this corresponds to models (I) to (VI).} \label{Fig:MPT}\centering
+        \includegraphics[scale= .5]{Figures/Moran1.pdf}
+\end{figure}
+#+END_LaTeX
+
+   This Figure clearly shows the value of SF in controlling for the
+   spatial autocorrelation of the residuals, and this is true for each
+   sample and each specification. More formally, a bootstrap test of
+   the Moran's /I/ statistics indicates that we reject the spatial
+   independence of errors for the models without SF but we cannot
+   reject it for the models with SF (95% for (II) and (VI), 90% for
+   (IV)).
+
+#+LaTeX: \clearpage
+
+*** <<SEP>> Spline effects on prices				   :noexport:
+
+#+BEGIN_LaTeX
+\begin{figure}[h]
+      \caption{\textbf{Marginal B-spline effects of elevation (left) and slope (right) on per-hectare prices}\\ \\
+{\footnotesize Note: Model (I) contains only the NCs as regressors, model (V) also includes GIs.
+               In rows, the three samples used in the estimations: pooled, \emph{C\^ote de Beaune} (CDB) and \emph{C\^ote de Nuits} (CDN).}}
+\centering\label{Fig:PEF}
+\begin{tabular}{cc}
+        \includegraphics[scale= .5]{Figures/EfELEV.pdf}& \includegraphics[scale= .5]{Figures/EfSLP.pdf} 
+\end{tabular}
+\end{figure}\clearpage
+#+END_LaTeX
+
+*** <<SED>> Spline effects of designations			   :noexport:
+
+#+BEGIN_LaTeX
+\begin{figure}[!h]
+  \caption{\textbf{Marginal effects of NCs on probabilities of GI designations}\\ \\
+   \footnotesize Notes: Results from models (iii) about elevation and slope effects (in columns) according to the three samples (in rows), 
+                        all other covariates are at their sample means.}
+  \centering\label{Fig:SPE}
+  \begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[page= 1, scale= .65]{Figures/Efo.pdf}
+  \end{subfigure}\\\vspace{-1.415cm}
+  \begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[page= 2, scale= .65]{Figures/Efo.pdf}
+  \end{subfigure}\\\vspace{-1.415cm}
+  \begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[page= 3, scale= .65]{Figures/Efo.pdf}
+  \end{subfigure}
+\end{figure}\newpage
+#+END_LaTeX
+
+*** <<COM>> /Communes/ effects in designations			   :noexport:
+
+#+BEGIN_LaTeX
+\begin{figure}[!h]\label{Fig:COM}
+\begin{tabular}{c}
+\textbf{A -- Coefficients of \emph{commune} dummy variables for spline models}\\
+\includegraphics[scale= .65]{./Figures/PlotComDum.pdf}\\
+\textbf{B -- Coefficients of \emph{commune} dummy variables for polynomial models}\\
+\includegraphics[scale= .65]{./Figures/PlotComDum2.pdf} \\
+\end{tabular}
+\end{figure}
+\clearpage
+#+END_LaTeX
+   
+* Presentation 							   :noexport:
+  :PROPERTIES:
+  :EXPORT_FILE_NAME:     Presentation
+  :EXPORT_LATEX_CLASS:   PresSemin
+  :EXPORT_LATEX_HEADER:  \renewcommand{\texttt}{\textcolor{beamer@blendedblue}} \renewcommand{\footnotesize}{\scriptsize} \addbibresource{Perso.bib} \renewcommand*{\bibfont}{\scriptsize}
+  :EXPORT_BEAMER_HEADER: \usepackage{bm, tikz, adjustbox, amsmath, dsfont, dcolumn, import} \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+  :EXPORT_LATEX_HEADER:  \usepackage{handoutWithNotes} \pgfpagesuselayout{3 on 1 with notes}[a4paper,border shrink=10mm]
+  :EXPORT_OPTIONS:       TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:2 author:t
+  :EXPORT_TITLE:         The Value of Geographical Indications with Unobserved /terroir/ Effects
+  :EXPORT_AUTHOR:        Jean-Sauveur Ay \and Julie Le Gallo \\[.5cm] \texttt{UMR CESAER}\\[.5cm] AgroSup Dijon, Inra, Univ. Bourgogne-Franche-Comté  
+  :EXPORT_DATE:          \null
+  :END:
+** 1 -- Introduction
+*** Economics of Geographical Indications (GIs)
+
+    - =Accomodative views= :
+
+    GIs proxy well and at low cost the unobservable quality attributes
+    of complex agricultural products
+
+#+LaTeX: \vspace{.5cm}
+
+    - =Contrarian views= :
+
+    GIs restrict supply and create rents for landowners through
+    artificially segmented agricultural markets
+
+*** \null
+
+#+BEGIN_CENTER
+\vspace{-.5cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .15]{./Figures/CM}
+#+END_CENTER
+
+*** Research statement
+
+    We test the =empirical relevance of these two views= through land
+    price determinants on =Burgundy vineyard sales=
+#+LaTeX: \vspace{.75cm}
+
+    =Question:= What are the respective effects of /terroir/ and GIs
+    to explain observed =vineyard prices variations= ?\\[.5cm]
+
+    - =Accomodative= : low value of GI with /terroir/ controlled
+    - =Contrarian= : high value of GI with /terroir/ controlled
+
+*** Empirical Literature
+
+    =Strong effect of Geographical Indications= in all studies
+
+#+LaTeX: \vspace{.5cm}
+
+    @@latex: \texttt{Insignificant effect of soil \emph{terroir}}@@
+    - Gergaud and Ginsburgh (EJ 2008), Bordeaux wines
+    - Cross et al. (AER 2011), Oregon vineyards 
+
+#+LaTeX: \vspace{.5cm}
+
+    @@latex: \texttt{Strong effect of climate \emph{terroir}}@@
+    - Ashenfelter et al. (Chance 1995), Bordeaux wines
+    - Ashenfelter and Storchmann (RES 2010), Mosell vineyards
+
+*** Our contribution
+
+    Typical available data do not contain all /terroir/ variables
+    (=omitted variable bias=) or /terroir/ is =measured with errors=
+    due to downscaling (particular case of omitted variable)
+
+#+BEGIN_CENTER
+    $\Rightarrow$ =Full terroir is not observed= in hedonic models
+#+END_CENTER
+
+#+LaTeX: \pause
+
+    We propose an original identification strategy based on the
+    =spatial continuity= of /terroir/ effects (biophysical patterns)
+ 
+** 2 -- Vineyard Data
+*** Vineyards of Côte d'Or, Burgundy (France)
+**** Image 1 							      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .375]{./Figures/Localisation}
+#+END_CENTER     
+
+**** Image 2 							      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-.75cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .4]{./Figures/pyramide2}
+#+END_CENTER     
+
+*** \null
+**** Image 1 							      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.45
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1.5cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .275]{./Figures/MapPx.pdf}
+#+END_CENTER     
+
+**** Image 2 							      :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.55
+    :END:
+
+#+Caption: Sales on the 1992--2008 period
+| <l>      |  <r> |  <r> |  <r> |  <r> |
+| GIs      |  CdB |  (%) |  CdN |  (%) |
+|----------+------+------+------+------|
+| Côteaux  |  173 |  5.6 |  121 |  3.9 |
+| Régional |  437 | 14.3 |  181 |  5.9 |
+| Village  |  865 | 28.3 |  709 | 23.2 |
+| Pr Cru   |  373 | 12.2 |  120 |  3.9 |
+| Gd Cru   |   35 |  1.1 |   40 |  1.3 |
+|----------+------+------+------+------|
+| Total    | 1883 | 61.6 | 1171 | 38.3 |
+
+*** Distribution of vineyard prices
+
+| <l>         | <c>           | <c>       |
+|             | =Price=       | =Index=   |
+| =GIs=       | (000 \EUR/ha) | (BGOR= 1) |
+|-------------+---------------+-----------|
+| Côteaux     | 52.93         | 1         |
+| Régional    | 62.20         | 1.18      |
+| Village     | 277.89        | 5.25      |
+| Premier Cru | 408.14        | 7.71      |
+| Grand Cru   | 954.15        | 18.03     |
+
+#+BEGIN_LaTeX
+{\footnotesize Note: Prices are in 2008 values and are weighted by sale acreages.}
+#+END_LaTeX
+
+*** Distribution of vineyard prices
+
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .6]{./Figures/DistribPx}
+#+END_CENTER     
+
+** 3 -- Structural Model
+*** Structural triangular relationship
+
+D.1: Consider the =Data Generating Process= :
+
+#+BEGIN_LaTeX
+\begin{equation}
+\left\{
+\begin{array}{ccccl}
+p  &=& h(X^*, d)+ \epsilon\,, &\hspace*{1cm}& \mathbb{E}(\epsilon\mid X^*, d)= 0\label{eq:1}\nonumber\\[.35cm]
+d^*&=& g(X^*)+ \xi\,,         &             & \mathbb{E}(\xi     \mid X^*)= 0
+\end{array}
+\right.
+\end{equation}
+
+\vspace*{.35cm}
+with $d= \sum_{j=0}^{J}\; j \cdot \bm{1}[\mu_{j} < d^*\leqslant \mu_{j+1}]$
+
+\vspace{.35cm}
+and $-\infty\equiv \mu_0< \mu_1<\dots < \mu_{J+1}\equiv \infty$
+#+END_LaTeX
+
+*** Structural assumptions
+
+A.1: =Spatial independence of structural errors=
+#+LaTeX: \vspace{.25cm}
+
+ (a). $\mathbb{E}(\epsilon\mid X^*, d, U) = \mathbb{E}(\epsilon\mid X^*, d)$
+
+ (b). $\mathbb{E}(\xi\mid X^*, U) = \mathbb{E}(\xi\mid X^*)$
+
+#+LaTeX: \vspace{.5cm}
+
+A.2: =Independence between structural errors=
+#+LaTeX: \vspace{.25cm}
+
+$\epsilon \indep \xi \;\;\Leftrightarrow\;\; p \indep (d^*, d) \mid X^*$
+
+#+LaTeX: \vspace{.5cm}
+
+But we neither assume that $X^*$ is =fully observable=, nor the
+presence of =instrumental variables= of GI designations.
+
+** 4 -- Reduced Models
+*** Classical hedonic models
+
+    =Semi-parametric hedonic model= with $X\subset X^*$:
+
+\begin{equation}
+p_i=  B(X_i) \bm{\beta}_1^{\top}+ D_{i}\Delta_1^{\top} + \epsilon_{1i},\nonumber
+\end{equation}
+
+#+LaTeX: \vspace{.5cm} \pause
+
+    =Spatial proxy model= with $U_i$ geographical coordinates:
+
+\begin{equation}
+p_i=  B(X_i) \bm{\beta}_2^{\top}
+         + D_{i}\Delta_2^{\top} + L(U_i) \bm{\ell}_2^{\top}+ \epsilon_{2i},\nonumber
+\end{equation}
+
+#+LaTeX: \vspace{.5cm} \pause
+
+    =Proposition 1= : $\widehat{\Delta}_1$ and $\widehat{\Delta}_2$ are over-estimated. 
+
+*** Explanatory variables
+
+#+LaTeX: \input{./Tables/SumStatPap.tex}
+
+*** Dimension reduction: Wet, Heat, Rough, Depth
+
+#+LaTeX: \vspace{-.8cm}
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .55]{./Figures/ACPbiop}
+#+END_CENTER     
+
+*** Classical hedonic models
+
+#+LATEX: \input{Tables/AnovaHedonicPRES.tex}
+
+*** Semi-parametric effects of elevation
+
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .55]{./Figures/EfLmNa}
+#+END_CENTER     
+
+*** Semi-parametric effects of slope
+
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .55]{./Figures/EfLmNb}
+#+END_CENTER     
+
+*** \null
+
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .85]{./Figures/Cote}
+#+END_CENTER     
+     
+*** GAM Spatial smoothing
+
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale=.225]{./Figures/SpSmGam.pdf}
+#+END_CENTER     
+
+*** Values of GIs
+
+| <c>         | <c>     | <c>         | <c>         |
+| =GI=        | =Index= | =OLS 2=     | =GAM 1=     |
+|-------------+---------+-------------+-------------|
+| Côteaux     | 1       | Ref         | Ref         |
+| Régional    | 1.18    | 1.58$^{**}$ | 1.46$^{**}$ |
+| Village     | 5.25    | 3.15$^{**}$ | 2.95$^{**}$ |
+| Premier Cru | 7.71    | 3.66$^{**}$ | 3.26$^{**}$ |
+| Grand Cru   | 18.03   | 4.99$^{**}$ | 4.35$^{**}$ |
+
+#+BEGIN_LaTeX
+{\footnotesize Note: ** for significant at p<1\% with HAC robust SEs.}
+#+END_LaTeX
+
+** 5 -- Identification
+*** Burgundy's vineyards
+
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 4cm, clip=true, scale= .47]{./Figures/Photo}
+#+END_CENTER     
+
+*** Vineyard plots and GIs
+     
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .25]{./Figures/parcelles}
+#+END_CENTER
+
+*** Additional assumptions
+
+    D.2: =Spatial neighborhood of a plot=
+#+LaTeX: \vspace{.25cm}
+
+$\mathcal{U}_i(k)\equiv\big\{i'\in \bm{I}_{0}, i'\neq i 
+                         \mid \|U_{i'}-U_{i}\|\leqslant k\big\}$
+#+LaTeX: \vspace{.5cm}
+
+    A.3: =Spatial continuity of terroir=
+#+LaTeX: \vspace{.25cm}
+
+$\lim_{k\rightarrow 0}\mathbb{E}\big[f(X^*)\mid \mathcal{U}(k), d=
+j\big]= \lim_{k\rightarrow 0}\mathbb{E}\big[f(X^*)\mid \mathcal{U}(k),
+d\neq j\big]$
+
+#+LaTeX: \vspace{.5cm}
+
+    A.4: =Existence of local GIs' variations=
+#+LaTeX: \vspace{.25cm}
+
+$q^*_j\equiv \lim_{k\rightarrow 0}\mbox{Prob}\big[d= j \mid \mathcal{U}(k)\big] < 1$
+
+*** Reaching spatial continuity
+
+    Spatial continuity requires a =high spatial density of
+    plots=
+
+#+LaTeX: \vspace{.5cm}\pause
+    
+    Price models are estimated on a =sample of vineyard sales= :
+    $N_p\approx 3,000$ corresponding to 2.5 sales for 10 ha
+
+#+LaTeX: \vspace{.5cm}
+
+    GI designation available on the =whole set of vineyard plots= :
+    $N_d\approx 57,000$ corresponding to 53 plots for 10 ha ($\times 20$)
+
+*** Identification result
+    
+    We compute =Designation Gaps= for $k=5, 10, 30$ nearest neighbors
+    using all GI plot observations:
+
+\begin{equation}
+\widehat{\bm{\xi}}_{j}(k)= d_{j}- \mathbb{E}[d_{j}\mid \mathcal{U}(k)]\nonumber
+\end{equation}
+
+#+LaTeX: \vspace{.2cm}
+
+    and use them as =instrumental variables= for GIs, by 2SLS:
+\begin{equation}
+p_i=  B(X_i) \bm{\beta}_{3k}^{\top}+ \widehat{D}_{i}\Delta_{3k}^{\top} + \epsilon_{3ki},\nonumber
+\end{equation}
+
+    =Proposition 2= : $\lim_{k\rightarrow 0} \widehat{\Delta}_{3k}$ is unbiased
+    and as. consistent. 
+
+*** \null
+
+\vspace{-1cm}
+#+BEGIN_CENTER
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .5]{./Figures/DGaP.pdf}
+#+END_CENTER
+
+*** First stage results: strong instruments
+
+#+caption: F-statistics for weak instruments
+|--------------------+-----+------+-----------+-----------------|
+|                    | df1 |  df2 | statistic | p-value         |
+|--------------------+-----+------+-----------+-----------------|
+| GI Gaps for 30 nnb |   1 | 1477 |   1146.32 | < 2e-16$^{***}$ |
+| GI Gaps for 10 nnb |   1 | 1477 |    590.20 | < 2e-16$^{***}$ |
+| GI Gaps for 05 nnb |   1 | 1477 |    374.82 | < 2e-16$^{***}$ |
+|--------------------+-----+------+-----------+-----------------|
+
+*** Values of GIs
+
+| <c>         | <c>     | <c>         | <c>         | <c>         | <c>         | <c>         |
+| =GI=        | =Index= | =OLS 2=     | =GAM 1=     | =k=30=      | =k=10=      | =k=5=       |
+|-------------+---------+-------------+-------------+-------------+-------------+-------------|
+| Côteaux     | 1       | Ref         | Ref         | Ref         | Ref         | Ref         |
+| Régional    | 1.18    | 1.58$^{**}$ | 1.46$^{**}$ | 1.20        | 1.12        | 1.06        |
+| Village     | 5.25    | 3.15$^{**}$ | 2.95$^{**}$ | 2.80$^{**}$ | 2.67$^{**}$ | 2.57$^{**}$ |
+| Premier Cru | 7.71    | 3.66$^{**}$ | 3.26$^{**}$ | 2.75$^{**}$ | 2.63$^{**}$ | 2.52$^{**}$ |
+| Grand Cru   | 18.03   | 4.99$^{**}$ | 4.35$^{**}$ | 3.80$^{**}$ | 3.78$^{**}$ | 3.76$^{**}$ |
+
+#+BEGIN_LaTeX
+{\footnotesize Note: ** for significant at p<1\% with HAC robust SEs.}
+#+END_LaTeX
+
+** 6 -- Conclusion
+*** Main results
+
+    Taking into account the unobserved parts of /terroir/ changes
+    =significantly the results=, avg. 85 percent points of GI values
+
+#+LaTeX: \vspace{.5cm}
+
+    The part of the =variance of sale price= explained by:
+    - Geographical Indications decrease from 51 to 32%
+    - /Terroir/ effects increase from 8 to 27%
+
+#+LaTeX: \vspace{.5cm}
+
+    GIs have economic effects independently from /terroir/ (quality)
+    effects, but with =less importance than typically thought=:
+    hedonic approaches biased toward contrarian views
+
+*** Perspectives
+
+    Our identification strategy provides consistent hedonic values for
+    GIs, the hedonic values of /terroir/ are =still downward biased=
+
+#+LaTeX: \vspace{.5cm}
+
+    Some =questions still unresolved=:
+    - the optimal choice of $k$ (gof statistics not relevant)
+    - the generality of local treatment effects from IVs 
+
+#+LaTeX: \vspace{.5cm}
+
+    =External validity= of the results from Burgundy:
+    - About the relative economics values of GIs
+    - About the methodology to control spatial heterogeneity
+
+*** Bibliography
+
+#+LaTeX: \null\vspace{-.5cm}{\small
+
+=Ashenfelter, O., D. Ashmore and R. Lalonde (1995)=. Bordeaux wine
+vintage quality and the weather.  /Chance/ 8.
+
+#+LaTeX: \vspace{.5cm}
+
+=Ashenfelter, O. and K. Storchmann (2010)=. Using hedonic models of
+solar radiation and weather to assess the economic effect of climate
+change: The case of Mosel Valley vineyards. /Review of Economics and
+Statistics/ 92.
+
+#+LaTeX: \vspace{.5cm}
+
+=Cross, R., A. J. Plantinga and R. N. Stavins (2011)=. What is the
+value of terroir? /American Economic Review/ 101: 152.
+
+#+LaTeX: \vspace{.5cm}
+
+=Gergaud, O. and V. Ginsburgh (2008)=. Natural endowments, production
+technologies and the quality of wines in Bordeaux. Does terroir
+matter? /Economic Journal/ 118.
+
+#+LaTeX: }
+
