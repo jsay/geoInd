@@ -8,57 +8,67 @@ author: |
 # Abstract
 
 <div class="abstract">
-This file contents the R codes associated with the paper "The informational content of geographical indications" AAWE Working Paper No XXX. The data used are under licence Creative Commons Attribution Share Alike 4.0 International, available on the INRA dataverse website: <https://data.inra.fr>. R functions used are reported in the appendix to preserve the visibility of codes. Additional elements are in the French version available from the following Github repository: .
+This file contents the R codes associated with the paper "The informational content of geographical indications" AAWE Working Paper No XXX. The data used are under licence Creative Commons Attribution Share Alike 4.0 International, available on the INRA dataverse website: <https://data.inra.fr>. Some R functions are reported in the appendix to preserve the visibility of codes. Additional elements and last version of the document are available from <https://github.com/jsay/geoInd>.
 
 </div>
 
 
 # Table of Contents
 
-1.  [Descriptive Statistics](#orgad30e4c)
-2.  [Models of GI designation](#orgf61b19f)
-    1.  [Parametric ordered logit](#org5e090ec)
-    2.  [Ordered generalized additive](#orgbff41fe)
-3.  [Diagnostics](#org93bda5e)
-    1.  [Significance](#org9271d44)
-    2.  [Goodness of fit](#org4546996)
-    3.  [Omitted variable](#org90e7af9)
-    4.  [Specification](#org3687717)
-4.  [Marginal effects](#orge4e0fe9)
-    1.  [Parametric ordered logit](#orgfb7d0fc)
-    2.  [Ordered generalized additive](#org6ef63b3)
-    3.  [Ordinal superiority figure](#org72d9bd4)
-    4.  [Correlation between *Communes*](#orgbcab552)
-5.  [Decomposition](#orgb264db6)
-6.  [Models for 1936 GIs](#org51d04e7)
-    1.  [Descriptive stats](#org616ec72)
-    2.  [Estimation](#org6c241cf)
-    3.  [Significance](#org9d9bcb2)
-    4.  [Goodness of fit](#org802a2d9)
-    5.  [Omitted variable](#org72e014d)
-    6.  [Specification](#org14eb027)
-    7.  [Marginal effects](#org3f37c2c)
-    8.  [*Commune* effects](#orgf1dfc41)
-    9.  [Dynamic *Communes*](#orgefe2d93)
-7.  [Counterfactual decomposition](#org0c3fa12)
-    1.  [Decomposition 1936 GIs](#org9e047de)
-    2.  [Alternative GI designations](#org82cad97)
-8.  [Session information](#orge43ff5d)
-9.  [Functions](#org8612800)
-    1.  [Surrogate](#org47756fe)
-    2.  [Decomposition](#org5f7b47d)
+1.  [Descriptive Statistics](#orgeb3b39b)
+    1.  [Data consistency](#org0dd7407)
+    2.  [Crossing GIs dimensions](#orge83023d)
+2.  [Models of GI designation](#orgac69595)
+    1.  [Parametric ordered logit](#org6105a26)
+    2.  [Ordered generalized additive](#orgec5319a)
+3.  [Diagnostics](#orgdf2fac1)
+    1.  [Significance](#org2b1c449)
+    2.  [Goodness of fit](#org56de100)
+    3.  [Omitted variable](#org48f958c)
+    4.  [Specification](#org0a22027)
+4.  [Marginal effects](#org8089fa8)
+    1.  [Parametric ordered logit](#orgf2dd70a)
+    2.  [Ordered generalized additive](#orgf1e1d57)
+    3.  [Ordinal superiority figure](#org484b47a)
+    4.  [Correlation between *Communes*](#orgf950ae0)
+5.  [Informational content](#org2536402)
+    1.  [Decomposition table](#org40ad2b8)
+6.  [Models for GIs of 1936](#org760b3f9)
+    1.  [Descriptive statistics](#org9066d9c)
+    2.  [Estimation](#org12cfb30)
+    3.  [Significance](#org97cf5d6)
+    4.  [Goodness of fit](#org908a4fd)
+    5.  [Omitted variable](#org0293ec0)
+    6.  [Specification](#org391e1bf)
+    7.  [Marginal effects](#orgd50037b)
+    8.  [Ordinal superiority](#orgb9dd6e3)
+    9.  [Correlation between models](#orgb175728)
+    10. [Decomposition table](#org7f2dfca)
+7.  [Alternative GI designations](#org66f495c)
+    1.  [Change latent vineyard quality](#org76a71a4)
+    2.  [Add a vertical level in GIs](#org04f7e8d)
+    3.  [Decomposition table](#orgb7e698b)
+8.  [Session information](#orge837d94)
+9.  [Custom functions](#org2ac582b)
+    1.  [Surrogate Residuals](#org625a316)
+    2.  [Decomposition terms](#org2465734)
 
 
-<a id="orgad30e4c"></a>
+<a id="orgeb3b39b"></a>
 
 # Descriptive Statistics
+
+
+<a id="org0dd7407"></a>
+
+## Data consistency
 
 Include stat des about sample selection
 
 ```R
-library(sp) ; load("Inter/PolyVny.Rda")
-Reg.Rank <- subset(PolyVny,
-                   PolyVny$PAOC!= 0 & !is.na(PolyVny$DEM) & !is.na(PolyVny$LIBCOM))
+library(sp) ; load("Inter/PolyVine.Rda")
+Reg.Rank <- subset(PolyVine, PolyVine$PAOC!= 0 & 
+                   !is.na(PolyVine$DEM) & !is.na(PolyVine$LIBCOM))
 Reg.Rank$AOCc <- ifelse(Reg.Rank$GCRU== 1, 5,
                  ifelse(Reg.Rank$PCRU== 1, 4,
                  ifelse(Reg.Rank$VILL== 1 | Reg.Rank$COMM== 1, 3,
@@ -105,12 +115,23 @@ sapply(Reg.Rank@data, function(x) sum(is.na(x)))
             0          0          0          0          0
 
 
-<a id="orgf61b19f"></a>
+<a id="orge83023d"></a>
+
+## Crossing GIs dimensions
+
+```R
+yop la
+```
+
+<./Figures/Effects2.pdf>
+
+
+<a id="orgac69595"></a>
 
 # Models of GI designation
 
 
-<a id="org5e090ec"></a>
+<a id="org6105a26"></a>
 
 ## Parametric ordered logit
 
@@ -138,7 +159,7 @@ por1b <- polr(factor(AOCc)~ 0+ LIBCOM+ EXPO
 Why warning message can be omitted.
 
 
-<a id="orgbff41fe"></a>
+<a id="orgec5319a"></a>
 
 ## Ordered generalized additive
 
@@ -174,12 +195,12 @@ save(gammod, file= "Inter/gammod.Rda")
         42413.2       262.8     42679.6
 
 
-<a id="org93bda5e"></a>
+<a id="orgdf2fac1"></a>
 
 # Diagnostics
 
 
-<a id="org9271d44"></a>
+<a id="org2b1c449"></a>
 
 ## Significance
 
@@ -232,7 +253,7 @@ sapply(gamod[ 1: 5* 2], resume)
                  7.0     7.0     7.0      7.0      7.0
 
 
-<a id="org4546996"></a>
+<a id="org56de100"></a>
 
 ## Goodness of fit
 
@@ -260,7 +281,7 @@ rbind(sapply(gamod[ 1: 5* 2], pcgp), sapply(gamod[ 1: 5* 2], AIC))
     [2,] 82412.10 64710.89 54941.54 48291.33 43535.14
 
 
-<a id="org90e7af9"></a>
+<a id="org48f958c"></a>
 
 ## Omitted variable
 
@@ -321,7 +342,7 @@ bwplot(values~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPlot.pdf>
 
 
-<a id="org3687717"></a>
+<a id="org0a22027"></a>
 
 ## Specification
 
@@ -346,12 +367,12 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, RRank@data[, i], i)
 ```
 
 
-<a id="orge4e0fe9"></a>
+<a id="org8089fa8"></a>
 
 # Marginal effects
 
 
-<a id="orgfb7d0fc"></a>
+<a id="orgf2dd70a"></a>
 
 ## Parametric ordered logit
 
@@ -365,7 +386,7 @@ plot(predictorEffects(por1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
 <./Figures/Effects1.pdf>
 
 
-<a id="org6ef63b3"></a>
+<a id="orgf1e1d57"></a>
 
 ## Ordered generalized additive
 
@@ -378,7 +399,7 @@ plot(gamod$gam100, pages= 1, scale= 0)
 <./Figures/Effects2.pdf>
 
 
-<a id="org72d9bd4"></a>
+<a id="org484b47a"></a>
 
 ## Ordinal superiority figure
 
@@ -401,7 +422,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEff.pdf>
 
 
-<a id="orgbcab552"></a>
+<a id="orgf950ae0"></a>
 
 ## Correlation between *Communes*
 
@@ -426,21 +447,28 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
 <./Figures/ComCor.pdf>
 
 
-<a id="orgb264db6"></a>
+<a id="org2536402"></a>
 
-# Decomposition
+# Informational content
+
+
+<a id="org40ad2b8"></a>
+
+## Decomposition table
 
 see appendix for the code of decompositions, latent un peu long à tourner.
 
 ```R
 load("Inter/gamod.Rda") ; source("myFcts.R")
-## latent <- sapply(gamod[ 1: 5* 2], function(x)
-##     rowSums(predict(x, type= 'terms')[, -1]))
-decomp <- apply(latent, 2, function(x)
-    c(Signal= var(x), Noise= pi^2/ 3, jointSignal(x), jointNoise(x),
-      rankSignal(x), rankResid(x), rankNoise(x),
-      comSignal(x), comResid(x), comNoise(x)))
-round(t(t(decomp)/ (pi^2/ 3+ decomp[1, ]))* 100, 1)
+ddtt <- data.frame(AOCc= RRank$AOCc, LIBCOM= RRank$LIBCOM,
+                   sapply(gamod[ 1: 5* 2], function(x)
+                       rowSums(predict(x, type= 'terms')[, -1])))
+dcmp <- sapply(names(ddtt[, 3: 7]), function(x)
+    c("Total Signal"= var(ddtt[, x]), "Total Noise"= pi^2/ 3,
+      jointSignal(ddtt, x),                      jointNoise(ddtt, x),
+      vertiSignal(ddtt, x), vertiResid(ddtt, x), vertiNoise(ddtt, x),
+      horizSignal(ddtt, x), horizResid(ddtt, x), horizNoise(ddtt, x)))
+round(t(apply(dcmp, 1, function(x) x/ (pi^2/ 3+ dcmp[1, ])* 100)), 1)
 ```
 
                   gam100 gam300 gam500 gam700 gam900
@@ -456,14 +484,14 @@ round(t(t(decomp)/ (pi^2/ 3+ decomp[1, ]))* 100, 1)
     Com Noise       63.5   57.5   71.3   69.3   68.5
 
 
-<a id="org51d04e7"></a>
+<a id="org760b3f9"></a>
 
-# Models for 1936 GIs
+# Models for GIs of 1936
 
 
-<a id="org616ec72"></a>
+<a id="org9066d9c"></a>
 
-## Descriptive stats
+## Descriptive statistics
 
 ```R
 Reg.Old <- subset(Reg.Rank, !is.na(Reg.Rank$AOC36lvl) &
@@ -483,7 +511,7 @@ table(Reg.Old$AOC36lvl, Reg.Old$AOCc)
     5     0     1    13     3  1604
 
 
-<a id="org6c241cf"></a>
+<a id="org12cfb30"></a>
 
 ## Estimation
 
@@ -530,7 +558,7 @@ save(gammold, file= "Inter/gammold.Rda")
         9582.37       78.69     9661.62 
 
 
-<a id="org9d9bcb2"></a>
+<a id="org97cf5d6"></a>
 
 ## Significance
 
@@ -556,7 +584,7 @@ sapply(gamold[ 3: 7], resume)
                  7.0     7.0     7.0     7.0     7.0
 
 
-<a id="org802a2d9"></a>
+<a id="org908a4fd"></a>
 
 ## Goodness of fit
 
@@ -573,7 +601,7 @@ rbind(sapply(gamold, pcgp), sapply(gamold, AIC))
     [2,] 40789.58 36833.3 33810.36 30271.01 27574.12 24526.6 22482.20
 
 
-<a id="org72e014d"></a>
+<a id="org0293ec0"></a>
 
 ## Omitted variable
 
@@ -616,7 +644,7 @@ bwplot(values~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPold.pdf>
 
 
-<a id="org14eb027"></a>
+<a id="org391e1bf"></a>
 
 ## Specification
 
@@ -640,7 +668,7 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, SRank@data[, i], i)
 ```
 
 
-<a id="org3f37c2c"></a>
+<a id="orgd50037b"></a>
 
 ## Marginal effects
 
@@ -655,9 +683,9 @@ plot(gamold$gam300, pages= 1, scale= 0)
 <./Figures/Effectsold.pdf>
 
 
-<a id="orgf1dfc41"></a>
+<a id="orgb9dd6e3"></a>
 
-## *Commune* effects
+## Ordinal superiority
 
 ```R
 xxx <- data.frame(sapply(gamold, function(x)
@@ -676,9 +704,9 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEffOld.pdf>
 
 
-<a id="orgefe2d93"></a>
+<a id="orgb175728"></a>
 
-## Dynamic *Communes*
+## Correlation between models
 
 ```R
 zzz <- merge(ww, www, by= "LIBCOM")
@@ -691,29 +719,22 @@ segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
 <./Figures/ComDyn.pdf>
 
 
-<a id="org0c3fa12"></a>
+<a id="org7f2dfca"></a>
 
-# Counterfactual decomposition
-
-
-<a id="org9e047de"></a>
-
-## Decomposition 1936 GIs
+## Decomposition table
 
 ```R
 load("Inter/gamold.Rda") ; source("myFcts.R")
-latold <- sapply(gamold, function(x)
-    rowSums(predict(x, type= 'terms')[, -1]))
-decold <- apply(latold, 2, function(x)
-    c(Signal= var(x), Noise= pi^2/ 3,
-      jointSignal2(x, vert= "AOCo", dat= SRank@data),
-      jointNoise2(x, vert= "AOCo", dat= SRank@data),
-      rankSignal2(x, vert= "AOCo", dat= SRank@data),
-      rankResid2(x, vert= "AOCo", dat= SRank@data),
-      rankNoise2(x, vert= "AOCo", dat= SRank@data),
-      comSignal2(x, dat= SRank@data),
-      comResid2(x, dat= SRank@data), comNoise2(x, dat= SRank@data)))
-round(t(t(decold)/ (pi^2/ 3+ decold[1, ]))* 100, 1)
+ddoo <- data.frame(AOCavt= SRank$AOCavt, LIBCOM= SRank$LIBCOM,
+                   sapply(gamold, function(x)
+                       rowSums(predict(x, type= 'terms')[, -1])))
+dcop <- sapply(names(ddoo[, 3: 9]), function(x)
+    c("Total Signal"= var(ddoo[, x]), "Total Noise"= pi^2/ 3,
+      jointSignal(ddoo, x, "AOCavt"), jointNoise(ddoo, x, "AOCavt"),
+      vertiSignal(ddoo, x, "AOCavt"), vertiResid(ddoo, x, "AOCavt"),
+      vertiNoise(ddoo, x, "AOCavt"), horizSignal(ddoo, x, "AOCavt"),
+      horizResid(ddoo, x, "AOCavt"), horizNoise(ddoo, x, "AOCavt")))
+round(t(apply(dcop, 1, function(x) x/ (pi^2/ 3+ dcop[1, ])* 100)), 1)
 ```
 
                   gam50 gam75 gam100 gam150 gam200 gam250 gam300
@@ -729,12 +750,18 @@ round(t(t(decold)/ (pi^2/ 3+ decold[1, ]))* 100, 1)
     Com Residual   16.0  33.3   43.7   20.9   35.3   20.6   43.7
 
 
-<a id="org82cad97"></a>
+<a id="org66f495c"></a>
 
-## Alternative GI designations
+# Alternative GI designations
+
+
+<a id="org76a71a4"></a>
+
+## Change latent vineyard quality
 
 ```R
-# prdd <- predict(gamod$gam900, type= 'terms')
+load("Inter/gamod.Rda")
+prdd <- predict(gamod$gam900, type= 'terms')
 thsld <- c(-Inf, gamod$gam900$family$getTheta(TRUE), Inf)
 ltt0 <- mean(prdd[, 1])+ rowSums(prdd[, -1])-
     (surlGAM(gamod$gam900)- gamod$gam900$line)
@@ -742,7 +769,8 @@ ltt1 <- rowSums(prdd)
 ltt2 <- mean(prdd[, 1])+ rowSums(prdd[, -1])-
     (surlGAM(gamod$gam800)- gamod$gam800$line)
 ltt3 <- mean(prdd[, 1])+ rowSums(prdd[, -1])
-Simu <- data.frame(RRank, OLD= RRank$AOCavt, S0= cut(ltt0, thsld),
+Simu <- data.frame(RRank, ltt= rowSums(prdd[, -1]),
+                   OLD= RRank$AOCavt, S0= cut(ltt0, thsld),
                    SI= cut(ltt1, thsld), SII= cut(ltt2, thsld),
                    SIII= cut(ltt3, thsld))
 table(Simu$AOCc, Simu$S0) ; table(Simu$AOCc, Simu$SI)
@@ -761,22 +789,27 @@ table(Simu$AOCc, Simu$SII) ; table(Simu$AOCc, Simu$SIII)
     Com Noise     68.6 68.6 68.6 68.6 68.6 68.6 68.6
     Com Residual  22.9 51.6 52.7 53.7 50.9 51.5 50.7
 
+
+<a id="org04f7e8d"></a>
+
+## Add a vertical level in GIs
+
 ```R
 thrldBOUR <- mean(ltt1[RRank$AOCc== 2])
 thrldVILL <- mean(ltt1[RRank$AOCc== 3])
 thrldPCRU <- mean(ltt1[RRank$AOCc== 4])
 Simv <- data.frame(Simu,
                     SIV= ifelse(RRank$AOCc< 2, RRank$AOCc,
-                         ifelse(RRank$AOCc== 2 & ltt< thrldBOUR, 2,
-                         ifelse(RRank$AOCc== 2 & ltt>= thrldBOUR, 3,
+                         ifelse(RRank$AOCc== 2 & ltt1< thrldBOUR, 2,
+                         ifelse(RRank$AOCc== 2 & ltt1>= thrldBOUR, 3,
                                 RRank$AOCc+ 1))),
                     SV = ifelse(RRank$AOCc< 3, RRank$AOCc,
-                         ifelse(RRank$AOCc== 3 & ltt< thrldVILL, 3,
-                         ifelse(RRank$AOCc== 3 & ltt>= thrldVILL, 4,
+                         ifelse(RRank$AOCc== 3 & ltt1< thrldVILL, 3,
+                         ifelse(RRank$AOCc== 3 & ltt1>= thrldVILL, 4,
                                 RRank$AOCc+ 1))),
                     SVI= ifelse(RRank$AOCc< 4, RRank$AOCc,
-                         ifelse(RRank$AOCc== 4 & ltt< thrldPCRU, 4,
-                         ifelse(RRank$AOCc== 4 & ltt>= thrldPCRU, 5,
+                         ifelse(RRank$AOCc== 4 & ltt1< thrldPCRU, 4,
+                         ifelse(RRank$AOCc== 4 & ltt1>= thrldPCRU, 5,
                                 RRank$AOCc+ 1))))
 table(Simv$AOCc, Simv$SIV)
 table(Simv$AOCc, Simv$SV) ; table(Simv$AOCc, Simv$SVI)
@@ -804,34 +837,35 @@ table(Simv$AOCc, Simv$SV) ; table(Simv$AOCc, Simv$SVI)
     4     0     0     0  4970  3607     0
     5     0     0     0     0     0  1906
 
+
+<a id="orgb7e698b"></a>
+
+## Decomposition table
+
 ```R
-decf <- sapply(names(Simv)[ 100: 107], function(x)
-    c(Signal= var(rowSums(prdd[, -1])), Noise= pi^2/ 3,
-      jointSignal2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      jointNoise2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      rankSignal2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      rankResid2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      rankNoise2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      comSignal2(rowSums(prdd[, -1]), dat= Simv),
-      comResid2(rowSums(prdd[, -1]), vert= x, dat= Simv),
-      comNoise2(rowSums(prdd[, -1]), dat= Simv)))
-(tabpap <- round(t(t(decf)/ (pi^2/ 3+ decf[1, ]))* 100, 1))
+decf <- sapply(names(Simv[, 100: 107]), function(x)
+    c("Total Signal"= var(Simv[, "ltt"]), "Total Noise"= pi^2/ 3,
+      jointSignal(Simv, "ltt", vt= x), jointNoise(Simv, "ltt", vt= x),
+      vertiSignal(Simv, "ltt", vt= x), vertiResid(Simv, "ltt", vt= x),
+      vertiNoise(Simv, "ltt", vt= x), horizSignal(Simv, "ltt", vt= x),
+      horizResid(Simv, "ltt", vt= x), horizNoise(Simv, "ltt", vt= x)))
+round(t(apply(decf, 1, function(x) x/ (pi^2/ 3+ decf[1, ])* 100)), 1)
 ```
 
-                   OLD   S0   SI  SII SIII  SIV   SV  SVI
-    Signal        97.6 97.6 97.6 97.6 97.6 97.6 97.6 97.6
-    Noise          2.4  2.4  2.4  2.4  2.4  2.4  2.4  2.4
-    Joint Signal  43.3 81.1 80.7 81.2 82.8 79.2 79.6 79.0
-    Joint Noise   54.3 16.4 16.8 16.4 14.8 18.4 18.0 18.6
-    Rank Signal   17.8 70.7 59.8 70.7 73.1 58.0 58.5 57.9
-    Rank Residual 25.4 10.4 21.0 10.5  9.7 21.1 21.0 21.1
-    Rank Noise    79.7 26.8 37.8 26.8 24.5 39.5 39.0 39.7
-    Com Signal    29.1 29.1 29.1 29.1 29.1 29.1 29.1 29.1
-    Com Residual  14.2 52.1 51.7 52.1 53.7 50.1 50.5 49.9
-    Com Noise     68.5 68.5 68.5 68.5 68.5 68.5 68.5 68.5
+                         OLD   S0   SI  SII SIII  SIV   SV  SVI
+    Total Signal        97.6 97.6 97.6 97.6 97.6 97.6 97.6 97.6
+    Total Noise          2.4  2.4  2.4  2.4  2.4  2.4  2.4  2.4
+    Joint Signal        50.7 81.1 80.7 81.2 82.8 79.2 79.7 79.0
+    Joint Noise         46.9 16.5 16.8 16.4 14.8 18.4 17.9 18.6
+    Vertical Signal     35.9 70.7 59.8 70.7 73.1 58.1 58.5 58.0
+    Vertical Residual   14.9 10.4 21.0 10.4  9.7 21.1 21.2 21.1
+    Vertical Noise      61.7 26.8 37.8 26.8 24.5 39.4 39.1 39.6
+    Horizontal Signal   29.1 29.1 29.1 29.1 29.1 29.1 29.1 29.1
+    Horizontal Residual 21.6 52.0 51.7 52.1 53.7 50.1 50.6 50.0
+    Horizontal Noise    68.5 68.5 68.5 68.5 68.5 68.5 68.5 68.5
 
 
-<a id="orge43ff5d"></a>
+<a id="orge837d94"></a>
 
 # Session information
 
@@ -887,14 +921,16 @@ sessionInfo()
     [46] haven_1.1.2
 
 
-<a id="org8612800"></a>
+<a id="org2ac582b"></a>
 
-# Functions
+# Custom functions
 
 
-<a id="org47756fe"></a>
+<a id="org625a316"></a>
 
-## Surrogate
+## Surrogate Residuals
+
+We use the package `sure` to simulate the surrogate residuals from the parametric ordered logistic, then we code a custom function for that to show that it works, then we implemented a custom function from OGAM models fitted with `mgcv`.
 
 ```R
 pltSURE <- function(resid, xvar, lab){
@@ -1079,187 +1115,163 @@ pltSURE <- function(resid, xvar, lab){
     ```
 
 
-<a id="org5f7b47d"></a>
+<a id="org2465734"></a>
 
-## Decomposition
+## Decomposition terms
 
-```R
-jointNoise <- function(latent, DAT= RegRank){
-    jN <- 0
-    for (i in 1: 5){
-        for (j in levels(DAT$LIBCOM)){
-            tmp <- latent[DAT$AOCc== i & DAT$LIBCOM== j]
-            if (length(tmp)> 0)
-                jN <- jN+ var(tmp)* mean(DAT$AOCc== i & DAT$LIBCOM== j)
-        }
-    }
-    c("Joint Noise"= jN)
-}
-jointNoise2 <- function(latent, vert= "AOCc", horiz= "LIBCOM", dat= RRank){
-    jN <- 0
-    for (i in levels(factor(dat[, vert]))){
-        for (j in levels(factor(dat[, horiz]))){
-            tmp <- latent[dat[, vert]== i & dat[, horiz]== j]
-            if (length(tmp)> 1)
-                jN <- jN+
-                    var(tmp)* mean(dat[, vert]== i & dat[, horiz]== j)
-        }
-    }
-    c("Joint Noise"= jN)
-}
-```
+We code different functions for the terms.
+
+The **joint signal** terms is the variance of the expected quality conditionally on vertical and horizontal dummies:
+
+\begin{equation}
+\mathbb{V}\big\{\,\mathbb{E}[q(X^*)\mid y, c]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
 
 ```R
-jointSignal <- function(latent, DAT= RegRank){
-    jS <- rep(0, nrow(DAT))
-    for (i in 1: 5){
-        for (j in levels(DAT$LIBCOM)){
-            jS[DAT$AOCc== i & DAT$LIBCOM== j] <-
-                mean(latent[DAT$AOCc== i & DAT$LIBCOM== j])
-        }
-    }
-    c("Joint Signal"= var(jS))
-}
-jointSignal2 <- function(latent, vert="AOCc", horiz="LIBCOM", dat= RRank){
+jointSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     jS <- rep(0, nrow(dat))
-    for (i in levels(factor(dat[, vert]))){
-        for (j in levels(factor(dat[, horiz]))){
-            ind <- dat[, vert]== i & dat[, horiz]== j 
-            jS[ ind] <- mean(latent[ ind])
+    for (i in unique(dat[, vt])){
+        for (j in unique(dat[, hz])){
+            tmp <- dat[, vt]== i & dat[, hz]== j
+            jS[ tmp] <- mean(dat[tmp, lt])
         }
     }
     c("Joint Signal"= var(jS))
 }
 ```
 
-```R
-rankSignal <- function(latent, DAT= RegRank){
-    rS <- var(ifelse(DAT$AOCc== 1, mean(latent[DAT$AOCc== 1]),
-              ifelse(DAT$AOCc== 2, mean(latent[DAT$AOCc== 2]),
-              ifelse(DAT$AOCc== 3, mean(latent[DAT$AOCc== 3]),
-              ifelse(DAT$AOCc== 4, mean(latent[DAT$AOCc== 4]),
-                     mean(latent[DAT$AOCc== 5]))))))
-    c("Rank Signal"= rS)
-}
-rankSignal2 <- function(latent, vert= "AOCc", horiz= "LIBCOM", dat= RRank){
-    rS <- rep(NA, nrow(dat))
-    for (i in levels(factor(dat[, vert]))){
-        rS[ dat[, vert]== i] <- mean(latent[dat[, vert]== i])
-    }
-    c("Rank Signal"= var(rS))
-}
-```
+The **joint noise** terms is the expectation of the variance quality conditionally on vertical and horizontal dummies:
+
+\begin{equation}
+\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y, c]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
 
 ```R
-rankNoise <- function(latent, DAT= RegRank){
-    rN <- var(latent[DAT$AOCc== 1])* mean(DAT$AOCc== 1)+
-        var(latent[DAT$AOCc== 2])*   mean(DAT$AOCc== 2)+
-        var(latent[DAT$AOCc== 3])*    mean(DAT$AOCc== 3)+
-        var(latent[DAT$AOCc== 4])*    mean(DAT$AOCc== 4)+
-        var(latent[DAT$AOCc== 5])*    mean(DAT$AOCc== 5)
-    c("Rank Noise"= rN)
-}
-rankNoise2 <- function(latent, vert= "AOCc", dat= RRank){
-    rN <- 0
-    for (i in levels(factor(dat[, vert]))){
-        rN <- rN+ var(latent[dat[, vert]== i])* mean(dat[, vert]== i)
-    }
-    c("Rank Noise"= rN)
-}
-```
-
-```R
-rankResid <- function(latent, DAT= RegRank){
-    sig <- rep(0, nrow(DAT))
-    for (i in 1: 5){
-        for (j in levels(DAT$LIBCOM)){
-            sig[DAT$AOCc== i & DAT$LIBCOM== j] <-
-                mean(latent[DAT$AOCc== i & DAT$LIBCOM== j])
+jointNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    jN <- 0
+    for (i in unique(dat[, vt])){
+        for (j in unique(dat[, hz])){
+            tmp <- dat[, vt]== i & dat[, hz]== j
+            if (sum(tmp)> 1) jN <- jN+ var(dat[ tmp, lt])* mean(tmp)
         }
     }
-    rR <- (var(sig[DAT$AOCc== 1])* mean(DAT$AOCc== 1)+
-           var(sig[DAT$AOCc== 2])* mean(DAT$AOCc== 2)+
-           var(sig[DAT$AOCc== 3])* mean(DAT$AOCc== 3)+
-           var(sig[DAT$AOCc== 4])* mean(DAT$AOCc== 4)+
-           var(sig[DAT$AOCc== 5])* mean(DAT$AOCc== 5))
-    c("Rank Residual"= rR)
-}
-rankResid2 <- function(latent, vert= "AOCc", horiz= "LIBCOM", dat= RRank){
-    sig <- rep(0, nrow(dat)) ; rR <- 0
-    for (i in levels(factor(dat[, vert]))){
-        for (j in levels(factor(dat[, horiz]))){
-            ind <- dat[, vert]== i & dat[, horiz]== j 
-            sig[ ind] <- mean(latent[ ind])
-        }
-    }
-    for (i in levels(factor(dat[, vert]))){
-        rR <- rR+ var(sig[dat[, vert]== i])* mean(dat[, vert]== i)
-    }
-    c("Rank Residual"= rR)
+    c("Joint Noise"= jN)
 }
 ```
 
+The **vertical signal** terms is the variance of the expectation quality conditionally on vertical GI dummies:
+
+\begin{equation}
+\mathbb{V}\big\{\,\mathbb{E}[q(X^*)\mid y]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
 ```R
-comSignal <- function(latent, DAT= RegRank){
-    cS <- rep(0, nrow(DAT))
-    for (j in levels(DAT$LIBCOM)){
-        cS[ DAT$LIBCOM== j] <- mean(latent[DAT$LIBCOM== j])
+vertiSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    vS <- rep(0, nrow(dat))
+    for (i in unique(dat[, vt])){
+        vS[ dat[, vt]== i] <- mean(dat[dat[, vt]== i, lt])
     }
-    c("Com Signal"= var(cS))
-}
-comSignal2 <- function(latent, horiz= "LIBCOM", dat= RRank){
-    cS <- rep(0, nrow(dat))
-    for (j in levels(factor(dat[, "LIBCOM"]))){
-        cS[ dat[, "LIBCOM"]== j] <- mean(latent[dat[, "LIBCOM"]== j])
-    }
-    c("Com Signal"= var(cS))
+    c("Vertical Signal"= var(vS))
 }
 ```
 
+The **vertical residual** terms is the expectation of the conditional on horizontal variance of the expectation quality conditionally on vertical GI dummies:
+
+\begin{equation}
+\mathbb{E}\big\{\,\mathbb{V}[\mathbb{E}(q(X^*)\mid y, c)\mid y]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
 ```R
-comNoise <- function(latent, DAT= RegRank){
-    cN <- 0
-    for (j in levels(DAT$LIBCOM)){
-        cN <- cN+ (var(latent[DAT$LIBCOM== j])* mean(DAT$LIBCOM== j)) 
+vertiResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    sig <- rep(0, nrow(dat)) ; vR <- 0
+    for (i in unique(dat[, vt])){
+        for (j in unique(dat[, hz])){
+            tmp <- dat[, vt]== i & dat[, hz]== j 
+            sig[ tmp] <- mean(dat[ tmp, lt])
+        }
     }
-    c("Com Noise"= cN)
-}
-comNoise2 <- function(latent, horiz= "LIBCOM", dat= RRank){
-    cN <- 0
-    for (j in levels(factor(dat[, horiz]))){
-        cN <- cN+ (var(latent[dat[, horiz]== j])* mean(dat[, horiz]== j)) 
+    for (i in unique(dat[, vt])){
+        vR <- vR+ var(sig[dat[, vt]== i])* mean(dat[, vt]== i)
     }
-    c("Com Noise"= cN)
+    c("Vertical Residual"= vR)
 }
 ```
 
+The **vertical Noise** terms is the expectation of the variance of the quality conditionally on vertical GI dummies:
+
+\begin{equation}
+\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
 ```R
-comResid <- function(latent, DAT= RegRank){
-    sig <- rep(0, nrow(DAT))
-    for (i in 1: 5){
-        for (j in levels(DAT$LIBCOM)){
-            sig[DAT$AOCc== i & DAT$LIBCOM== j] <-
-                mean(latent[DAT$AOCc== i & DAT$LIBCOM== j])
-        }
+vertiNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    vN <- 0
+    for (i in unique(dat[, vt])){
+        vN <- vN+ var(dat[dat[, vt]== i, lt])* mean(dat[, vt]== i)
     }
-    cR <- 0
-    for (j in levels(DAT$LIBCOM)){
-        cR <- cR+ var(sig[DAT$LIBCOM== j])* mean(DAT$LIBCOM== j)
-    }
-    c("Com Residual"= cR)
+    c("Vertical Noise"= vN)
 }
-comResid2 <- function(latent, vert= "AOCc", horiz= "LIBCOM", dat= RRank){
-    sig <- rep(0, nrow(dat))
-    for (i in levels(factor(dat[, vert]))){
-        for (j in levels(factor(dat[, horiz]))){
-            sig[dat[, vert]== i & dat[, horiz]== j] <-
-                mean(latent[dat[, vert]== i & dat[, horiz]== j])
+
+```
+
+The **horizontal signal** terms is the variance of the expectation quality conditionally on horizontal GI dummies:
+
+\begin{equation}
+\mathbb{V}\big\{\,\mathbb{E}[q(X^*)\mid c]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
+```R
+horizSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    hS <- rep(0, nrow(dat))
+    for (j in unique(dat[, hz])){
+        hS[ dat[, hz]== j] <- mean(dat[dat[, hz]== j, lt])
+    }
+    c("Horizontal Signal"= var(hS))
+}
+```
+
+The **horizontal residual** terms is the expectation of the conditional on vertical variance of the expectation quality conditionally on horizontal GI dummies:
+
+\begin{equation}
+\mathbb{E}\big\{\,\mathbb{V}[\mathbb{E}(q(X^*)\mid y, c)\mid y]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
+```R
+horizResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    sig <- rep(0, nrow(dat)) ; hR <- 0
+    for (i in unique(dat[, vt])){
+        for (j in unique(dat[, hz])){
+            tmp <- dat[, vt]== i & dat[, hz]== j 
+            sig[ tmp] <- mean(dat[ tmp, lt])
         }
     }
-    cR <- 0
-    for (j in levels(factor(dat[, horiz]))){
-        cR <- cR+ var(sig[dat[, horiz]== j])* mean(dat[, horiz]== j)
+    for (j in unique(dat[, hz])){
+        hR <- hR+ var(sig[dat[, hz]== j])* mean(dat[, hz]== j)
     }
-    c("Com Residual"= cR)
+    c("Horizontal Residual"= hR)
+}
+```
+
+The **horizontal Noise** terms is the expectation of the variance of the quality conditionally on horizontal GI dummies:
+
+\begin{equation}
+\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid c]\,\big\}= 
+\frac{1}{N+J+H}\sum_{i=1}^{N}\sum_{j=1}^J\sum_{h=1}^H \big[\mathbb{E}(q(X^*)\mid y= j, c= h)- \overline{q}_{jh}\big]^2 
+\end{equation}
+
+```R
+horizNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+    hN <- 0
+    for (j in unique(dat[, hz])){
+        hN <- hN+ (var(dat[dat[, hz]== j, lt])* mean(dat[, hz]== j)) 
+    }
+    c("Horizontal Noise"= hN)
 }
 ```
