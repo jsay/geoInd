@@ -40,22 +40,23 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
-** EN: The Informational Content of Geographical Indications 
+** The Informational Content of Geographical Indications
 
-   Relating Geographical Indications to biophysical characteristics of
-   vineyards for the /Côte d'Or/ region (Burgundy, France).
-   - Working paper XXX
+   Econometric approach relating Geographical Indications to
+   biophysical characteristics of vineyards for the /Côte d'Or/ region
+   (Burgundy, France).
+   - [[file:WorkingPaper.pdf][Working paper]]
    - Data: https://www6.inra.fr/datapartage/
    - Code: [[file:ReproPaper.pdf][PDF version]] or [[file:ReproPaper.md][Markdown]]
-   - Dynamic carto:  [[https://site-a-determiner.fr]]
+   - Dynamic carto: [[https://site-a-determiner.fr]]
 
-** FR: Le contenu Informationnel des Appellations d'Origine
+** Le contenu Informationnel des Appellations d'Origine
 
-   Relations entre les Appellations d'Origine Contrôlée et les
-   caractéristiques biophysiques des vignobles de Côte d'Or
+   Relation économétrique entre les Appellations d'Origine Contrôlée
+   et les caractéristiques biophysiques des vignobles de Côte d'Or
    (Bourgogne).
    - Présentation des données : [[file:DataPaper.pdf][PDF version]] or [[file:DataPaper.md][Markdown]]
-   - Data : https://www6.inra.fr/datapartage/
+   - Accéder aux données : https://www6.inra.fr/datapartage/
    - Cartographie dynamique : [[https://site-a-determiner.fr]]
 
 ** Credits
@@ -66,33 +67,6 @@
 #+begin_export html
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 #+end_export
-
-* Mail Jasper Morris
-
-  Dear Jasper Morris,
-
-  I am a French researcher in economics, working at the National
-  Institute for Agricultural Research (INRA) at Dijon. 
-
-  I have read with great interest some portions of your book "Inside
-  Burgundy", in particular the references between the actual AOC and
-  other historical classifications and some refinements that you
-  propose.
-
-  I would like to use these information in my researches on the
-  evaluation of the AOC scheme in Côte d'Or.
-
-  - Do you agree for an academic usage of your data, with quotation of
-    the source (i.e., the book) ?
-  - Do you have these data in tab-formatted files to avoid me to grasp
-    them by hand ?
-  - Does your tasting notes mentioned on your website could be
-    available as well-formatted data bases?
-
-  Thank you for your response and all your passion about Burgundy's
-  wines.
-
-  Best Regards, Jean-Sauveur Ay.
 
 * Bibliography
   :PROPERTIES:

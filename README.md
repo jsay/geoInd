@@ -1,19 +1,19 @@
-# EN: The Informational Content of Geographical Indications
+# The Informational Content of Geographical Indications
 
-Relating Geographical Indications to biophysical characteristics of vineyards for the *Côte d'Or* region (Burgundy, France).
+Econometric approach relating Geographical Indications to biophysical characteristics of vineyards for the *Côte d'Or* region (Burgundy, France).
 
--   Working paper XXX
+-   [Working paper](WorkingPaper.pdf)
 -   Data: <https://www6.inra.fr/datapartage/>
 -   Code: [PDF version](ReproPaper.pdf) or [Markdown](ReproPaper.md)
 -   Dynamic carto: <https://site-a-determiner.fr>
 
 
-# FR: Le contenu Informationnel des Appellations d'Origine
+# Le contenu Informationnel des Appellations d'Origine
 
-Relations entre les Appellations d'Origine Contrôlée et les caractéristiques biophysiques des vignobles de Côte d'Or (Bourgogne).
+Relation économétrique entre les Appellations d'Origine Contrôlée et les caractéristiques biophysiques des vignobles de Côte d'Or (Bourgogne).
 
 -   Présentation des données : [PDF version](DataPaper.pdf) or [Markdown](DataPaper.md)
--   Data : <https://www6.inra.fr/datapartage/>
+-   Accéder aux données : <https://www6.inra.fr/datapartage/>
 -   Cartographie dynamique : <https://site-a-determiner.fr>
 
 
