@@ -1,7 +1,8 @@
 ---
 title:  Déterminants biophysiques des AOC viticoles, Construction des données et modélisation
-author: Jean-Sauveur Ay et Mohamed Hilal
-date:   UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
+author: |
+  | Jean-Sauveur Ay et Mohamed Hilal
+  | UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
 ---
 
 # Résumé
@@ -16,36 +17,36 @@ Nous présentons le détails de la construction de données à l'échelle parcel
 
 # Table des matières
 
-1.  [Introduction](#org1c66928)
-2.  [Construction des données](#org2af311b)
-    1.  [Les parcelles cadastrales](#orgeb0beb3)
-    2.  [Enrichissement de la topographie](#org2f1d018)
-    3.  [Enrichissement de la géologie](#org3927802)
-    4.  [Enrichissement de la pédologie](#org3cd4d58)
-    5.  [Enrichissement des AOC de 1936](#orgcd3aafe)
-    6.  [Enrichissement des lieux dits](#org1fae0b6)
-    7.  [Enregistrement de la base](#orga9df99d)
-3.  [Statistiques descriptives](#org6a89924)
-    1.  [Général](#org49f7412)
-    2.  [Bilan surfacique des AOC](#orgd259b5a)
-    3.  [Liens avec les AOC historiques](#orgd1aec5a)
-    4.  [Distribution spatiale](#orgc7ca565)
-4.  [Modèle ordonné de désignation](#org5997c05)
-    1.  [Variable transformations](#org9db842c)
-    2.  [Spécification du modèle](#org58687b5)
-    3.  [Effets des variables biophysiques](#org06ce969)
-    4.  [Prédiction du score et classifications](#org3f1d3f7)
-5.  [Mise en cartographie dynamique](#org9c523e0)
-6.  [Conclusion](#orgeb1cc51)
-7.  [Bibliographie](#orgafad594)
-8.  [Annexes](#org7203e70)
-    1.  [Annexe 1: incohérence des AOC](#orgb4257fe)
-    2.  [Annexe 2: les intitulés pédologiques](#org0f434b1)
+1.  [Introduction](#org5b3d4bc)
+2.  [Construction des données](#orgc4e3c70)
+    1.  [Les parcelles cadastrales](#org9cb2472)
+    2.  [Enrichissement de la topographie](#orgbd4e5da)
+    3.  [Enrichissement de la géologie](#orge561aa9)
+    4.  [Enrichissement de la pédologie](#orga48f567)
+    5.  [Enrichissement des AOC de 1936](#orgcbf02b6)
+    6.  [Enrichissement des lieux dits](#orgf18ed5d)
+    7.  [Enregistrement de la base](#org902a211)
+3.  [Statistiques descriptives](#org5264c02)
+    1.  [Général](#orge3cd5f6)
+    2.  [Bilan surfacique des AOC](#orgc471d24)
+    3.  [Liens avec les AOC historiques](#orgdf16c44)
+    4.  [Distribution spatiale](#org3a6ead5)
+4.  [Modèle ordonné de désignation](#orgaa27580)
+    1.  [Variable transformations](#orgd8b48b8)
+    2.  [Spécification du modèle](#org4a600d9)
+    3.  [Effets des variables biophysiques](#org5c80316)
+    4.  [Prédiction du score et classifications](#orgca98630)
+5.  [Mise en cartographie dynamique](#org3bfd0e1)
+6.  [Conclusion](#org0672c57)
+7.  [Bibliographie](#org429cbfe)
+8.  [Annexes](#org600dd73)
+    1.  [Annexe 1: incohérence des AOC](#orgebac520)
+    2.  [Annexe 2: les intitulés pédologiques](#org7921950)
 
 
-<a id="org1c66928"></a>
+<a id="org5b3d4bc"></a>
 
-# <a id="org4ae8925"></a> Introduction
+# <a id="orgd1835e7"></a> Introduction
 
 Les Appellations d'Origines Contrôlées (AOC) en Bourgogne sont issues de processus humains qui ont travaillées, répertoriés puis classés les parcelles en fonction de leur capacité à produire des vins de qualité. . Niveaux.
 
@@ -68,16 +69,16 @@ Nous présentons également une application de cette base de données pour propo
 Ce document contient le code R, packages, github, etc. Les bases de données sources qui entrent dans le travail sont disponibles auprès des auteurs sur demande.
 
 
-<a id="org2af311b"></a>
+<a id="orgc4e3c70"></a>
 
-# <a id="orgee46409"></a> Construction des données
+# <a id="org83dd042"></a> Construction des données
 
 
-<a id="orgeb0beb3"></a>
+<a id="org9cb2472"></a>
 
 ## Les parcelles cadastrales
 
-Le travail porte sur l'ensemble des parcelles cadastrales des 31 communes de la Côte de Beaune et de la Côte de Nuits reportées dans la Figure XX en Annexe A. La géométrie du parcellaires est issue de la BD parcellaire de l'IGN version X.XX téléchargée le XX/XX/2018. Deux traitements ont été effectués au préalable, nous avons calculé à l'aide d'un système d'information géographique (SIG) des caractéristiques géométriques des parcelles (surface, périmètre, et distance maximale entre deux sommets, voir Table [1](#org36545b7)) et appariée l'information sur les AOC à partir du fichier de l'INAO sur \url{data.gouv.fr}. Sur ce deuxième point, blabla.
+Le travail porte sur l'ensemble des parcelles cadastrales des 31 communes de la Côte de Beaune et de la Côte de Nuits reportées dans la Figure XX en Annexe A. La géométrie du parcellaires est issue de la BD parcellaire de l'IGN version X.XX téléchargée le XX/XX/2018. Deux traitements ont été effectués au préalable, nous avons calculé à l'aide d'un système d'information géographique (SIG) des caractéristiques géométriques des parcelles (surface, périmètre, et distance maximale entre deux sommets, voir Table [1](#orgd8db5ec)) et appariée l'information sur les AOC à partir du fichier de l'INAO sur \url{data.gouv.fr}. Sur ce deuxième point, blabla.
 
 À partir du Shapefile `dicopar` disponible sur le cloud au <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-01-11 ven.&gt; </span></span> projection Lambert 93, nous créons un code INSEE par concaténation du département et du code commune:
 
@@ -121,7 +122,7 @@ La base parcellaire contient donc \(110\,350\) observations et 30 variables issu
 | 17 | GCRU    | 17   | Grand Cru                                |
 
 
-<a id="org2f1d018"></a>
+<a id="orgbd4e5da"></a>
 
 ## Enrichissement de la topographie
 
@@ -148,7 +149,7 @@ Il y a \(2\,096\) parcelles pour lesquelles le code `Par2ras` ne correspond à a
 Même tableau que précédemment
 
 
-<a id="org3927802"></a>
+<a id="orge561aa9"></a>
 
 ## Enrichissement de la géologie
 
@@ -175,7 +176,7 @@ sapply(Geo.Ras@data[, 29: 44], function(x) sum(is.na(x)))
 On a fait une sélection sur les valeurs omises et sur la redondance d'information.
 
 
-<a id="org3cd4d58"></a>
+<a id="orga48f567"></a>
 
 ## Enrichissement de la pédologie
 
@@ -201,7 +202,7 @@ sapply(Geo.Ras@data[, 45: 60], function(x) sum(is.na(x)))
 Il apparaît que les descriptions des Pédopaysages combinent des caractéristiques topographiques (Plaines, massifs, piedmonts), des caractéristiques d'occupation (forestiers, vignoble) et des caractéristiques géologiques (plio-pléistocènes, calcaires). Le redondance de ce découpage avec les variables topographiques, le découpage géologique et le mode d'occupation des sols se pose effectivement. Les valeurs manquantes correspondent aux espaces urbanisés (pas vraiment à partir du MOS)
 
 
-<a id="orgcd3aafe"></a>
+<a id="orgcbf02b6"></a>
 
 ## Enrichissement des AOC de 1936
 
@@ -227,7 +228,7 @@ L'appellation Vins fins de la Côte de Nuits a été remplacée le 20/08/1964 pa
 **Actualisation** <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-02-01 ven.&gt; </span></span> Rien à Chenove/Marsannay/Couchey. Voir callage Griotte chambertin par exemple.
 
 
-<a id="org1fae0b6"></a>
+<a id="orgf18ed5d"></a>
 
 ## Enrichissement des lieux dits
 
@@ -251,7 +252,7 @@ sapply(Geo.Ras@data[, 63: 72], function(x) sum(is.na(x)))
 Pour 4% des parcelles, aucun lieu dit n'a été apparié. Ces parcelles se concentrent sur les communes de Chenôve, Marsannay-la-Côte et Beaune (Corgoloin dans une moindre mesure). Ces "trous" apparaissent déjà dans le fichier source et ne sont donc pas un résultat de l'appariement. Ils semblent être des espaces bâtis sur la carte, mais ce n'est pas confirmé par le MOS.
 
 
-<a id="orga9df99d"></a>
+<a id="org902a211"></a>
 
 ## Enregistrement de la base
 
@@ -266,12 +267,12 @@ writeOGR(Geo.Ras, "Carto/", "GeoRas", driver= "ESRI Shapefile")
     [1] 110350     72
 
 
-<a id="org6a89924"></a>
+<a id="org5264c02"></a>
 
-# <a id="org7ada1fa"></a> Statistiques descriptives
+# <a id="orge3368a3"></a> Statistiques descriptives
 
 
-<a id="org49f7412"></a>
+<a id="orge3cd5f6"></a>
 
 ## Général
 
@@ -292,7 +293,7 @@ GCDtmp5$DISTCHF <- sqrt((GCDtmp5$XL93- GCDtmp5$XCHF* 100)^2
 ```
 
 
-<a id="orgd259b5a"></a>
+<a id="orgc471d24"></a>
 
 ## Bilan surfacique des AOC
 
@@ -301,7 +302,7 @@ Définition de nos niveaux et implications en termes de surfaces sur la pyramide
 The endogeneity is about the size or the shape of parcels, but not the pedoclimatic variables. The endogeneity of the size/ shape of parcel can be due both to simultaneity and omitted land quality effects. Both seems to be intuitively treated. Size of parcels multiples of ha, m2 or ouvrée (= 428 m2)?
 
 
-<a id="orgd1aec5a"></a>
+<a id="orgdf16c44"></a>
 
 ## Liens avec les AOC historiques
 
@@ -318,17 +319,17 @@ y= ax+ b
 Retravail des données brutes AOC (XX et XXI) et création des niveaux hiérachiques.
 
 
-<a id="orgc7ca565"></a>
+<a id="org3a6ead5"></a>
 
 ## Distribution spatiale
 
 
-<a id="org5997c05"></a>
+<a id="orgaa27580"></a>
 
-# <a id="org95a87e0"></a> Modèle ordonné de désignation
+# <a id="orgf297b8e"></a> Modèle ordonné de désignation
 
 
-<a id="org9db842c"></a>
+<a id="orgd8b48b8"></a>
 
 ## Variable transformations
 
@@ -354,7 +355,7 @@ RRank$Y= SSank$coords.x2
 ```
 
 
-<a id="org58687b5"></a>
+<a id="org4a600d9"></a>
 
 ## Spécification du modèle
 
@@ -397,19 +398,19 @@ ff[order(ff$WMean, decreasing= TRUE), ]
 ```
 
 
-<a id="org06ce969"></a>
+<a id="org5c80316"></a>
 
 ## Effets des variables biophysiques
 
 
-<a id="org3f1d3f7"></a>
+<a id="orgca98630"></a>
 
 ## Prédiction du score et classifications
 
 
-<a id="org9c523e0"></a>
+<a id="org3bfd0e1"></a>
 
-# <a id="orge8af311"></a> Mise en cartographie dynamique
+# <a id="org0a77545"></a> Mise en cartographie dynamique
 
 AGGREGATION PAR LIEUX DITS
 
@@ -525,9 +526,9 @@ mapshot(m, url = paste0(getwd(), "/DynMap/test.html"),
 ```
 
 
-<a id="orgeb1cc51"></a>
+<a id="org0672c57"></a>
 
-# <a id="org8984019"></a> Conclusion
+# <a id="orgf817f73"></a> Conclusion
 
 Le chiffres d’affaire des signes de qualité c’est 32 milliards d’euros et le budget de l’INAO 32 millions d’euros, c’est un millième du chiffre d’affaires.
 
@@ -536,19 +537,19 @@ sessionInfo()
 ```
 
 
-<a id="orgafad594"></a>
+<a id="org429cbfe"></a>
 
-# <a id="orgf828882"></a> Bibliographie
+# <a id="org4e8abaf"></a> Bibliographie
 
 <Biblio.bib>
 
 
-<a id="org7203e70"></a>
+<a id="org600dd73"></a>
 
-# <a id="org8e1fa44"></a> Annexes
+# <a id="org1761985"></a> Annexes
 
 
-<a id="orgb4257fe"></a>
+<a id="orgebac520"></a>
 
 ## Annexe 1: incohérence des AOC
 
@@ -573,7 +574,7 @@ as.vector(Geo.CDem$IDU[Geo.CDem$AOC== "PCRU" & Geo.CDem@data[, 26]> 0])
      [1] "21442000AB0315"
 
 
-<a id="org0f434b1"></a>
+<a id="org7921950"></a>
 
 ## Annexe 2: les intitulés pédologiques
 

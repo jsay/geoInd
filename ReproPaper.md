@@ -1,54 +1,55 @@
 ---
 title:  The Informational Content of Geographical Indications
-author: Jean-Sauveur Ay
-date:   UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
+author: |
+  | Jean-Sauveur Ay
+  | UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
 ---
 
 # Abstract
 
 <div class="abstract">
-This file contents the R codes associated with the paper "The informational content of geographical indications" AAWE Working Paper No XXX. The data used are under licence Creative Commons, available on the INRA dataverse website: <https://data.inra.fr>. R functions used are reported in the appendix to preserve the visibility of codes. Additional elements are in the French version available from the following Github repository: .
+This file contents the R codes associated with the paper "The informational content of geographical indications" AAWE Working Paper No XXX. The data used are under licence Creative Commons Attribution Share Alike 4.0 International, available on the INRA dataverse website: <https://data.inra.fr>. R functions used are reported in the appendix to preserve the visibility of codes. Additional elements are in the French version available from the following Github repository: .
 
 </div>
 
 
 # Table of Contents
 
-1.  [Descriptive Statistics](#org51d3b8a)
-2.  [Models of GI designation](#org61c2dea)
-    1.  [Parametric ordered logit](#org4608714)
-    2.  [Ordered generalized additive](#orga8c49ca)
-3.  [Diagnostics](#org4bd7f9b)
-    1.  [Significance](#org4d7064f)
-    2.  [Goodness of fit](#org761b461)
-    3.  [Omitted variable](#org18e18c3)
-    4.  [Specification](#orge849f76)
-4.  [Marginal effects](#org206435d)
-    1.  [Parametric ordered logit](#org1f31d06)
-    2.  [Ordered generalized additive](#orgb58b873)
-    3.  [Ordinal superiority figure](#org429927d)
-    4.  [Correlation between *Communes*](#org43389b5)
-5.  [Decomposition](#org79599f1)
-6.  [Models for 1936 GIs](#org029e8f1)
-    1.  [Descriptive stats](#orgb2c18ad)
-    2.  [Estimation](#org26c0651)
-    3.  [Significance](#org5454fdd)
-    4.  [Goodness of fit](#org459556e)
-    5.  [Omitted variable](#org5c7d97a)
-    6.  [Specification](#org394535f)
-    7.  [Marginal effects](#org0cf81a1)
-    8.  [*Commune* effects](#org1bffe84)
-    9.  [Dynamic *Communes*](#orgea24f7e)
-7.  [Counterfactual decomposition](#org75e46c7)
-    1.  [Decomposition 1936 GIs](#org2bff1a5)
-    2.  [Alternative GI designations](#org0657208)
-8.  [Session information](#org524ca2b)
-9.  [Functions](#org310ef70)
-    1.  [Surrogate](#org0acd283)
-    2.  [Decomposition](#org9c93e0c)
+1.  [Descriptive Statistics](#orgad30e4c)
+2.  [Models of GI designation](#orgf61b19f)
+    1.  [Parametric ordered logit](#org5e090ec)
+    2.  [Ordered generalized additive](#orgbff41fe)
+3.  [Diagnostics](#org93bda5e)
+    1.  [Significance](#org9271d44)
+    2.  [Goodness of fit](#org4546996)
+    3.  [Omitted variable](#org90e7af9)
+    4.  [Specification](#org3687717)
+4.  [Marginal effects](#orge4e0fe9)
+    1.  [Parametric ordered logit](#orgfb7d0fc)
+    2.  [Ordered generalized additive](#org6ef63b3)
+    3.  [Ordinal superiority figure](#org72d9bd4)
+    4.  [Correlation between *Communes*](#orgbcab552)
+5.  [Decomposition](#orgb264db6)
+6.  [Models for 1936 GIs](#org51d04e7)
+    1.  [Descriptive stats](#org616ec72)
+    2.  [Estimation](#org6c241cf)
+    3.  [Significance](#org9d9bcb2)
+    4.  [Goodness of fit](#org802a2d9)
+    5.  [Omitted variable](#org72e014d)
+    6.  [Specification](#org14eb027)
+    7.  [Marginal effects](#org3f37c2c)
+    8.  [*Commune* effects](#orgf1dfc41)
+    9.  [Dynamic *Communes*](#orgefe2d93)
+7.  [Counterfactual decomposition](#org0c3fa12)
+    1.  [Decomposition 1936 GIs](#org9e047de)
+    2.  [Alternative GI designations](#org82cad97)
+8.  [Session information](#orge43ff5d)
+9.  [Functions](#org8612800)
+    1.  [Surrogate](#org47756fe)
+    2.  [Decomposition](#org5f7b47d)
 
 
-<a id="org51d3b8a"></a>
+<a id="orgad30e4c"></a>
 
 # Descriptive Statistics
 
@@ -104,12 +105,12 @@ sapply(Reg.Rank@data, function(x) sum(is.na(x)))
             0          0          0          0          0
 
 
-<a id="org61c2dea"></a>
+<a id="orgf61b19f"></a>
 
 # Models of GI designation
 
 
-<a id="org4608714"></a>
+<a id="org5e090ec"></a>
 
 ## Parametric ordered logit
 
@@ -137,7 +138,7 @@ por1b <- polr(factor(AOCc)~ 0+ LIBCOM+ EXPO
 Why warning message can be omitted.
 
 
-<a id="orga8c49ca"></a>
+<a id="orgbff41fe"></a>
 
 ## Ordered generalized additive
 
@@ -173,12 +174,12 @@ save(gammod, file= "Inter/gammod.Rda")
         42413.2       262.8     42679.6
 
 
-<a id="org4bd7f9b"></a>
+<a id="org93bda5e"></a>
 
 # Diagnostics
 
 
-<a id="org4d7064f"></a>
+<a id="org9271d44"></a>
 
 ## Significance
 
@@ -231,7 +232,7 @@ sapply(gamod[ 1: 5* 2], resume)
                  7.0     7.0     7.0      7.0      7.0
 
 
-<a id="org761b461"></a>
+<a id="org4546996"></a>
 
 ## Goodness of fit
 
@@ -259,7 +260,7 @@ rbind(sapply(gamod[ 1: 5* 2], pcgp), sapply(gamod[ 1: 5* 2], AIC))
     [2,] 82412.10 64710.89 54941.54 48291.33 43535.14
 
 
-<a id="org18e18c3"></a>
+<a id="org90e7af9"></a>
 
 ## Omitted variable
 
@@ -320,7 +321,7 @@ bwplot(values~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPlot.pdf>
 
 
-<a id="orge849f76"></a>
+<a id="org3687717"></a>
 
 ## Specification
 
@@ -345,12 +346,12 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, RRank@data[, i], i)
 ```
 
 
-<a id="org206435d"></a>
+<a id="orge4e0fe9"></a>
 
 # Marginal effects
 
 
-<a id="org1f31d06"></a>
+<a id="orgfb7d0fc"></a>
 
 ## Parametric ordered logit
 
@@ -364,7 +365,7 @@ plot(predictorEffects(por1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
 <./Figures/Effects1.pdf>
 
 
-<a id="orgb58b873"></a>
+<a id="org6ef63b3"></a>
 
 ## Ordered generalized additive
 
@@ -377,7 +378,7 @@ plot(gamod$gam100, pages= 1, scale= 0)
 <./Figures/Effects2.pdf>
 
 
-<a id="org429927d"></a>
+<a id="org72d9bd4"></a>
 
 ## Ordinal superiority figure
 
@@ -400,7 +401,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEff.pdf>
 
 
-<a id="org43389b5"></a>
+<a id="orgbcab552"></a>
 
 ## Correlation between *Communes*
 
@@ -425,7 +426,7 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
 <./Figures/ComCor.pdf>
 
 
-<a id="org79599f1"></a>
+<a id="orgb264db6"></a>
 
 # Decomposition
 
@@ -455,12 +456,12 @@ round(t(t(decomp)/ (pi^2/ 3+ decomp[1, ]))* 100, 1)
     Com Noise       63.5   57.5   71.3   69.3   68.5
 
 
-<a id="org029e8f1"></a>
+<a id="org51d04e7"></a>
 
 # Models for 1936 GIs
 
 
-<a id="orgb2c18ad"></a>
+<a id="org616ec72"></a>
 
 ## Descriptive stats
 
@@ -482,7 +483,7 @@ table(Reg.Old$AOC36lvl, Reg.Old$AOCc)
     5     0     1    13     3  1604
 
 
-<a id="org26c0651"></a>
+<a id="org6c241cf"></a>
 
 ## Estimation
 
@@ -529,7 +530,7 @@ save(gammold, file= "Inter/gammold.Rda")
         9582.37       78.69     9661.62 
 
 
-<a id="org5454fdd"></a>
+<a id="org9d9bcb2"></a>
 
 ## Significance
 
@@ -555,7 +556,7 @@ sapply(gamold[ 3: 7], resume)
                  7.0     7.0     7.0     7.0     7.0
 
 
-<a id="org459556e"></a>
+<a id="org802a2d9"></a>
 
 ## Goodness of fit
 
@@ -572,7 +573,7 @@ rbind(sapply(gamold, pcgp), sapply(gamold, AIC))
     [2,] 40789.58 36833.3 33810.36 30271.01 27574.12 24526.6 22482.20
 
 
-<a id="org5c7d97a"></a>
+<a id="org72e014d"></a>
 
 ## Omitted variable
 
@@ -615,7 +616,7 @@ bwplot(values~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPold.pdf>
 
 
-<a id="org394535f"></a>
+<a id="org14eb027"></a>
 
 ## Specification
 
@@ -639,7 +640,7 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, SRank@data[, i], i)
 ```
 
 
-<a id="org0cf81a1"></a>
+<a id="org3f37c2c"></a>
 
 ## Marginal effects
 
@@ -654,7 +655,7 @@ plot(gamold$gam300, pages= 1, scale= 0)
 <./Figures/Effectsold.pdf>
 
 
-<a id="org1bffe84"></a>
+<a id="orgf1dfc41"></a>
 
 ## *Commune* effects
 
@@ -675,7 +676,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEffOld.pdf>
 
 
-<a id="orgea24f7e"></a>
+<a id="orgefe2d93"></a>
 
 ## Dynamic *Communes*
 
@@ -690,12 +691,12 @@ segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
 <./Figures/ComDyn.pdf>
 
 
-<a id="org75e46c7"></a>
+<a id="org0c3fa12"></a>
 
 # Counterfactual decomposition
 
 
-<a id="org2bff1a5"></a>
+<a id="org9e047de"></a>
 
 ## Decomposition 1936 GIs
 
@@ -728,7 +729,7 @@ round(t(t(decold)/ (pi^2/ 3+ decold[1, ]))* 100, 1)
     Com Residual   16.0  33.3   43.7   20.9   35.3   20.6   43.7
 
 
-<a id="org0657208"></a>
+<a id="org82cad97"></a>
 
 ## Alternative GI designations
 
@@ -830,7 +831,7 @@ decf <- sapply(names(Simv)[ 100: 107], function(x)
     Com Noise     68.5 68.5 68.5 68.5 68.5 68.5 68.5 68.5
 
 
-<a id="org524ca2b"></a>
+<a id="orge43ff5d"></a>
 
 # Session information
 
@@ -886,12 +887,12 @@ sessionInfo()
     [46] haven_1.1.2
 
 
-<a id="org310ef70"></a>
+<a id="org8612800"></a>
 
 # Functions
 
 
-<a id="org0acd283"></a>
+<a id="org47756fe"></a>
 
 ## Surrogate
 
@@ -1078,7 +1079,7 @@ pltSURE <- function(resid, xvar, lab){
     ```
 
 
-<a id="org9c93e0c"></a>
+<a id="org5f7b47d"></a>
 
 ## Decomposition
 

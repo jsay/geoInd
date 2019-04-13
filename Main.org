@@ -40,6 +40,7 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
+*** Object/ Objet
 
    Relating Geographical Indications to biophysical characteristics of
    vineyards for the /Côte d'Or/ region (Burgundy, France).
@@ -3449,8 +3450,9 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 #+begin_export html
 ---
 title:  Déterminants biophysiques des AOC viticoles, Construction des données et modélisation
-author: Jean-Sauveur Ay et Mohamed Hilal
-date:   UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
+author: |
+  | Jean-Sauveur Ay et Mohamed Hilal
+  | UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
 ---
 
 # Résumé
@@ -4696,8 +4698,9 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
 #+begin_export html
 ---
 title:  The Informational Content of Geographical Indications
-author: Jean-Sauveur Ay
-date:   UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
+author: |
+  | Jean-Sauveur Ay
+  | UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
 ---
 
 # Abstract
