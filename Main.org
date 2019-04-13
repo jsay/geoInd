@@ -4729,11 +4729,12 @@ date:   UMR CESAER, AgroSup, INRA, Université Bourgogne Franche-Comté
 #+BEGIN_abstract
 This file contents the R codes associated with the paper "The
 informational content of geographical indications" AAWE Working Paper
-No XXX.  The data used are under licence Creative Commons, available
-on the INRA dataverse website: https://data.inra.fr.  R functions used
-are reported in the appendix to preserve the visibility of codes.
-Additional elements are in the French version available from the
-following Github repository: .
+No XXX.  The data used are under licence Creative Commons Attribution
+Share Alike 4.0 International, available on the INRA dataverse
+website: https://data.inra.fr.  R functions used are reported in the
+appendix to preserve the visibility of codes.  Additional elements are
+in the French version available from the following Github repository:
+.
 #+END_abstract
 #+TOC: headlines 3
 ** Simulation                                :noexport:
