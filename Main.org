@@ -50,13 +50,13 @@
    - [[file:WorkingPaper.pdf][Working paper]]
    - Data: https://www6.inra.fr/datapartage/
    - Code: [[file:ReproPaper.pdf][PDF version]] or [[file:ReproPaper.md][Markdown]]
-   - Dynamic carto: [[https://site-a-determiner.fr]]
+   - Dynamic carto: [[https://geoind-wine.firebaseapp.com]]
 
 *** Version Française
 
    - Présentation des données : [[file:DataPaper.pdf][PDF version]] or [[file:DataPaper.md][Markdown]]
    - Accéder aux données : https://www6.inra.fr/datapartage/
-   - Cartographie dynamique : [[https://site-a-determiner.fr]]
+   - Cartographie dynamique : [[https://geoind-wine.firebaseapp.com]]
 
 *** Credits
 
@@ -1008,6 +1008,7 @@ ff[order(ff$WMean, decreasing= TRUE), ]
 *** Effets des variables biophysiques
 *** Prédiction du score et classifications
 ** <<Carto>> Mise en cartographie dynamique
+*** R code
 
    AGGREGATION PAR LIEUX DITS
 
@@ -1091,6 +1092,39 @@ mapshot(m, url = paste0(getwd(), "/DynMap/test.html"),
         file = paste0(getwd(), "/DynMap/test.png"),
         remove_controls = c("homeButton", "layersControl"))
 #+end_src
+
+*** Deploiement
+
+    https://firebase.google.com/
+
+    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+    https://websiteforstudents.com/install-the-latest-node-js-and-nmp-packages-on-ubuntu-16-04-18-04-lts/
+    nvm install 10.15.3
+
+#+begin_src random
+from https://github.com/creationix/nvm:
+You can list available versions using ls-remote:
+nvm ls-remote
+And then in any new shell just use the installed version:
+nvm use node
+Or you can just run it:
+nvm run node --version
+Or, you can run any arbitrary command in a subshell with the desired version of node:
+nvm exec 10.15.3 node --version
+nvm install 10.15.3
+
+#+end_src
+
+    npm install -g firebase-tools
+    To update to the latest version of the Firebase CLI, re-run the
+    same npm install command.
+    firebase login
+    firebase list
+    se mettre dans le répertoire DynMap
+    firebase init, choisir hosting
+    mettre le fichier, l'appeler index.html
+    firebase deploy
+
 
 ** <<Concl>> Conclusion
 

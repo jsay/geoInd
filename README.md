@@ -6,14 +6,14 @@
 -   [Working paper](WorkingPaper.pdf)
 -   Data: <https://www6.inra.fr/datapartage/>
 -   Code: [PDF version](ReproPaper.pdf) or [Markdown](ReproPaper.md)
--   Dynamic carto: <https://site-a-determiner.fr>
+-   Dynamic carto: <https://geoind-wine.firebaseapp.com>
 
 
 # Version Française
 
 -   Présentation des données : [PDF version](DataPaper.pdf) or [Markdown](DataPaper.md)
 -   Accéder aux données : <https://www6.inra.fr/datapartage/>
--   Cartographie dynamique : <https://site-a-determiner.fr>
+-   Cartographie dynamique : <https://geoind-wine.firebaseapp.com>
 
 
 # Credits
