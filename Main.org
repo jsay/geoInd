@@ -35,6 +35,10 @@
 # https://www.sfedit.net
 # https://www.comeetie.fr/
 
+# DANS REPROD, CHANGER LES FONCTIONS surlGAM et suroldGAM par
+# sureOGAM, puis les enlever des custom functions. Attention
+# lorsqu'elles sont dans une boucle.
+
 * README
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
@@ -1028,22 +1032,33 @@ ff[order(ff$WMean, decreasing= TRUE), ]
    holding the Ctrl and left-clicking on the map.
 
 #+begin_src R
-library(rgdal)
-Geo.Cada <- readOGR("./Data/VITI_JSA_MH", "dicopar", verbose= F)
+library(rgdal) ; library(rgeos) ; library(maptools)
+load("Inter/GeoRas.Rda")
 MapCom <- readOGR("Carto/", "MapCom")
+Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
+Geo.Aoc$AOCc <- ifelse(Geo.Aoc$GCRU== 1, 5,
+                ifelse(Geo.Aoc$PCRU== 1, 4,
+                ifelse(Geo.Aoc$VILL== 1 | Geo.Aoc$COMM== 1, 3,
+                ifelse(Geo.Aoc$BOUR== 1, 2, 1))))
+
+tmp_geo <- gBuffer(Geo.Aoc, byid= TRUE, width= 0)
+Poly.Lxd <- unionSpatialPolygons(tmp_geo, Geo.Aoc$LIEUDIT)
+Poly.Lxd$LIEUDIT <- as.character(row.names(Poly.Lxd))
+Poly.Lxd$AOC<-aggregate(Geo.Aoc$AOCc, by= list(Geo.Aoc$LIEUDIT), mean)[, 2]
+Poly.Lxd$AREA<-aggregate(Geo.Aoc$AREA, by= list(Geo.Aoc$LIEUDIT), sum)[, 2]
+
+library(mapview)
+tst <- mapview(Poly.Lxd,
+               zcol= "AOC", alpha.regions= .6,
+               col.regions= paste0("purple", c("1", "2", "", "3", "4")),
+               color= "white",
+               label= Poly.Lxd$LIEUDIT,
+               popup = popupTable(Poly.Lxd@data,
+                                  zcol = c("LIEUDIT", "AREA", "AOC")))
+
+
 mapviewOptions()
 mapviewOptions(maxpolygons= 150000)
-library(mapview)
-
-Geo.Cada$AOC <- factor(ifelse(Geo.Cada$GCRU== 1, "Grand Cru",
-                       ifelse(Geo.Cada$PCRU== 1, "Premier Cru",
-                       ifelse(Geo.Cada$COMM== 1 |
-                              Geo.Cada$VILL== 1, "Communale",
-                       ifelse(Geo.Cada$BOUR== 1, "Régionale",
-                              "Coteaux")))),
-                       levels= c("Coteaux", "Régionale", "Communale",
-                                 "Premier Cru", "Grand Cru"))
-
 n <- mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Chenôve"),
              zcol= "AOC", alpha.regions= .6,
              col.regions= paste0("purple", c("1", "2", "", "3", "4")),
@@ -1062,49 +1077,6 @@ n <- mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Chenôve"),
             popup = popupTable(com2,
                                zcol = c("Area", "Perimeter", "P_a")))+
     
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Couchey"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white",
-              label= com2$IDU,
-            layer.name= "Couchey",
-            popup = popupTable(com2,
-                               zcol = c("Area", "Perimeter", "P_a")))+
-    
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Fixin"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white",
-              label= com2$IDU,
-            layer.name= "Fixin",
-            popup = popupTable(com2,
-                               zcol = c("Area", "Perimeter", "P_a")))+
-    
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Brochon"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white",
-              label= com2$IDU,
-            layer.name= "Brochon",
-            popup = popupTable(com2,
-                               zcol = c("Area", "Perimeter", "P_a")))+
-    
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Gevrey-Chambertin"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white", label= com2$IDU,
-            layer.name= "Gevrey-Chambertin",
-            popup = popupTable(zcol = c("Area", "Perimeter", "P_a")))
-+
-    
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Morey-Saint-Denis"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white", lwd= .25,
-            label= com2$IDU,
-            layer.name= "Morey-Saint-Denis",
-            popup = popupTable(com2,
-                               zcol = c("Area", "Perimeter", "P_a")))
 
 
 
@@ -1112,7 +1084,7 @@ n <- mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Chenôve"),
 ##         width = 200, height = 100, offset.x= 75, offset.y= 20)
 n
 ## create standalone .html
-mapshot(n, url = paste0(getwd(), "/DynMap/tst.html"))
+mapshot(tst, url = paste0(getwd(), "/DynMap/LieuxDits.html"))
 
 ## create .html and .png
 mapshot(m, url = paste0(getwd(), "/DynMap/test.html"),
@@ -1480,6 +1452,16 @@ sapply(Reg.Rank@data, function(x) sum(is.na(x)))
 
 #+RESULTS:
 #+begin_example
+
+   
+        1     2     3     4     5
+  0   657     0     0     0     0
+  1  9110   195     0     1     0
+  2     0 15300     0     1     0
+  3     0     0 24052    88     0
+  4     0     0     0  8499     0
+  5     0     0     0     0  1906
+
    PAR2RAS        IDU    CODECOM       AREA      PERIM    MAXDIST 
          0          0          0          0          0          0 
       PAOC       ALIG       BPTG       CREM       MOUS       BGOR 
@@ -1489,21 +1471,21 @@ sapply(Reg.Rank@data, function(x) sum(is.na(x)))
       YL93      NOMOS      URBAN     FOREST      WATER        DEM 
          0          0          0          0          0          0 
      SLOPE     ASPECT      SOLAR     PERMEA       CODE   NOTATION 
-         0          0          0          0          0          0 
+         0          0          0          0         22         22 
      DESCR  TYPE_GEOL  AP_LOCALE    TYPE_AP   GEOL_NAT   ISOPIQUE 
-         0          0         80         80          0          0 
+        22         22        102        102         22         22 
    AGE_DEB    ERA_DEB    SYS_DEB LITHOLOGIE     DURETE  ENVIRONMT 
-         0          0          0          0         10          0 
+        22         22         22         22         32         22 
  GEOCHIMIE  LITHO_COM       NOUC      NO_UC   NO_ETUDE     SURFUC 
-         0         10        658        658        658        658 
+        22         32        668        668        668        668 
       TARG       TSAB       TLIM     TEXTAG      EPAIS        TEG 
-       658        658        658        658        658        658 
+       668        668        668        668        668        668 
        TMO        RUE        RUD       NOUS      OCCUP     DESCRp 
-       658        658        658        658        658        658 
+       668        668        668        668        668        668 
   AOC36lab   AOC36lvl    LIEUDIT     CLDVIN     LIBCOM       XCHF 
-        18         18        152        152        152        152 
+        18         18          0          0          0          0 
       YCHF     ALTCOM     SUPCOM     POPCOM   CODECANT     REGION 
-       152        152        152        152        152        152 
+         0          0          0          0          0          0 
          X          Y       AOCc      RAYAT       EXPO 
          0          0          0          0          0
 #+end_example
@@ -1968,7 +1950,7 @@ bwplot(values~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 *** Specification
 
      Surrogate residuals can also be used to test specification,
-     results not reported.  Introducing =pltSURE= function.
+     results not reported.
 
 #+begin_src R :exports code :results graphics :height 7 :width 12 :file "./Figures/Surrogate.pdf"
 library(sure) ; library(ggplot2) ; library(gridExtra)
@@ -1980,6 +1962,11 @@ do.call(grid.arrange, c(list(atp), plots))
 restmp <- surlGAM(gamod$gam900)- gamod$gam900$line 
 plot(qlogis(1: nrow(RRank)/ nrow(RRank), scale= 1), sort(restmp))
 abline(0, 1)
+pltSURE <- function(resid, xvar, lab){
+    plot(xvar, resid, xlab= lab, main= paste("Surrogate Analysis", lab))
+    abline(h= 0, col= "red", lty= 3, lwd= 2)
+    lines(smooth.spline(resid ~ xvar), lwd= 3, col= "blue")
+}
 par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, RRank@data[, i], i)
 #+end_src
 
@@ -3294,27 +3281,29 @@ loaded via a namespace (and not attached):
     We use the package =sure= to simulate the surrogate residuals from
     the parametric ordered logistic, then we code a custom function
     for that to show that it works, then we implemented a custom
-    function from OGAM models fitted with =mgcv=.
-
-**** Plot                                    :noheading:
-
-#+begin_src R :tangle ./myFcts.R
-pltSURE <- function(resid, xvar, lab){
-    plot(xvar, resid, xlab= lab, main= paste("Surrogate Analysis", lab))
-    abline(h= 0, col= "red", lty= 3, lwd= 2)
-    lines(smooth.spline(resid ~ xvar), lwd= 3, col= "blue")
-}
-#+end_src
+    function from OGAM models fitted with =mgcv=.  We use =truncdist=
+    to simulate truncated distribution.
 
 **** Ordered Logit                           :noheading:
-***** function
+
+     Implementing the function for the ordered logistic from the
+     =polr= function of the =MASS= package. 
 
 #+begin_src R :tangle ./myFcts.R
-surlOLR <- function(mod, newd= NULL){
+truncLogis <- function(n, spec, a = -Inf, b = Inf, ...) {
+    p <- runif(n, min = 0, max = 1)
+    G <- get(paste("p", spec, sep = ""), mode = "function")
+    Gin <- get(paste("q", spec, sep = ""), mode = "function")
+    G.a <- G(a, ...)
+    G.b <- G(b, ...)
+    pmin(pmax(a, Gin(G(a, ...) + p * (G(b, ...) - G(a, ...)), ...)), b)
+}
+
+surePOLR <- function(mod, newd= NULL){
     if (mod$method!= "logistic") stop("Logistic required")
     gg <- as.numeric(mod$zeta)
     if (is.null(newd)){
-        g1 <- unname(as.integer(model.response(model.frame(mod))))
+        g1 <- as.integer(model.response(model.frame(mod)))
         g6 <- mod$lp
     } else {
         g1 <- as.integer(newd[, "AOCc"])
@@ -3326,78 +3315,40 @@ surlOLR <- function(mod, newd= NULL){
                    "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
                    "5"= c(gg[ 4], Inf   ))
     sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
-           location= g6, scale= 1)
+    truncLogis(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
+               location= g6, scale= 1)
 }
-#+end_src
-
-***** test
-
-#+begin_src R
-summary(por1)
-#+end_src
-
-**** Ordered Probit                          :noheading:
-***** function                               :noheading:
-
-#+begin_src R :tangle ./myFcts.R
-library(sure)
-library(truncdist)
-surpOLR <- function(mod, newd= NULL){
-    if (mod$method!= "probit") stop("Probit required")
-    gg <- as.numeric(mod$zeta)
-    if (is.null(newd)){
-        g1 <- unname(as.integer(model.response(model.frame(mod))))
-        g6 <- mod$lp
-    } else {
-        g1 <- as.integer(newd[, "AOCc"])
-        g6 <- gg[ 1]-qnorm(predict(mod, newdata= newd, type= 'probs')[, 1])
-    }
-    nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
-                   "5"= c(gg[ 4], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "norm", a= sls[, 1], b= sls[, 2],
-           mean= g6, sd= sqrt(1+ var(g6)))
-}
-#+end_src
-
-***** test                                   :noheading:
-
-#+begin_src R
-kk <- surrogate(por1)+ por1$zeta[ 1]
-hh <- surpOLR(por1)
-plot(kk, hh)
-abline(h= gg)
-abline(v= gg)
-abline(0, 1, col= "blue")
-
-ll <- surrogate(por1)+ gg[ 1]
-plot(kk, ll)
-abline(h= gg)
-abline(v= gg)
-abline(0, 1, col= "blue")
-
-oo <- surpOLR(por1, newd= RegRank)
-plot(oo, ll)
-abline(h= gg)
-abline(v= gg)
-abline(0, 1, col= "blue")
 #+end_src
 
 **** Ordered Additive                        :noheading:
-***** function                               :noheading:
+
+     Now the same structure for the OGAM, from the =mgcv= package
 
 #+begin_src R :tangle ./myFcts.R
+sureOGAM <- function(mod, newd= NULL){
+    if (is.null(newd)){
+        g1 <- as.integer(mod$y)
+        g6 <- mod$linear.predictors
+    } else {
+        g1 <- as.integer(newd[, names(mod$model[ 1])])
+        g6 <- predict(mod, newdata= newd)
+    }
+    nn <- length(g1)
+    gt <- data.frame(rep(NA, nn), rep(NA, nn))
+    gg <- c(fit.ogam$family$getTheta(TRUE), Inf)
+    kk <- c(- Inf, gg[ 1])
+    for (j in 2: length(unique(g1))) kk <- rbind(kk, c(gg[ j- 1], gg[ j]))
+    gt <- data.frame(t(sapply(g1, function(x) kk[x, ])))
+    truncLogis(nn, spec= "logis", a= gt[, 1], b= gt[, 2], location= g6)
+}
+
 surlGAM <- function(mod, newd= NULL){
     gg <- as.numeric(mod$family$getTheta(TRUE))
     if (is.null(newd)){
         g1 <- as.integer(mod$y)
         g6 <- mod$linear.predictors
     } else {
-        g1 <- as.integer(newd[, "AOCc"])
+        g1 <- as.integer(newd[, names(mod$model[ 1])])
         g6 <- predict(mod, newdata= newd)
     }
     nn <- length(g1)
@@ -3408,93 +3359,50 @@ surlGAM <- function(mod, newd= NULL){
     sls <- data.frame(unlist(t(suls)))
     rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2], location= g6)
 }
-suroldGAM <- function(mod, newd= NULL){
-    gg <- as.numeric(mod$family$getTheta(TRUE))
-    if (is.null(newd)){
-        g1 <- as.integer(mod$y)
-        g6 <- mod$linear.predictors
-    } else {
-        g1 <- as.integer(newd[, "AOCavt"])
-        g6 <- predict(mod, newdata= newd)
-    }
-    nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2], location= g6)
-}
+
 #+end_src
 
-***** test                                   :noheading:
+**** Test of functions                       :noheading:
+
+     Equivalence between OGAM and polr, for surrogate and residuals.
 
 #+begin_src R
+library(mgcv) ; library(MASS) ; library(sure) ; library(truncdist)
 fit.ogam <- gam(AOCc~ poly(DEM, 2)+ poly(SLOPE, 2)
-                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEABILITY, 2)
-              , family= ocat(R= 5), data= RegRank)
-fit.oglm <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
-                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEABILITY, 2)
-              , method= "logistic", data= RegRank)
-plot(fit.ogam$line, fit.oglm$lp-fit.oglm$zeta[1]- 1)
-abline(0, 1)
+                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
+              , family= ocat(R= 5), data= Reg.Rank)
+fit.polr <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
+                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
+              , data= Reg.Rank)
 
-hh <- surrogate(fit.oglm)+ fit.oglm$zeta[ 1]+ 1
-gg <- surlGAM(fit.ogam)
-plot(gg, hh)
-abline(v= fit.ogam$family$getTheta(TRUE))
-abline(h= fit.oglm$zeta+ 1)
-abline(0, 1, col= "blue")
-kk <- surlGAM(fit.ogam, newd= RegRank)
-plot(kk, hh)
-abline(v= fit.ogam$family$getTheta(TRUE))
-abline(h= fit.oglm$zeta+ 1)
-abline(0, 1, col= "blue")
+sure1 <- surrogate(fit.polr)+ fit.oglm$zeta[ 1]
+sure2 <- resids(fit.polr)
+polr1 <- surePOLR(fit.polr)
+polr2 <- surePOLR(fit.polr)- fit.polr$lp
+ogam1 <- sureOGAM(fit.ogam)
+ogam2 <- sureOGAM(fit.ogam)- fit.ogam$linear.pred
 
+par(mfrow= c(3, 2))
+plot(sure1, polr1)
+abline(h= fit.oglm$zeta, v= fit.oglm$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(sure2, polr2)
+abline(0, 1, col= "orange")
+
+plot(polr1, ogam1- mean(ogam1))
+abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
+       v= fit.oglm$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(polr2, ogam2)
+abline(0, 1, col= "orange")
+
+plot(sure1, ogam1- mean(ogam1))
+abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
+       v= fit.oglm$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(sure2, ogam2)
+abline(0, 1, col= "orange")
 #+end_src
-
-**** Logit                                   :noheading:
-***** function
-
-#+begin_src R
-surlGLM <- function(mod, newd= NULL){
-    if (mod$family$link!= "logit") stop("Logit required")
-    if (is.null(newd)){
-        g1 <- as.integer(mod$y)
-        g6 <- mod$linear.predictors
-    } else {
-        g1 <- as.integer(newd[, "AOCc"])
-        g6 <- predict(mod, newdata= newd, type= "link")
-    }
-    nn <- length(g1)
-    ifelse(g1== 0,
-           rtrunc(nn, spec= "logis", a= -Inf, b= 0, location= g6,
-                  scale= 1),
-           rtrunc(nn, spec= "logis", a= 0, b=  Inf, location= g6,
-                  scale= 1))
-}
-#+end_src
-
-***** test
-**** Probit                                  :noheading:
-***** function                               :noheading:
-
-#+begin_src R :tangle ./myFcts.R
-surpGLM <- function(mod, newd= NULL){
-    if (mod$family$link!= "probit") stop("Probit required")
-    if (is.null(newd)){
-        g1 <- as.integer(mod$y)
-        g6 <- mod$linear.predictors
-    } else {
-        g1 <- as.integer(newd[, "AOCc"])
-        g6 <- predict(mod, newdata= newd, type= "link")
-    }
-    nn <- length(g1)
-    ifelse(g1== 0, rtrunc(nn, spec= "norm", a= -Inf, b= 0, mean= g6),
-           rtrunc(nn, spec= "norm", a= 0, b=  Inf, mean= g6))
-}
-#+end_src
-
-***** test                                   :noheading:
 
 **** clearpage                               :noheading:
 
@@ -3549,6 +3457,46 @@ sim_trunc <- function(n, distribution, a, b, location = 0, scale = 1) {
     .rtrunc(n, spec = distribution, a = a, b = b,
             location = location, scale = scale)
   }
+}
+#+end_src
+
+**** Old functions                           :noexport:
+***** Logit
+
+#+begin_src R
+surlGLM <- function(mod, newd= NULL){
+    if (mod$family$link!= "logit") stop("Logit required")
+    if (is.null(newd)){
+        g1 <- as.integer(mod$y)
+        g6 <- mod$linear.predictors
+    } else {
+        g1 <- as.integer(newd[, "AOCc"])
+        g6 <- predict(mod, newdata= newd, type= "link")
+    }
+    nn <- length(g1)
+    ifelse(g1== 0,
+           rtrunc(nn, spec= "logis", a= -Inf, b= 0, location= g6,
+                  scale= 1),
+           rtrunc(nn, spec= "logis", a= 0, b=  Inf, location= g6,
+                  scale= 1))
+}
+#+end_src
+
+***** Probit
+
+#+begin_src R :tangle ./myFcts.R
+surpGLM <- function(mod, newd= NULL){
+    if (mod$family$link!= "probit") stop("Probit required")
+    if (is.null(newd)){
+        g1 <- as.integer(mod$y)
+        g6 <- mod$linear.predictors
+    } else {
+        g1 <- as.integer(newd[, "AOCc"])
+        g6 <- predict(mod, newdata= newd, type= "link")
+    }
+    nn <- length(g1)
+    ifelse(g1== 0, rtrunc(nn, spec= "norm", a= -Inf, b= 0, mean= g6),
+           rtrunc(nn, spec= "norm", a= 0, b=  Inf, mean= g6))
 }
 #+end_src
 
@@ -5113,8 +5061,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
     of these measures.  Relatively privilegied \emph{communes} appear
     at the top of the Figure, whereas relatively disadvantged
     \emph{communes} appear at the bottom.}\label{Fig:2}
-  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale=
-  .75]{./Figures/ComEff.pdf}
+  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale= .75]{./Figures/ComEff.pdf}
 \end{figure}
 #+end_export
 
@@ -5720,7 +5667,7 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
   :EXPORT_BEAMER_HEADER: \usepackage{libertine}\setbeamerfont{frametitle}{family=\sffamily}\setbeamerfont{framesubtitle}{family=\sffamily}\setbeamerfont{title}{family=\sffamily}\setbeamerfont{date}{family=\sffamily}\usepackage{bm, adjustbox, amsmath, dcolumn, import, rotfloat} \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
   :EXPORT_OPTIONS:       TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:2 author:t
   :EXPORT_TITLE:         @@latex: The Informational Content of\\ Geographical Indications @@
-  :EXPORT_AUTHOR:        @@latex: Jean-Sauveur AY\\ INRA UMR CESAER \\ @@  
+  :EXPORT_AUTHOR:        @@latex: Jean-Sauveur Ay\\ INRA UMR CESAER \\ @@  
   :EXPORT_DATE:          =Vendredi 10 mai 2019=
   :END:
 ** 1 -- Introduction
@@ -5851,12 +5798,12 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .5]{./Figures/labelPCRU}
 #+END_CENTER
 
-** 3 -- Model
+** 3 -- Models
 *** Latent structure
 
 #+begin_export latex
 \begin{flalign*}
-y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X)= 0&&\nonumber
+y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\nonumber
 \end{flalign*}\pause
 #+end_export
 
@@ -5867,10 +5814,10 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 # idiosyncratique (hypothèse les deux sont indépendants)
 
 #+begin_export latex
-\vspace{-1cm}
+\vspace{-1.5cm}
 \begin{flalign*}
-&\mbox{ Define } y_{ij}= 1 \mbox{ if } \alpha_{j-1}< y_i^* \leqslant \alpha_{j+1} \mbox{ and } y_{ij}= 0 \mbox{ otherwise } \nonumber\\
-& j= \mbox{\small Côteaux Bourguignons, Bourgogne, Village, Premier Cru, Grand Cru}\nonumber
+ y= j &\;\;\mbox{ if }\;\; \alpha_{j-1}^c< y^* \leqslant \alpha_{j}^c & \nonumber\\
+&\mbox{ for }\;\; j \in \big\{\mbox{\small Côteaux, Bourgogne, Village, Premier Cru, Grand Cru}\big\}&\nonumber
 \end{flalign*}\pause
 #+end_export
 
@@ -5884,11 +5831,11 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 # horizontalité, ça laisse une place aux goûts
 
 #+begin_export latex
-\vspace{-1cm}
+\vspace{-1.5cm}
 \begin{flalign*}
-&\mbox{ Define } c_{ik}= 1 \mbox{ if } i \in \mathbb{C}_k \mbox{ and } c_{ik}= 0 \mbox{ otherwise } \nonumber\\
-& k= \mbox{\small Gevrey-Chambertin, Chassagne-Montrachet, Beaune, Vougeot, etc.}\nonumber
-\end{flalign*}\pause
+ \alpha_{j}^c = \alpha_j- \mu_c & \;\;\mbox{ with }\;\; \mu_c \;\;\mbox{ an ordinal superiority measure }&\nonumber\\
+&\mbox{ for }\;\; c \in \big\{\mbox{\small Gevrey-Chambertin, Pommard, Meursault, Vougeot, \dots}\big\}&\nonumber
+\end{flalign*}
 #+end_export
 
 # La structure horizontale est également présente dans l'information
@@ -5897,14 +5844,6 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 # administratif qui préexiste aux appellations d'origine. 1789 en
 # fonction des paroisses, localisation des églises (IXe-XIIe
 # siècles). Le but n'était de signaler la qualité des vignes
-
-#+begin_export latex
-\vspace{-.75cm}
-\begin{flalign*}
-\;\;\overrightarrow{\alpha_j}= \alpha_j- \sum\nolimits_k \theta_k\cdot C_k \;\; \mbox{ with $\theta_k$ the bias}&&\nonumber
-\end{flalign*}
-\vspace{.5cm}
-#+end_export
 
 # Par contre, les communes ont joué un rôle important, à travers les
 # regroupements de producteurs dans la mise en oeuvre des AOC, ils ont
@@ -5920,12 +5859,12 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 
 # Ordinal superiority as an objective mesure of reputation
 
-*** Decomposition I
+*** Decomposition
 #+LATEX: \small
 
 #+begin_export latex
 \begin{flalign*}
-\mathbb{Var}(y^*)= \underbrace{\mbox{Var}\left[q\left(X_i; \beta\right)\right]}_{\mbox{signal}}+ \underbrace{\mbox{Var}\left(\xi_i\right)}_{\mbox{noise}}&& [D1]\nonumber
+\mathbb{V}(y^*)= \underbrace{\mathbb{V}\left[q\left(X^*\right)\right]}_{\mbox{signal}}+ \underbrace{\mathbb{V}\left[\;\xi\;\right]}_{\mbox{noise}}&& [D1]\nonumber
 \end{flalign*}\pause
 #+end_export
 
@@ -5942,33 +5881,27 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mbox{Var}\left[s\left(X_i; \beta\right)\right]=
-    \underbrace{\mbox{Var}\left\{\mathbb{E}\left[s\left(X_i;
-            \beta\right)\mid Y\right]\right\}}_{\mbox{ranking signal}}+
-    \underbrace{\mathbb{E}\left\{\mbox{Var}\left[s\left(X_i;
-            \beta\right)\mid Y\right]\right\}}_{\mbox{ranking noise}}&& [D2]
+  \mathbb{V}\left[q\left(X^*\right)\right]=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}}_{\mbox{joint signal}}+
+    \underbrace{\mathbb{E}\left\{\mathbb{V}\left[q\left(X^*\right)\mid y, c\right]\right\}}_{\mbox{joint noise}}&& [D2]
 \end{flalign*}\pause
 #+end_export
 
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mbox{Var}\left[s\left(X_i; \beta\right)\right]=
-    \underbrace{\mbox{Var}\left\{\mathbb{E}\left[s\left(X_i;
-            \beta\right)\mid C\right]\right\}}_{\mbox{commune signal}}+
-    \underbrace{\mathbb{E}\left\{\mbox{Var}\left[s\left(X_i;
-            \beta\right)\mid C\right]\right\}}_{\mbox{commune noise}}&& [D3]
+  \mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y\right]\right\}}_{\mbox{vertical signal}}+
+    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c \right]\mid y\right\}}_{\mbox{vertical residual}}&& [D3]
 \end{flalign*}\pause
 #+end_export
 
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mbox{Var}\left[s\left(X_i; \beta\right)\right]=
-    \underbrace{\mbox{Var}\left\{\mathbb{E}\left[s\left(X_i;
-            \beta\right)\mid Y, C\right]\right\}}_{\mbox{joint signal}}+
-    \underbrace{\mathbb{E}\left\{\mbox{Var}\left[s\left(X_i;
-            \beta\right)\mid Y, C\right]\right\}}_{\mbox{joint noise}}&& [D4]
+  \mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid c\right]\right\}}_{\mbox{horizontal signal}}+
+    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c \right]\mid c\right\}}_{\mbox{horizontal residual}}&& [D4]
 \end{flalign*}
 #+end_export
 
@@ -5977,38 +5910,47 @@ y_i^*= q\left(X_i; \beta\right)+ \xi_i \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid
 
 # Certaine redondance entre les niveaux et les communes
 
-*** Decomposition II
-#+LATEX: \small
+*** Empirical Challenge
 
-#+begin_export latex
-\vspace{-1cm}
-\begin{flalign*}
-   \mbox{Var}\left[s\left(X_i; \beta\right)\right]&\,= 
-  \mbox{Var}\left\{\mathbb{E}\left[s\left(X_i; \beta\right)\mid Y\right]\right\} \;\;\;\Rightarrow\;\;\; \mbox{ranking signal}  & [D5] \\
-  +& \underbrace{\mathbb{E}\mbox{Var}\left\{\mathbb{E}\left[s\left(X_i; \beta\right)\mid Y, C \right]\mid Y\right\}}_{\mbox{residual commune signal}} +
-  \underbrace{\mathbb{E}\left\{\mbox{Var}\left[s\left(X_i; \beta\right)\mid Y, C\right]\right\}}_{\mbox{joint noise}}&\nonumber
-\end{flalign*}\pause
-#+end_export
+    We only observe $X\subset X^*$ of the whole /terroir/
+#+LATEX: \vspace{.5cm}
 
-#+begin_export latex
-\vspace{-1cm}
-\begin{flalign*}
-  \mbox{Var}\left[s\left(X_i; \beta\right)\right]&\;=  
-  \mbox{Var}\left\{\mathbb{E}\left[s\left(X_i; \beta\right)\mid C\right]\right\}   \;\;\;\Rightarrow\;\;\; \mbox{commune signal}& [D6]\\
-    + & \underbrace{\mathbb{E}\mbox{Var}\left\{\mathbb{E}\left[s\left(X_i; \beta\right)\mid Y, C\right]\mid C\right\}}_{\mbox{residual ranking signal}}+
-    \underbrace{\mathbb{E}\left\{\mbox{Var}\left[s\left(X_i; \beta\right)\mid Y, C\right]\right\}}_{\mbox{joint noise}} &\nonumber
-\end{flalign*}
-#+end_export
+    Omitted /terroir/ variable correlated within /communes/
+#+LATEX: \vspace{.5cm}
 
-# Certaine redondance entre les niveaux et les communes
+    Under the assumption of spatial smoothness of /terroir/
+#+LATEX: \vspace{.5cm}
 
-** 4 -- Result
-*** Specifications
+    Geographical coordinates allow to control for /terroir/
+#+LATEX: \vspace{.5cm}
 
-    Variables, 5 specifications, pc of good predictions.
+    $\Rightarrow$ Ordered Generalized Additive Models
+
+** 4 -- Results
+*** Estimation
+
+#+LATEX: \footnotesize\input{Tables/VarSign1.tex}
 
 *** Marginal effects
+
+#+LATEX: \vspace*{.2cm}\hspace*{-1cm}\includegraphics[scale= 1.05]{Figures/PltEff.pdf}
+
+*** Spatial effects
+
+#+LATEX: \includegraphics[scale=.35]{Figures/SmoothMap.pdf}
+
+*** Omitted /terroir/
+
+#+LATEX: \includegraphics[scale= .4]{Figures/SignifPlot.pdf}
+
+*** Ordinal superiority
+
+#+LATEX: \includegraphics[scale= .5]{./Figures/ComEff.pdf}
+
 *** Decompositions
+
+#+LATEX: \small \input{Tables/Decomp.tex}
+
 ** 5 -- Conclusion
 *** Results
 
