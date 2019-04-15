@@ -1,14 +1,17 @@
-pltSURE <- function(resid, xvar, lab){
-    plot(xvar, resid, xlab= lab, main= paste("Surrogate Analysis", lab))
-    abline(h= 0, col= "red", lty= 3, lwd= 2)
-    lines(smooth.spline(resid ~ xvar), lwd= 3, col= "blue")
+truncLogis <- function(n, spec, a = -Inf, b = Inf, ...) {
+    p <- runif(n, min = 0, max = 1)
+    G <- get(paste("p", spec, sep = ""), mode = "function")
+    Gin <- get(paste("q", spec, sep = ""), mode = "function")
+    G.a <- G(a, ...)
+    G.b <- G(b, ...)
+    pmin(pmax(a, Gin(G(a, ...) + p * (G(b, ...) - G(a, ...)), ...)), b)
 }
 
-surlOLR <- function(mod, newd= NULL){
+surePOLR <- function(mod, newd= NULL){
     if (mod$method!= "logistic") stop("Logistic required")
     gg <- as.numeric(mod$zeta)
     if (is.null(newd)){
-        g1 <- unname(as.integer(model.response(model.frame(mod))))
+        g1 <- as.integer(model.response(model.frame(mod)))
         g6 <- mod$lp
     } else {
         g1 <- as.integer(newd[, "AOCc"])
@@ -20,64 +23,25 @@ surlOLR <- function(mod, newd= NULL){
                    "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
                    "5"= c(gg[ 4], Inf   ))
     sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
-           location= g6, scale= 1)
+    truncLogis(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
+               location= g6, scale= 1)
 }
 
-library(sure)
-library(truncdist)
-surpOLR <- function(mod, newd= NULL){
-    if (mod$method!= "probit") stop("Probit required")
-    gg <- as.numeric(mod$zeta)
-    if (is.null(newd)){
-        g1 <- unname(as.integer(model.response(model.frame(mod))))
-        g6 <- mod$lp
-    } else {
-        g1 <- as.integer(newd[, "AOCc"])
-        g6 <- gg[ 1]-qnorm(predict(mod, newdata= newd, type= 'probs')[, 1])
-    }
-    nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
-                   "5"= c(gg[ 4], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "norm", a= sls[, 1], b= sls[, 2],
-           mean= g6, sd= sqrt(1+ var(g6)))
-}
-
-surlGAM <- function(mod, newd= NULL){
-    gg <- as.numeric(mod$family$getTheta(TRUE))
+sureOGAM <- function(mod, newd= NULL){
     if (is.null(newd)){
         g1 <- as.integer(mod$y)
         g6 <- mod$linear.predictors
     } else {
-        g1 <- as.integer(newd[, "AOCc"])
+        g1 <- as.integer(newd[, names(mod$model[ 1])])
         g6 <- predict(mod, newdata= newd)
     }
     nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
-                   "5"= c(gg[ 4], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2], location= g6)
-}
-suroldGAM <- function(mod, newd= NULL){
-    gg <- as.numeric(mod$family$getTheta(TRUE))
-    if (is.null(newd)){
-        g1 <- as.integer(mod$y)
-        g6 <- mod$linear.predictors
-    } else {
-        g1 <- as.integer(newd[, "AOCavt"])
-        g6 <- predict(mod, newdata= newd)
-    }
-    nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2], location= g6)
+    gt <- data.frame(rep(NA, nn), rep(NA, nn))
+    gg <- c(mod$family$getTheta(TRUE), Inf)
+    kk <- c(- Inf, gg[ 1])
+    for (j in 2: length(unique(g1))) kk <- rbind(kk, c(gg[ j- 1], gg[ j]))
+    gt <- data.frame(t(sapply(g1, function(x) kk[x, ])))
+    truncLogis(nn, spec= "logis", a= gt[, 1], b= gt[, 2], location= g6)
 }
 
 surpGLM <- function(mod, newd= NULL){

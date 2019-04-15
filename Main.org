@@ -1125,7 +1125,6 @@ nvm install 10.15.3
     mettre le fichier, l'appeler index.html
     firebase deploy
 
-
 ** <<Concl>> Conclusion
 
    Le chiffres d’affaire des signes de qualité c’est 32 milliards
@@ -1240,8 +1239,8 @@ plot(GCDtmp3[GCDtmp3$NOUC== "0",], col= "blue", add= T, pch= 20)
 
 **** Codes
 
-  # Liste des Grands Crus
-  #+begin_src R :results output exemple
+# Liste des Grands Crus
+#+begin_src R :results output exemple
 Liste_Grand_Crus <- c("Chambertin", "Chambertin-clos de Bèze",
                       "Charmes-Chambertin", "Mazoyères-Chambertin",
                       "Chapelle-Chambertin", "Griottes-Chambertin",
@@ -1261,10 +1260,10 @@ Liste_Grand_Crus <- c("Chambertin", "Chambertin-clos de Bèze",
                       "Bâtard-Monrachet", "Bienvenues-Bâtard-Montrachet",
                       "Montrachet", "Bâtard-Montrachet",
                       "Criots-Bâtard-Montrachet")
-  #+end_src
+#+end_src
 
-  # Liste des Communes
-  #+begin_src R :results output exemple
+# Liste des Communes
+#+begin_src R :results output exemple
 Liste_Communes <- c("Aloxe-Corton", "Auxey-Duresses", "Beaune",
                     "Blagny", "Chambolle-Musigny",
                     "Chassagne-Montrachet", "Chorey-lès-Beaune",
@@ -1275,10 +1274,10 @@ Liste_Communes <- c("Aloxe-Corton", "Auxey-Duresses", "Beaune",
                     "Puligny-Montrachet", "Saint-Aubin",
                     "Saint-Romain", "Santenay", "Savigny-lès-Beaune",
                     "Volnay", "Vosne-Romanée", "Vougeot")
-  #+end_src
+#+end_src
 
-  # Liste des Grands Crus matchés aux communes
-  #+begin_src R :results output exemple
+# Liste des Grands Crus matchés aux communes
+#+begin_src R :results output exemple
 GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
                        "Gevrey-Chambertin", "Chambertin-clos de Bèze",
                        "Gevrey-Chambertin", "Charmes-Chambertin",
@@ -1316,7 +1315,7 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
                        "Chassagne-Montrachet", "Montrachet",
                        "Chassagne-Montrachet", "Bâtard-Montrachet",
                        "Chassagne-Montrachet", "Criots-Bâtard-Montrachet")
-  #+end_src
+#+end_src
 
 * Reprod Paper
   :PROPERTIES:
@@ -1671,6 +1670,20 @@ SRank <- subset(RRank, SELOLD== 1)
 SRank$LIBCOM <- factor(SRank$LIBCOM)
 #+end_src
 
+#+RESULTS:
+#+begin_example
+
+The following `from` values were not present in `x`: Beaune, Chorey, Meursault_Blagny, Aloxe_Corton, Vosne_Romanee, Chambertin, Chambertin_Clos_de_Beze, Chapelle_Chambertin, Charlemagne, Charmes_Chambertin, Clos_de_Vougeot, Corton, Corton_Charlemagne, Cote_de_Beaune_ou_Cote_de_Beaune_Villages, Echezeaux, Gevrey_Chambertin, Grands_Echezeaux, Griotte_Chambertin, Latricieres_Chambertin, Mazis_Chambertin, Mazoyeres_Chambertin, Montrachet, Ruchottes_Chambertin, Vins_fins_de_la_Cote_de_Nuits, Vougeot_rouge, Bonnes_Mares, Chambolle_Musigny, Clos_de_la_Roche, Clos_Saint_Denis, Fixin, La_Tache, Musigny, Nuits, Pommard, Richebourg, Romanee, Romanee_Conti, Romanee_Saint_Vivant, Vougeot
+
+The following `from` values were not present in `x`: Batard_Montrachet, Bienvenues_Batard_Montrachet, Chevalier_Montrachet, Chorey_les_Beaune, Clos_de_Tart, Criots_Batard_Montrachet, Morey_Saint_Denis, Volnay, Volnay_Santenots, Aloxe_Corton, Vosne_Romanee, Chambertin, Chambertin_Clos_de_Beze, Chapelle_Chambertin, Charlemagne, Charmes_Chambertin, Clos_de_Vougeot, Corton, Corton_Charlemagne, Cote_de_Beaune_ou_Cote_de_Beaune_Villages, Echezeaux, Gevrey_Chambertin, Grands_Echezeaux, Griotte_Chambertin, Latricieres_Chambertin, Mazis_Chambertin, Mazoyeres_Chambertin, Montrachet, Ruchottes_Chambertin, Vins_fins_de_la_Cote_de_Nuits, Vougeot_rouge, Bonnes_Mares, Chambolle_Musigny, Clos_de_la_Roche, Clos_Saint_Denis, Fixin, La_Tache, Musigny, Nuits, Pommard, Richebourg, Romanee, Romanee_Conti, Romanee_Saint_Vivant, Vougeot
+
+The following `from` values were not present in `x`: Auxey_Duresses, Batard_Montrachet, Bienvenues_Batard_Montrachet, Chassagne_Montrachet, Chevalier_Montrachet, Chorey_les_Beaune, Clos_de_Tart, Criots_Batard_Montrachet, Ladoix, Meursault, Monthelie, Morey_Saint_Denis, Pernand_Vergelesses, Puligny_Montrachet, Saint_Aubin, Santenay, Savigny, Volnay, Volnay_Santenots, Beaune, Chorey, Meursault_Blagny, Chambertin, Chambertin_Clos_de_Beze, Chapelle_Chambertin, Charlemagne, Charmes_Chambertin, Clos_de_Vougeot, Corton, Corton_Charlemagne, Cote_de_Beaune_ou_Cote_de_Beaune_Villages, Echezeaux, Gevrey_Chambertin, Grands_Echezeaux, Griotte_Chambertin, Latricieres_Chambertin, Mazis_Chambertin, Mazoyeres_Chambertin, Montrachet, Ruchottes_Chambertin, Vins_fins_de_la_Cote_de_Nuits, Vougeot_rouge, Bonnes_Mares, Chambolle_Musigny, Clos_de_la_Roche, Clos_Saint_Denis, Fixin, La_Tache, Musigny, Nuits, Pommard, Richebourg, Romanee, Romanee_Conti, Romanee_Saint_Vivant, Vougeot
+
+The following `from` values were not present in `x`: Auxey_Duresses, Bienvenues_Batard_Montrachet, Chassagne_Montrachet, Chorey_les_Beaune, Clos_de_Tart, Criots_Batard_Montrachet, Ladoix, Meursault, Monthelie, Morey_Saint_Denis, Puligny_Montrachet, Saint_Aubin, Santenay, Savigny, Volnay_Santenots, Beaune, Chorey, Meursault_Blagny, Aloxe_Corton, Vosne_Romanee, Bonnes_Mares, Chambolle_Musigny, Clos_de_la_Roche, Clos_Saint_Denis, Fixin, La_Tache, Musigny, Nuits, Pommard, Richebourg, Romanee, Romanee_Conti, Romanee_Saint_Vivant, Vougeot
+
+The following `from` values were not present in `x`: Auxey_Duresses, Batard_Montrachet, Bienvenues_Batard_Montrachet, Chassagne_Montrachet, Chevalier_Montrachet, Chorey_les_Beaune, Clos_de_Tart, Criots_Batard_Montrachet, Ladoix, Meursault, Monthelie, Puligny_Montrachet, Saint_Aubin, Volnay, Volnay_Santenots, Chorey, Meursault_Blagny, Aloxe_Corton, Chambertin, Chambertin_Clos_de_Beze, Chapelle_Chambertin, Charlemagne, Charmes_Chambertin, Clos_de_Vougeot, Corton, Corton_Charlemagne, Cote_de_Beaune_ou_Cote_de_Beaune_Villages, Echezeaux, Grands_Echezeaux, Griotte_Chambertin, Latricieres_Chambertin, Mazis_Chambertin, Mazoyeres_Chambertin, Montrachet, Ruchottes_Chambertin, Vins_fins_de_la_Cote_de_Nuits, Vougeot_rouge
+#+end_example
+
 *** Encore plus ancien                       :noexport:
 
 #+begin_src R
@@ -1811,14 +1824,14 @@ Analysis of Deviance Table (Type II tests)
 
 Response: factor(AOCc)
                       LR Chisq Df Pr(>Chisq)    
-LIBCOM                   14625 31     <2e-16 ***
-EXPO                      1212  7     <2e-16 ***
-poly(DEM, 2)              5334  2     <2e-16 ***
-poly(SLOPE, 2)             385  2     <2e-16 ***
-poly(RAYAT, 2)            1921  2     <2e-16 ***
-poly(X, 3)                2478  3     <2e-16 ***
-poly(Y, 3)                 639  3     <2e-16 ***
-poly(X, 3):poly(Y, 3)     9555  9     <2e-16 ***
+LIBCOM                   14609 31     <2e-16 ***
+EXPO                      1209  7     <2e-16 ***
+poly(DEM, 2)              5308  2     <2e-16 ***
+poly(SLOPE, 2)             400  2     <2e-16 ***
+poly(RAYAT, 2)            1934  2     <2e-16 ***
+poly(X, 3)                2484  3     <2e-16 ***
+poly(Y, 3)                 647  3     <2e-16 ***
+poly(X, 3):poly(Y, 3)     9526  9     <2e-16 ***
 ---
 codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #+end_example
@@ -1867,13 +1880,14 @@ EXPO       110.3   123.2   222.3    153.5    160.8
 
 #+begin_src R :wrap example
 psR2 <- function(x) 1- (logLik(x)/ logLik(update(x, . ~ + 1)))
-round(c(psR2(por1), AIC(por1)/ 1000,
-        sum(diag(table(predict(por1), Reg.Rank$AOCc)))/nrow(Reg.Rank)), 2)
+round(c(McFaddenR2= psR2(por1), AIC= AIC(por1)/ 1000,
+        Pcgp= sum(diag(table(predict(por1), Reg.Rank$AOCc)))/nrow(Reg.Rank)), 2)
 #+end_src
 
 #+RESULTS:
 #+begin_example
-[1]   0.29 119.40   0.59
+McFaddenR2        AIC       Pcgp 
+      0.29     119.40       0.59
 #+end_example
 
 **** OGAM                                    :noheading:
@@ -1881,21 +1895,19 @@ round(c(psR2(por1), AIC(por1)/ 1000,
      The same goodness of fit measures for OGAMs.
 
 #+begin_src R :wrap example
-library(mgcv)
 pcgp <- function(x){
     sum(diag(table(cut(x$line, c(-Inf, x$family$getTheta(TRUE), Inf)),
                    x$model[, 1])))/ nrow(x$model)* 100
 }
-
-rbind(sapply(gamod[ 1: 5* 2], pcgp), sapply(gamod[ 1: 5* 2], AIC))
+rbind(Pcgp= sapply(gamod[ 1: 5* 2], pcgp), AIC= sapply(gamod[ 1: 5* 2], AIC))
 #sapply(gamod, psR2)
 #+end_src
 
 #+RESULTS:
 #+begin_example
        gam100   gam300   gam500   gam700   gam900
-[1,]    73.89    79.94    84.23    86.94    89.15
-[2,] 82412.10 64710.89 54941.54 48291.33 43535.14
+Pcgp    73.89    79.94    84.23    86.94    89.15
+AIC  82412.10 64710.89 54941.54 48291.33 43535.14
 #+end_example
 
 *** Omitted variable
@@ -1908,7 +1920,7 @@ rbind(sapply(gamod[ 1: 5* 2], pcgp), sapply(gamod[ 1: 5* 2], AIC))
 
 #+begin_src R :wrap example
 library(lmtest) ; library(sandwich) ; library(sure)
-wal1 <- 0 ; nsim= 100 
+wal1 <- 0 ; nsim= 100
 for (i in 1: nsim){
     tmp <- surrogate(por1a)- por1a$lp
     wal1[ i] <- waldtest(lm(tmp~ Reg.Rank$LIBCOM), . ~ 1, vcov= vcovHC)$F[ 2]
@@ -1930,17 +1942,16 @@ quantile(wal1, c(.05, .5, .95))
 
 #+begin_src R :wrap example
 load("Inter/gammod.Rda") ; source("myFcts.R")
-omitVar <- function(mod, nsim= 100, old= F){
+omitVar <- function(mod, var, nsim= 100){
     usq <- 0
-    if (!old) COM <- RRank$LIBCOM else COM <- SRank$LIBCOM 
     for(i in 1: nsim) {
-        if (!old) RES <- surlGAM(mod) else RES <- suroldGAM(mod) 
-        tmp <- lm(I(RES- mod$linear.pred)~ COM) 
+        RES <- sureOGAM(mod) 
+        tmp <- lm(I(RES- mod$linear.pred)~ factor(var)) 
         usq[ i] <- waldtest(tmp, . ~ 1, vcov= vcovHC)$F[ 2]
     }
     usq
 }
-wal2 <- sapply(gammod, omitVar)
+wal2 <- sapply(gammod, function(x) omitVar(x, RRank$LIBCOM, nsim= 100))
 apply(wal2[, 1: 5* 2], 2, function(x) quantile(x, c(.05, .5, .95)))
 #+end_src
 
@@ -1990,10 +2001,9 @@ bwplot(values~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 library(sure) ; library(ggplot2) ; library(gridExtra)
 var <- c("DEM", "SLOPE", "RAYAT", "EXPO", "LIBCOM", "X", "Y")
 plots <- lapply(var, function(.x)
-    autoplot(por1, what= "covariate", x= RRank@data[, .x], xlab= .x))
-(atp <- autoplot(por1, what= "qq"))
-do.call(grid.arrange, c(list(atp), plots))
-restmp <- surlGAM(gamod$gam900)- gamod$gam900$line 
+    autoplot(por1, what= "covariate", x= Reg.Rank@data[, .x], xlab= .x))
+do.call(grid.arrange, c(list(autoplot(por1, what= "qq")), plots))
+restmp <- sureOGAM(gamod$gam900)- gamod$gam900$line 
 plot(qlogis(1: nrow(RRank)/ nrow(RRank), scale= 1), sort(restmp))
 abline(0, 1)
 pltSURE <- function(resid, xvar, lab){
@@ -2486,6 +2496,8 @@ por2a <- polr(factor(AOCo)~ 0+ EXPO
 por2b <- polr(factor(AOCo)~ 0+ LIBCOM+ EXPO
               + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
             , data= Reg.Old, Hess= T)
+
+## A CHANGER WITH NEW DATA
 library(mgcv)
 listk <- c(50, 75, 100, 150, 200, 250, 300)
 gamold <- vector("list", length(listk))
@@ -2550,18 +2562,19 @@ EXPO       119.8    91.8    91.9    96.1    90.2
     Goodness of fit measures from the same Table XX in Appendix.
 
 #+begin_src R :wrap example
-round(c(psR2(por2), AIC(por2)/ 1000,
-        sum(diag(table(predict(por2), Reg.Old$AOCo)))/ nrow(Reg.Old)), 2)
-rbind(sapply(gamold, pcgp), sapply(gamold, AIC))
+round(c(McFaddenR2= psR2(por2), AIC= AIC(por2)/ 1000,
+        Pcgp= sum(diag(table(predict(por2), Reg.Old$AOCo)))/ nrow(Reg.Old)), 2)
+rbind(Pcgp= sapply(gamold, pcgp), AIC= sapply(gamold, AIC))
 #sapply(gamold, psR2)
 #+end_src
 
 #+RESULTS:
 #+begin_example
-[1]  0.38 51.29  0.79
+McFaddenR2        AIC       Pcgp 
+      0.38      51.29       0.79
         gam50   gam75   gam100   gam150   gam200  gam250   gam300
-[1,]    84.34    85.9    87.08    89.26    90.28    91.4    92.54
-[2,] 40789.58 36833.3 33810.36 30271.01 27574.12 24526.6 22482.20
+Pcgp    84.34    85.9    87.08    89.26    90.28    91.4    92.54
+AIC  40789.58 36833.3 33810.36 30271.01 27574.12 24526.6 22482.20
 #+end_example
 
 *** Omitted variable
@@ -2578,7 +2591,7 @@ for (i in 1: nsim){
     wal3[ i] <- waldtest(lm(tmp~ Reg.Old$LIBCOM), . ~ 1, vcov= vcovHC)$F[ 2]
 }
 load("Inter/gammold.Rda") ; source("myFcts.R")
-wal4 <- sapply(gammold, function(x) omitVar(x, old= T))
+wal4 <- sapply(gammold, function(x) omitVar(x, SRank$LIBCOM, nsim= 100))
 wold <- data.frame(logit= wal3, wal4)
 apply(wold, 2, function(x) quantile(x, c(.05, .5, .95)))
 #+end_src
@@ -2623,17 +2636,17 @@ bwplot(values~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 *** Specification
 
      results not reported, parler de ce qu'il se passe moins bien mais
-     qui n'est pas grave.
+     qui n'est pas grave.  Dans le gam 300 il y a un point qui fait
+     n'imp, probablement un trou dans la carte de Florian.
 
 #+begin_src R :exports code :results graphics :height 7 :width 12 :file "./Figures/Surroldgate.pdf"
 library(sure) ; library(ggplot2) ; library(gridExtra)
 var <- c("DEM", "SLOPE", "RAYAT", "EXPO", "LIBCOM", "X", "Y")
 plots <- lapply(var, function(.x)
     autoplot(por2, what= "covariate", x= Reg.Old@data[, .x], xlab= .x))
-(atp <- autoplot(por2, what= "qq"))
-do.call(grid.arrange, c(list(atp), plots))
+do.call(grid.arrange, c(list(autoplot(por2, what= "qq")), plots))
 
-restmp <- suroldGAM(gamold$gam300)- gamold$gam300$line 
+restmp <- sureOGAM(gamold$gam300)- gamold$gam300$line 
 plot(qlogis(1: nrow(SRank)/ nrow(SRank), scale= 1), sort(restmp))
 abline(0, 1)
 var <- c("DEM", "SLOPE", "RAYAT", "EXPO", "LIBCOM", "X", "Y")
@@ -2717,9 +2730,8 @@ ddoo <- data.frame(AOCavt= SRank$AOCavt, LIBCOM= SRank$LIBCOM,
 dcop <- sapply(names(ddoo[, 3: 9]), function(x)
     c("Total Signal"= var(ddoo[, x]), "Total Noise"= pi^2/ 3,
       jointSignal(ddoo, x, "AOCavt"), jointNoise(ddoo, x, "AOCavt"),
-      vertiSignal(ddoo, x, "AOCavt"), vertiResid(ddoo, x, "AOCavt"),
-      vertiNoise(ddoo, x, "AOCavt"), horizSignal(ddoo, x, "AOCavt"),
-      horizResid(ddoo, x, "AOCavt"), horizNoise(ddoo, x, "AOCavt")))
+      vertiSignal(ddoo, x, "AOCavt"), vertiResid(ddoo, x, "AOCavt"), vertiNoise(ddoo, x, "AOCavt"), 
+      horizSignal(ddoo, x, "AOCavt"), horizResid(ddoo, x, "AOCavt"), horizNoise(ddoo, x, "AOCavt")))
 round(t(apply(dcop, 1, function(x) x/ (pi^2/ 3+ dcop[1, ])* 100)), 1)
 #+end_src
 
@@ -2743,18 +2755,18 @@ Com Residual   16.0  33.3   43.7   20.9   35.3   20.6   43.7
 
     We conclude this work with the simulations of alternative GIs
     designations schemes. Below are scenarios XX from XX, need to run
-    the code.
+    the code.  Put the equations here.
 
 #+begin_src R :wrap example
 load("Inter/gamod.Rda")
 prdd <- predict(gamod$gam900, type= 'terms')
 thsld <- c(-Inf, gamod$gam900$family$getTheta(TRUE), Inf)
-ltt0 <- mean(prdd[, 1])+ rowSums(prdd[, -1])-
-    (surlGAM(gamod$gam900)- gamod$gam900$line)
+ltt0 <- rowSums(prdd)- (sureOGAM(gamod$gam900)- gamod$gam900$line)
 ltt1 <- rowSums(prdd)
 ltt2 <- mean(prdd[, 1])+ rowSums(prdd[, -1])-
-    (surlGAM(gamod$gam800)- gamod$gam800$line)
+    (sureOGAM(gamod$gam900)- gamod$gam900$line)
 ltt3 <- mean(prdd[, 1])+ rowSums(prdd[, -1])
+## CHANGER RRank$AOCavt
 Simu <- data.frame(RRank, ltt= rowSums(prdd[, -1]),
                    OLD= RRank$AOCavt, S0= cut(ltt0, thsld),
                    SI= cut(ltt1, thsld), SII= cut(ltt2, thsld),
@@ -2781,7 +2793,7 @@ Com Residual  22.9 51.6 52.7 53.7 50.9 51.5 50.7
 *** Add a vertical level in GIs
 
     Below are the simulations from scenarios XX, XX, and XX, according
-    to changing XX.
+    to changing XX.  Put the equations here.
 
 #+begin_src R :wrap example
 thrldBOUR <- mean(ltt1[RRank$AOCc== 2])
@@ -2838,9 +2850,8 @@ table(Simv$AOCc, Simv$SV) ; table(Simv$AOCc, Simv$SVI)
 decf <- sapply(names(Simv[, 100: 107]), function(x)
     c("Total Signal"= var(Simv[, "ltt"]), "Total Noise"= pi^2/ 3,
       jointSignal(Simv, "ltt", vt= x), jointNoise(Simv, "ltt", vt= x),
-      vertiSignal(Simv, "ltt", vt= x), vertiResid(Simv, "ltt", vt= x),
-      vertiNoise(Simv, "ltt", vt= x), horizSignal(Simv, "ltt", vt= x),
-      horizResid(Simv, "ltt", vt= x), horizNoise(Simv, "ltt", vt= x)))
+      vertiSignal(Simv, "ltt", vt= x), vertiResid(Simv, "ltt", vt= x), vertiNoise(Simv, "ltt", vt= x),
+      horizSignal(Simv, "ltt", vt= x), horizResid(Simv, "ltt", vt= x), horizNoise(Simv, "ltt", vt= x)))
 round(t(apply(decf, 1, function(x) x/ (pi^2/ 3+ decf[1, ])* 100)), 1)
 #+end_src
 
@@ -2849,13 +2860,13 @@ round(t(apply(decf, 1, function(x) x/ (pi^2/ 3+ decf[1, ])* 100)), 1)
                      OLD   S0   SI  SII SIII  SIV   SV  SVI
 Total Signal        97.6 97.6 97.6 97.6 97.6 97.6 97.6 97.6
 Total Noise          2.4  2.4  2.4  2.4  2.4  2.4  2.4  2.4
-Joint Signal        50.7 81.1 80.7 81.2 82.8 79.2 79.7 79.0
-Joint Noise         46.9 16.5 16.8 16.4 14.8 18.4 17.9 18.6
-Vertical Signal     35.9 70.7 59.8 70.7 73.1 58.1 58.5 58.0
-Vertical Residual   14.9 10.4 21.0 10.4  9.7 21.1 21.2 21.1
-Vertical Noise      61.7 26.8 37.8 26.8 24.5 39.4 39.1 39.6
+Joint Signal        50.7 78.4 80.7 81.1 82.8 79.2 79.7 79.0
+Joint Noise         46.9 19.2 16.8 16.5 14.8 18.4 17.9 18.6
+Vertical Signal     35.9 56.8 59.8 70.7 73.1 58.1 58.5 58.0
+Vertical Residual   14.9 21.6 21.0 10.4  9.7 21.1 21.2 21.1
+Vertical Noise      61.7 40.8 37.8 26.9 24.5 39.4 39.1 39.6
 Horizontal Signal   29.1 29.1 29.1 29.1 29.1 29.1 29.1 29.1
-Horizontal Residual 21.6 52.0 51.7 52.1 53.7 50.1 50.6 50.0
+Horizontal Residual 21.6 49.3 51.7 52.0 53.7 50.1 50.6 50.0
 Horizontal Noise    68.5 68.5 68.5 68.5 68.5 68.5 68.5 68.5
 #+end_example
 
@@ -3369,31 +3380,12 @@ sureOGAM <- function(mod, newd= NULL){
     }
     nn <- length(g1)
     gt <- data.frame(rep(NA, nn), rep(NA, nn))
-    gg <- c(fit.ogam$family$getTheta(TRUE), Inf)
+    gg <- c(mod$family$getTheta(TRUE), Inf)
     kk <- c(- Inf, gg[ 1])
     for (j in 2: length(unique(g1))) kk <- rbind(kk, c(gg[ j- 1], gg[ j]))
     gt <- data.frame(t(sapply(g1, function(x) kk[x, ])))
     truncLogis(nn, spec= "logis", a= gt[, 1], b= gt[, 2], location= g6)
 }
-
-surlGAM <- function(mod, newd= NULL){
-    gg <- as.numeric(mod$family$getTheta(TRUE))
-    if (is.null(newd)){
-        g1 <- as.integer(mod$y)
-        g6 <- mod$linear.predictors
-    } else {
-        g1 <- as.integer(newd[, names(mod$model[ 1])])
-        g6 <- predict(mod, newdata= newd)
-    }
-    nn <- length(g1)
-    suls <- sapply(g1, switch,
-                   "1"= c(-Inf  , gg[ 1]), "2"= c(gg[ 1], gg[ 2]),
-                   "3"= c(gg[ 2], gg[ 3]), "4"= c(gg[ 3], gg[ 4]),
-                   "5"= c(gg[ 4], Inf   ))
-    sls <- data.frame(unlist(t(suls)))
-    rtrunc(nn, spec= "logis", a= sls[, 1], b= sls[, 2], location= g6)
-}
-
 #+end_src
 
 **** Test of functions                       :noheading:
@@ -3409,7 +3401,7 @@ fit.polr <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
                 + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
               , data= Reg.Rank)
 
-sure1 <- surrogate(fit.polr)+ fit.oglm$zeta[ 1]
+sure1 <- surrogate(fit.polr)+ fit.polr$zeta[ 1]
 sure2 <- resids(fit.polr)
 polr1 <- surePOLR(fit.polr)
 polr2 <- surePOLR(fit.polr)- fit.polr$lp
@@ -3418,21 +3410,21 @@ ogam2 <- sureOGAM(fit.ogam)- fit.ogam$linear.pred
 
 par(mfrow= c(3, 2))
 plot(sure1, polr1)
-abline(h= fit.oglm$zeta, v= fit.oglm$zeta, lty= 2, col= "blue")
+abline(h= fit.polr$zeta, v= fit.polr$zeta, lty= 2, col= "blue")
 abline(0, 1, col= "orange")
 plot(sure2, polr2)
 abline(0, 1, col= "orange")
 
 plot(polr1, ogam1- mean(ogam1))
 abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
-       v= fit.oglm$zeta, lty= 2, col= "blue")
+       v= fit.polr$zeta, lty= 2, col= "blue")
 abline(0, 1, col= "orange")
 plot(polr2, ogam2)
 abline(0, 1, col= "orange")
 
 plot(sure1, ogam1- mean(ogam1))
 abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
-       v= fit.oglm$zeta, lty= 2, col= "blue")
+       v= fit.polr$zeta, lty= 2, col= "blue")
 abline(0, 1, col= "orange")
 plot(sure2, ogam2)
 abline(0, 1, col= "orange")
@@ -4398,26 +4390,26 @@ disclosure, variance decomposition, ordered models.
 **** Description                             :noheading:
 
     Actual GIs are a nest between a vertical quality ranking in 5
-    items and a horizontal differentiation scheme through the name of
-    one among the 31 administrative municipalities (/communes/) that
-    are shown in the right panel of \autoref{Fig:1}.  The
-    highest-quality vineyards are labeled /Grands Crus/, each of which
-    has its own independent appellation title (ex: "/Clos de la
-    Roche/" or "/Chevalier-Montrachet/").  There are 32 /Grands Crus/
-    on the area, XX in the /Côte de Beaune/ (southern part) and XX in
-    the /Côte de Nuits/ (northern part) for a total area of XX ha (XX
-    %).  It follows in the hierarchy 532 /Premiers Crus/ which have to
-    be associated with their /commune/ names on bottle labels (ex:
-    "/Les Chaumes/" from /Vosne-Romanée/ or "/La Chapelle/" from
+    items and a horizontal differentiation scheme through 31
+    administrative municipalities (/communes/) that are shown in the
+    right panel of \autoref{Fig:1}.  The highest-quality vineyards are
+    labeled /Grands Crus/, each of which has its own independent
+    appellation title (ex: "/Clos de la Roche/" or
+    "/Chevalier-Montrachet/").  There are 32 /Grands Crus/ on the
+    area, XX in the /Côte de Beaune/ (southern part) and XX in the
+    /Côte de Nuits/ (northern part) for a total area of XX ha (XX%).
+    It follows in the hierarchy XXX /Premiers Crus/ which have to be
+    associated with their /commune/ names on bottle labels (ex: "/Les
+    Chaumes/" from /Vosne-Romanée/ or "/La Chapelle/" from
     /Auxey-Duresse/).  There are XX ha of /Premiers Crus/ in the /Côte
-    de Beaune/ (XX %) and XX ha in the /Côte de Nuits/ (XX %).  The
+    de Beaune/ (XX%) and XX ha in the /Côte de Nuits/ (XX%).  The
     third vertical level corresponds to /Bourgogne Village/ with or
     without the name of the administrative /commune/ (ex: /Pommard
     Village/ or /Côte de Nuits Village/).  The vertical
-    differentiation of GIs ends with /Bourgogne Réginal/ (XX ha, 25.9
-    %) and /Coteaux Bourguignons/ (Xx ha, 16.3 %) that are sometimes
-    grouped in a same /régional/ level.  Putting the name of the
-    /commune/ where the vineyard is located is forbidden for these
+    differentiation of GIs ends with /Bourgogne Réginal/ (XX ha,
+    25.9%) and /Coteaux Bourguignons/ (XX ha, 16.3%) that are
+    sometimes grouped in a same /régional/ level.  Putting the name of
+    the /commune/ where the vineyard is located is forbidden for these
     GIs.  The difference between these 2 lasts GIs was initially
     justified in terms of grape varieties (/Pinot noir/ or
     /Chardonnay/ for /Bourgogne Régional/ and /Gamay noir/ or
@@ -4427,68 +4419,81 @@ disclosure, variance decomposition, ordered models.
 
 **** Confusion                               :noheading:
 
-    The picture of actual GIs is not complete without the mention of
-    the complexities that exists between the vertical and the
-    horizontal dimensions, which lead to strong difficulties for
-    actual consumers to distinguish their respective information
-    signal.  It is important to note that the terms /commune/ and
-    /village/ are often used as synonymous for rural areas of France,
-    whereas the first is related to the horizontal dimension and the
-    second for the vertical dimension.  In addition, some vertical
-    items from /Grands Crus/, /Premiers Crus/ or even /Villages/
-    dimensions can be located on two different contiguous /communes/:
-    the /Grand Cru/ "/Bonnes Mares/" is shared between the /communes/
-    of /Chambolle-Musigny/ and /Morey-Saint-Denis/, the /Fixin Premier
-    Cru/ "/Clos de la Perrière/" is shared between the /communes/ of
-    /Brochon/ and /Fixin/, the /Vosnes-Romanée/ /Village/ is shared
-    between the /communes/ of /Vosnes-Romanée/ and /Flagey-Echézeaux/.
-    Moreover, at the beginning of the 20th century, 10 /communes/ have
-    chosen to add the names of their most famous /Grand Cru/ to their
-    administrative names, for example /Aloxe-Corton/ or
-    /Gevrey-Chambertin/.  This complexity reaches its climax in the
-    two administrative /communes/ of /Chassagne-Montrachet/ and
-    /Puligny-Montrachet/ that share the same /Grand Cru/
-    "/Montrachet/" and have chosen to add it to their names.  However,
-    the legal obligation to mention in large font the vertical items
-    /Grands Crus/, /Premier Crus/, /Village/, /Régional/ on wine
-    bottle labels suggests that this information is clearly
-    identifiable to consumers.
+    The picture of actual GIs on the area is not complete without the
+    mention of the complexities that exists between the vertical and
+    the horizontal dimensions, which could lead to difficulties for
+    consumers to distinguish their respective information content.
+    First note that the terms /commune/ and /village/ are often used
+    as synonymous for the administrative delineations in rural areas
+    of France, whereas the first is related to the horizontal
+    dimension and the second for the vertical dimension.  Secondly, a
+    same name of a given vertical item from /Grand Cru/, /Premier Cru/
+    or even /Villages/ can be located on two different /communes/: the
+    /Grand Cru/ /Bonnes Mares/ is shared between the /communes/ of
+    /Chambolle-Musigny/ and /Morey-Saint-Denis/, the /Fixin Premier
+    Cru/ /Clos de la Perrière/ is shared between the /communes/ of
+    /Brochon/ and /Fixin/, and the /Vosnes-Romanée/ /Village/ is
+    shared between the /communes/ of /Vosnes-Romanée/ and
+    /Flagey-Echézeaux/.  Thirdly, at the beginning of the 20th
+    century, 10 /communes/ have added the name of their most famous
+    /Grand Cru/ to their administrative name, as /Aloxe-Corton/ or
+    /Gevrey-Chambertin/.  Consequently, the name of a /Grand Cru/ is
+    present from in the horizontal information.  This complexity
+    reaches its maximum in the two /communes/ of
+    /Chassagne-Montrachet/ and /Puligny-Montrachet/ that share the
+    same /Grand Cru/ /Montrachet/ and have chosen to add it to their
+    names.  However, the legal obligation to mention the vertical item
+    /Grand Cru/, /Premier Cru/, /Village/, /Régional/ or /Coteaux
+    Bourguignons/ as the main information on wine bottle labels
+    suggests that this information is clearly identifiable to
+    consumers.
 
 *** Summary Statistics
+**** Particularities                         :noheading:
 
-     The region under study is quite homogeneous in terms of wine
-     varieties (/Pinot Noir/ for red wines and /Chardonnay/ for white
-     wines) and in terms of the actual economic structures of wine
-     production, with the co-existence of small producers and
-     wine-trader (/négociants/) located in bigger /communes/ of
-     /Beaune/ and /Nuits-St-Georges/.  As shown by \autoref{Fig:1},
-     the balanced distribution of topographic variables between and
-     within the /communes/ is fundamental for the econometric analysis
-     that follows.  It appears from the left panel that each /commune/
-     approximately contains the whole range of elevation, slope and
-     exposition.  The right panel shows that administrative
-     delineations of /communes/ articulate with each other on the
-     north-south gradient, which ensures sharp climatic differences.
-     The \autoref{Tab:SD} of Appendix [[#App:A]] presents some descriptive
-     statistics about the exhaustive plot-level data on the 31
-     /communes/ of the area.  For about $60\,000$ vineyard plots of a
-     small average size of $2\,000$ m$^2$ (about $0.5$ acres), the
-     elevation is distributed between 200 and 500 m with an average of
-     286 m.  Slopes have an average of 5.73 degrees with a high
-     standard deviation (coefficient of variation of about 100 %).
-     The solar radiation is scaled for numerical stability in
-     econometric estimations, it is initially distributed from 0.5 to
-     1.23 millions Joules with an average of 1 millions J.  To add
-     flexibility in the estimations the aspect variable is discretized
-     in 8 dummy variables for different radians ranges, which shows
-     that more the 50 % of vineyard plots have a south-eastern
-     exposition with radians between 90 and 180 degrees.  Our data
-     contains both the current GIs both with the vertical dimension
-     (named Current GI in the Table) and the horizontal dimension (not
-     reported).  Les villages sont dans les communaux, See
-     \autoref{Fig:A0} in Appendix.  we also have geological and
-     pedological discrete vraibles not significant for our empirical
-     strategy see RM. yoplallla bououu lkjldkj nns;d,n
+     The precision of the econometric estimation for disentangling the
+     sources of variations of the GIs relies of the balanced
+     distribution of tangible variables and vertical items between and
+     within the horizontal /commune/ items.  The left panel of
+     \autoref{Fig:1} shows that each /commune/ approximately contains
+     the whole range of elevation, slope and exposition.  The right
+     panel shows that administrative delineations of /communes/
+     articulate with each other on the north-south gradient, which
+     ensures sharp climatic differences between their averages.
+     \autoref{Fig:A0} in the Appendix shows the cumulative acreages
+     and individual shares of each vertical items for each horizontal
+     /commune/ items.  Every /commune/ has at least two vertical items
+     among the five possible, with an average number of item by
+     /commune/ of 3.87.  Vineyards ranked as /Village/, /Premier Cru/
+     and /Grand Cru/ are present in respectively 28, 24 and 11
+     /communes/ that count respectively for 90%, 77.4% and 35.5%.
+
+**** Banalities                              :noheading:
+
+     \autoref{Tab:SD} in Appendix [[#App:A]] presents some descriptive
+     statistics from the exhaustive plot-level data that we use on the
+     31 /communes/ of the region.  For about $60\,000$ vineyard plots
+     of a tiny average size of 0.2 ha (about 0.5 acres) the elevation
+     is distributed between 200 and 500 m with an average of 286 m.
+     Slopes have an average of 5.73 degrees with a high standard
+     deviation (coefficient of variation of about 100 %).  The solar
+     radiation is scaled for numerical stability in econometric
+     estimations, it is initially distributed from 0.5 to 1.23
+     millions Joules with an average of 1 millions J.  To add
+     flexibility in the econometric estimations, the aspect variable
+     is discretized in 8 dummy variables for different radians ranges,
+     which shows that more than 50% of vineyard plots have a
+     south-eastern exposition with radians between 90 and 180 degrees.
+     The data also contain the current distribution of GIs (only the
+     vertical dimension named Current GI is reported) and the GIs of
+     1936 when the national INAO was created (named Past GI in the
+     Table).  We have also used additional geological and soil
+     variables in order to better control for soil characteristics of
+     vineyards.  Because such variables are not determinant in the
+     empirical strategy that we propose, we do not report them here.
+     Interested reader can have access to these variables through the
+     Reproducibility Material, RM, from the link at the title page of
+     this document.
 
 ** Models
    :PROPERTIES:
@@ -4877,7 +4882,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      smoothing parameter which is source of additional uncertainty,
      while cite:WPSa16 provide some corrections for inference and
      traditional goodness of fit measures such as Akaike Information
-     Criteria.  
+     Criteria (AIC).  
 
      # In practice then, choice of basis dimension has to remain a part
      # of model specification. But it is important to note that all the
@@ -5034,7 +5039,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      estimating the marginal effects of each explanatory variable.
      Panel A shows that the high effect of elevation on the 0-300
      meters range are not present in the parametric model.  The same
-     is true for high effect of slopes on the 0-5 degrees range.
+     is true for the high effect of slope on the 0-5 degrees range.
      These results are particularly stringent as these ranges
      concentrate the majority of vineyard plots.  In terms of spatial
      smooth effects reported in \autoref{Fig:A2} of Appendix, OGAMs
@@ -5074,7 +5079,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      side or another from administrative borders are shown to have
      significantly different probabilities of being in different
      vertical levels of GIs. We use the estimated /communes/ fixed
-     effects to measure ordinal superiority reported in
+     effects to compute the ordinal superiority measures reported in
      \autoref{Fig:2}.
 
 **** Figure                                  :noheading:
@@ -5106,60 +5111,63 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      that a positive value indicates an advantage relatively to the
      average and a negative value indicates a disadvantage
      citep:AKat17.  Only vineyard plots from 4 /communes/ are not
-     different from the average /commune/ in terms of the probability
-     to be designated along the vertical dimension of GIs.  /Communes/
-     from the /Côte de Nuits/ at the North of the region under study
-     are more advantaged on average, as 10 /communes/ from this part
-     are among the 15 most advantaged.  The proximity to Dijon where
-     trials about the use of vineyard names take place between 1860
-     and 1936 is one potential explanation for this result.  The
-     /communes/ that have a /syndicat/ (a group of wine producers)
-     engaged in collective action appear to be privileged while the
-     separation is not clear-cut.@@latex:\footnote{\cite{Jacq09}
-     (p.189, 211) reports the \emph{communes} of
-     \emph{Gevrey-Chambertin}, \emph{Ladoix-Serrigny},
-     \emph{Santenay}, \emph{Vosne-Romanée}, \emph{Vougeot} as having
-     experienced the first \emph{syndicats}, with some internal
-     conflicts for \emph{Santenay}.}@@ The hierarchy of advantaged and
-     disadvantaged /communes/ does not follow strictly their past or
-     actual reputations, as some advantaged /communes/ are not reputed
-     (/Pernand-Vergeless/ and /Chorey-les-Beaune/) and some reputed
-     /communes/ are disadvantaged (/Pommard/ and /Meursault/).  We
-     find the ordinal superiority measures are only weakly positively
-     correlated with average levels of actual GIs (R^2= 0.08, see
-     \autoref{Fig:A2b}).
+     different from the average /commune/ of the area in terms of the
+     probability to be designated along the vertical dimension of GIs.
+     /Communes/ from the /Côte de Nuits/ at the North of the region
+     under study are more advantaged on average, as 10 /communes/ from
+     this part are among the 15 most advantaged.  The proximity to
+     Dijon where trials about the use of vineyard names take place
+     between 1860 and 1936 is one potential explanation for this
+     result.  The /communes/ that have a /syndicat/ (a group of wine
+     producers) engaged in collective action appear to be privileged
+     while the separation is not
+     clear-cut.@@latex:\footnote{\cite{Jacq09} (p.189, 211) reports
+     the \emph{communes} of \emph{Gevrey-Chambertin},
+     \emph{Ladoix-Serrigny}, \emph{Santenay}, \emph{Vosne-Romanée},
+     \emph{Vougeot} as having experienced the first \emph{syndicats},
+     with some internal conflicts for \emph{Santenay}.}@@ The
+     hierarchy of advantaged and disadvantaged /communes/ does not
+     follow strictly their past or actual reputations, as some
+     advantaged /communes/ are not reputed (/Pernand-Vergeless/ and
+     /Chorey-les-Beaune/) and some reputed /communes/ are
+     disadvantaged (/Pommard/ and /Meursault/).  We find the ordinal
+     superiority measures are only weakly positively correlated with
+     average levels of actual GIs (R^2= 0.08, see \autoref{Fig:A2b}).
 
 *** Informational content of GIs
 **** Text 1                                  :noheading:
     
      \autoref{Tab:2} reports the decomposition from equations (5) to
-     (8) with $q(X_i^*)$ predicted from the 5 OGAMs of \autoref{Tab:1}
-     with increasing complexity order of spatial coordinates (the
-     formulas used to compute the empirical counterparts of these
-     equations are reported in RM Annex 1B, jointly with the R code to
-     implement them).  As expected, the total signal reported in the
-     first row of \autoref{Tab:2} is increasing and the total noise is
-     decreasing.@@latex:\footnote{As the variance of errors is
-     normalized to identify ordered models and the variance of $y^*$
-     from the data generating process is constant between models, the
-     increase in the total signal and the decrease in total noise are
-     two sides of the same coin, they show the increase in the
-     variance of the latent variable predicted from tangible
-     variables.}@@ In contrast to this monotonic relation between the
-     signal and the complexity of the models, the results from joint,
-     vertical and horizontal decomposition are more stationary.  As
-     reported in the abstract, the average joint signal of about 77 %
-     is 4 times higher than the average joint noise of about 18 %.
-     The vertical dimension has a higher informational content than
-     the horizontal dimension, with an average signal to noise ratio
-     of 1.37 ($=55/40$) compared to 0.41 ($=29/70$).  The horizontal
-     residual terms, which represents the marginal informational
-     content of the vertical dimension once the horizontal dimension
-     is taken into account, is smaller than the horizontal signal from
-     using only the horizontal dimension.  From the vertical residual,
-     we show that the vertical dimension of GIs has about 20 % of bias
-     in conveying information about vineyard quality, while this bias
-     can be assessed by consumers through the horizontal dimension.
+     (8) with $q(X_i^*)$ predicted from the five OGAMs reported in
+     \autoref{Tab:1} with increasing complexity order of spatial
+     coordinates (the formulas used to compute the empirical
+     counterparts of the decomposition are reported in RM Annex 1B,
+     jointly with the R code to implement them).  As expected, the
+     total signal reported in the first row of \autoref{Tab:2} is
+     increasing and the total noise is decreasing.@@latex:\footnote{As
+     the variance of errors is normalized to identify ordered models
+     and the variance of $y^*$ from the data generating process is
+     constant between models, the increase in the total signal and the
+     decrease in total noise are two sides of the same coin, they show
+     the increase in the variance of the latent variable predicted
+     from tangible variables.}@@ In contrast to this monotonic
+     relation between the signal and the complexity of the models, the
+     results from joint, vertical and horizontal decomposition are
+     more stationary between models.  As reported in the abstract, the
+     average joint signal of about 77% is 4 times higher than the
+     average joint noise of about 18%.  The vertical dimension has a
+     higher informational content than the horizontal dimension, with
+     an average signal to noise ratio of 1.37 ($=55/40$) compared to
+     0.41 ($=29/70$).  The horizontal residual terms, which represents
+     the marginal informational content of the vertical dimension once
+     the horizontal dimension is fully taken into account, is higher
+     than the full horizontal signal from using only the horizontal
+     dimension.  The information about vineyard quality is more
+     clearly assessed by the horizontal dimension of GIs. From the
+     vertical residual terms, we show that the vertical dimension of
+     GIs has about 20 % of bias in conveying information about
+     vineyard quality, while this bias can be assessed by consumers
+     through the horizontal dimension.
 
 **** Table                                   :noheading:
 
@@ -5188,47 +5196,59 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 *** Alternative GI designation schemes
 **** Text 1                                  :noheading:
 
-     We run the same analysis on the GIs from 1936, the year of the
-     creation of INAO, the national institutes for GI
-     management.@@latex:\footnote{We drop the \emph{communes} of
-     \emph{Chenôve}, \emph{Marsannay-la-Côte}, \emph{Couchey},
-     \emph{Comblanchien}, \emph{Corgoloin} and \emph{Saint-Romain}
-     from the sample as thet contains only one vertical level in 1936,
-     their fixed effects are not identifiable.}@@ At this period, the
-     vertical dimension of GIs counts only three levels as reported in
-     \autoref{Tab:SD} in Appendix (/Régional/ < /Village/ < /Grand
-     Cru/ with respectively 57%, 40% and 3% of actual vineyard plots).
-     The table of joint significance, the marginal effects and the
-     spatial smooth effects are reported in \autoref{Tab:A3},
-     \autoref{Fig:A4} and \autoref{Fig:A5} in Appendix.  The
-     insignificance of omitted /terroir/ effects is reached for
-     smaller effective degrees of freedom for such GI designations
-     (bootstrapped F-statistics for the omitted /terroir/ variable is
-     reported in RM).  The hierarchy of the explanatory power of RHS
+     We run the same econometric analysis on the GIs of 1936, the year
+     of the creation the national institute for GI management (INAO).
+     At this period, the vertical dimension of GIs counts only three
+     levels as reported in \autoref{Tab:SD} in Appendix: /Régional/ <
+     /Village/ < /Grand Cru/ with respectively 57%, 40% and 3% of
+     actual vineyard plots.@@latex:\footnote{We drop the
+     \emph{communes} of \emph{Chenôve}, \emph{Marsannay-la-Côte},
+     \emph{Couchey}, \emph{Comblanchien}, \emph{Corgoloin} and
+     \emph{Saint-Romain} from the sample as they contains only one
+     vertical level in 1936, soq their fixed effects are not
+     identifiable.}@@ The table of joint significance, the marginal
+     effects and the spatial smooth effects are reported in
+     \autoref{Tab:A3}, \autoref{Fig:A4} and \autoref{Fig:A5} in
+     Appendix.  The control for omitted /terroir/ variables is reached
+     for smaller effective degrees of freedom (bootstrapped
+     F-statistics for the omitted /terroir/ variable are reported in
+     the bottom of \autoref{Tab:A3}, the violin plot is reported in
+     the RM).  The hierarchy of the joint significance of RHS
      variables is surprisingly comparable with what is obtained for
      actual GIs.  The /commune/ fixed effects and spatial coordinates
      have the highest significance, followed by elevation, slope,
      solar radiation and exposition.  The marginal effects of
-     elevation and slope have also an inverted-U pattern, and the
-     spatial smoothed patterns look similar.  Contrariwise, the
-     ordinal superiority measures are more contrasted between
-     /commune/ (\autoref{Fig:A6} in Appendix).  Only 2 /communes/
-     present measures that are not different from the average
-     /commune/ and numerous /communes/ present ordinal superiority
+     elevation and slope have also an inverted-U pattern with close
+     maximum arguments and the spatial smoothed patterns are very
+     close to what is found on actual GIs.  Contrariwise, the ordinal
+     superiority measures are more contrasted between /communes/ (see
+     \autoref{Fig:A6} in Appendix).  Only 2 /communes/ present
+     measures that are not different from the average /commune/ of the
+     region and numerous /communes/ present ordinal superiority
      measures close to one in absolute values.  For given /terroir/
-     characteristics, the /commune/ of vineyards was a more important
-     determinant of GIs designations at the creation of INAO.  This
-     result can also be assessed from the first column of
-     \autoref{Tab:3} where the vertical signal from GIs of 1936 is
-     smaller than the horizontal signal whereas the horizontal signal
-     is higher.  Note that the low informational level of the vertical
-     dimension of the GIs of 1936 is also attributable to the low
-     number of items, 3 instead of 5 in actual GIs.
+     characteristics, the /commune/ where a vineyard is located was a
+     more important determinant of GIs designations in the middle of
+     the 20th century.  Consequently, the horizontal dimension had a
+     higher informational content than the vertical dimension, as it
+     can be assessed from the first column of \autoref{Tab:3}.  The
+     vertical dimension from GIs of 1936 had an average signal to
+     noise ratio of 0.22 ($=17.8/79.7$) compared to 0.42 ($=29/68$)
+     for the horizontal dimension (because the /commune/ delineations
+     have not changed since 1936, the informational content of the
+     horizontal dimension does not change).  The lower informational
+     level of the vertical dimension of the GIs of 1936 is not
+     exclusively dependant to the importance of /communes/ in
+     delineation, a part of the loss is also attributable to the lower
+     number of items, three instead of five in actual GIs.  Both
+     effects lead to a smaller joint informational content of GIs with
+     a signal to noise ratio of only 0.8 ($= 43.3/54.3$) that
+     indicates significant improvements of the informational content
+     of GIs in the last century.
 
 **** Table                                   :noheading:
 
 #+begin_export latex
-\begin{table}
+\begin{table}[h]
 \caption{\textbf{Signal decompositions from alternative GI designations}}\singlespacing
 \singlespacing\label{Tab:3} \vspace{-.5cm}
 \begin{threeparttable}
@@ -5237,11 +5257,11 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 \item Notes: Latent vineyard quality is predicted from model ( V ) of
   \autoref{Tab:1}, which provides the best fit of actual GIs. The
   first column reports the informational content of the GIs of 1936.
-  Scenario S.0 is a benchmark which adds surrogate residuals to the
+  The scheme S.0 is a benchmark which adds surrogate residuals to the
   latent quality to mimic actual GIs.  S.I drops the random
   idosynchratic terms, S.II drops the intangible determinants through
   averaging \emph{commune} effects and S.III drops random terms and
-  intangible determinants of GIs.  Scenario S.IV, S.V and S.VI add a
+  intangible determinants of GIs.  Scheme S.IV, S.V and S.VI add a
   vertical level on actual GIs, respectively for \emph{Bourgogne},
   \emph{Village} and \emph{Premier Cru}.
 \end{tablenotes}
@@ -5251,17 +5271,30 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 **** Text 2                                  :noheading:
 
-     The informational content of GIs has increased since 1936 where
-     the signal to noise ratio was only 0.8 ($= 43.3/54.3$).  The
-     benchmark scenario S.0 is consistent with the results of
-     \autoref{Tab:3} in order of magnitude, which allow to compare the
-     potential improvement from the other scenarios.  We consider 3
-     different dimensions of differentation.  First from history,
-     second by changing the latent variable and third by adding a
-     vertical level. Details /presentation of scenarios/.  We do not
-     consider changing the horizontal dimension of GIs as changing
-     administrative boundaries to increase the informational content
-     of wine labels seems unlikely.
+     With the predicted tangible vineyard quality from model ( V ) of
+     \autoref{Tab:1}, we evaluate the informational content of
+     simulated GI designations schemes as reported in \autoref{Tab:3}.
+     We study eight counter-factual vertical dimensions of alternative
+     schemes by changing the underlying latent score of vineyard (in
+     S.0, S.I, S.II and S.III) and by changing the number of vertical
+     items in schemes S.IV, S.V and S.VI.  We do not consider changing
+     the horizontal dimension of GIs as changing administrative
+     boundaries to increase the informational content of wine-related
+     GIs is unlikely.  The detailed formula to simulate the
+     alternative GI designation schemes are reported in RM.  The
+     scheme S.0 is a benchmark that reproduce actual GI designations,
+     including designation noise from $\xi$ by using surrogate
+     residuals and estimated thresholds with /commune/ fixed effects.
+     Then, we drop only designation errors in S.I, only the intangible
+     /commune/ effects in S.II and both designation errors and
+     /commune/ effects in S.IV.  The three last designation schemes
+     simulate an increase in the number of vertical items from five to
+     six.  In S.V, the /Bourgogne/ level is divided in two levels
+     according to the mean of the latent variable used in S.0 for
+     vineyards actually in /Bourgogne/.  The same is done for
+     /Village/ and /Premier Cru/ in S.VI and S.VII.
+
+**** Text 3                                  :noheading:
 
      The results show that dropping the intangible effects are the
      more important part to increase the informational content of the
@@ -5369,7 +5402,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
   System from a Digital Elevation Model of 5 m resolution.  Longitude
   and Latitude variables correspond to the centroid of each vineyard
   plot. Current GI are dummy variables that count for the vertical
-  dimension in 2018 and Past GI comes from the map of 1860 mentioned
+  dimension in 2018 and Past GI comes from the map of 1936 mentioned
   in the main text.  Aspect is discretized according to radians range
   reported between brakets.
 \end{tablenotes}
@@ -5382,12 +5415,12 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-  \caption{\textbf{Distribution of the vertical dimension of GIs among the horizontal dimension.}\\[.1cm]
+\caption{\textbf{Distribution of the vertical dimension within and between the horizontal dimension}\\[.1cm]
     \footnotesize Notes: For each \emph{commune} on the y axis (the
     horizontal dimension of GIs), the bars represent the cumulative
     vineyard area designated in each item of the vertical dimension
     represented with different colors.  The number reported are the
-    percentage for each \emph{commune} that each vertical level
+    percentage for each \emph{commune} that each vertical item
     represents.  }
   \centering\label{Fig:A0} \rotatebox[origin=c]{-90}{
     \includegraphics[scale=.65,angle=90]{Figures/CrossGIs.pdf} }
@@ -5731,11 +5764,14 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 \includegraphics[trim= 2.5cm 1.5cm 2.5cm 2cm, clip=true, scale= .55]{./Figures/labelVDP}
 #+END_CENTER
 
-*** Relevant signal ?
+*** Relevant information ?
 
 # Derrière se joue la question de la pertinence de la référence au
 # lieu par rapport au modèle dominant de la marque, qui est souvent
 # source de conflit dans les négociations commerciales.
+
+# ça peut sembler évident mais ça ne l'ai pas dans la littérature ou
+# dans les département d'économie agricole oute atlantique.
 
 #+BEGIN_CENTER
 \vspace{-.5cm}
@@ -5759,6 +5795,18 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
     - Ashenfelter and Storchmann (RES 2010), Mosell vineyards
  
 ** 2 -- Data
+*** GI information
+
+# On va prendre pour exemple la Côte d'Or, ce n'est pas le plus facile
+# ni le plus représentatif (vin) mais ce n'est pas loin. Non sinon,
+# c'est une vrai success story des GIs, la première étiquette que je
+# vous ai montré c'est le vin le plus cher du monde.
+
+#+BEGIN_CENTER
+\vspace{-.5cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .5]{./Figures/labelPCRU}
+#+END_CENTER
+
 *** GIs of the /Côte d'Or/ region
 **** Image 1 							      :BMCOL:
     :PROPERTIES:
@@ -5819,18 +5867,6 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 # Franchement, il y en a qui pensent que la profusion et la complexité
 # des labels créent de la confusion chez le consommateur, ce n'est
 # clairement pas le cas en Bourgogne.
-
-*** GI information
-
-# On va prendre pour exemple la Côte d'Or, ce n'est pas le plus facile
-# ni le plus représentatif (vin) mais ce n'est pas loin. Non sinon,
-# c'est une vrai success story des GIs, la première étiquette que je
-# vous ai montré c'est le vin le plus cher du monde.
-
-#+BEGIN_CENTER
-\vspace{-.5cm}
-\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .5]{./Figures/labelPCRU}
-#+END_CENTER
 
 ** 3 -- Models
 *** Latent structure
@@ -5946,22 +5982,22 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 
 *** Empirical Challenge
 
-    We only observe $X\subset X^*$ of the whole /terroir/
+    =Note= we only observe $X\subset X^*$ of the whole /terroir/
 #+LATEX: \vspace{.5cm}
 
-    Omitted /terroir/ variable correlated within /communes/
+    $\Rightarrow$ omitted /terroir/ variable correlated within /communes/
 #+LATEX: \vspace{.5cm}
 
-    Under the assumption of spatial smoothness of /terroir/
+    =But= under the assumption of spatial smoothness of /terroir/
 #+LATEX: \vspace{.5cm}
 
-    Geographical coordinates allow to control for /terroir/
+    $\Rightarrow$ Geographical coordinates allow to control for /terroir/
 #+LATEX: \vspace{.5cm}
 
-    $\Rightarrow$ Ordered Generalized Additive Models
+     =Through= Ordered Generalized Additive Models
 
 ** 4 -- Results
-*** Estimation
+*** $\chi^2$ statistics of joint significance with edf
 
 #+LATEX: \footnotesize\input{Tables/VarSign1.tex}
 
@@ -10227,3 +10263,12 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 
 #+LATEX: \clearpage\appendix
 
+* Letter to the editor
+
+  Full reproductible, does not allow anonymity, so recently as a
+  working paper.
+
+  Reread by a professional economic-oriented firm.
+
+  Truly believe that the journal as is appropriate, as the first
+  submission choice.
