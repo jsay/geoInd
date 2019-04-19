@@ -26,6 +26,13 @@ surePOLR <- function(mod, newd= NULL){
     truncLogis(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
                location= g6, scale= 1)
 }
+library(MASS) ; library(sure) ; library(truncdist)
+fit.polr <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
+                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
+              , data= Reg.Rank)
+sure1 <- surrogate(fit.polr)+ fit.polr$zeta[ 1]
+sure2 <- resids(fit.polr)
+polr1 <- surePOLR(fit.polr) ; polr2 <- surePOLR(fit.polr)- fit.polr$lp
 
 sureOGAM <- function(mod, newd= NULL){
     if (is.null(newd)){
@@ -43,6 +50,33 @@ sureOGAM <- function(mod, newd= NULL){
     gt <- data.frame(t(sapply(g1, function(x) kk[x, ])))
     truncLogis(nn, spec= "logis", a= gt[, 1], b= gt[, 2], location= g6)
 }
+library(mgcv)
+fit.ogam <- gam(AOCc~ poly(DEM, 2)+ poly(SLOPE, 2)
+                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
+              , family= ocat(R= 5), data= Reg.Rank)
+ogam1 <- sureOGAM(fit.ogam)
+ogam2 <- sureOGAM(fit.ogam)- fit.ogam$linear.pred
+
+par(mfrow= c(3, 2))
+plot(sure1, polr1)
+abline(h= fit.polr$zeta, v= fit.polr$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(sure2, polr2)
+abline(0, 1, col= "orange")
+
+plot(polr1, ogam1- mean(ogam1))
+abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
+       v= fit.polr$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(polr2, ogam2)
+abline(0, 1, col= "orange")
+
+plot(sure1, ogam1- mean(ogam1))
+abline(h= fit.ogam$family$getTheta(TRUE)- mean(ogam1),
+       v= fit.polr$zeta, lty= 2, col= "blue")
+abline(0, 1, col= "orange")
+plot(sure2, ogam2)
+abline(0, 1, col= "orange")
 
 surpGLM <- function(mod, newd= NULL){
     if (mod$family$link!= "probit") stop("Probit required")

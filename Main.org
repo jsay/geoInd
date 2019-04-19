@@ -31,13 +31,15 @@
 #+MACRO:         flc @@latex: \alert{\ding{220}}@@
 :END:
 
+# https://github.com/davesteps/geoExploreR
+# https://github.com/wowChelios/BrazilianEcommerce/blob/master/analysis.R
+# https://paula-moraga.github.io/tutorial-shiny-spatial/
 # https://www6.inra.fr/datapartage/Partager-Publier/Deposer-dans-Data-Inra2,
 # https://www.sfedit.net
 # https://www.comeetie.fr/
 
-# DANS REPROD, CHANGER LES FONCTIONS surlGAM et suroldGAM par
-# sureOGAM, puis les enlever des custom functions. Attention
-# lorsqu'elles sont dans une boucle.
+# in Repro, write empirical equations for variance decomp and
+# prediction equations for simulations 
 
 * README
   :PROPERTIES:
@@ -71,11 +73,10 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME:    DataPaper
   :EXPORT_LATEX_CLASS:  ManueStat
-  :EXPORT_LANGUAGE:     fr
-  :EXPORT_TITLE:        @@latex: \vspace{-1cm} \huge\textbf{Déterminants biophysiques des AOC viticoles :\\ Construction des données et modélisation \\[.25cm]}@@
+  :EXPORT_TITLE:        @@latex: \vspace{-1.5cm} \huge\textbf{Déterminants biophysiques des AOC viticoles :\\ Construction des données et modélisation \\[.25cm]}@@
   :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textsc{Jean-Sauveur Ay} && \textsc{Mohamed Hilal} \\ < \url{jean-sauveur.ay@inra.fr} > && < \url{mohamed.hilal@inra.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup / INRA / Univ. Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard du docteur Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
   :EXPORT_DATE:         /Data paper/ version 0.2 du Vendredi 12 avril 2019
-  :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil
+  :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat} \usepackage{tocloft} \renewcommand{\abstractname}{Résumé} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm} \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} \renewcommand*\contentsname{Table des Matières}
   :END:
 ** Résumé                                    :noheading:
@@ -90,20 +91,18 @@ author: |
 # Résumé
 #+end_export
 #+BEGIN_abstract
-Nous présentons le détails de la construction de données à l'échelle
-parcellaire pour étudier statistiquement les relations existantes
-entre les caractéristiques biophysiques (topographie, géologie,
-pédologie) des parcelles viticoles et les appellations d'origine
-contrôlée (AOC).  La zone d'étude comprend actuellement 31 communes de
-la Côte d'Or entre Dijon et Santenay, incluses dans la Côte de Beaune
-et la Côte de Nuits.  L'intérêt de ces données est illustré par une
-modélisation de l'effet des caractéristiques biophysiques des
-parcelles sur leur probabilité d'être dans les différents niveaux
-d'AOC.  Ce modèle permet en outre d'affiner le classement actuel des
-parcelles dans un sens qui sera précisé, tout en restant fidèle à ses
-principes historiques.  Les données et prédictions du modèle sont
-disponibles sous licence Creative Commons sur le portail Data de
-l'INRA: https://data.inra.fr/geoInd.\\
+Nous présentons la construction de données à l'échelle parcellaire
+pour étudier les relations entre les caractéristiques biophysiques
+(topographie, géologie, pédologie) des parcelles viticoles et les
+appellations d'origine contrôlée (AOC).  La zone d'étude comprend les
+31 communes de la Côte d'Or qui constituent la Côte de Beaune et la
+Côte de Nuits.  L'intérêt de ces données est illustré par une
+modélisation de l'effet des caractéristiques biophysiques sur la
+hiérarchie des AOC afin d'affiner le classement actuel tout en restant
+fidèle à ses principes historiques.  Les données et prédictions du
+modèle sont disponibles sous licence Creative Commons sur
+https://data.inra.fr/geoInd et sont consultables par le biais d'une
+application sur [[http://github.com/jsay/geoInd/]].\\
 
 *Mots-clés*: Recherche reproductible ; économie viti-vinicole ;
 signes de qualité ; système d'information géographique ; modélisation
@@ -111,12 +110,26 @@ signes de qualité ; système d'information géographique ; modélisation
 #+END_abstract
 #+TOC: headlines 3
 ** <<Intro>> Introduction
-*** Contexte                                 :noheading:
+*** Économie des AOC                         :noheading:
 
     Les Appellations d'Origines Contrôlées (AOC) en Bourgogne sont
     issues de processus humains qui ont travaillées, répertoriés puis
     classés les parcelles en fonction de leur capacité à produire des
     vins de qualité.  . Niveaux.
+
+    D'un point de vue économique, les AOc sont un signe de qualité bla
+    mais peuvent aussi faire l'objet d'une demande pour eux mêmes.
+
+    Une analyse économique des "signes de qualité". Labels et
+    certification des produits Laurent Linnemer sem-linkAnne Perrot
+    Revue économique Année 2000 51-6 pp. 1397-1418
+
+    Asymétrie de l'information, réputation et certification Bénédicte
+    Coestier Annales d'Économie et de Statistique No. 51 (Jul. - Sep.,
+    1998
+
+*** Histoire des AOC                         :noheading:
+
 
     Christophe Lucand (dans \cite{WJac11}) cite les experts fondateurs
     (les mêmes qu'Olivier): Jullien, Morelot et Lavalle, supposent
@@ -137,17 +150,6 @@ signes de qualité ; système d'information géographique ; modélisation
     de 1855 et le Classement du Comité d’Agriculture et de Viticulture
     de l’Arrondissement de Beaune de 1860.
 
-    D'un point de vue économique, les AOc sont un signe de qualité bla
-    mais peuvent aussi faire l'objet d'une demande pour eux mêmes.
-
-     Une analyse économique des "signes de qualité". Labels et
-     certification des produits Laurent Linnemer sem-linkAnne Perrot
-     Revue économique Année 2000 51-6 pp. 1397-1418
-
-     Asymétrie de l'information, réputation et certification Bénédicte
-     Coestier Annales d'Économie et de Statistique No. 51 (Jul. -
-     Sep., 1998
-
 *** Sources de données                       :noheading:
 
     L'objet de cet article est premièrement de présenter la
@@ -161,6 +163,24 @@ signes de qualité ; système d'information géographique ; modélisation
     localisées des éléments du milieu physique (règlements européens
     510/2006 et 1234/2007) AOC en Cote d'Or: PCI-Vecteur ou cadastre
     de l'IGN. Peut comprendre des parcelle découpées.
+
+#+begin_export latex
+\vspace{.5cm}
+\begin{figure}[!h]
+  \caption{\textbf{Vignobles de la \emph{Côte d'Or}, topographie
+      et appellations d'origine contrôlées}\\[.1cm]
+    \footnotesize blabla.}\label{Fig:1}
+  \centering\hspace{-2cm}
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .4]{./Figures/MapCom1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .4]{./Figures/MapCom2}
+\end{minipage}
+\end{figure}
+#+end_export
 
 *** Analyses                                 :noheading:
 
@@ -177,18 +197,123 @@ signes de qualité ; système d'information géographique ; modélisation
 
 ** <<Const>> Construction des données
 *** Travail préalable                        :noexport:
+**** Bricole pour premiers crus
+
+     Envoi Mohamed pour intégration dicopar: OK
+
+#+begin_src R
+Dat.Deno <- fread("./Data/VITI_JSA_MH/denomination.csv",
+                  encoding = 'Latin-1')
+dd <- grepl("premier cru", Dat.Deno$denomination, perl=TRUE)
+library(stringr)
+Dat.Deno$id_den_new <- ifelse(
+    dd & !str_sub(Dat.Deno$denomination, start= -7)=="ier cru",
+    Dat.Deno$id_den+ 3000, Dat.Deno$id_den)
+write.csv(Dat.Deno, file= "Inter/denom_new.csv")
+#+end_src
+
+**** Vérifications INAO
+
+     Il y a des Bourgognes, Mousseux, aligotés, hors coteaux
+     bourguignons, dans notre travail nous les ajoutons.
+
+#+begin_src R
+library(rgdal) ; library(data.table)
+Geo.Cada <- readOGR("./Data/VITI_JSA_MH", "dicopar", verbose= F)
+Dat.Apel <- fread("./Data/VITI_JSA_MH/appellation.csv",
+                  encoding = 'Latin-1')
+Dat.Deno <- fread("./Data/VITI_JSA_MH/denomination.csv",
+                  encoding = 'Latin-1')
+Geo.Cada@data <- cbind(Geo.Cada@data[, c(1: 18, 39: 69)])
+names(Geo.Cada)[ 20: 49] <-
+    paste0(substr(names(Geo.Cada)[ 20: 49], 1, 4), c("", "_ap", "_de"))
+Geo.Cada$CODECOM <- paste0(Geo.Cada$Code_dep, Geo.Cada$Code_com)
+##
+## RETOUR INAO
+## 
+table(Geo.Cada$BGOR, Geo.Cada$PAOC)
+table(Geo.Cada$BGOR, Geo.Cada$CREM)
+table(Geo.Cada$BGOR, Geo.Cada$BOUR)
+table(Geo.Cada$BGOR, Geo.Cada$PCRU)
+jj <- subset(Geo.Cada, BGOR== 0 & MOUS== 1)
+table(jj$CODECOM)
+kk <- subset(Geo.Cada, BGOR== 0 & BOUR== 1)
+plot(kk)
+table(kk$CODECOM)
+
+## On ne retrouve pas le chapitre
+table(Geo.Cada$BOUR, Geo.Cada$BOUR_id_d9)
+
+#+end_src
+
 **** Sur la couche parcellaire
 
 #+begin_src R :wrap example
-library(rgdal)
+library(rgdal) ; library(data.table)
 Geo.Cada <- readOGR("./Data/VITI_JSA_MH", "dicopar", verbose= F)
+
+## On inclue en BGOR les aligotés and co et les Bourgognes, pour que
+## ça colle avec PAOC, AOC== 1, AOCtp== "Apell", AOClb= "Coteaux blabla"
+Geo.Cada$AOC <- ifelse(!is.na(Geo.Cada$PAOC), 1, 0)
+Geo.Cada$AOCtp <- ifelse(Geo.Cada$AOC== 1, "Appel", NA)
+Geo.Cada$AOCgg <- ifelse(Geo.Cada$AOC== 1, Geo.Cada$BGOR_id_a2, NA)
+Geo.Cada$AOCgg[Geo.Cada$AOCgg== 0] <- "1027"
+## On regarde les dénominations pour les bourgognes
+Geo.Cada$AOC <- ifelse(!is.na(Geo.Cada$BOUR) &
+                     Geo.Cada$BOUR== 1, 2, Geo.Cada$AOC)
+Geo.Cada$AOCtp <- ifelse(Geo.Cada$AOC== 2, "Denom", Geo.Cada$AOCtp)
+Geo.Cada$AOCgg <- ifelse(Geo.Cada$AOC== 2, Geo.Cada$BOUR_id_d9,
+                         Geo.Cada$AOCgg)
+## Interactions denom apel pour les communes
+Geo.Cada$AOC <- ifelse((!is.na(Geo.Cada$VILL) | !is.na(Geo.Cada$COMM)) &
+                     (Geo.Cada$VILL== 1|Geo.Cada$COMM== 1), 3,Geo.Cada$AOC)
+Geo.Cada$AOCtp <- ifelse(Geo.Cada$AOC== 3, "Appel", Geo.Cada$AOCtp)
+Geo.Cada$AOCgg <- ifelse(Geo.Cada$AOC== 3,
+                  ifelse(Geo.Cada$COMM== 1, Geo.Cada$COMM_id_14,
+                         Geo.Cada$VILL_id_12), Geo.Cada$AOCgg)
+## Prend les denominations PCRU
+Geo.Cada$AOC <- ifelse(!is.na(Geo.Cada$PCRU) &
+                     Geo.Cada$PCRU== 1, 4, Geo.Cada$AOC)
+Geo.Cada$AOCtp <- ifelse(Geo.Cada$AOC== 4, "Denom", Geo.Cada$AOCtp)
+Geo.Cada$AOCgg <- ifelse(Geo.Cada$AOC== 4, Geo.Cada$PCRU_id_17,
+                         Geo.Cada$AOCgg)
+## On vérifie que tous les grands crus sont présents et des dénom
+## premiers crus sans nom sont absentes.
+Geo.Cada$AOC <- ifelse(!is.na(Geo.Cada$GCRU) &
+                     Geo.Cada$GCRU== 1, 5, Geo.Cada$AOC)
+Geo.Cada$AOCtp <- ifelse(Geo.Cada$AOC== 5, "Appel", Geo.Cada$AOCtp)
+Geo.Cada$AOCgg <- ifelse(Geo.Cada$AOC== 5, Geo.Cada$GCRU_id_18,
+                         Geo.Cada$AOCgg)
+
 Geo.Cada$CODECOM <- paste0(Geo.Cada$Code_dep, Geo.Cada$Code_com)
-names(Geo.Cada)
 CadaParc <- Geo.Cada[,c("IDU","CODECOM", "Area", "Perimeter", "Max_distan",
-                        "Par2ras", "PAOC", "ALIG", "BPTG", "CREM", "MOUS", 
-                        "BGOR", "BOUR", "VILL", "COMM", "PCRU", "GCRU")]
-names(CadaParc)[ 3: 6] <- c("AREA", "PERIM", "MAXDIST", "PAR2RAS")
-writeOGR(CadaParc, "Carto/", "CadaParc", "ESRI Shapefile")
+                        "Par2ras", "PAOC", "BGOR", "BOUR", "VILL", "COMM",
+                        "PCRU", "GCRU", "AOC", "AOCtp")]
+
+
+Dat.Apel <- fread("./Data/VITI_JSA_MH/appellation.csv",
+                     encoding = 'Latin-1')
+Dat.Deno <- fread("./Data/VITI_JSA_MH/denomination.csv",
+                     encoding = 'Latin-1')
+## On met les étiquettes
+Geo.Cada$AOCff <- paste0(Geo.Cada$AOCtp, Geo.Cada$AOCgg)
+
+tmmp <- subset(Geo.Cada, AOCtp== "Appel")
+Dat.Apel$AOCff <- as.character(paste0("Appel", Dat.Apel$ID_APP)) 
+R1 <- merge(tmmp, Dat.Apel, by= "AOCff", all.x= TRUE)
+
+tmpp <- subset(Geo.Cada, AOCtp== "Denom")
+Dat.Deno$AOCff <- as.character(paste0("Denom", Dat.Deno$id_den)) 
+R2 <- merge(tmpp, Dat.Deno, by= "AOCff", all.x= TRUE)
+
+RR <- merge(CadaParc, R1@data[, c(19, 76)], by= "IDU", all.x= TRUE)
+Geo.Cad <- merge(RR, R2@data[, c(19, 76)], by= "IDU", all.x= TRUE)
+
+Geo.Cad$AOClb <- ifelse(Geo.Cad$AOCtp== "Appel", Geo.Cad$appellation,
+                 ifelse(Geo.Cad$AOCtp== "Denom", Geo.Cad$denomination, NA))
+Geo.Cad@data[, 20: 21] <- NULL
+names(Geo.Cad)[ 3: 6] <- c("AREA", "PERIM", "MAXDIST", "PAR2RAS")
+writeOGR(Geo.Cad, "Carto/", "GeoCad", "ESRI Shapefile")
 #+end_src
 
   NOTE : l'IDU est l'identifiant unique parcellaire, composé des
@@ -407,28 +532,23 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
     [[Tab:1]]) et appariée l'information sur les AOC à partir du fichier
     de l'INAO sur \url{data.gouv.fr}.  Sur ce deuxième point, blabla.
 
-    À partir du Shapefile =dicopar= disponible sur le cloud au
-    <2019-01-11 ven.> projection Lambert 93, nous créons un code INSEE
-    par concaténation du département et du code commune:
-
 #+begin_src R :wrap example
 library(sp) ; library(rgdal)
-Geo.Cada <- readOGR("./Carto", "CadaParc")
-sapply(Geo.Cada@data, function(x) sum(is.na(x)))
+Geo.Cad <- readOGR("./Carto", "GeoCad")
+sapply(Geo.Cad@data, function(x) sum(is.na(x)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
 OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoIndic/Carto", layer: "CadaParc"
+Source: "/home/jsay/geoInd/Carto", layer: "GeoCad"
 with 110350 features
-It has 17 fields
-    IDU CODECOM    AREA   PERIM MAXDIST PAR2RAS    PAOC    ALIG 
-      0       0       0       0       0       0       0       0 
-   BPTG    CREM    MOUS    BGOR    BOUR    VILL    COMM    PCRU 
-      0       0       0       0       0       0       0       0 
-   GCRU 
-      0
+It has 16 fields
+
+    IDU CODECOM    AREA   PERIM MAXDIST PAR2RAS    PAOC    BGOR 
+      0       0       0       0       0       0   49718   49718 
+   BOUR    VILL    COMM    PCRU    GCRU     AOC   AOCtp   AOClb 
+  49718   49718   49718   49718   49718       0   49718   49718
 #+end_example
 
     La base parcellaire contient donc $110\,350$ observations et 30
@@ -438,47 +558,45 @@ It has 17 fields
     identifiant cadastral et les variables issues de l'INAO (variables
     19 à 29):
 
-#+begin_src R :exports results :results value :colnames yes :rownames yes
+#+begin_src R :exports results :results value :colnames yes :rownames no
 (labs <- data.frame(NOM= c("IDU", "CODECOM", "AREA", "PERIM", "MAXDIST",
-                           "PAR2RAS","PAOC", "ALIG", "BPTG","CREM", "MOUS",
-                           "BGOR", "BOUR", "VILL", "COMM", "PCRU", "GCRU"),
-                   TYPE= 1: 17,
+                           "PAR2RAS","PAOC", "BGOR", "BOUR", "VILL",
+                           "COMM", "PCRU", "GCRU", "AOC","AOCtp", "AOClb"),
                    LABEL= c("Identifiant cadastral", "Code INSEE commune",
                             "Surface de la parcelle",
                             "Périmètre de la parcelle",
                             "Distance maximale entre deux sommets",
                             "Identifiant pour appariement avec raster",
-                            "Hors périmètre AOC", "Bourgogne Aligoté",
-                            "Bourgogne Passe Tout Grain",
-                            "Crémant de Bourgogne", "Bourgogne Mousseux",
-                            "Coteaux Bourguignon", "Bourgogne Régional",
-                            "Bourgogne Village", "Bourgogne Communal",
-                            "Premier Cru", "Grand Cru")))
+                            "Hors périmètre AOC", "Coteaux Bourguignon",
+                            "Bourgogne Régional", "Bourgogne Village",
+                            "Bourgogne Communal", "Premier Cru",
+                            "Grand Cru", "Rank dans la hiérarchie",
+                            "Type d'étiquette", "étiquette"),
+                   VALEURS= 1: 16))
 #+end_src
 
 #+ATTR_LATEX: :environment tabularx :width \textwidth :align lllX
 #+CAPTION: Numéro, nom, type et label des variables parcellaires
 #+NAME: Tab:1
 #+RESULTS:
-|    | NOM     | TYPE | LABEL                                    |
-|----+---------+------+------------------------------------------|
-|  1 | IDU     |    1 | Identifiant cadastral                    |
-|  2 | CODECOM |    2 | Code INSEE commune                       |
-|  3 | AREA    |    3 | Surface de la parcelle                   |
-|  4 | PERIM   |    4 | Périmètre de la parcelle                 |
-|  5 | MAXDIST |    5 | Distance maximale entre deux sommets     |
-|  6 | PAR2RAS |    6 | Identifiant pour appariement avec raster |
-|  7 | PAOC    |    7 | Hors périmètre AOC                       |
-|  8 | ALIG    |    8 | Bourgogne Aligoté                        |
-|  9 | BPTG    |    9 | Bourgogne Passe Tout Grain               |
-| 10 | CREM    |   10 | Crémant de Bourgogne                     |
-| 11 | MOUS    |   11 | Bourgogne Mousseux                       |
-| 12 | BGOR    |   12 | Coteaux Bourguignon                      |
-| 13 | BOUR    |   13 | Bourgogne Régional                       |
-| 14 | VILL    |   14 | Bourgogne Village                        |
-| 15 | COMM    |   15 | Bourgogne Communal                       |
-| 16 | PCRU    |   16 | Premier Cru                              |
-| 17 | GCRU    |   17 | Grand Cru                                |
+| NOM     | LABEL                                    | VALEURS |
+|---------+------------------------------------------+---------|
+| IDU     | Identifiant cadastral                    |       1 |
+| CODECOM | Code INSEE commune                       |       2 |
+| AREA    | Surface de la parcelle                   |       3 |
+| PERIM   | Périmètre de la parcelle                 |       4 |
+| MAXDIST | Distance maximale entre deux sommets     |       5 |
+| PAR2RAS | Identifiant pour appariement avec raster |       6 |
+| PAOC    | Hors périmètre AOC                       |       7 |
+| BGOR    | Coteaux Bourguignon                      |       8 |
+| BOUR    | Bourgogne Régional                       |       9 |
+| VILL    | Bourgogne Village                        |      10 |
+| COMM    | Bourgogne Communal                       |      11 |
+| PCRU    | Premier Cru                              |      12 |
+| GCRU    | Grand Cru                                |      13 |
+| AOC     | Rank dans la hiérarchie                  |      14 |
+| AOCtp   | Type d'étiquette                         |      15 |
+| AOClb   | étiquette                                |      16 |
 
 *** Enrichissement de la topographie
 
@@ -498,13 +616,12 @@ library(data.table)
 dim(Dat.Ras <- fread("./Data/DatRas.csv"))
 Cad.Ras <- Dat.Ras[, lapply(.SD, mean), by= list(PAR2RAS),
                    .SDcols= names(Dat.Ras)[ -c(1, 4)]]
-Geo.Ras <- merge(Geo.Cada, Cad.Ras, by= "PAR2RAS")
-sapply(Geo.Ras@data[, 18: 28], function(x) sum(is.na(x))); rm(Dat.Ras)
+Geo.Ras <- merge(Geo.Cad, Cad.Ras, by= "PAR2RAS")
+sapply(Geo.Ras@data[, 17: 27], function(x) sum(is.na(x))); rm(Dat.Ras)
 #+end_src
 
 #+RESULTS:
 #+begin_example
-data.table 1.11.4  Latest news: http://r-datatable.com
 [1] 14253070       13
   XL93   YL93  NOMOS  URBAN FOREST  WATER    DEM  SLOPE ASPECT  SOLAR 
   2096   2096   2096   2096   2096   2096   2096   2096   2096   2096 
@@ -520,7 +637,36 @@ PERMEA
     données parcelles et les données raster pour comprendre l'origine
     de ces valeurs manquantes.
 
-    Même tableau que précédemment
+#+begin_src R :exports results :results value :colnames yes :rownames no
+(labt <- data.frame(NOM= c("XL93", "YL93", "NOMOS", "URBAN", "FOREST",
+                           "WATER", "DEM", "SLOPE", "ASPECT", "SOLAR",
+                           "PERMEA"),
+                    TYPE= 1: 11,
+                    LABEL= c("Latitude Lambert 93",
+                             "Longitude Lambert 93", "Part hors MOS",
+                             "Part en usage urbain", "Part en Forêt",
+                             "Part en eau",
+                             "Altitude moyenne en mètres",
+                             "Pente moyenne en degrés",
+                             "Exposition (degrés)",
+                             "Radiation solaire en Joules",
+                             "Perméabilité")))
+#+end_src
+
+#+RESULTS:
+| NOM    | TYPE | LABEL                       |
+|--------+------+-----------------------------|
+| XL93   |    1 | Latitude Lambert 93         |
+| YL93   |    2 | Longitude Lambert 93        |
+| NOMOS  |    3 | Part hors MOS               |
+| URBAN  |    4 | Part en usage urbain        |
+| FOREST |    5 | Part en Forêt               |
+| WATER  |    6 | Part en eau                 |
+| DEM    |    7 | Altitude moyenne en mètres  |
+| SLOPE  |    8 | Pente moyenne en degrés     |
+| ASPECT |    9 | Exposition (degrés)         |
+| SOLAR  |   10 | Radiation solaire en Joules |
+| PERMEA |   11 | Perméabilité                |
 
 *** Enrichissement de la géologie
 
@@ -536,15 +682,15 @@ PERMEA
 
 #+begin_src R :wrap example
 Geol.Map <- readOGR("./Carto/", "GeolMap")
-Pts.Cad <- SpatialPoints(Geo.Ras, proj4string= CRS(proj4string(Geo.Ras)))
+Pts.Cad <- SpatialPoints(Geo.Ras, proj4string= CRS(proj4string(Geol.Map)))
 Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Geol.Map))
-sapply(Geo.Ras@data[, 29: 44], function(x) sum(is.na(x)))
+sapply(Geo.Ras@data[, 28: 43], function(x) sum(is.na(x)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
 OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoIndic/Carto", layer: "GeolMap"
+Source: "/home/jsay/geoInd/Carto", layer: "GeolMap"
 with 13960 features
 It has 16 fields
       CODE   NOTATION      DESCR  TYPE_GEOL  AP_LOCALE    TYPE_AP 
@@ -552,12 +698,28 @@ It has 16 fields
   GEOL_NAT   ISOPIQUE    AGE_DEB    ERA_DEB    SYS_DEB LITHOLOGIE 
         31         31         31         31         31         31 
     DURETE  ENVIRONMT  GEOCHIMIE  LITHO_COM 
-        69         31         31         69
+        69         31         31         69 
 #+end_example
-
 
     On a fait une sélection sur les valeurs omises et sur la
     redondance d'information.
+
+#+begin_src R :exports results :results value :colnames yes :rownames no
+(labu <- data.frame(NOM= c("CODE", "NOTATION", "DESCR", "TYPE_GEOL",
+                           "AP_LOCALE", "TYPE_AP", "GEOL_NAT", "ISOPIQUE",
+                           "AGE_DEB", "ERA_DEB", "SYS_DEB", "LITHOLOGIE", 
+                           "DURETE", "ENVIRONMT","GEOCHIMIE", "LITHO_COM"),
+                    TYPE= 1: 16,
+                    LABEL= c("Code de la géologie",
+                             "Notation géologie", "Description géologie",
+                             "bla", "Part en Forêt",
+                             "Part en eau",
+                             "Altitude moyenne en mètres",
+                             "Pente moyenne en degrés",
+                             "Exposition (degrés)",
+                             "Radiation solaire en Joules",
+                             "Perméabilité")))
+#+end_src
 
 *** Enrichissement de la pédologie
 
@@ -577,13 +739,13 @@ It has 16 fields
 #+begin_src R :wrap example
 Pedo.Map <- readOGR("./Carto", "PedoMap")
 Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Pedo.Map))
-sapply(Geo.Ras@data[, 45: 60], function(x) sum(is.na(x)))
+sapply(Geo.Ras@data[, 44: 59], function(x) sum(is.na(x)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
 OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoIndic/Carto", layer: "PedoMap"
+Source: "/home/jsay/geoInd/Carto", layer: "PedoMap"
 with 194 features
 It has 16 fields
     NOUC    NO_UC NO_ETUDE   SURFUC     TARG     TSAB     TLIM 
@@ -603,18 +765,58 @@ It has 16 fields
     effectivement.  Les valeurs manquantes correspondent aux espaces
     urbanisés (pas vraiment à partir du MOS)
 
+#+begin_src R :exports results :results value :colnames yes :rownames no
+(labv <- data.frame(NOM= c("NOUC", "NO_UC", "NO_ETUDE", "SURFUC", "TARG",
+                           "TSAB", "TLIM", "TEXTAG", "EPAIS", "TEG", "TMO",
+                           "RUE", "RUD", "NOUS", "OCCUP", "DESCRp"),
+                    TYPE= 1: 16,
+                    LABEL= c("Numéro de l'unité cartographique", "CX",
+                             "Numéro de l'étude pédologique",
+                             "Surface de l'unité cartographique",
+                             "Taux d'argile dans l'unité cartographique",
+                             "Taux de sable dans l'unité cartographique",
+                             "Taux de limon dans l'unité cartographique",
+                             "Classes de textures agrégées",
+                             "Épaisseur des sols",
+                             "Taux d'éléments grossiers",
+                             "Taux de Matière organique",
+                             "Réserve Utile par excès",
+                             "Réserve Utile par Défaut", "NOUS",
+                             "Occupation", "Description classe pédo")))
+#+end_src
+
+#+RESULTS:
+| NOM      | TYPE | LABEL                                     |
+|----------+------+-------------------------------------------|
+| NOUC     |    1 | Numéro de l'unité cartographique          |
+| NO_UC    |    2 | CX                                        |
+| NO_ETUDE |    3 | Numéro de l'étude pédologique             |
+| SURFUC   |    4 | Surface de l'unité cartographique         |
+| TARG     |    5 | Taux d'argile dans l'unité cartographique |
+| TSAB     |    6 | Taux de sable dans l'unité cartographique |
+| TLIM     |    7 | Taux de limon dans l'unité cartographique |
+| TEXTAG   |    8 | Classes de textures agrégées              |
+| EPAIS    |    9 | Épaisseur des sols                        |
+| TEG      |   10 | Taux d'éléments grossiers                 |
+| TMO      |   11 | Taux de Matière organique                 |
+| RUE      |   12 | Réserve Utile par excès                   |
+| RUD      |   13 | Réserve Utile par Défaut                  |
+| NOUS     |   14 | NOUS                                      |
+| OCCUP    |   15 | Occupation                                |
+| DESCRp   |   16 | Description classe pédo                   |
+
 *** Enrichissement des AOC de 1936
      
 #+begin_src R :wrap example
 Hist.Aoc <- readOGR("Carto/", "Aoc1936")
 Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Hist.Aoc))
-sapply(Geo.Ras@data[, 61: 62], function(x) sum(is.na(x)))
+sapply(Geo.Ras@data[, 60: 61], function(x) sum(is.na(x)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
 OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoIndic/Carto", layer: "Aoc1936"
+Source: "/home/jsay/geoInd/Carto", layer: "Aoc1936"
 with 56 features
 It has 2 fields
 AOC36lab AOC36lvl 
@@ -686,13 +888,13 @@ AOC36lab AOC36lvl
 #+begin_src R :wrap example
 Lieu.Dit <- readOGR("./Carto/", "LieuDit")
 Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Lieu.Dit[, -1]))
-sapply(Geo.Ras@data[, 63: 72], function(x) sum(is.na(x)))
+sapply(Geo.Ras@data[, 62: 71], function(x) sum(is.na(x)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
 OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoIndic/Carto", layer: "LieuDit"
+Source: "/home/jsay/geoInd/Carto", layer: "LieuDit"
 with 3285 features
 It has 11 fields
  LIEUDIT   CLDVIN   LIBCOM     XCHF     YCHF   ALTCOM   SUPCOM 
@@ -889,17 +1091,10 @@ table(yop$tex)
     Avant ici pas de stat des
 
 #+begin_src R
-
-Reg.Rank$AOCc <- ifelse(Reg.Rank$GCRU== 1, 5,
-                 ifelse(Reg.Rank$PCRU== 1, 4,
-                 ifelse(Reg.Rank$VILL== 1 | Reg.Rank$COMM== 1, 3,
-                 ifelse(Reg.Rank$BOUR== 1, 2, 1))))
-
-tmp <- DatCom$LIBCOM[order(DatCom$YCHF, decreasing= TRUE)]
-GCDtmp5$LIBCOM <- factor(GCDtmp5$LIBCOM, levels= tmp)
-GCDtmp5$DISTCHF <- sqrt((GCDtmp5$XL93- GCDtmp5$XCHF* 100)^2
-                        + (GCDtmp5$YL93- GCDtmp5$YCHF* 100)^2)
-
+tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
+Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
+Geo.Ras$DISTCHF <- sqrt((Geo.Ras$XL93- Geo.Ras$XCHF* 100)^2
+                        + (Geo.Ras$YL93- Geo.Ras$YCHF* 100)^2)
 #+end_src
 
 *** Bilan surfacique des AOC
@@ -934,21 +1129,22 @@ y= ax+ b
 *** Variable transformations
 
 #+begin_src R
-RegRank$RAYAT <- with(RegRank@data, (SOLAR- mean(SOLAR))/ sd(SOLAR))
-RegRank$EXPO <- factor(ifelse(RegRank$ASPECT< 45, "0-45",
-                       ifelse(RegRank$ASPECT< 90, "45-90",
-                       ifelse(RegRank$ASPECT<135, "90-135",
-                       ifelse(RegRank$ASPECT<180, "135-180",
-                       ifelse(RegRank$ASPECT<225, "180-225",
-                       ifelse(RegRank$ASPECT<270, "225-270",
-                       ifelse(RegRank$ASPECT<315, "270-315", "315-360"))))))),
+Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
+    sd(Geo.Ras$SOLAR, na.rm= TRUE)
+Geo.Ras$EXPO <- factor(ifelse(Geo.Ras$ASPECT< 45, "0-45",
+                       ifelse(Geo.Ras$ASPECT< 90, "45-90",
+                       ifelse(Geo.Ras$ASPECT<135, "90-135",
+                       ifelse(Geo.Ras$ASPECT<180, "135-180",
+                       ifelse(Geo.Ras$ASPECT<225, "180-225",
+                       ifelse(Geo.Ras$ASPECT<270, "225-270",
+                       ifelse(Geo.Ras$ASPECT<315, "270-315", "315-360"))))))),
                        levels= c("0-45", "45-90", "90-135", "135-180",
                                  "180-225","225-270","270-315","315-360"))
 
-RRank <- spTransform(RegRank, CRS("+proj=longlat +ellps=WGS84"))
-SSank <- as(RRank, "data.frame")
-RRank$X= SSank$coords.x1
-RRank$Y= SSank$coords.x2
+GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
+dd <- coordinates(GR84)
+Geo.Ras$X= dd[, 1]
+Geo.Ras$Y= dd[, 2]
 
 
 
@@ -1007,6 +1203,26 @@ ff[order(ff$WMean, decreasing= TRUE), ]
 
 *** Effets des variables biophysiques
 *** Prédiction du score et classifications
+
+#+begin_src R
+load("Inter/gamod.Rda")
+GAM900 <- predict(gamod$gam900, newdata= Geo.Ras@data, type= "terms")
+
+Geo.Ras$G900raw <- rowSums(GAM900, na.rm= TRUE)
+Geo.Ras$G900cor <- mean(GAM900[, 1], na.rm= T)+
+    rowSums(GAM900[, -1], na.rm= TRUE)
+unini <- function(x) (x- min(x))/ (max(x)- min(x))
+Geo.Ras$G900raw <- round(unini(Geo.Ras$G900raw)* 100, 2)
+Geo.Ras$G900cor <- round(unini(Geo.Ras$G900cor)* 100, 2)
+
+gg <- aggregate(Geo.Ras$G900raw, by= list(Geo.Ras$AOClb), mean, na.rm= T)
+hh <- aggregate(Geo.Ras$G900cor, by= list(Geo.Ras$AOClb), mean, na.rm= T)
+
+head(gg[order(gg$x, decreasing= TRUE), ], n= 100)
+head(hh[order(hh$x, decreasing= TRUE), ], n= 100)
+hh[hh$Group.1== 'Romanée-Conti',]
+#+end_src
+
 ** <<Carto>> Mise en cartographie dynamique
 *** R code
 
@@ -1034,56 +1250,53 @@ ff[order(ff$WMean, decreasing= TRUE), ]
 
 #+begin_src R
 library(rgdal) ; library(rgeos) ; library(maptools)
-load("Inter/GeoRas.Rda")
 MapCom <- readOGR("Carto/", "MapCom")
 Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
-Geo.Aoc$AOCc <- ifelse(Geo.Aoc$GCRU== 1, 5,
-                ifelse(Geo.Aoc$PCRU== 1, 4,
-                ifelse(Geo.Aoc$VILL== 1 | Geo.Aoc$COMM== 1, 3,
-                ifelse(Geo.Aoc$BOUR== 1, 2, 1))))
+Geo.Denom <- subset(Geo.Aoc, AOC> 3)
+Poly.Denom <- unionSpatialPolygons(Geo.Denom, Geo.Denom$AOClb)
+Poly.Denom$AOCLD <- as.character(row.names(Poly.Denom))
+Poly.Denom$AOC <- aggregate(Geo.Denom$AOC,
+                            by= list(Geo.Denom$AOClb), mean)[, 2]
+Poly.Denom$PrdRaw <- aggregate(Geo.Denom$G900raw,
+                               by= list(Geo.Denom$AOClb), mean)[, 2]
+Poly.Denom$PrdCor <- aggregate(Geo.Denom$G900cor,
+                               by= list(Geo.Denom$AOClb), mean)[, 2]
+Poly.Denom$Area <- aggregate(Geo.Denom$AREA,
+                               by= list(Geo.Denom$AOClb), sum)[, 2]
 
-tmp_geo <- gBuffer(Geo.Aoc, byid= TRUE, width= 0)
-Poly.Lxd <- unionSpatialPolygons(tmp_geo, Geo.Aoc$LIEUDIT)
-Poly.Lxd$LIEUDIT <- as.character(row.names(Poly.Lxd))
-Poly.Lxd$AOC<-aggregate(Geo.Aoc$AOCc, by= list(Geo.Aoc$LIEUDIT), mean)[, 2]
-Poly.Lxd$AREA<-aggregate(Geo.Aoc$AREA, by= list(Geo.Aoc$LIEUDIT), sum)[, 2]
+Geo.Appel <- subset(Geo.Aoc, AOC< 4)
+tmp_geo <- gBuffer(Geo.Appel, byid= TRUE, width= 0)
+Poly.Appel <- unionSpatialPolygons(tmp_geo, Geo.Appel$LIEUDIT)
+Poly.Appel$AOCLD <- as.character(row.names(Poly.Appel))
+Poly.Appel$AOC <- aggregate(Geo.Appel$AOC,
+                            by= list(Geo.Appel$LIEUDIT), mean)[, 2]
+Poly.Appel$PrdRaw <- aggregate(Geo.Appel$G900raw,
+                               by= list(Geo.Appel$LIEUDIT), mean)[, 2]
+Poly.Appel$PrdCor <- aggregate(Geo.Appel$G900cor,
+                               by= list(Geo.Appel$LIEUDIT), mean)[, 2]
+Poly.Appel$Area <- aggregate(Geo.Appel$AREA,
+                             by= list(Geo.Appel$LIEUDIT), mean)[, 2]
+
+Poly.Lxd <- rbind(Poly.Appel, Poly.Denom)
+Poly.Lxd@data[, -1] <- round(Poly.Lxd@data[, -1], 2)
+
+library(RColorBrewer)
+pal <- colorRampPalette(brewer.pal(9, "BuPu"))
 
 library(mapview)
 tst <- mapview(Poly.Lxd,
                zcol= "AOC", alpha.regions= .6,
-               col.regions= paste0("purple", c("1", "2", "", "3", "4")),
+               col.regions = pal(100), at = seq(0, 5, length.out= 10),
                color= "white",
                label= Poly.Lxd$LIEUDIT,
                popup = popupTable(Poly.Lxd@data,
-                                  zcol = c("LIEUDIT", "AREA", "AOC")))
-
-
-mapviewOptions()
-mapviewOptions(maxpolygons= 150000)
-n <- mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Chenôve"),
-             zcol= "AOC", alpha.regions= .6,
-             col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-             color= "white",
-             label= com1$IDU,
-             layer.name= "Chenôve",
-             popup = popupTable(com1,
-                                zcol = c("Area", "Perimeter", "P_a")))+
-    
-    mapview(subset(Geo.Cada, PAOC== 1 & Nom_com== "Marsannay-la-Côte"),
-            zcol= "AOC", alpha.regions= .6,
-            col.regions= paste0("purple", c("1", "2", "", "3", "4")),
-            color= "white",
-              label= com2$IDU,
-            layer.name= "Marsannay-la-Côte",
-            popup = popupTable(com2,
-                               zcol = c("Area", "Perimeter", "P_a")))+
-    
-
+                                  zcol = c("AOCLD", "Area", "AOC",
+                                           "PrdRaw", "PrdCor")))
 
 
 ## addLogo(n, "http://www7.inra.fr/fournisseurs/images/logo.jpg",
 ##         width = 200, height = 100, offset.x= 75, offset.y= 20)
-n
+tst
 ## create standalone .html
 mapshot(tst, url = paste0(getwd(), "/DynMap/LieuxDits.html"))
 
@@ -1101,7 +1314,7 @@ mapshot(m, url = paste0(getwd(), "/DynMap/test.html"),
     https://websiteforstudents.com/install-the-latest-node-js-and-nmp-packages-on-ubuntu-16-04-18-04-lts/
     nvm install 10.15.3
 
-#+begin_src random
+#+begin_src sh
 from https://github.com/creationix/nvm:
 You can list available versions using ls-remote:
 nvm ls-remote
@@ -1124,6 +1337,97 @@ nvm install 10.15.3
     firebase init, choisir hosting
     mettre le fichier, l'appeler index.html
     firebase deploy
+
+** <<Appli>> Mise en application Shiny
+*** Global
+
+#+begin_src R :tangle ./DynMap/global.R
+library(dygraphs)
+library(shinydashboard)
+library(shiny)
+library(shinyjs)
+library(mapview)
+library(datasets)
+library(dplyr)
+library(leaflet)
+# 
+latent <- Geo.Ras@data
+# 
+# print(getwd())
+# print(test)
+# 
+
+## my_map <- 
+##   leaflet(Poly.Lxd) %>% addTiles() %>% addMouseCoordinates()
+
+# # 
+# source("./ui.R")
+# source("./server.R")
+# # 
+
+shinyApp(ui, server)
+#+end_src
+
+*** Server
+
+#+begin_src R :tangle ./DynMap/server.R
+server <- shinyServer(function(input, output, session) {
+    getData <- reactive({ latent[, as.character(input$prdd)] })
+    output$myplot <- renderPlot({
+        input$pprd
+    }) # créer l'objet à plot => pour PlotOutput côté server
+    output$myplot2 <- renderPlot({
+        plot(density(getData()))
+    }) # créer l'objet à plot => pour PlotOutput côté server
+    output$mymap <- renderLeaflet({
+        tst@map
+    })
+})
+#+end_src
+
+#+RESULTS:
+
+*** ui
+
+#+begin_src R :tangle ./DynMap/ui.R
+ui <- dashboardPage(
+    dashboardHeader(
+        titleWidth = 150, 
+        title = "TITRE"),
+    dashboardSidebar(width = 75,
+                     sidebarMenu(id = "tabs",
+                                 menuItem("T1", tabName = "T1",
+                                          icon = icon("angle-right ")),
+                                 menuItem("T2", tabName = "T2",
+                                          icon = icon("angle-right ")))),
+    dashboardBody(
+        tabItems(tabItem(tabName = "T1",
+                         fluidRow(
+
+                             box(width= 2,
+                                 column(width = 12, 
+                                        selectInput("prdd",
+                                                    label = "Correction",
+                                                    choices=
+                                                  c("G900raw", "G900cor"), 
+                                                  selected = 1))),
+                             box(width= 5,
+                                 column(width = 12,
+                                        plotOutput("myplot")))))),
+                                      #  leafletOutput("mymap"))))),
+                 tabItem(tabName = "T2",
+                         fluidRow(
+                             box(width = 5, 
+                                 column(width= 12,
+                                        plotOutput("myplot2")))),
+                         fluidRow(
+                             box(width = 5,
+                                 column(width = 12,
+                                        plotOutput("myplot2"))))))))
+
+#+end_src
+
+#+RESULTS:
 
 ** <<Concl>> Conclusion
 
@@ -1325,7 +1629,7 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_TITLE:        @@latex: \textbf{The Informational Content of Geographical Indications}\\[.5cm] @@
   :EXPORT_AUTHOR:       @@latex: \textsc{Jean-Sauveur Ay}\footnote{\url{jsay@inra.fr}, UMR CESAER, AgroSup, INRA, Univ. Bourgogne Franche-Comté, 26 bd Dr Petitjean, 21000 Dijon (FR).} \\[.15cm] INRA UMR CESAER @@
-  :EXPORT_DATE:         @@latex: Reproducibility file Version 0.1 : \today @@
+  :EXPORT_DATE:         @@latex: Reproducibility Material Version 0.1 : \today @@
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc}\usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat}  \usepackage{tocloft} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm}
   :END:
 ** Abstract                                  :noheading:
@@ -1672,6 +1976,8 @@ SRank$LIBCOM <- factor(SRank$LIBCOM)
 
 #+RESULTS:
 #+begin_example
+
+Le chargement a nécessité le package : sp
 
 The following `from` values were not present in `x`: Beaune, Chorey, Meursault_Blagny, Aloxe_Corton, Vosne_Romanee, Chambertin, Chambertin_Clos_de_Beze, Chapelle_Chambertin, Charlemagne, Charmes_Chambertin, Clos_de_Vougeot, Corton, Corton_Charlemagne, Cote_de_Beaune_ou_Cote_de_Beaune_Villages, Echezeaux, Gevrey_Chambertin, Grands_Echezeaux, Griotte_Chambertin, Latricieres_Chambertin, Mazis_Chambertin, Mazoyeres_Chambertin, Montrachet, Ruchottes_Chambertin, Vins_fins_de_la_Cote_de_Nuits, Vougeot_rouge, Bonnes_Mares, Chambolle_Musigny, Clos_de_la_Roche, Clos_Saint_Denis, Fixin, La_Tache, Musigny, Nuits, Pommard, Richebourg, Romanee, Romanee_Conti, Romanee_Saint_Vivant, Vougeot
 
@@ -2796,21 +3102,21 @@ Com Residual  22.9 51.6 52.7 53.7 50.9 51.5 50.7
     to changing XX.  Put the equations here.
 
 #+begin_src R :wrap example
-thrldBOUR <- mean(ltt1[RRank$AOCc== 2])
-thrldVILL <- mean(ltt1[RRank$AOCc== 3])
-thrldPCRU <- mean(ltt1[RRank$AOCc== 4])
+thrldBOUR <- mean(ltt0[RRank$AOCc== 2])
+thrldVILL <- mean(ltt0[RRank$AOCc== 3])
+thrldPCRU <- mean(ltt0[RRank$AOCc== 4])
 Simv <- data.frame(Simu,
                     SIV= ifelse(RRank$AOCc< 2, RRank$AOCc,
-                         ifelse(RRank$AOCc== 2 & ltt1< thrldBOUR, 2,
-                         ifelse(RRank$AOCc== 2 & ltt1>= thrldBOUR, 3,
+                         ifelse(RRank$AOCc== 2 & ltt0< thrldBOUR, 2,
+                         ifelse(RRank$AOCc== 2 & ltt0>= thrldBOUR, 3,
                                 RRank$AOCc+ 1))),
                     SV = ifelse(RRank$AOCc< 3, RRank$AOCc,
-                         ifelse(RRank$AOCc== 3 & ltt1< thrldVILL, 3,
-                         ifelse(RRank$AOCc== 3 & ltt1>= thrldVILL, 4,
+                         ifelse(RRank$AOCc== 3 & ltt0< thrldVILL, 3,
+                         ifelse(RRank$AOCc== 3 & ltt0>= thrldVILL, 4,
                                 RRank$AOCc+ 1))),
                     SVI= ifelse(RRank$AOCc< 4, RRank$AOCc,
-                         ifelse(RRank$AOCc== 4 & ltt1< thrldPCRU, 4,
-                         ifelse(RRank$AOCc== 4 & ltt1>= thrldPCRU, 5,
+                         ifelse(RRank$AOCc== 4 & ltt0< thrldPCRU, 4,
+                         ifelse(RRank$AOCc== 4 & ltt0>= thrldPCRU, 5,
                                 RRank$AOCc+ 1))))
 table(Simv$AOCc, Simv$SIV)
 table(Simv$AOCc, Simv$SV) ; table(Simv$AOCc, Simv$SVI)
@@ -3322,17 +3628,20 @@ loaded via a namespace (and not attached):
 
 ** Custom functions
 *** Surrogate Residuals
-
-    We use the package =sure= to simulate the surrogate residuals from
-    the parametric ordered logistic, then we code a custom function
-    for that to show that it works, then we implemented a custom
-    function from OGAM models fitted with =mgcv=.  We use =truncdist=
-    to simulate truncated distribution.
-
 **** Ordered Logit                           :noheading:
 
-     Implementing the function for the ordered logistic from the
-     =polr= function of the =MASS= package. 
+    The R package =sure= allows to simulate the surrogate residuals
+    from a large panel of ordered parametric models
+    (https://koalaverse.github.io/sure/index.html) but not for the
+    semiparametric ordered generalized additive model fitted with the
+    package =mgcv=.  We first define the =truncLogis= function for the
+    simulation of random draws from a truncated logistic distribution
+    with a vector of inputs (locations and thresholds) as the package
+    =truncdist= is only designed for a given value of location and
+    thresholds.  Then, we code the function =surePOLR= which simulate
+    surrogate residuals from =polr= models from the =MASS= package.
+    The code is test against the surrogate simulations from =sure= for
+    a random ordered logistic model.
 
 #+begin_src R :tangle ./myFcts.R
 truncLogis <- function(n, spec, a = -Inf, b = Inf, ...) {
@@ -3363,11 +3672,20 @@ surePOLR <- function(mod, newd= NULL){
     truncLogis(nn, spec= "logis", a= sls[, 1], b= sls[, 2],
                location= g6, scale= 1)
 }
+library(MASS) ; library(sure) ; library(truncdist)
+fit.polr <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
+                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
+              , data= Reg.Rank)
+sure1 <- surrogate(fit.polr)+ fit.polr$zeta[ 1]
+sure2 <- resids(fit.polr)
+polr1 <- surePOLR(fit.polr) ; polr2 <- surePOLR(fit.polr)- fit.polr$lp
 #+end_src
 
 **** Ordered Additive                        :noheading:
 
-     Now the same structure for the OGAM, from the =mgcv= package
+     Now we use the same structure to simulate the surrogate residuals
+     for the OGAM through the function =sureOGAM=.  Again, the
+     function is tested for a random OGAM.
 
 #+begin_src R :tangle ./myFcts.R
 sureOGAM <- function(mod, newd= NULL){
@@ -3386,25 +3704,10 @@ sureOGAM <- function(mod, newd= NULL){
     gt <- data.frame(t(sapply(g1, function(x) kk[x, ])))
     truncLogis(nn, spec= "logis", a= gt[, 1], b= gt[, 2], location= g6)
 }
-#+end_src
-
-**** Test of functions                       :noheading:
-
-     Equivalence between OGAM and polr, for surrogate and residuals.
-
-#+begin_src R
-library(mgcv) ; library(MASS) ; library(sure) ; library(truncdist)
+library(mgcv)
 fit.ogam <- gam(AOCc~ poly(DEM, 2)+ poly(SLOPE, 2)
                 + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
               , family= ocat(R= 5), data= Reg.Rank)
-fit.polr <- polr(factor(AOCc)~ poly(DEM, 2)+ poly(SLOPE, 2)
-                + poly(RAYAT, 2)+ poly(ASPECT, 2)+ poly(PERMEA, 2)
-              , data= Reg.Rank)
-
-sure1 <- surrogate(fit.polr)+ fit.polr$zeta[ 1]
-sure2 <- resids(fit.polr)
-polr1 <- surePOLR(fit.polr)
-polr2 <- surePOLR(fit.polr)- fit.polr$lp
 ogam1 <- sureOGAM(fit.ogam)
 ogam2 <- sureOGAM(fit.ogam)- fit.ogam$linear.pred
 
@@ -3528,7 +3831,16 @@ surpGLM <- function(mod, newd= NULL){
 
 *** Decomposition terms
 
-    We code different functions for the terms.
+    For each terms of the decomposition presented in the main text, we
+    code a different functions presented below.  For the ease of
+    notations, we note for the values of the latent and the
+    probabilities of being in each GIs $x= y, p$:
+\begin{equation}
+\overline{x}_{jc}= \frac{1}{N} \sum\nolimits_{i=1}^{N} x_i \;\;\mbox{ and }\;\;
+\overline{x}_{j.}= \frac{1}{C} \sum\nolimits_{c=1}^{C} x_{jc} \;\;\mbox{ and }\;\;
+\overline{x}_{.c}= \frac{1}{J}  \sum\nolimits_{j=1}^{J} x_{jc} 
+\end{equation}
+
 
 **** Joint Signal                            :noheading:
 
@@ -4076,6 +4388,7 @@ disclosure, variance decomposition, ordered models.
 
 \textbf{J.E.L. Codes:} C24, L15, Q13.\\
 #+END_abstract
+
 ** Introduction
 *** Importance of information                :noheading:
 
@@ -4967,26 +5280,25 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
     /commune/ dummies that represent the intangible determinants from
     the horizontal dimension of GIs.  This set is closely followed by
     the series of transformations of spatial coordinates that controls
-    for the direct and indirect effects of longitude and latitude
-    positions of vineyards.  Elevation, solar radiation, exposition
-    and slope variables follow in decreasing order of joint
-    significance, for an overall significance of tangible variables
-    higher than intangible variables (results not reported).  The
-    quadratic effects of the three topographical variables are
-    reported in \autoref{Fig:A1} of Appendix.  Elevation and slope
-    variables have some inverted-U effects with the highest vineyard
-    quality at about 250 meters and 15 degrees.  The effect of solar
-    radiation is linearly increasing and the southern expositions
-    provides the higher marginal probability of a high GI
-    classification (see the Reproducibility Material, RM, from the
-    link at the title page).  The top-left panel of \autoref{Fig:A2}
-    in Appendix shows the marginal effects of spatial coordinates on
-    the long run vineyard quality.  The third-order parametric
-    specification with full interactions produces some ellipsoidal
-    smooth patterns with two central kernels that describe a
-    core-periphery structure.  The individual values obtained from
-    /communes/ fixed effects are interpreted in the next subsection in
-    terms of ordinal superiority.
+    for the effects of longitude and latitude positions of vineyards.
+    Elevation, solar radiation, exposition and slope variables follow
+    in decreasing order of joint significance, for an overall
+    significance of tangible variables higher than intangible
+    variables (results not reported).  The nonlinear effects of the
+    three topographical variables on the latent variable are reported
+    in \autoref{Fig:A1} of Appendix.  Elevation and slope variables
+    have inverted-U effects with the highest vineyard quality at about
+    250 meters and 15 degrees.  The effect of solar radiation is
+    linearly increasing and the southern expositions provides the
+    higher marginal probability of a high GI classification (see the
+    Reproducibility Material, RM, from the link at the title page).
+    The top-left panel of \autoref{Fig:A2} in Appendix shows the
+    marginal effects of spatial coordinates on the latent variable.
+    The third-order parametric specification with full interactions
+    produces some ellipsoidal smooth patterns with two central kernels
+    that describe a core-periphery structure.  The individual values
+    obtained from /communes/ fixed effects are interpreted in the next
+    subsection in terms of ordinal superiority.
 
 **** Table                                   :noheading:
 
@@ -5027,7 +5339,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      of these models keeps the same degrees of freedom for exposition
      and /commune/ dummies of respectively 7 and 31.  Increasing the
      complexity of the spline series of spatial coordinates increases
-     slightly the pseudo-R$^2$ to 75 % and the percent of good
+     sensibly the pseudo-R$^2$ to 75 % and the percent of good
      predictions to 90 % in the most complex OGAM ( V ) reported in
      the last column.  Simultaneously, the joint significance of
      spatial coordinates increases and the significance of all other
@@ -5061,26 +5373,26 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      The last row of \autoref{Tab:1} reports the bootstrapped
      F-statistics about the joint significance of /communes/ dummies
      on surrogate residuals from auxiliary models that do not account
-     for the intangible effects.  \autoref{Fig:A2a} in Appendix
-     presents in more details the relevance of smoothing spatial
-     coordinates to control for unobserved /terroir/ variables.  It
-     first appears that OGAMs provide some important progress compared
-     to the parametric ordered logistic model ( 0 ) that presents some
-     important unobserved effects correlated with /commune/ fixed
-     effects.  Secondly, a maximum effective degrees of freedom of
-     about 700 -- that corresponds to model ( IV ) in \autoref{Tab:1}
-     -- is a sufficient complexity level to rule out correlated
-     omitted spatial effects, as the insignificance of /commune/ fixed
-     effects on the surrogate residuals from the auxiliary regressions
-     can not be rejected on average.  Above this complexity level, the
-     /commune/ fixed effects stay highly significant in full models of
+     for these fixed effects.  \autoref{Fig:A2a} in Appendix presents
+     in more details the relevance of smoothing spatial coordinates to
+     control for unobserved /terroir/ variables.  It first appears
+     that OGAMs provide some important progress compared to the
+     parametric ordered logistic model ( 0 ) which surrogate residuals
+     are highly correlated with /commune/ fixed effects.  Secondly, a
+     maximum effective degrees of freedom of about 700 -- that
+     corresponds to model ( IV ) in \autoref{Tab:1} -- is a sufficient
+     complexity level to rule out potentially correlated omitted
+     spatial effects, as the insignificance of /commune/ fixed effects
+     on the surrogate residuals from the auxiliary regressions can not
+     be rejected on average.  Above this complexity level, the
+     /commune/ fixed effects stay highly significant in models of
      \autoref{Tab:1}, which indicates persistent effects of intangible
-     human-related characteristics.  Similar vineyard plots from one
-     side or another from administrative borders are shown to have
-     significantly different probabilities of being in different
-     vertical levels of GIs. We use the estimated /communes/ fixed
-     effects to compute the ordinal superiority measures reported in
-     \autoref{Fig:2}.
+     human-related characteristics on the GI designation scheme.
+     Similar vineyard plots from one side or another from
+     administrative borders are shown to have significantly different
+     probabilities of being in different vertical levels of GIs. We
+     use the estimated /communes/ fixed effects to compute the ordinal
+     superiority measures reported in \autoref{Fig:2}.
 
 **** Figure                                  :noheading:
 
@@ -5091,7 +5403,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
       in actual GI designation scheme}\\[.1cm]
     \footnotesize Notes: For a given \emph{commune} $c$ on the y axis,
     ordinal superiority measures are computed from the difference
-    between the estimated fixed effect $\mu_c$ and the average
+    between its estimated fixed effect $\mu_c$ and the average
     fixed effect $\overline{\mu}$ of all \emph{commune} according to:
     $\Delta_{c}= 2\times \Lambda[(\mu_{c}-\overline{\mu})/
     \sqrt{2}]-1$.  The horizontal bars represent the range of measures
@@ -5107,67 +5419,68 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 **** Text 2                                  :noheading:
 
      Ordinal superiority measures from models with respectively 700,
-     800 and 900 maximum edf are scaled between $-1$ and $1$ in a way
-     that a positive value indicates an advantage relatively to the
-     average and a negative value indicates a disadvantage
-     citep:AKat17.  Only vineyard plots from 4 /communes/ are not
-     different from the average /commune/ of the area in terms of the
-     probability to be designated along the vertical dimension of GIs.
-     /Communes/ from the /Côte de Nuits/ at the North of the region
-     under study are more advantaged on average, as 10 /communes/ from
-     this part are among the 15 most advantaged.  The proximity to
-     Dijon where trials about the use of vineyard names take place
-     between 1860 and 1936 is one potential explanation for this
-     result.  The /communes/ that have a /syndicat/ (a group of wine
-     producers) engaged in collective action appear to be privileged
-     while the separation is not
-     clear-cut.@@latex:\footnote{\cite{Jacq09} (p.189, 211) reports
-     the \emph{communes} of \emph{Gevrey-Chambertin},
+     800 and 900 maximum edf are distributed inside the $-1$ and $1$
+     interval in a way that a positive value indicates an advantage
+     relatively to the average and a negative value indicates a
+     disadvantage citep:AKat17.  Only vineyard plots from 4 /communes/
+     are not different from the average /commune/ of the area in terms
+     of their probability distribution along the vertical dimension of
+     GIs.  /Communes/ from the /Côte de Nuits/ at the North of the
+     region are more advantaged on average the those of the /Côte de
+     Beaune/ at the South, as 10 /communes/ from this part are among
+     the 15 most advantaged.  The proximity to Dijon where trials
+     about the use of vineyard names take place between 1860 and 1936
+     is one potential explanation for this result.  The /communes/
+     that have a /syndicat/ (a group of wine producers) engaged in
+     collective action appear to be privileged while the separation is
+     not clear-cut.@@latex:\footnote{\cite{Jacq09} (p.189, 211)
+     reports the \emph{communes} of \emph{Gevrey-Chambertin},
      \emph{Ladoix-Serrigny}, \emph{Santenay}, \emph{Vosne-Romanée},
      \emph{Vougeot} as having experienced the first \emph{syndicats},
      with some internal conflicts for \emph{Santenay}.}@@ The
      hierarchy of advantaged and disadvantaged /communes/ does not
      follow strictly their past or actual reputations, as some
-     advantaged /communes/ are not reputed (/Pernand-Vergeless/ and
+     advantaged /communes/ are not reputed (/Ladoix-Serrigny/ and
      /Chorey-les-Beaune/) and some reputed /communes/ are
-     disadvantaged (/Pommard/ and /Meursault/).  We find the ordinal
-     superiority measures are only weakly positively correlated with
-     average levels of actual GIs (R^2= 0.08, see \autoref{Fig:A2b}).
+     disadvantaged (/Chassagne-Montrachet/ and /Santenay/).  We find
+     the ordinal superiority measures are only weakly positively
+     correlated with average levels of actual GIs (R^2= 0.08, see
+     \autoref{Fig:A2b}).
 
 *** Informational content of GIs
 **** Text 1                                  :noheading:
     
-     \autoref{Tab:2} reports the decomposition from equations (5) to
-     (8) with $q(X_i^*)$ predicted from the five OGAMs reported in
-     \autoref{Tab:1} with increasing complexity order of spatial
-     coordinates (the formulas used to compute the empirical
-     counterparts of the decomposition are reported in RM Annex 1B,
-     jointly with the R code to implement them).  As expected, the
-     total signal reported in the first row of \autoref{Tab:2} is
-     increasing and the total noise is decreasing.@@latex:\footnote{As
-     the variance of errors is normalized to identify ordered models
-     and the variance of $y^*$ from the data generating process is
-     constant between models, the increase in the total signal and the
-     decrease in total noise are two sides of the same coin, they show
-     the increase in the variance of the latent variable predicted
-     from tangible variables.}@@ In contrast to this monotonic
-     relation between the signal and the complexity of the models, the
-     results from joint, vertical and horizontal decomposition are
-     more stationary between models.  As reported in the abstract, the
-     average joint signal of about 77% is 4 times higher than the
-     average joint noise of about 18%.  The vertical dimension has a
-     higher informational content than the horizontal dimension, with
-     an average signal to noise ratio of 1.37 ($=55/40$) compared to
-     0.41 ($=29/70$).  The horizontal residual terms, which represents
-     the marginal informational content of the vertical dimension once
-     the horizontal dimension is fully taken into account, is higher
-     than the full horizontal signal from using only the horizontal
-     dimension.  The information about vineyard quality is more
-     clearly assessed by the horizontal dimension of GIs. From the
-     vertical residual terms, we show that the vertical dimension of
-     GIs has about 20 % of bias in conveying information about
-     vineyard quality, while this bias can be assessed by consumers
-     through the horizontal dimension.
+     \autoref{Tab:2} reports the decomposition from equations
+     (\ref{eq:dec1}) to (\ref{eq:dec4}) with $q(X_i^*)$ predicted from
+     the five OGAMs reported in \autoref{Tab:1} with increasing
+     complexity order of spatial coordinates (the formulas used to
+     compute the empirical counterparts of the decomposition are
+     reported in RM Annex 1B, jointly with the R code to compute
+     them).  As expected, the total signal reported in the first row
+     of \autoref{Tab:2} is increasing from the left to the right and
+     the total noise is decreasing.@@latex:\footnote{As the variance
+     of errors is normalized to identify ordered models and the
+     variance of $y^*$ from the data generating process is constant
+     between models, the increase in the total signal and the decrease
+     in total noise are two sides of the same coin, they show the
+     increase in the variance of the latent variable predicted from
+     tangible variables.}@@ In contrast to this monotonic relationship
+     between the total signal and the complexity of the empirical
+     models, the results from joint, vertical and horizontal
+     decomposition are more stationary between models.  As reported in
+     the abstract, the average joint signal of about 76% is 4 times
+     higher than the average joint noise of about 18%.  The vertical
+     dimension has a higher informational content than the horizontal
+     dimension, with an average signal to noise ratio of 1.37
+     ($=55/40$) compared to 0.41 ($=29/70$).  The horizontal residual
+     terms, which represents the marginal informational content of the
+     vertical dimension once the horizontal dimension is fully taken
+     into account, is higher than the horizontal signal from only
+     using the horizontal dimension. From the vertical residual terms,
+     we show that the vertical dimension of GIs has about 20% of bias
+     in conveying information about vineyard quality, while this bias
+     due to the preferential treatments between /communes/ can be
+     assessed by consumers through the horizontal dimension of GIs.
 
 **** Table                                   :noheading:
 
@@ -5179,15 +5492,15 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 \input{Tables/Decomp.tex}
 \begin{tablenotes}\footnotesize
 \item Notes: The effective degrees of freedom for spatial smoothing
-  terms in parenthesis show that each decomposition corresponds to model ( I )
+  terms in parenthesis show that the columns correspond to model ( I )
   to ( V ) from \autoref{Tab:1}.  Decomposition terms are expressed in
   percent of variance of the latent variable $y^{*}$ according to
-  equations (5) to (8) in the text.  For each column, the sum of
-  vertical signal and vertical residual equals the joint signal, as the
-  sum of horizontal signal and horizontal residual.  The vertical noise
-  equals the sum of the vertical residual and the joint noise, as the
-  horizontal noise equals the sum of horizontal residual and joint
-  noise.
+  equations (\ref{eq:dec1}) to (\ref{eq:dec4}) in the text.  For each
+  column, the sum of vertical signal and vertical residual equals the
+  joint signal, as the sum of horizontal signal and horizontal
+  residual.  The vertical noise equals the sum of the vertical
+  residual and the joint noise and the horizontal noise equals the sum
+  of horizontal residual and joint noise.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -5196,24 +5509,25 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 *** Alternative GI designation schemes
 **** Text 1                                  :noheading:
 
-     We run the same econometric analysis on the GIs of 1936, the year
-     of the creation the national institute for GI management (INAO).
-     At this period, the vertical dimension of GIs counts only three
-     levels as reported in \autoref{Tab:SD} in Appendix: /Régional/ <
-     /Village/ < /Grand Cru/ with respectively 57%, 40% and 3% of
-     actual vineyard plots.@@latex:\footnote{We drop the
-     \emph{communes} of \emph{Chenôve}, \emph{Marsannay-la-Côte},
-     \emph{Couchey}, \emph{Comblanchien}, \emph{Corgoloin} and
-     \emph{Saint-Romain} from the sample as they contains only one
-     vertical level in 1936, soq their fixed effects are not
-     identifiable.}@@ The table of joint significance, the marginal
-     effects and the spatial smooth effects are reported in
-     \autoref{Tab:A3}, \autoref{Fig:A4} and \autoref{Fig:A5} in
-     Appendix.  The control for omitted /terroir/ variables is reached
-     for smaller effective degrees of freedom (bootstrapped
+     We run a similar econometric analysis on the GIs of 1936, the
+     year of the creation the French national institute for GI
+     management (INAO).  At this period, the vertical dimension of GIs
+     counts only three levels as reported in \autoref{Tab:SD} in
+     Appendix: /Régional/ < /Village/ < /Grand Cru/ with respectively
+     57%, 40% and 3% of actual vineyard plots.@@latex:\footnote{We
+     drop the \emph{communes} of \emph{Chenôve},
+     \emph{Marsannay-la-Côte}, \emph{Couchey}, \emph{Comblanchien},
+     \emph{Corgoloin} and \emph{Saint-Romain} from the sample as they
+     contains only one vertical level in 1936, so their fixed effects
+     are not identifiable (see RM).}@@ The table of joint
+     significance, the plots of the marginal effects and the spatial
+     smooth effects are reported in \autoref{Tab:A3}, \autoref{Fig:A4}
+     and \autoref{Fig:A5} in Appendix.  The control for omitted
+     /terroir/ variables is reached for smaller effective degrees of
+     freedom attributed to spatial coordinates (bootstrapped
      F-statistics for the omitted /terroir/ variable are reported in
      the bottom of \autoref{Tab:A3}, the violin plot is reported in
-     the RM).  The hierarchy of the joint significance of RHS
+     the RM, p.XX).  The hierarchy of the joint significance of RHS
      variables is surprisingly comparable with what is obtained for
      actual GIs.  The /commune/ fixed effects and spatial coordinates
      have the highest significance, followed by elevation, slope,
@@ -5228,22 +5542,22 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
      measures close to one in absolute values.  For given /terroir/
      characteristics, the /commune/ where a vineyard is located was a
      more important determinant of GIs designations in the middle of
-     the 20th century.  Consequently, the horizontal dimension had a
-     higher informational content than the vertical dimension, as it
-     can be assessed from the first column of \autoref{Tab:3}.  The
-     vertical dimension from GIs of 1936 had an average signal to
-     noise ratio of 0.22 ($=17.8/79.7$) compared to 0.42 ($=29/68$)
-     for the horizontal dimension (because the /commune/ delineations
-     have not changed since 1936, the informational content of the
-     horizontal dimension does not change).  The lower informational
-     level of the vertical dimension of the GIs of 1936 is not
-     exclusively dependant to the importance of /communes/ in
-     delineation, a part of the loss is also attributable to the lower
-     number of items, three instead of five in actual GIs.  Both
-     effects lead to a smaller joint informational content of GIs with
-     a signal to noise ratio of only 0.8 ($= 43.3/54.3$) that
-     indicates significant improvements of the informational content
-     of GIs in the last century.
+     the 20th century than actually.  Consequently, the horizontal
+     dimension had a higher informational content than the vertical
+     dimension, as it can be assessed from the first column of
+     \autoref{Tab:3}.  The vertical dimension from GIs of 1936 had an
+     average signal to noise ratio of 0.22 ($=17.8/79.7$) compared to
+     0.42 ($=29/68$) for the horizontal dimension. Because the
+     /commune/ delineations have not changed since 1936, the
+     informational content of the horizontal dimension does not
+     change.  The lower informational level of the vertical dimension
+     of the GIs of 1936 is not exclusively due to the higher
+     importance of /communes/ in GI delineation, a part of the loss is
+     also attributable to the lower number of vertical items (three
+     instead of five).  Both effects imply a smaller joint
+     informational content in 1936 with a signal to noise ratio of
+     only 0.8 ($= 43.3/54.3$) that indicates significant improvements
+     of the informational content of GIs in the last century.
 
 **** Table                                   :noheading:
 
@@ -5271,40 +5585,64 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 **** Text 2                                  :noheading:
 
-     With the predicted tangible vineyard quality from model ( V ) of
-     \autoref{Tab:1}, we evaluate the informational content of
-     simulated GI designations schemes as reported in \autoref{Tab:3}.
-     We study eight counter-factual vertical dimensions of alternative
-     schemes by changing the underlying latent score of vineyard (in
-     S.0, S.I, S.II and S.III) and by changing the number of vertical
-     items in schemes S.IV, S.V and S.VI.  We do not consider changing
-     the horizontal dimension of GIs as changing administrative
-     boundaries to increase the informational content of wine-related
-     GIs is unlikely.  The detailed formula to simulate the
-     alternative GI designation schemes are reported in RM.  The
-     scheme S.0 is a benchmark that reproduce actual GI designations,
-     including designation noise from $\xi$ by using surrogate
-     residuals and estimated thresholds with /commune/ fixed effects.
-     Then, we drop only designation errors in S.I, only the intangible
-     /commune/ effects in S.II and both designation errors and
-     /commune/ effects in S.IV.  The three last designation schemes
-     simulate an increase in the number of vertical items from five to
-     six.  In S.V, the /Bourgogne/ level is divided in two levels
-     according to the mean of the latent variable used in S.0 for
-     vineyards actually in /Bourgogne/.  The same is done for
-     /Village/ and /Premier Cru/ in S.VI and S.VII.
+     Different scenarios for predicting the tangible vineyard quality
+     from model ( V ) of \autoref{Tab:1} allows us to evaluate the
+     informational content of simulated GI designations schemes as
+     reported in columns S.0 to S.VI in \autoref{Tab:3}.  We study six
+     counter-factual vertical designation schemes by changing the
+     underlying latent predictions of vineyard quality (in S.I, S.II
+     and S.III) and by changing the number of vertical items in
+     schemes S.IV, S.V and S.VI.  We do not consider changing the
+     horizontal dimension of GIs as changing the administrative
+     boundaries is not policy-relevant.  The detailed formula and the
+     R codes used to simulate alternative GI designation schemes are
+     reported in RM (p.XX).  The scheme S.0 is a benchmark scheme that
+     tries to reproduce actual GI designations, by adding designation
+     noises from surrogate residuals to underlying latent predictions.
+     This noised vineyard quality is mapped to the vertical dimension
+     of GIs with estimated thresholds and /commune/ fixed effects.
+     The second column labeled S.0 in \autoref{Tab:3} shows that the
+     decomposition terms are very close to those obtained in the
+     column ( V ) of \autoref{Tab:2}.  Then, we drop the designation
+     errors from surrogate residuals in S.I, the intangible /commune/
+     effects in S.II and both designation errors and /commune/ effects
+     in S.III.  The three last designation schemes S.IV, S.V and S.VI
+     simulate an increase in the number of vertical items of GIs from
+     the actual five to six items.  The /Bourgogne/, /Village/ and
+     /Premier Cru/ levels are respectively divided in two levels
+     through the latent variable about vineyard quality used in S.0.
+     Each scheme corresponds to the creation of an additional item
+     (like, for example, /Bourgogne supérieur/, /Village supérieur/ ou
+     /Premier Cru supérieur/) that groups the vineyards of best
+     qualities from the econometric analysis of the actual scheme.
 
 **** Text 3                                  :noheading:
 
-     The results show that dropping the intangible effects are the
-     more important part to increase the informational content of the
-     vertical dimension without impacting the horizontal part.
-     Dropping the intangible is greater than adding a level but if we
-     want we do not need to target the high level but the middle with
-     more vineyard plot.  Maybe it is different from the value.  Then,
-     additive cumulative gain of dropping random terms and intangible
-     attributes. With little impact on the informational content of
-     the horizontal dimension that keeps the same order of magnitude.
+     The results show that dropping the intangible effects associated
+     to /commune/ effects is the most important policy to increase the
+     informational content of the vertical dimension of GIs (i.e.,
+     vertical signal).  Conversely, reducing the designation noise is
+     more important to increase the joint signal, under the assumption
+     that consumer use the information of both dimensions of GIs.
+     These two policy changes of GIs seem to be additively cumulative
+     for increasing the informational content of both vertical and
+     joint signals.  In particular, the gain of canceling the
+     /commune/ effects is about the same with and without designations
+     noise.  \autoref{Tab:3} also shows that canceling the /commune/
+     effect in designation scheme increase more the joint signal than
+     adding a vertical level as in S.III ,S.IV or S.V.  Among these
+     latter alternative schemes, we find that splitting the
+     intermediate level /village/ is more efficient while the
+     differences are not high.  Note that the measure of the
+     informational content that we propose is not directly related to
+     the value of the GI information, as it treats symmetrically high
+     and low levels of GIs.  More research is needed to convert these
+     results in terms of the efficient amount of information to give
+     to consumers, as the information about high levels of Gis would
+     be more valuable.  In all cases, these potential improvements
+     from the vertical dimension of GIs have no impact on the
+     informational content of the horizontal dimension that keeps the
+     same order of magnitude among simulations.
 
 ** Conclusion
    :PROPERTIES:
@@ -5314,22 +5652,48 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
     We propose an original framework to disentangle the informational
     content of geographical indications (GIs), in regards to their
-    ability to describe natural characteristics of production
-    sites. Both tangible and intangible characteristics of plots,
-    while the latter have high effects without controlling for
-    /terroir/, it decreases.  It also decrease on the long run of
-    history with continuous improvements from the management
-    institute.  We interpret this result as a control in strategic
-    transmition information. Difference betwen bias and noise: private
-    information is not fully reliable, so that the possibility of
-    honest mistakes makes it very difficult to establish fraud
-    conclusively. This clearly makes a crucial difference in insiders'
-    ability to deceive the public repeatedly, hence in the
-    profitability of market manipulation.  Actual Burgundy
-    classification cation appears to be a good indicator of Burgundy
-    wine quality. These two results suggest that the high
+    ability to describe the characteristics of production sites.
+    Applied to the region of /Côte d'Or/ (Burgundy, France), we find
+    significant effects of both tangible and intangible
+    characteristics of vineyard plots, respectively from nature and
+    humans.  While the former are expected, the latter are shown to be
+    robust to the control of the omitted /terroir/ variables under the
+    assumption that, as natural patterns, they vary smoothly in space.
+    This means that historical elements such as the reputation of
+    landowners, their influence with the decision makers or their
+    collective actions have some persistent effects on GI designation
+    scheme.  These differential treatment between administrative units
+    are shown to decrease on the long run of history, with the
+    continuous changes in the scheme that have taken place.  We
+    interpret this result in regard to the dynamic analysis of the
+    control of strategic transmission information by cite:BLar92.  The
+    authors show that when an information is not fully reliable
+    (because of designation noise here), the possibility of honest
+    mistakes makes it very difficult to distinguish designation noise
+    from preferential treatments.  This makes a crucial difference in
+    GIs ability to deceive the public repeatedly, hence in the
+    profitability of market manipulation by wine producers.  Actual
+    Burgundy classification appears to be a good indicator of Burgundy
+    wine quality.  These two results suggest that the high
     informational content of GIs and their actual economic importance
     comes from their long history and their independent management.
+
+*** More interpretations                     :noheading:
+
+   Our results about the benefits of the long run of history on the
+   informational content of GIs put some doubt about the idea that
+   flexibility can keep the concept of /terroir/ alive in regards to
+   GIS cite:WWJo09.  As an human construct which require the
+   participation of producers with a private information about
+   vineyard quality, the unbiasedness of the GIs signal would probably
+   not emerge spontaneously.  The stability of GIs in their management
+   and principle is a big part of their value.  Face to cliamte change
+   burgundy (harvest date), GIs are still very relevant markers for
+   the value of wine and will probably continue to not change
+   bioclmatic conditions are not the only sources citep:Ashe17. In
+   addition, this stability is also valued by consumer as a
+   self-reinforcing process.  this is shown to work in the region of
+   Burgundy under study.
 
 *** Discussion of the identification         :noheading:
 
@@ -5344,21 +5708,8 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
     stability of the main result of signal to noise ratio of 4 to
     different smoothing pattern of spatial.  important to estimate
     commune effect And limited importance on decomposition, so about
-    the high informational content (Table).
-
-*** More interpretation                      :noheading:
-
-   Our results about historical and potential improvement counter the
-   idea that "only flexibility can keep the concept of terroir alive"
-   cite:WWJo09,Ashe17.  Even conditions change, the consumer
-   preference face to the GIs signal will change but the historical
-   and independent certifiers. Face to cliamte change burgundy
-   (harvest date), GIs are still very relevant markers for the value
-   of wine and will probably continue. How to improve the signaling of
-   quality through GIs or to imagine alternative sources of
-   signaling. Les AOC ne sont pas immuables et il est important de
-   voir qu'ils se sont améliorés, gestion pyublique des AOC en
-   question, la littértaure sur la fourniture privée.
+    the high informational content (Table).  The second is about the
+    value of GIs.
 
 *** Research perspectives                    :noheading:
 
@@ -5366,11 +5717,9 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
     signaling (welfare implication) but difficult on GIs because of
     their stability.  Another difficulty would be the endogenous
     quality from viticultural practices in reaction to good
-    classification and associated high prices.
-
-    Value of information But also: Consumers may migrate toward higher
-    quality (vertical sorting) of to wine whose product
-    characteristics best meet their idiosynchratic needs
+    classification and associated high prices. But also: Consumers may
+    migrate toward higher quality (vertical sorting) of to wine whose
+    product characteristics best meet their idiosynchratic needs
     (horizontal). Both can increase welfare. Numerous paper about
     vertical welfare imroving (DZJi10 p.952 for a review) Reputation
     should thus be relevant if prospective buyers believe that it
@@ -6879,11 +7228,12 @@ print(xtable(yop, align= c("@{\\extracolsep{\\fill}} l", rep("X", 7))),
 ** Decomposition Counterfactual AOC
 
 #+begin_src R :results value :exports code :file "Tables/Decoldmp.tex"
+library(xtable)
 yap <- data.frame(Decomp.= c("Total", "", "Joint", "",
                              "Vertical", "", "", "Horizontal", "", ""),
                   Term= c(rep(c("Signal", "Noise"), 2),
                           rep(c("Signal", "Residual", "Noise"), 2)),
-                  tabpap)
+                  t(apply(decf, 1, function(x)x/(pi^2/3+ decf[1,])* 100)))
 names(yap)[ 3: 10] <- c("1936", "S.0", "S.I", "S.II", "S.III",
                         "S.IV", "S.V", "S.VI")
 ctmp <- "\\hline\\hline\\toprule\n&& \\multicolumn{7}{c}{\\emph{Alternative scenarios of GI designations}}\\\\[.25cm]\n"
