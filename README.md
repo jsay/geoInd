@@ -1,5 +1,11 @@
 # The Informational Content of Geographical Indications
 
+Predicting vineyard quality from econometric modeling of geographical indications in Côte d'Or (Burgundy, France)
+
+Prédire la qualité du terroir à partir d'une modélisation économetrique des appellation d'origine en Côte d'Or (Bourgogne, France)
+
+![img](Figures/MainPlot.png)
+
 
 # English version
 
