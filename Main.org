@@ -31,6 +31,7 @@
 #+MACRO:         flc @@latex: \alert{\ding{220}}@@
 :END:
 
+# https://www.youtube.com/watch?v=L6vnJIMwLSQ
 # https://github.com/davesteps/geoExploreR
 # https://github.com/wowChelios/BrazilianEcommerce/blob/master/analysis.R
 # https://paula-moraga.github.io/tutorial-shiny-spatial/
@@ -1475,13 +1476,15 @@ library(shinydashboard)
 library(shiny)
 library(shinyjs)
 
+Pts.Crd <- spTransform(Poly.Lxd, CRS("+proj=longlat +ellps=WGS84"))
+
 r_colors <- rgb(t(col2rgb(colors()) / 255))
 names(r_colors) <- colors()
 
 ui <- dashboardPage(
   dashboardHeader(
-    titleWidth = 150, 
-    title = "TITRE"),
+    titleWidth = 500, 
+    title = "Informational Content of Geographical Indications"),
   dashboardSidebar(
     width = 75,
     sidebarMenu(
@@ -1541,17 +1544,23 @@ server <- function(input, output, session) {
     getData  <- reactive({
         Poly.Lxd$PrdCor[Poly.Lxd$AOC%in% x ]
     }) 
-    points <- eventReactive(input$recalc, {
-        cbind(sample(460: 500/ 100, 10) , sample(4700: 4730/ 100, 10))
-    }, ignoreNULL = FALSE)
+    getCrd <- reactive({
+        coordinates(Pts.Crd[Pts.Crd$AOCLD == input$aocld, ])
+    })
+    getPts <- reactive({
+        SpatialPoints(Pts.Crd[Pts.Crd$AOCLD == input$aocld, ])
+    })
     output$mymap <- renderLeaflet({
-        tst@ map %>% addMarkers(data = points())})
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data = getPts()) })
     output$miplot <- renderPlot({
         plot(density(getData()),
              main= paste0("AOC numero ", paste(x, collapse= ", ")))
         abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld] )})
     })
 }
+
 
 shinyApp(ui, server)
 #+end_src
