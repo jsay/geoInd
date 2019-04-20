@@ -47,13 +47,13 @@
   :END:
 *** The Informational Content of Geographical Indications
 
-    R code and Shiny application to predict vineyard quality from the
-    geographical indications of /Côte d'Or/ (Burgundy, France).
-    Relating the fine-scale biophysical attributes to the hierarchical
-    scheme of /Appellations d'Origine Contrôlée/ allows to predict a
-    continuous quality score for each of the 60000 vineyards plots of
-    the area.  The Figure below reports the distribution according to
-    the actual classification and a correction of the unequal
+    R code and Shiny application to predict vineyard quality in the
+    /Côte d'Or/ region (Burgundy, France).  Relating fine-scale
+    biophysical attributes of vineyards to the hierarchical scheme of
+    /Appellations d'Origine Contrôlée/ allows to predict a continuous
+    quality score for each of the 60000 parcels of the area.  The
+    Figure below reports the score distribution according to actual
+    classification, with and without the correction of unequal
     treatments between /communes/.
 
 [[file:Figures/MainPlot.png]]
@@ -1280,7 +1280,7 @@ ggplot(cc, aes(factor(AOC), Score, fill= Pr))+
     geom_split_violin(draw_quantiles = c(0.25, 0.5, 0.75))+
     theme(legend.justification=c(0, 1), legend.position=c(0, 1),
           legend.title = element_blank())
-ggsave("Figures/MainPlot.png")
+#ggsave("Figures/MainPlot.png")
 
 
 ## PAS DE C-c C-c
@@ -1466,6 +1466,101 @@ nvm install 10.15.3
     firebase deploy
 
 ** <<Appli>> Mise en application Shiny
+*** TEST
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shiny)
+library(shinyjs)
+
+r_colors <- rgb(t(col2rgb(colors()) / 255))
+names(r_colors) <- colors()
+
+
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 150, 
+    title = "TITRE"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 2, # taille de la box
+                column(
+                    width = 12, #taille ?
+                    selectInput("i_sp", 
+                                label = "choose ?",
+                                choices = 1:length(breweries91), 
+                            selected = 1), 
+                  # textInput("village", value = breweries91$village[1]), 
+                    selectInput("irow", #input$irow
+                                label = "irow ?",
+                                choices = 1:2, 
+                                selected = 1)
+                )
+          ),
+          box(width = 5, 
+              column(
+                  width = 12, 
+                  plotOutput("myplot",width='100%')
+              )
+              ),
+          box(width = 5, 
+              column(
+                  width = 30, 
+                  leafletOutput("mymap")
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+ui <- fluidPage(
+  leafletOutput("mymap"),
+  p(),
+  actionButton("recalc", "New points")
+)
+
+server <- function(input, output, session) {
+  
+  points <- eventReactive(input$recalc, {
+    cbind(sample(460: 500/ 100, 10) , sample(4700: 4730/ 100, 10))
+  }, ignoreNULL = FALSE)
+  
+  output$mymap <- renderLeaflet({
+      tst@map %>%
+          addMarkers(data = points())
+  })
+}
+
+shinyApp(ui, server)
+#+end_src
+
 *** Global
 
 #+begin_src R :tangle ./DynMap/global.R
