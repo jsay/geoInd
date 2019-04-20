@@ -50,7 +50,7 @@
     R code and Shiny application to predict vineyard quality in the
     /Côte d'Or/ region (Burgundy, France).  Relating fine-scale
     biophysical attributes of vineyards to the hierarchical scheme of
-    /Appellations d'Origine Contrôlée/ allows to predict a continuous
+    /Appellations d'Origine Contrôlée/ allows to compute a continuous
     quality score for each of the 60000 parcels of the area.  The
     Figure below reports the score distribution according to actual
     classification, with and without the correction of unequal
@@ -1162,9 +1162,6 @@ GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
 dd <- coordinates(GR84)
 Geo.Ras$X= dd[, 1]
 Geo.Ras$Y= dd[, 2]
-
-
-
 #+end_src
 
 #+RESULTS:
@@ -1378,15 +1375,18 @@ hh[hh$Group.1== 'Romanée-Conti',]
 #+begin_src R
 library(rgdal) ; library(rgeos) ; library(maptools)
 MapCom <- readOGR("Carto/", "MapCom")
+
 Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
+Geo.Aoc$U900raw <- Geo.Plt$G900raw
+Geo.Aoc$U900cor <- Geo.Plt$G900cor
 Geo.Denom <- subset(Geo.Aoc, AOC> 3)
 Poly.Denom <- unionSpatialPolygons(Geo.Denom, Geo.Denom$AOClb)
 Poly.Denom$AOCLD <- as.character(row.names(Poly.Denom))
 Poly.Denom$AOC <- aggregate(Geo.Denom$AOC,
                             by= list(Geo.Denom$AOClb), mean)[, 2]
-Poly.Denom$PrdRaw <- aggregate(Geo.Denom$G900raw,
+Poly.Denom$PrdRaw <- aggregate(Geo.Denom$U900raw,
                                by= list(Geo.Denom$AOClb), mean)[, 2]
-Poly.Denom$PrdCor <- aggregate(Geo.Denom$G900cor,
+Poly.Denom$PrdCor <- aggregate(Geo.Denom$U900cor,
                                by= list(Geo.Denom$AOClb), mean)[, 2]
 Poly.Denom$Area <- aggregate(Geo.Denom$AREA,
                                by= list(Geo.Denom$AOClb), sum)[, 2]
@@ -1397,9 +1397,9 @@ Poly.Appel <- unionSpatialPolygons(tmp_geo, Geo.Appel$LIEUDIT)
 Poly.Appel$AOCLD <- as.character(row.names(Poly.Appel))
 Poly.Appel$AOC <- aggregate(Geo.Appel$AOC,
                             by= list(Geo.Appel$LIEUDIT), mean)[, 2]
-Poly.Appel$PrdRaw <- aggregate(Geo.Appel$G900raw,
+Poly.Appel$PrdRaw <- aggregate(Geo.Appel$U900raw,
                                by= list(Geo.Appel$LIEUDIT), mean)[, 2]
-Poly.Appel$PrdCor <- aggregate(Geo.Appel$G900cor,
+Poly.Appel$PrdCor <- aggregate(Geo.Appel$U900cor,
                                by= list(Geo.Appel$LIEUDIT), mean)[, 2]
 Poly.Appel$Area <- aggregate(Geo.Appel$AREA,
                              by= list(Geo.Appel$LIEUDIT), mean)[, 2]
@@ -1478,8 +1478,6 @@ library(shinyjs)
 r_colors <- rgb(t(col2rgb(colors()) / 255))
 names(r_colors) <- colors()
 
-
-
 ui <- dashboardPage(
   dashboardHeader(
     titleWidth = 150, 
@@ -1497,30 +1495,22 @@ ui <- dashboardPage(
       tabItem(
         tabName = "T1",
         fluidRow(
-            box(width = 2, # taille de la box
+            box(width = 4, # taille de la box
                 column(
-                    width = 12, #taille ?
-                    selectInput("i_sp", 
-                                label = "choose ?",
-                                choices = 1:length(breweries91), 
-                            selected = 1), 
-                  # textInput("village", value = breweries91$village[1]), 
-                    selectInput("irow", #input$irow
-                                label = "irow ?",
-                                choices = 1:2, 
-                                selected = 1)
-                )
+                    width = 12,
+                    checkboxGroupInput("aoc", "Sélectionner une AOC",
+                                       choices= 1: 5,
+                                       selected= 1: 5, inline= TRUE),
+                    selectInput("aocld", 
+                                label = "Sélectionner un lieux dit",
+                                choices = unique(Poly.Lxd$AOCLD), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'))
           ),
-          box(width = 5, 
+          box(width = 8, 
               column(
                   width = 12, 
-                  plotOutput("myplot",width='100%')
-              )
-              ),
-          box(width = 5, 
-              column(
-                  width = 30, 
-                  leafletOutput("mymap")
+                  leafletOutput("mymap", height = 700)
               )
               )
         )
@@ -1540,22 +1530,27 @@ ui <- dashboardPage(
   )
 )
 
-ui <- fluidPage(
-  leafletOutput("mymap"),
-  p(),
-  actionButton("recalc", "New points")
-)
-
 server <- function(input, output, session) {
-  
-  points <- eventReactive(input$recalc, {
-    cbind(sample(460: 500/ 100, 10) , sample(4700: 4730/ 100, 10))
-  }, ignoreNULL = FALSE)
-  
-  output$mymap <- renderLeaflet({
-      tst@map %>%
-          addMarkers(data = points())
-  })
+    observe({
+    x <- input$aoc
+    if (is.null(x)) x <- 1: 5
+    updateSelectInput(session, "aocld",
+      label = paste("Select input label", length(x)),
+      choices = unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
+    )
+    getData  <- reactive({
+        Poly.Lxd$PrdCor[Poly.Lxd$AOC%in% x ]
+    }) 
+    points <- eventReactive(input$recalc, {
+        cbind(sample(460: 500/ 100, 10) , sample(4700: 4730/ 100, 10))
+    }, ignoreNULL = FALSE)
+    output$mymap <- renderLeaflet({
+        tst@ map %>% addMarkers(data = points())})
+    output$miplot <- renderPlot({
+        plot(density(getData()),
+             main= paste0("AOC numero ", paste(x, collapse= ", ")))
+        abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld] )})
+    })
 }
 
 shinyApp(ui, server)
