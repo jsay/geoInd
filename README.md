@@ -1,8 +1,6 @@
 # The Informational Content of Geographical Indications
 
-Predicting vineyard quality from econometric modeling of geographical indications in Côte d'Or (Burgundy, France)
-
-Prédire la qualité du terroir à partir d'une modélisation économetrique des appellation d'origine en Côte d'Or (Bourgogne, France)
+R code and Shiny application to predict vineyard quality from an econometric model of geographical indications in *Côte d'Or* (Burgundy, France). Relating the fine-scale biophysical attributes of vineyards to the hierarchical scheme of *Appellations d'Origine Contrôlée* allows to predict a continuous quality score for each of the 60000 vineyards plots. The Figure below reports this distribution according to the actual classification and a correction of preferential treatments betwwen *communes* (see the documentations below for details).
 
 ![img](Figures/MainPlot.png)
 

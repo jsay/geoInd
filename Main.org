@@ -47,12 +47,15 @@
   :END:
 *** The Informational Content of Geographical Indications
 
-    Predicting vineyard quality from econometric modeling of
-    geographical indications in Côte d'Or (Burgundy, France)
-
-    Prédire la qualité du terroir à partir d'une modélisation
-    économetrique des appellation d'origine en Côte d'Or (Bourgogne,
-    France)
+    R code and Shiny application to predict vineyard quality from an
+    econometric model of geographical indications in /Côte d'Or/
+    (Burgundy, France).  Relating the fine-scale biophysical
+    attributes of vineyards to the hierarchical scheme of
+    /Appellations d'Origine Contrôlée/ allows to predict a continuous
+    quality score for each of the 60000 vineyards plots.  The Figure
+    below reports this distribution according to the actual
+    classification and a correction of preferential treatments betwwen
+    /communes/ (see the documentations below for details).
 
 [[file:Figures/MainPlot.png]]
 
@@ -1266,12 +1269,12 @@ revAOC <- c("1"= "Coteaux b.", "2"= "Bourgogne", "3"= "Village",
 cc <- rbind(
     data.frame(AOC= revalue(factor(Geo.Plt$AOC), revAOC),
                Score= Geo.Plt$G900raw,
-               Prediction= "Uncorrected: with communes fixed effects"),
+               Pr= "Uncorrected: without communes fixed effects"),
     data.frame(AOC= revalue(factor(Geo.Plt$AOC), revAOC),
                Score= Geo.Plt$G900cor,
-               Prediction= "Corrected: without communes fixed effects"))
+               Pr= "Corrected: with communes fixed effects"))
 
-ggplot(cc, aes(factor(AOC), Score, fill= Prediction))+
+ggplot(cc, aes(factor(AOC), Score, fill= Pr))+
     geom_split_violin()+
     ylab("100-Point Vineyard Quality Score")+
     ylim(40, 100)+ theme_minimal()+ xlab("")+
