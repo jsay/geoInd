@@ -48,14 +48,15 @@
   :END:
 *** The Informational Content of Geographical Indications
 
-    R code and Shiny application to predict vineyard quality in the
-    /Côte d'Or/ region (Burgundy, France).  Relating fine-scale
-    biophysical attributes of vineyards to the hierarchical scheme of
-    /Appellations d'Origine Contrôlée/ allows to compute a continuous
-    quality score for each of the 60000 parcels of the area.  The
-    Figure below reports the score distribution according to actual
-    classification, with and without the correction of unequal
-    treatments between /communes/.
+    R code and Shiny application used to predict vineyard quality in
+    the /Côte de Beaune/ and /Côte de Nuits/ (Burgundy, France).
+    Relating fine-scale biophysical attributes of vineyards to the
+    hierarchical scheme of /Appellations d'Origine Contrôlée/ allows
+    to compute a continuous quality score for each of the 60000
+    parcels of the area.  The Figure below reports the score
+    distribution according to actual classification, with and without
+    the correction for unequal treatments between administrative
+    /communes/.
 
 [[file:Figures/MainPlot.png]]
 
@@ -1412,19 +1413,28 @@ library(RColorBrewer)
 pal <- colorRampPalette(brewer.pal(9, "BuPu"))
 
 library(mapview)
+
 tst <- mapview(Poly.Lxd,
                zcol= "AOC", alpha.regions= .6,
                col.regions = pal(100), at = seq(0, 5, length.out= 10),
                color= "white",
-               label= Poly.Lxd$LIEUDIT,
+               label= Poly.Lxd$AOCLD, layerId = Poly.Lxd$AOCLD,
                popup = popupTable(Poly.Lxd@data,
                                   zcol = c("AOCLD", "Area", "AOC",
                                            "PrdRaw", "PrdCor")))
 
+length(tst@map$x$calls[[ 6]]$args[[1]])
+tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]]
+
+attr(tst@map$x$calls[[ 6]]$args[[1]], "dimnames")
+
+tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]] <-
+    cbind(tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]],
+          layerId= "yop")
 
 ## addLogo(n, "http://www7.inra.fr/fournisseurs/images/logo.jpg",
 ##         width = 200, height = 100, offset.x= 75, offset.y= 20)
-tst
+
 ## create standalone .html
 mapshot(tst, url = paste0(getwd(), "/DynMap/LieuxDits.html"))
 
@@ -1467,7 +1477,7 @@ nvm install 10.15.3
     firebase deploy
 
 ** <<Appli>> Mise en application Shiny
-*** TEST
+*** TEST 1
 
 #+begin_src R
 library(shiny)
@@ -1535,11 +1545,11 @@ ui <- dashboardPage(
 
 server <- function(input, output, session) {
     observe({
-    x <- input$aoc
-    if (is.null(x)) x <- 1: 5
-    updateSelectInput(session, "aocld",
-      label = paste("Select input label", length(x)),
-      choices = unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
+        x <- input$aoc
+        if (is.null(x)) x <- 1: 5 
+        updateSelectInput(session, "aocld",
+                          label= paste("Select input label", length(x)),
+                          choices= unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
     )
     getData  <- reactive({
         Poly.Lxd$PrdCor[Poly.Lxd$AOC%in% x ]
@@ -1561,9 +1571,113 @@ server <- function(input, output, session) {
     })
 }
 
+shinyApp(ui, server)
+#+end_src
+
+*** TEST 2
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shiny)
+library(shinyjs)
+
+Pts.Crd <- spTransform(Poly.Lxd, CRS("+proj=longlat +ellps=WGS84"))
+
+r_colors <- rgb(t(col2rgb(colors()) / 255))
+names(r_colors) <- colors()
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 500, 
+    title = "Informational Content of Geographical Indications"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 4, # taille de la box
+                column(
+                    width = 12,
+                    checkboxGroupInput("aoc", "Sélectionner une AOC",
+                                       choices= 1: 5,
+                                       selected= 1: 5, inline= TRUE),
+                    selectInput("aocld", 
+                                label = "Sélectionner un lieux dit",
+                                choices = unique(Poly.Lxd$AOCLD), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'))
+          ),
+          box(width = 8, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    x <- input$aoc
+    if (is.null(x)) x <- 1: 5
+    updateSelectInput(session, "aocld",
+      label = paste("Select input label", length(x)),
+      choices = unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
+    )
+    getData  <- reactive({## LA DENSITE
+        Poly.Lxd$PrdCor[Poly.Lxd$AOC%in% x ]
+    }) 
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$AOCLD == input$aocld, ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$AOCLD == input$aocld, ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$miplot <- renderPlot({
+        plot(density(getData()),
+             main= paste0("AOC numero ", paste(x, collapse= ", ")))
+        abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld] )
+        abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == getClk()] )})
+    })
+}
+
 
 shinyApp(ui, server)
 #+end_src
+
 
 *** Global
 
