@@ -1248,11 +1248,6 @@ ggplot(Geo.Plt, aes(x= factor(AOC), y= G900cor)) +
   geom_violin(trim=FALSE, color="darkred")+
   geom_boxplot(width=0.1) + theme_minimal()+ ylim(40, 100)
 
-ggplot(Geo.Plt, aes(x= factor(AOC), y= G900cor, fill= factor(AOC))) +
-    geom_violin(trim=FALSE, color="darkred")+
-    geom_boxplot(width=0.1, fill="white")+
-    labs(title="Plot of length  by dose",x="Dose (mg)", y = "Length")+
-    theme_minimal()+ ylim(40, 100)
 
 ## overlay
 p <- ggplot(Geo.Plt, aes(factor(AOC), G900raw))
@@ -1582,9 +1577,10 @@ library(leaflet)
 library(shinydashboard)
 library(shiny)
 library(shinyjs)
+library(ggplot2)
+library(plyr)
 
 Pts.Crd <- spTransform(Poly.Lxd, CRS("+proj=longlat +ellps=WGS84"))
-
 r_colors <- rgb(t(col2rgb(colors()) / 255))
 names(r_colors) <- colors()
 
@@ -1669,11 +1665,259 @@ server <- function(input, output, session) {
     output$miplot <- renderPlot({
         plot(density(getData()),
              main= paste0("AOC numero ", paste(x, collapse= ", ")))
-        abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld] )
-        abline(v= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == getClk()] )})
+        abline(v=  Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld])
+        abline(v=  Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == getClk()])})
     })
 }
+)
 
+shinyApp(ui, server)
+#+end_src
+
+*** TEST 3
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shiny)
+library(shinyjs)
+library(ggplot2)
+library(plyr)
+
+Pts.Crd <- spTransform(Poly.Lxd, CRS("+proj=longlat +ellps=WGS84"))
+yop <- c("Coteaux b.", "Bourgogne", "Village", "Premier cru", "Grand cru")
+names(yop) <- 1: 5
+
+r_colors <- rgb(t(col2rgb(colors()) / 255))
+names(r_colors) <- colors()
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 500, 
+    title = "Informational Content of Geographical Indications"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 4, # taille de la box
+                column(
+                    width = 12,
+                    checkboxGroupInput("aoc", "Sélectionner une AOC",
+                                       choices= 1: 5,
+                                       selected= 1: 5, inline= TRUE),
+                    selectInput("aocld", 
+                                label = "Sélectionner un lieux dit",
+                                choices = unique(Poly.Lxd$AOCLD), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'))
+          ),
+          box(width = 8, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    x <- input$aoc
+    if (is.null(x)) x <- 1: 5
+    updateSelectInput(session, "aocld",
+      label = paste("Select input label", length(x)),
+      choices = unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
+    )
+    getData  <- reactive({## LA DENSITE
+        Poly.Lxd@data[Poly.Lxd$AOC%in% x ,]
+    }) 
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$AOCLD == input$aocld, ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$AOCLD == input$aocld, ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$miplot <- renderPlot({
+        ggplot(getData(), aes(x= revalue(factor(AOC), yop),
+                              y= PrdCor, fill= factor(AOC)))+
+            geom_violin(trim=FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill="white")+
+            labs(title= paste("Reference: ", input$aocld,
+                              " ; Current: ", getClk()),
+                 x= "", y = "100-Point Vineyard Quality Score")+    
+            scale_fill_manual(values= pal(5))+ 
+            theme(legend.position= "none")+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),drop=T)+
+            geom_hline(yintercept= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld],
+                       lty= 3, col= "red")+
+            geom_hline(yintercept= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == getClk()], lty= 2, col= "blue")+
+            annotate("text", x= 0.4,
+                     y= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld]+ 2,
+                     label = "Reference", col= "red")+
+            annotate("text", x= length(x)+ .6,
+                     y= ifelse(is.null(input$mymap_shape_click), -100,
+                               Poly.Lxd$PrdCor[Poly.Lxd$AOCLD==getClk()])+
+                         2, label = "Current", col= "blue")
+    })
+    })
+})
+
+shinyApp(ui, server)
+#+end_src
+
+*** TEST 4
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shiny)
+library(shinyjs)
+library(ggplot2)
+library(plyr)
+
+Pts.Crd <- spTransform(Poly.Lxd, CRS("+proj=longlat +ellps=WGS84"))
+yop <- c("Coteaux b.", "Bourgogne", "Village", "Premier cru", "Grand cru")
+names(yop) <- 1: 5
+
+r_colors <- rgb(t(col2rgb(colors()) / 255))
+names(r_colors) <- colors()
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 500, 
+    title = "Informational Content of Geographical Indications"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 4, # taille de la box
+                column(
+                    width = 12,
+                    checkboxGroupInput("aoc", "Sélectionner une AOC",
+                                       choices= 1: 5,
+                                       selected= 1: 5, inline= TRUE),
+                    selectInput("aocld", 
+                                label = "Sélectionner un lieux dit",
+                                choices = unique(Poly.Lxd$AOCLD), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'))
+          ),
+          box(width = 8, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    x <- input$aoc
+    if (is.null(x)) x <- 1: 5
+    updateSelectInput(session, "aocld",
+      label = paste("Select input label", length(x)),
+      choices = unique(Poly.Lxd$AOCLD[ Poly.Lxd$AOC %in% x])
+    )
+    getData  <- reactive({## LA DENSITE
+        Poly.Lxd@data[Poly.Lxd$AOC%in% x ,]
+    }) 
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$AOCLD == input$aocld, ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$AOCLD == input$aocld, ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$miplot <- renderPlot({
+        ggplot(getData(), aes(x= revalue(factor(AOC), yop),
+                              y= PrdCor, fill= factor(AOC)))+
+            geom_violin(trim=FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill="white")+
+            labs(title= paste("Reference: ", input$aocld,
+                              " ; Current: ", getClk()),
+                 x= "", y = "100-Point Vineyard Quality Score")+    
+            scale_fill_manual(values= pal(5))+ 
+            theme(legend.position= "none")+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),drop=T)+
+            geom_hline(yintercept= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld],
+                       lty= 3, col= "red")+
+            geom_hline(yintercept= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == getClk()], lty= 2, col= "blue")+
+            annotate("text", x= 0.4,
+                     y= Poly.Lxd$PrdCor[Poly.Lxd$AOCLD == input$aocld]+ 2,
+                     label = "Reference", col= "red")+
+            annotate("text", x= length(x)+ .6,
+                     y= ifelse(is.null(input$mymap_shape_click), -100,
+                               Poly.Lxd$PrdCor[Poly.Lxd$AOCLD==getClk()])+
+                         2, label = "Current", col= "blue")
+    })
+    })
+})
 
 shinyApp(ui, server)
 #+end_src
