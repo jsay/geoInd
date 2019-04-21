@@ -1833,7 +1833,7 @@ ui <- dashboardPage(
       tabItem(
         tabName = "T1",
         fluidRow(
-            box(width = 4, # taille de la box
+            box(width = 5, 
                 column(
                     width = 12,
                     checkboxGroupInput("aoc", "Sélectionner une AOC",
@@ -1843,9 +1843,10 @@ ui <- dashboardPage(
                                 label = "Sélectionner un lieux dit",
                                 choices = unique(Poly.Lxd$AOCLD), 
                                 selected = 1),
-                    plotOutput("miplot", width='100%'))
+                    plotOutput("miplot", width='100%'),
+                    tableOutput('table'))
           ),
-          box(width = 8, 
+          box(width = 7, 
               column(
                   width = 12, 
                   leafletOutput("mymap", height = 700),
@@ -1894,6 +1895,13 @@ server <- function(input, output, session) {
         tst@map %>%
             setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
             addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$table <- renderTable(
+        data.frame("Vineyard"= c("Reference", "Current"),
+                   "Coteaux b."= c(100, NA),
+                   "Bourgogne"= c(100, NA),
+                   "Village"= c(100, NA),
+                   "Premier Cru"= c(100, NA),
+                   "Grand Cru"= c(100, NA)))
     output$miplot <- renderPlot({
         ggplot(getData(), aes(x= revalue(factor(AOC), yop),
                               y= PrdCor, fill= factor(AOC)))+
