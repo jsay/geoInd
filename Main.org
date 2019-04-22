@@ -1240,14 +1240,6 @@ library(plotly)
 ## https://plot.ly/r/violin/
 
 library(ggplot2)
-## classic
-ggplot(Geo.Plt, aes(x= factor(AOC), y= G900cor, fill= factor(AOC))) +
-    geom_violin()+ ylim(40, 100)
-
-ggplot(Geo.Plt, aes(x= factor(AOC), y= G900cor)) +
-  geom_violin(trim=FALSE, color="darkred")+
-  geom_boxplot(width=0.1) + theme_minimal()+ ylim(40, 100)
-
 
 ## overlay
 p <- ggplot(Geo.Plt, aes(factor(AOC), G900raw))
@@ -1371,64 +1363,63 @@ hh[hh$Group.1== 'Romanée-Conti',]
 
 #+begin_src R
 library(rgdal) ; library(rgeos) ; library(maptools)
-MapCom <- readOGR("Carto/", "MapCom")
-
 Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
 Geo.Aoc$U900raw <- Geo.Plt$G900raw
 Geo.Aoc$U900cor <- Geo.Plt$G900cor
-Geo.Denom <- subset(Geo.Aoc, AOC> 3)
-Poly.Denom <- unionSpatialPolygons(Geo.Denom, Geo.Denom$AOClb)
-Poly.Denom$AOCLD <- as.character(row.names(Poly.Denom))
-Poly.Denom$AOC <- aggregate(Geo.Denom$AOC,
-                            by= list(Geo.Denom$AOClb), mean)[, 2]
-Poly.Denom$PrdRaw <- aggregate(Geo.Denom$U900raw,
-                               by= list(Geo.Denom$AOClb), mean)[, 2]
-Poly.Denom$PrdCor <- aggregate(Geo.Denom$U900cor,
-                               by= list(Geo.Denom$AOClb), mean)[, 2]
-Poly.Denom$Area <- aggregate(Geo.Denom$AREA,
-                               by= list(Geo.Denom$AOClb), sum)[, 2]
 
-Geo.Appel <- subset(Geo.Aoc, AOC< 4)
-tmp_geo <- gBuffer(Geo.Appel, byid= TRUE, width= 0)
-Poly.Appel <- unionSpatialPolygons(tmp_geo, Geo.Appel$LIEUDIT)
-Poly.Appel$AOCLD <- as.character(row.names(Poly.Appel))
-Poly.Appel$AOC <- aggregate(Geo.Appel$AOC,
-                            by= list(Geo.Appel$LIEUDIT), mean)[, 2]
-Poly.Appel$PrdRaw <- aggregate(Geo.Appel$U900raw,
-                               by= list(Geo.Appel$LIEUDIT), mean)[, 2]
-Poly.Appel$PrdCor <- aggregate(Geo.Appel$U900cor,
-                               by= list(Geo.Appel$LIEUDIT), mean)[, 2]
-Poly.Appel$Area <- aggregate(Geo.Appel$AREA,
-                             by= list(Geo.Appel$LIEUDIT), mean)[, 2]
 
-Poly.Lxd <- rbind(Poly.Appel, Poly.Denom)
-Poly.Lxd@data[, -1] <- round(Poly.Lxd@data[, -1], 2)
+NVA <- c("Coteaux b.", "Bourgogne", "Village", "Premier cru", "Grand cru")
+names(NVA) <- 1: 5
+library(plyr)
+Geo.Aoc$NIVEAU <- revalue(factor(Geo.Aoc$AOC), NVA)
+Geo.Aoc$NAME <- ifelse(Geo.Aoc$AOC== 5, as.character(Geo.Aoc$AOClb),
+                ifelse(Geo.Aoc$AOC< 4, as.character(Geo.Aoc$LIEUDIT), NA))
+for (i in 1: nrow(Geo.Aoc)){
+    if (is.na(Geo.Aoc$NAME[ i])){
+        Geo.Aoc$NAME[ i] <- substr(Geo.Aoc$AOClb[ i],
+                                   regexpr(" cru+", Geo.Aoc$AOClb[ i],
+                                           perl= T)+ 5,
+                                   nchar(as.character(Geo.Aoc$AOClb[ i])))
+    } else {(Geo.Aoc$NAME[ i])}
+}
+Geo.Aoc$Concat <- paste0(Geo.Aoc$AOC, Geo.Aoc$LIBCOM, Geo.Aoc$NAME)
+tmp_geo <- gBuffer(Geo.Aoc, byid= TRUE, width= 0)    
+Poly.tst <- unionSpatialPolygons(tmp_geo, Geo.Aoc$Concat)
+
+Poly.tst$xx <- as.character(row.names(Poly.tst))
+attrTb <- data.frame(xx= Geo.Aoc$Concat[ !duplicated(Geo.Aoc$Concat)],
+                     NIVEAU= Geo.Aoc$NIVEAU[ !duplicated(Geo.Aoc$Concat)],
+                     LIBCOM= Geo.Aoc$LIBCOM[ !duplicated(Geo.Aoc$Concat)],
+                     NAME=   Geo.Aoc$NAME[ !duplicated(Geo.Aoc$Concat)])
+Poly.tst <- merge(Poly.tst, attrTb, by= "xx")
+Poly.tst$PrdRaw <- aggregate(Geo.Aoc$U900raw,
+                             by= list(Geo.Aoc$Concat), mean)[, 2]
+Poly.tst$PrdCor <- aggregate(Geo.Aoc$U900cor,
+                             by= list(Geo.Aoc$Concat), mean)[, 2]
+Poly.tst$Area <- aggregate(Geo.Aoc$AREA,
+                           by= list(Geo.Aoc$Concat), sum)[, 2]
+
+Poly.tst@data[, 5: 7] <- round(Poly.tst@data[, 5: 7], 2)
 
 library(RColorBrewer)
-pal <- colorRampPalette(brewer.pal(9, "BuPu"))
-
+AocPal <- brewer.pal(5, "BuPu")
 library(mapview)
-
-tst <- mapview(Poly.Lxd,
-               zcol= "AOC", alpha.regions= .6,
-               col.regions = pal(100), at = seq(0, 5, length.out= 10),
-               color= "white",
-               label= Poly.Lxd$AOCLD, layerId = Poly.Lxd$AOCLD,
-               popup = popupTable(Poly.Lxd@data,
-                                  zcol = c("AOCLD", "Area", "AOC",
-                                           "PrdRaw", "PrdCor")))
-
-length(tst@map$x$calls[[ 6]]$args[[1]])
-tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]]
-
-attr(tst@map$x$calls[[ 6]]$args[[1]], "dimnames")
-
-tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]] <-
-    cbind(tst@map$x$calls[[ 6]]$args[[1]][[1]][[ 1]][[ 1]],
-          layerId= "yop")
-
-## addLogo(n, "http://www7.inra.fr/fournisseurs/images/logo.jpg",
-##         width = 200, height = 100, offset.x= 75, offset.y= 20)
+mapviewOptions(basemaps = mapviewGetOption("basemaps")[ c(4, 1: 3, 5)])
+tst <- mapview(Poly.tst,
+               zcol= "NIVEAU", alpha.regions= .5,
+               col.regions = AocPal,
+               color= "white", legend.opacity= .5,
+               label= Poly.tst$NAME, layerId= Poly.tst$xx,
+               popup = popupTable(Poly.tst@data, feature.id= FALSE,
+                                  zcol = c("NIVEAU", "LIBCOM", "NAME",
+                                           "Area", "PrdRaw", "PrdCor")))
+## addLogo(tst, "http://www7.inra.fr/fournisseurs/images/logo.jpg",
+##         width = 200, height = 100)
+## mapviewOptions(basemaps = mapviewGetOption("basemaps")[ c(4, 1: 3, 5)],
+##                raster.palette = colorRampPalette(brewer.pal(9, "Greys")),
+##                vector.palette = colorRampPalette(brewer.pal(9, "YlGnBu")),
+##                na.color = "magenta",
+##                layers.control.pos = "topright")
 
 ## create standalone .html
 mapshot(tst, url = paste0(getwd(), "/DynMap/LieuxDits.html"))
@@ -1930,6 +1921,304 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 #+end_src
 
+*** TEST 5
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shinyjs)
+library(ggplot2)
+library(plyr)
+
+Pts.Crd <- spTransform(Poly.tst, CRS("+proj=longlat +ellps=WGS84"))
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 500, 
+    title = "Informational Content of Geographical Indications"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 5, 
+                column(
+                    width = 12,
+                    selectInput("niveau", 
+                                label= "Sélectionner un niveau",
+                                choices= unique(Poly.tst$NIVEAU), 
+                                selected = 1),
+                    selectInput("commune", 
+                                label = "Sélectionner une commune",
+                                choices = unique(Poly.tst$LIBCOM), 
+                                selected = 1),
+                    selectInput("name", 
+                                label = "Sélectionner un lieu dit",
+                                choices = unique(Poly.tst$NAME), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'),
+                    tableOutput('table'))
+          ),
+          box(width = 7, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    updateSelectInput(session, "commune",
+      choices = unique(Poly.tst$LIBCOM[ Poly.tst$NIVEAU %in% input$niveau])
+      )
+    updateSelectInput(session, "name",
+      choices = unique(Poly.tst$NAME[ Poly.tst$NIVEAU %in% input$niveau &
+                                      Poly.tst$LIBCOM %in% input$commune ])
+    )
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$table <- renderTable(
+        data.frame("Vineyard"= c("Reference", "Current"),
+                   "Coteaux b."= c(100, NA),
+                   "Bourgogne"= c(100, NA),
+                   "Village"= c(100, NA),
+                   "Premier Cru"= c(100, NA),
+                   "Grand Cru"= c(100, NA)))
+    output$miplot <- renderPlot({
+        ggplot(Poly.tst@data, aes(x= factor(NIVEAU),
+                                 y= PrdCor, fill= factor(NIVEAU)))+
+            geom_violin(trim=FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill="white")+
+            labs(title= paste("Reference: ", input$name,
+                              " ; Current: ", getClk()),
+                 x= "", y = "100-Point Vineyard Quality Score")+    
+            scale_fill_manual(values= AocPal)+ 
+            theme(legend.position= "none")+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),drop=T)+
+            geom_hline(yintercept=
+                 Poly.tst$PrdCor[Poly.tst$NIVEAU %in% input$niveau &
+                                 Poly.tst$LIBCOM %in% input$commune&
+                                 Poly.tst$NAME   %in% input$name ],
+                       lty= 3, col= "red")+
+            geom_hline(yintercept= Poly.tst$PrdCor[Poly.tst$xx== getClk()],
+                       lty= 2, col= "blue")+
+            annotate("text", x= 0.4,
+                     y= Poly.tst$PrdCor[Poly.tst$NIVEAU %in% input$niveau &
+                                        Poly.tst$LIBCOM %in% input$commune&
+                                        Poly.tst$NAME   %in% input$name ]+
+                         2, label = "Reference", col= "red")+
+            annotate("text", x= 5.6,
+                     y= ifelse(is.null(input$mymap_shape_click), -100,
+                               Poly.tst$PrdCor[Poly.tst$xx== getClk()])+
+                         2, label = "Current", col= "blue")
+    })
+    })
+})
+
+shinyApp(ui, server)
+#+end_src
+
+*** TEST 6
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shinyjs)
+library(ggplot2)
+library(plyr)
+
+Pts.Crd <- spTransform(Poly.tst, CRS("+proj=longlat +ellps=WGS84"))
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 700, 
+    title = "Essai de classification continue des vignobles de la Côte d'Or"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 5, 
+                column(
+                    width = 12,
+                    selectInput("niveau", 
+                                label=
+                                    "Niveau de l'appellation de référence",
+                                choices= unique(Poly.tst$NIVEAU), 
+                                selected= 1),
+                    selectInput("commune", 
+                                label=
+                                    "Commune de la parcelle de référence",
+                                choices= unique(Poly.tst$LIBCOM), 
+                                selected= 1),
+                    selectInput("name", 
+                                label=
+                                    "Lieu dit de la parcelle de référence",
+                                choices= unique(Poly.tst$NAME), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'),
+                    tableOutput('table'))
+          ),
+          box(width = 7, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    updateSelectInput(session, "commune",
+      choices = unique(Poly.tst$LIBCOM[ Poly.tst$NIVEAU %in% input$niveau])
+      )})
+    observe({
+    updateSelectInput(session, "name",
+      choices = unique(Poly.tst$NAME[ Poly.tst$NIVEAU %in% input$niveau &
+                                      Poly.tst$LIBCOM %in% input$commune ])
+      )})
+    observe({
+        yop <- Poly.tst$PrdCor[Poly.tst$NIVEAU %in% input$niveau &
+                               Poly.tst$LIBCOM %in% input$commune&
+                               Poly.tst$NAME   %in%   input$name ]
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    yap <- Poly.tst$PrdCor[Poly.tst$xx== getClk()]
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$table <- renderTable(
+        data.frame("Meilleur que x pc des"= c("Reference", "Current"),
+                   "Coteaux b."= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Coteaux b."]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Coteaux b."]< yap)* 100), 2),
+                   "Bourgogne"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Bourgogne"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Bourgogne"]< yap)* 100), 2),
+                   "Village"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Village"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Village"]< yap)* 100), 2),
+                   "Premier cru"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Premier cru"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Premier cru"]< yap)* 100), 2),
+                   "Grand cru"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Grand cru"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Grand cru"]< yap)* 100), 2)))
+    output$miplot <- renderPlot({
+        ggplot(Poly.tst@data, aes(x= factor(NIVEAU),
+                                 y= PrdCor, fill= factor(NIVEAU)))+
+            geom_violin(trim=FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill="white")+
+            labs(title= paste("Référence: ", input$name,
+                              " ; Current: ",
+                              Poly.tst$NAME[Poly.tst$xx== getClk()]),
+                 x= "", y = "100-Point Vineyard Quality Score")+    
+            scale_fill_manual(values= AocPal)+ 
+            theme(legend.position= "none")+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),drop=T)+
+            geom_hline(yintercept= yop, lty= 3, col= "red")+
+            geom_hline(yintercept= yap, lty= 2, col= "blue")+
+            annotate("text", x= 0.4,
+                     y= yop+ 2, label = "Référence", col= "red")+
+            annotate("text", x= 5.6,
+                     y= ifelse(is.null(input$mymap_shape_click),
+                               -100, yap)+ 2, label="Current", col= "blue")
+    })
+    })
+})
+
+shinyApp(ui, server)
+#+end_src
 
 *** Global
 
