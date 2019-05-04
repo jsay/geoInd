@@ -1,6 +1,6 @@
 # The Informational Content of Geographical Indications
 
-R code and Shiny application to predict vineyard quality in the *Côte d'Or* region (Burgundy, France). Relating fine-scale biophysical attributes of vineyards to the hierarchical scheme of *Appellations d'Origine Contrôlée* allows to compute a continuous quality score for each of the 60000 parcels of the area. The Figure below reports the score distribution according to actual classification, with and without the correction of unequal treatments between *communes*.
+R code and Shiny application used to predict vineyard quality in the *Côte de Beaune* and *Côte de Nuits* (Burgundy, France). Relating fine-scale biophysical attributes of vineyards to the hierarchical scheme of *Appellations d'Origine Contrôlée* allows to compute a continuous quality score for each of the 60000 parcels of the area. The Figure below reports the score distribution according to actual classification, with and without the correction for unequal treatments between administrative *communes*.
 
 ![img](Figures/MainPlot.png)
 
