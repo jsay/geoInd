@@ -41,6 +41,11 @@
 # in Repro, write empirical equations for variance decomp and
 # prediction equations for simulations 
 
+# attention sur les degrés de liberté sur les splines spatiales entre
+# les modèles auxiliaires et les modèles avec les communes.
+# L'inclusion des dummy geo et pédo ne change quasiment pas les df des
+# splines spatiales.
+
 * README
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
@@ -51,11 +56,10 @@
     the /Côte de Beaune/ and /Côte de Nuits/ (Burgundy, France).
     Relating fine-scale biophysical attributes of vineyards to the
     hierarchical scheme of /Appellations d'Origine Contrôlée/ allows
-    to compute a continuous quality score for each of the 60000
-    parcels of the area.  The Figure below reports the score
-    distribution according to actual classification, with and without
-    the correction for unequal treatments between administrative
-    /communes/.
+    to estimate a continuous quality score for each of the 60000
+    plots.  The Figure below reports the score distribution for each
+    actual item, with and without the correction for unequal
+    treatments between administrative /communes/.
 
 [[file:Figures/MainPlot.png]]
 
@@ -110,7 +114,7 @@ biophysiques (topographie, géologie, pédologie) des parcelles
 viticoles et les appellations d'origine contrôlée (AOC).  La zone
 d'étude comprend les 31 communes de la Côte d'Or qui forment les Côtes
 de Beaune et de Nuits.  L'intérêt de ces données est illustré par une
-modélisation de la hiérarchie des AOC qui permet de noter sur 100
+modélisation de la hiérarchie des AOC qui permet de classer en continu
 chaque parcelle de vigne en accord avec les principes historiques de
 désignation.  Les données et prédictions du modèle sont disponibles
 sous licence Creative Commons XX sur https://data.inra.fr/geoInd et
@@ -620,9 +624,11 @@ It has 16 fields
     variables, =AOC=, =AOCtp= et =AOClb=.  Les valeurs omises
     correspondent à l'absence d'AOC.  Attention ce ne sont pas des
     AOC, en particulier pour les Bourgognes régionaux et les premiers
-    crus (=table(Geo.Cad$AOC, Geo.Cad$AOCtp)=).  Pour les régionaux,
-    il s'agit d'avoir les Bourgognes Côte d'Or et les hautes côtes et
-    Notre Dame La Chapelle (on n'a pas Le Chapitre).
+    crus où on utilise les dénominations (=table(Geo.Cad$AOC,
+    Geo.Cad$AOCtp)=).  Le nom générique pourrait être les indications
+    géographiques.  Pour les régionaux, il s'agit d'avoir les
+    Bourgognes Côte d'Or et les hautes côtes et Notre Dame La Chapelle
+    (on n'a pas Le Chapitre).
 
 #+begin_src R :exports results :results value :colnames yes :rownames no
 (labs <- data.frame(NOM= c("IDU", "CODECOM", "AREA", "PERIM", "MAXDIST",
@@ -1184,60 +1190,85 @@ table(yop$tex)
 #+end_src
 
 ** <<StatD>> Statistiques descriptives
-*** Général
+*** Distribution des indications géographiques
 
-    Avant ici pas de stat des
+    Les deux dimensions des indications géographiques.
 
-#+begin_src R :wrap example
+#+begin_src R :results graphics :height 9 :width 13 :file "./Figures/InterGIs.pdf"
+load("Inter/GeoRas.Rda") ; library(lattice)
+tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
+Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
+fig.dat <- aggregate(model.matrix(~0+ factor(Geo.Ras$AOC))*
+                     Geo.Ras$AREA/ 1000, by= list(Geo.Ras$LIBCOM), sum)
+names(fig.dat)<-c("LIBCOM", "RIEN", "BGOR", "BOUR", "VILL", "PCRU", "GCRU")
+fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, lev= rev(levels(fig.dat$LIBCOM)))
+fig.crd <- t(apply(fig.dat[, -1], 1, function(t) cumsum(t)- t/2))
+fig.lab <- round(t(apply(fig.dat[, -1], 1, function(t) t/ sum(t)))* 100)
+library(RColorBrewer)
+my.pal <- brewer.pal(n= 9, name = "BuPu")[ c(1, 2, 4, 6, 8, 9)]
+barchart(LIBCOM~ RIEN+ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 32000),
+         xlab="Parcelles sous appellation d'origine contrôlée (hectare)",
+         data= fig.dat, horiz= T, stack= T, col= my.pal, border= "blue",
+         par.settings= list(superpose.polygon= list(col= my.pal)),
+         auto.key= list(space= "top", points= F, rectangles= T, columns= 5,
+                        text=c("Hors AOC", "Coteaux b.", "Bourgogne",
+                               "Village", "Premier cru", "Grand cru")),
+         panel=function(x, y, ...) {
+             panel.grid(h= 0, v = -11, col= "grey60")
+             panel.barchart(x, y, ...)
+             ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))})
+#+end_src
+
+#+ATTR_LATEX: :options scale= .5
+#+RESULTS:
+[[file:./Figures/InterGIs.pdf]]
+
+*** Bilan surfacique des AOC
+
+    Définition de nos niveaux et implications en termes de surfaces
+    sur la pyramides des AOC.  Sur la Côte d'Or, on n'a pas vraiment
+    la pyramide du BIVB.  L'OP intègre mieux l'information, il ne faut
+    pas mettre les 2 en concurrence. cette pratique est liée au
+    principe de hiérarchisation des appellations d'origine, qui [...]
+    s'emboîtent de manière pyramidale à partir d'une appellation
+    régionale socle [...]. Dans cette optique, le vin élaboré selon le
+    cahier des charges d'une appellation hiérarchiquement supérieure
+    répondrait de facto aux exigences de l'appellation régionale, dont
+    les conditions de production sont moins contraignantes.
+
+#+begin_src R :results graphics :height 9 :width 13 :file "./Figures/PyramGIs.pdf"
+ddd <- aggregate(Geo.Ras$AREA/ 10000,
+                 by= list(Geo.Ras$AOC, Geo.Ras$REGION), sum, na.rm= TRUE)
+names(ddd) <- c("AOC", "REGION", "SURFACES")
+ddd$SURFACES[ddd$REGION== "CDB"] <- -ddd$SURFACES[ddd$REGION== "CDB"]
+library(ggplot2)
+pyramidGH <- ggplot(ddd, aes(x= AOC, y= SURFACES, fill= REGION))+ 
+    geom_bar(data= subset(ddd, REGION== "CDB"), stat= "sum")+
+    geom_bar(data= subset(ddd, REGION== "CDN"), stat= "sum")+
+    coord_flip()+ theme_bw()+ ylab("Surfaces en milliers d'ha")+
+    xlab("Niveau d'Indication Géographique")+
+    scale_y_continuous(breaks = seq(-10000, 10000, 5000), 
+                       labels = paste0(as.character(
+                           c(seq(10, 1, -5), seq(0, 10,  5))), "m"))
+pyramidGH
+#+end_src
+
+#+RESULTS:
+[[file:./Figures/PyramGIs.pdf]]
+
+*** Liens avec les AOC historiques
+    
+    Hiérachisation des données historiques par les nom de crus et s'il
+    sont présents dans les nouvelles données.
+
+*** Restriction d'échantillon 
+
+#+begin_src R
 load("Inter/GeoRas.Rda")
 tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
 Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
 Geo.Ras$DISTCHF <- sqrt((Geo.Ras$XL93- Geo.Ras$XCHF* 100)^2
                         + (Geo.Ras$YL93- Geo.Ras$YCHF* 100)^2)
-#+end_src
-
-#+RESULTS:
-#+begin_example
-yop
-#+end_example
-
-*** Bilan surfacique des AOC
-
-    Définition de nos niveaux et implications en termes de surfaces
-    sur la pyramides des AOC.
-
-    The endogeneity is about the size or the shape of parcels, but not
-    the pedoclimatic variables. The endogeneity of the size/ shape of
-    parcel can be due both to simultaneity and omitted land quality
-    effects. Both seems to be intuitively treated. Size of parcels
-    multiples of ha, m2 or ouvrée (= 428 m2)?
-
-*** Liens avec les AOC historiques
-
-   First load the =.shp= file in the R workspace. 
-
-   The database contains ...
-
-Dans le
-    Data paper, il s'agira d'identifier les grands crus des villages
-    avec et sans nom reconnus pour retrouver la structure
-    hiérarchique.
-
-   Hiérachisation des données historiques par les nom de crus et s'il
-   sont présents dans les nouvelles données.
-
-\begin{equation}\label{eq:2}
-y= ax+ b
-\end{equation}
-
-   Retravail des données brutes AOC (XX et XXI) et création des
-   niveaux hiérachiques.
-
-*** Distribution spatiale
-** <<Ordon>> Modèle ordonné de désignation
-*** Variable transformations
-
-#+begin_src R
 Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
     sd(Geo.Ras$SOLAR, na.rm= TRUE)
 Geo.Ras$EXPO <- factor(ifelse(Geo.Ras$ASPECT< 45, "0-45",
@@ -1249,38 +1280,159 @@ Geo.Ras$EXPO <- factor(ifelse(Geo.Ras$ASPECT< 45, "0-45",
                        ifelse(Geo.Ras$ASPECT<315, "270-315", "315-360"))))))),
                        levels= c("0-45", "45-90", "90-135", "135-180",
                                  "180-225","225-270","270-315","315-360"))
-
 GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
 dd <- coordinates(GR84)
-Geo.Ras$X= dd[, 1]
-Geo.Ras$Y= dd[, 2]
+Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
+Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
+                  & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION))
 #+end_src
 
-#+RESULTS:
-
+** <<Ordon>> Modèle ordonné de désignation
 *** Spécification du modèle
-    
-    La différence avec le multinomial c'est dans l'interprétation des
-    données. Dans le MNL, tu dis c'est VILL est la meilleure AOC pour
-    cette parcelle. Dans le OP, tu dis cette parcelle peut est mieux
-    que Bourgogne, mieux que VILL, mais moins bien que PCRU et Grand
-    cru. L'OP intègre mieux l'information, il ne faut pas mettre les 2
-    en concurrence. cette pratique est liée au principe de
-    hiérarchisation des appellations d'origine, qui [...] s'emboîtent
-    de manière pyramidale à partir d'une appellation régionale socle
-    […]. Dans cette optique, le vin élaboré selon le cahier des
-    charges d'une appellation hiérarchiquement supérieure répondrait
-    de facto aux exigences de l'appellation régionale, dont les
-    conditions de production sont moins contraignantes.
 
 #+begin_src R
-library(mgcv) ## ASSEZ LONG
-gam2 <- gam(AOCc~ s(DEM, k= 10)+ s(SLOPE)+ s(ASPECT)+ s(RAYAT)+ s(PERMEABILITY)
-            + s(XREG, YREG, k= 200)+ LIBCOM
-          , data= RegRank, family= ocat(R= 5))
+Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
+tmp <- table(Reg.Ras$NOTATION)< 1000
+Reg.Ras$GEOL <- factor(
+    ifelse(Reg.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
+           as.character(Reg.Ras$NOTATION)))
 
+Reg.Ras$NOUC <- factor(Reg.Ras$NOUC)
+tmp <- table(Reg.Ras$NOUC)< 1000
+Reg.Ras$PEDO <- factor(
+    ifelse(Reg.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
+           as.character(Reg.Ras$NOUC)))
+
+library(mgcv) 
+gam <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+           + s(X, Y, k= 100)+ LIBCOM+ EXPO 
+         , data= Reg.Ras, family= ocat(R= 5))
+
+summary(gam)
+
+gamm <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+           + s(X, Y, k= 100)+ LIBCOM+ EXPO+ GEOL+ PEDO
+         , data= Reg.Ras, family= ocat(R= 5))
+
+## environ 2 heures
+gamm5 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+             + s(X, Y, k= 500)+ LIBCOM+ EXPO+ GEOL+ PEDO
+           , data= Reg.Ras, family= ocat(R= 5))
+summary(gamm5)
+plot(gamm5, scale= 0, page= 1, rug= TRUE)
+
+system.time( ## 5.5 heures
+gamm8 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+             +s(X, Y, k= 700)+ LIBCOM+ EXPO+ GEOL+ PEDO
+           , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gamm8)
+anova(gamm8)
+plot(gamm8, scale= 0, page= 1)
+modMontr <- list("gamm5"= gamm5, "gamm8"= gamm8)
+save(modMontr, file= "Inter/modMontr.Rda")
+
+load("Inter/modMontr.Rda")
+summary(modMontr$gamm5)
+plot(modMontr$gamm5, scale= 0, page= 1, rug= TRUE)
+
+pcgp <- function(x){
+    sum(diag(table(cut(x$line, c(-Inf, x$family$getTheta(TRUE), Inf)),
+                   x$model[, 1])))/ nrow(x$model)* 100
+}
+pcgp(modMontr$gamm8)
+summary(modMontr$gamm8)
+
+
+plot(gam, scale= 0, page= 1)
+gam1 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 100)+ LIBCOM+ EXPO
+            +TYPEGEOL+ TYPEAP+ GEOLNAT+ ERADEB+ DURETE+ GEOCHIMIE
+          , data= Reg.Ras, family= ocat(R= 5))
+summary(gam1)
+plot(gam1, scale= 0, page= 1)
+anova(gam1)
+
+
+gam2 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 100)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ ISOPIQUE+ ERADEB+ DURETE+ GEOCHIMIE
+            + TARG+ TLIM+ EPAIS+ TEG+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
 summary(gam2)
-plot(gam2, scale= 0)
+plot(gam2, scale= 0, page= 1)
+anova(gam2)
+
+gam3 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 200)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ ISOPIQUE+ ERADEB+ DURETE+ GEOCHIMIE
+            + TARG+ TLIM+ EPAIS+ TEG+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+summary(gam3)
+plot(gam3, scale= 0, page= 1)
+anova(gam3)
+
+gam3a <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 200)+ LIBCOM+ EXPO+ s(DISTCHF)
+            + DESCR+ DESCRp
+          , data= Reg.Ras, family= ocat(R= 5))
+summary(gam3a)
+plot(gam3a, scale= 0, page= 1)
+anova(gam3a)
+
+
+system.time( ## 40 min
+gam4 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 300)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ ISOPIQUE+ DURETE+ TARG+ TLIM+ EPAIS+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gam4)
+plot(gam4, scale= 0, page= 1)
+anova(gam4)
+
+system.time( ## 46 min
+gam5 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 400)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ DURETE+ TARG+ TLIM+ EPAIS+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gam5)
+plot(gam5, scale= 0, page= 1)
+anova(gam5)
+
+system.time( ## 5 heures
+gam6 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 500)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ DURETE+ TARG+ TLIM+ EPAIS+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gam6)
+plot(gam6, scale= 0, page= 1)
+anova(gam6)
+
+system.time( ## 4 heures
+gam7 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 600)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ DURETE+ TARG+ TLIM+ EPAIS+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gam7)
+plot(gam7, scale= 0, page= 1)
+anova(gam7)
+
+system.time( ## 7.7 heures
+gam8 <- gam(AOC~ s(DEM)+ s(SLOPE)+ s(RAYAT)
+            +s(X, Y, k= 700)+ LIBCOM+ EXPO+ s(DISTCHF)
+            +GEOLNAT+ DURETE+ TARG+ TLIM+ EPAIS+ TMO+ RUE
+          , data= Reg.Ras, family= ocat(R= 5))
+)
+summary(gam8)
+plot(gam8, scale= 0, page= 1)
+anova(gam8)
+
+newgam <- list(gam6= gam6, gam7= gam7, gam8= gam8)
+save(newgam, file= "Inter/newgam.Rda")
 
 plot(density((gam2$linear.pred- min(gam2$linear.pred))/
              (max(gam2$linear.pred)- min(gam2$linear.pred))))
@@ -1315,16 +1467,34 @@ ff[order(ff$WMean, decreasing= TRUE), ]
 #+begin_src R
 load("Inter/gamod.Rda")
 GAM900 <- predict(gamod$gam900, newdata= Geo.Ras@data, type= "terms")
-
 Geo.Ras$G900raw <- rowSums(GAM900, na.rm= TRUE)
 Geo.Ras$G900cor <- mean(GAM900[, 1], na.rm= T)+
     rowSums(GAM900[, -1], na.rm= TRUE)
 
-Geo.Plt <- subset(Geo.Ras@data, PAOC== 1)
-unini <- function(x) (x- min(x))/ (max(x)- min(x))
-Geo.Plt$G900raw <- round(unini(Geo.Plt$G900raw)* 100, 2)
-Geo.Plt$G900cor <- round(unini(Geo.Plt$G900cor)* 100, 2)
+load("Inter/modMontr.Rda")
+tmp <- table(Reg.Ras$NOTATION)< 1000
+Geo.Ras$GEOL <- factor(
+    ifelse(Geo.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
+           as.character(Geo.Ras$NOTATION)))
 
+tmp <- table(Geo.Ras$NOUC)< 2200
+Geo.Ras$PEDO <- factor(
+    ifelse(!Geo.Ras$NOUC %in% names(tmp[tmp]),
+           as.character(Geo.Ras$NOUC), "0AREF"))
+GAMONT <- predict(modMontr$gamm8, newdata= Geo.Ras@data, type= "terms")
+Geo.Ras$GMONraw <- rowSums(GAMONT, na.rm= TRUE)
+Geo.Ras$GMONcor <- mean(GAMONT[, 1], na.rm= T)+
+    rowSums(GAMONT[, -1], na.rm= TRUE)
+
+cor(Geo.Ras$G900cor, Geo.Ras$GMONcor)
+cor(Geo.Ras$G900raw, Geo.Ras$GMONraw)
+
+Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
+unini <- function(x) (x- min(x))/ (max(x)- min(x))
+Geo.Aoc$G900raw <- round(unini(Geo.Aoc$G900raw)* 100, 2)
+Geo.Aoc$G900cor <- round(unini(Geo.Aoc$G900cor)* 100, 2)
+Geo.Aoc$GMONraw <- round(unini(Geo.Aoc$GMONraw)* 100, 2)
+Geo.Aoc$GMONcor <- round(unini(Geo.Aoc$GMONcor)* 100, 2)
 
 library(plotly)
 ## https://plot.ly/r/violin/
@@ -1332,9 +1502,14 @@ library(plotly)
 library(ggplot2)
 
 ## overlay
-p <- ggplot(Geo.Plt, aes(factor(AOC), G900raw))
-p <- p + geom_violin(aes(colour = "#1268FF"), alpha = 0.3)
-q <- p + geom_violin(aes(y = G900cor, colour = "#3268FF"), alpha = 0.3)
+p <- ggplot(Geo.Aoc@data, aes(factor(AOC), G900raw))
+p <- p + geom_violin(aes(colour= "#1268FF"), alpha= 0.3)
+q <- p + geom_violin(aes(y= G900cor, colour= "#3268FF"), alpha= 0.3)
+q+ ylim(40, 100)
+
+p <- ggplot(Geo.Aoc@data, aes(factor(AOC), GMONraw))
+p <- p + geom_violin(aes(colour= "#1268FF"), alpha = 0.3)
+q <- p + geom_violin(aes(y= GMONcor, colour= "#3268FF"), alpha= 0.3)
 q+ ylim(40, 100)
 
 ## split
@@ -1342,11 +1517,28 @@ library(plyr)
 revAOC <- c("1"= "Coteaux b.", "2"= "Bourgogne", "3"= "Village",
             "4"= "Premier cru", "5"= "Grand Cru")
 cc <- rbind(
-    data.frame(AOC= revalue(factor(Geo.Plt$AOC), revAOC),
-               Score= Geo.Plt$G900raw,
+    data.frame(AOC= revalue(factor(Geo.Aoc$AOC), revAOC),
+               Score= Geo.Aoc$G900raw,
                Pr= "Uncorrected: without communes fixed effects"),
-    data.frame(AOC= revalue(factor(Geo.Plt$AOC), revAOC),
-               Score= Geo.Plt$G900cor,
+    data.frame(AOC= revalue(factor(Geo.Aoc$AOC), revAOC),
+               Score= Geo.Aoc$G900cor,
+               Pr= "Corrected: with communes fixed effects"))
+
+ggplot(cc, aes(factor(AOC), Score, fill= Pr))+
+    geom_split_violin()+
+    ylab("100-Point Vineyard Quality Score")+
+    ylim(40, 100)+ theme_minimal()+ xlab("")+
+    geom_split_violin(draw_quantiles = c(0.25, 0.5, 0.75))+
+    theme(legend.justification=c(0, 1), legend.position=c(0, 1),
+          legend.title = element_blank())
+#ggsave("Figures/MainPlot.png")
+
+cc <- rbind(
+    data.frame(AOC= revalue(factor(Geo.Aoc$AOC), revAOC),
+               Score= Geo.Aoc$GMONraw,
+               Pr= "Uncorrected: without communes fixed effects"),
+    data.frame(AOC= revalue(factor(Geo.Aoc$AOC), revAOC),
+               Score= Geo.Aoc$GMONcor,
                Pr= "Corrected: with communes fixed effects"))
 
 ggplot(cc, aes(factor(AOC), Score, fill= Pr))+
@@ -1417,13 +1609,17 @@ geom_split_violin <- function(mapping = NULL, data = NULL, stat = "ydensity", po
 *** Aggrégation
 
 #+begin_src R
-gg <- aggregate(Geo.Ras$G900raw, by= list(Geo.Ras$AOClb), mean, na.rm= T)
-hh <- aggregate(Geo.Ras$G900cor, by= list(Geo.Ras$AOClb), mean, na.rm= T)
+gg <- aggregate(Geo.Aoc$G900raw, by= list(Geo.Aoc$AOClb), mean, na.rm= T)
+hh <- aggregate(Geo.Aoc$G900cor, by= list(Geo.Aoc$AOClb), mean, na.rm= T)
+head(gg[order(gg$x, decreasing= TRUE), ], n= 10)
+head(hh[order(hh$x, decreasing= TRUE), ], n= 10)
 
-head(gg[order(gg$x, decreasing= TRUE), ], n= 100)
-head(hh[order(hh$x, decreasing= TRUE), ], n= 100)
-hh[hh$Group.1== 'Romanée-Conti',]
+gg <- aggregate(Geo.Aoc$GMONraw, by= list(Geo.Aoc$AOClb), mean, na.rm= T)
+hh <- aggregate(Geo.Aoc$GMONcor, by= list(Geo.Aoc$AOClb), mean, na.rm= T)
+head(gg[order(gg$x, decreasing= TRUE), ], n= 10)
+head(hh[order(hh$x, decreasing= TRUE), ], n= 10)
 
+gg[gg$Group.1== 'Romanée-Conti',]
 #+end_src
 
 ** <<Carto>> Mise en cartographie dynamique
@@ -1453,10 +1649,6 @@ hh[hh$Group.1== 'Romanée-Conti',]
 
 #+begin_src R
 library(rgdal) ; library(rgeos) ; library(maptools)
-Geo.Aoc <- subset(Geo.Ras, PAOC== 1)
-Geo.Aoc$U900raw <- Geo.Plt$G900raw
-Geo.Aoc$U900cor <- Geo.Plt$G900cor
-
 
 NVA <- c("Coteaux b.", "Bourgogne", "Village", "Premier cru", "Grand cru")
 names(NVA) <- 1: 5
@@ -1482,9 +1674,10 @@ attrTb <- data.frame(xx= Geo.Aoc$Concat[ !duplicated(Geo.Aoc$Concat)],
                      LIBCOM= Geo.Aoc$LIBCOM[ !duplicated(Geo.Aoc$Concat)],
                      NAME=   Geo.Aoc$NAME[ !duplicated(Geo.Aoc$Concat)])
 Poly.tst <- merge(Poly.tst, attrTb, by= "xx")
-Poly.tst$PrdRaw <- aggregate(Geo.Aoc$U900raw,
+
+Poly.tst$PrdRaw <- aggregate(Geo.Aoc$G900raw,
                              by= list(Geo.Aoc$Concat), mean)[, 2]
-Poly.tst$PrdCor <- aggregate(Geo.Aoc$U900cor,
+Poly.tst$PrdCor <- aggregate(Geo.Aoc$G900cor,
                              by= list(Geo.Aoc$Concat), mean)[, 2]
 Poly.tst$Area <- aggregate(Geo.Aoc$AREA,
                            by= list(Geo.Aoc$Concat), sum)[, 2]
@@ -1511,7 +1704,7 @@ tst <- mapview(Poly.tst,
 ##                vector.palette = colorRampPalette(brewer.pal(9, "YlGnBu")),
 ##                na.color = "magenta",
 ##                layers.control.pos = "topright")
-
+tst
 ## create standalone .html
 mapshot(tst, url = paste0(getwd(), "/DynMap/LieuxDits.html"))
 
@@ -2310,6 +2503,167 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 #+end_src
+
+*** TEST 7
+
+#+begin_src R
+library(shiny)
+library(leaflet)
+library(shinydashboard)
+library(shinyjs)
+library(ggplot2)
+library(plyr)
+
+Pts.Crd <- spTransform(Poly.tst, CRS("+proj=longlat +ellps=WGS84"))
+
+ui <- dashboardPage(
+  dashboardHeader(
+    titleWidth = 500, 
+    title = "Classification continue des vignobles de la Côte d'Or"),
+  dashboardSidebar(
+    width = 75,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("T1", tabName = "T1", icon = icon("angle-right ")),
+      menuItem("T2", tabName = "T2", icon = icon("angle-right "))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "T1",
+        fluidRow(
+            box(width = 5, 
+                column(
+                    width = 12,
+                    selectInput("niveau", 
+                                label=
+                                    "Niveau de l'appellation de référence",
+                                choices= unique(Poly.tst$NIVEAU), 
+                                selected= 1),
+                    selectInput("commune", 
+                                label=
+                                    "Commune de la parcelle de référence",
+                                choices= unique(Poly.tst$LIBCOM), 
+                                selected= 1),
+                    selectInput("name", 
+                                label=
+                                    "Lieu dit de la parcelle de référence",
+                                choices= unique(Poly.tst$NAME), 
+                                selected = 1),
+                    plotOutput("miplot", width='100%'),
+                    tableOutput('table'))
+          ),
+          box(width = 7, 
+              column(
+                  width = 12, 
+                  leafletOutput("mymap", height = 700),
+                  fluidRow(verbatimTextOutput("mymap_shape_click"))
+              )
+              )
+        )
+      ),
+      tabItem(
+          tabName = "T2",
+        fluidRow(
+          box(width = 5, 
+              column(
+                width = 12, 
+                plotOutput("myplot2",width='100%')
+              )
+          )          
+        )
+      )
+    )
+  )
+)
+
+## click, mouseover, and mouseout, null before the first click
+server <- function(input, output, session) {
+    observe({
+    updateSelectInput(session, "commune",
+      choices = unique(Poly.tst$LIBCOM[ Poly.tst$NIVEAU %in% input$niveau])
+      )})
+    observe({
+    updateSelectInput(session, "name",
+      choices = unique(Poly.tst$NAME[ Poly.tst$NIVEAU %in% input$niveau &
+                                      Poly.tst$LIBCOM %in% input$commune ])
+      )})
+    observe({
+        yop <- Poly.tst$PrdCor[Poly.tst$NIVEAU %in% input$niveau &
+                               Poly.tst$LIBCOM %in% input$commune&
+                               Poly.tst$NAME   %in%   input$name ]
+    getCrd <- reactive({## LE ZOOM
+        coordinates(Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ])
+    })
+    getPts <- reactive({## LE POINT
+        Pts.Crd[Pts.Crd$NIVEAU == input$niveau &
+                            Pts.Crd$LIBCOM == input$commune &
+                            Pts.Crd$NAME   == input$name , ]
+    })
+    getClk <- reactive({## LE CLICK
+        input$mymap_shape_click$id
+    })
+    yap <- Poly.tst$PrdCor[Poly.tst$xx== getClk()]
+    output$mymap <- renderLeaflet({
+        tst@map %>%
+            setView(getCrd()[ 1], getCrd()[ 2], zoom= 17) %>%
+            addCircleMarkers(data= SpatialPoints(getPts()))})
+    output$table <- renderTable(
+        data.frame("Meilleur que x pc des"= c("Reference", "Current"),
+                   "Coteaux b."= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Coteaux b."]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Coteaux b."]< yap)* 100), 2),
+                   "Bourgogne"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Bourgogne"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Bourgogne"]< yap)* 100), 2),
+                   "Village"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Village"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Village"]< yap)* 100), 2),
+                   "Premier cru"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Premier cru"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Premier cru"]< yap)* 100), 2),
+                   "Grand cru"= round(c(mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Grand cru"]< yop)* 100, mean(
+                       Poly.tst$PrdCor[Poly.tst$NIVEAU==
+                                       "Grand cru"]< yap)* 100), 2)))
+    output$miplot <- renderPlot({
+        ggplot(Poly.tst@data, aes(x= factor(NIVEAU),
+                                 y= PrdCor, fill= factor(NIVEAU)))+
+            geom_violin(trim=FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill="white")+
+            labs(title= paste("Référence: ", input$name,
+                              " ; Current: ",
+                              Poly.tst$NAME[Poly.tst$xx== getClk()]),
+                 x= "", y = "100-Point Vineyard Quality Score")+    
+            scale_fill_manual(values= AocPal)+ 
+            theme(legend.position= "none")+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),drop=T)+
+            geom_hline(yintercept= yop, lty= 3, col= "red")+
+            geom_hline(yintercept= yap, lty= 2, col= "blue")+
+            annotate("text", x= 0.4,
+                     y= yop+ 2, label = "Référence", col= "red")+
+            annotate("text", x= 5.6,
+                     y= ifelse(is.null(input$mymap_shape_click),
+                               -100, yap)+ 2, label="Current", col= "blue")
+    })
+    })
+})
+
+shinyApp(ui, server)
+#+end_src
+
 
 *** Global
 
@@ -7061,13 +7415,11 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 ** 1 -- Introduction
 *** The signal of quality
 
-# Je vais vous parler de vin sans vous en proposer pour accompagner
-# vos sandwichs mais bon parler gastromie en mangeant c'est bien
-# français il me semble
+# Vous avez l'étiquette d'un des vins les plus chers du monde, où on
+# voit bien ce qui est mis en avant pour signaler la qualité du vin.
 
-# AOC, une mauvaise habitude de certains pays à indiquer la provenance
-# géographique des leurs productions agricoles pour signaler la
-# qualité
+# Romanée Conti est une parcelle d'un peu plus de 1 ha et demi, située
+# à une trenteine de km d'ici, je reviendrais là-dessus.
 
 #+BEGIN_CENTER
 \vspace{-.5cm}
@@ -7076,9 +7428,13 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 
 *** Quality of the signal
 
-# Il ne suffit pas de renseigner un lieu pour signaler la qualité et
-# je parler du contenu informationel qui transite par la référence au
-# lieu
+# Par contre, signaler le lieu de production ne suffit pour signaler
+# la qualité et se pose donc la question de la qualité du signal qui
+# transite par la référence au lieu
+
+# je ne connaîs pas le bois joli dans l'hérault mais je sais qu'il y a
+# un rapport de un à plus de mille pour 75 cl de jus de raisin
+# fermenté
 
 #+BEGIN_CENTER
 \vspace{-.5cm}
@@ -7087,57 +7443,34 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 
 *** Relevant signal ?
 
-# Derrière se joue la question de la pertinence de la référence au
-# lieu par rapport au modèle dominant de la marque, qui est souvent
-# source de conflit dans les négociations commerciales.
+# Au delà de l'annecdote se joue la question de la pertinence de la
+# référence au lieu par rapport au modèle dominant de la marque, qui
+# est encore source de conflit dans les négociations commerciales.
 
-# ça peut sembler évident mais ça ne l'ai pas dans la littérature ou
-# dans les département d'économie agricole oute atlantique.
+# je ne rentre pas dans les détails mais la littérature anglo-saxone
+# est très critique des AOC qui limite l'offre et hausse les prix,
+# avec des préférences pour des stratégies marketing plus subtiles.
 
 #+BEGIN_CENTER
 \vspace{-.5cm}
 \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .35]{./Figures/labelFAT}
 #+END_CENTER
 
-*** Literature                               :noexport:
+** 2 -- Context
+*** Côte d'Or, Bourgogne, France
 
-    =Strong effect of Geographical Indications= in all studies
+# je vais travailler sur le vignoble de la Côte
 
-#+LaTeX: \vspace{.5cm}
+# qui est une sorte de talu avec la plaine à l'est et les hautes côtes
+# à l'ouest, moins de 100 km de long entre 180 et 600 mètres
+# d'altitude
 
-    @@latex: \texttt{Insignificant effect of soil \emph{terroir}}@@
-    - Gergaud and Ginsburgh (EJ 2008), Bordeaux wines
-    - Cross et al. (AER 2011), Oregon vineyards 
+# les vignes et les appellations sont une bande de 1 à 2 km sur les
+# coteaux à pentes maximales, sur 31 communes séprarées en Côte de
+# Nuits et Côte de Beaune
 
-#+LaTeX: \vspace{.5cm}
-
-    @@latex: \texttt{Strong effect of climate \emph{terroir}}@@
-    - Ashenfelter et al. (Chance 1995), Bordeaux wines
-    - Ashenfelter and Storchmann (RES 2010), Mosell vineyards
- 
-** 2 -- Case study
-*** GI information
-
-# On va prendre pour exemple la Côte d'Or, ce n'est pas le plus facile
-# ni le plus représentatif (vin) mais ce n'est pas loin. Non sinon,
-# c'est une vrai success story des GIs, la première étiquette que je
-# vous ai montré c'est le vin le plus cher du monde.
-
-#+BEGIN_CENTER
-\vspace{-.5cm}
-\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .55]{./Figures/labelPCRU}
-#+END_CENTER
-
-*** Link to the /terroir/
-**** Image 1                                 :BMCOL:
-    :PROPERTIES:
-    :BEAMER_col: 0.5
-    :END:
-
-#+BEGIN_CENTER
-\vspace*{-1cm}
-\includegraphics[scale= .3]{./Figures/MapCom2}
-#+END_CENTER     
+# Au sein des chaque commune il y a une classification verticale en 5
+# catégories en ordre croissant dans la hiérarchie
 
 **** Image 2                                 :BMCOL:
     :PROPERTIES:
@@ -7149,11 +7482,39 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 \includegraphics[scale= .3]{./Figures/MapCom1}
 #+END_CENTER     
 
-*** \null
+**** Image 1                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
 
-#+LATEX: \vspace*{-1cm} \footnotesize \input{Tables/StatDes.tex}
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3]{./Figures/MapCom2}
+#+END_CENTER     
 
-*** Citation 1
+*** Information available to consumers
+
+# Parmi les informations typiquement disponible d'une étiquette, je
+# vais m'intéresser au niveau de l'appellation, village et la
+# dénomination
+
+#+BEGIN_CENTER
+\vspace{-.5cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .55]{./Figures/labelPCRU}
+#+END_CENTER
+
+*** History
+
+    - IIth century: Archaeological evidences of vineyards
+    - VIIth century: Written evidences of vineyards (Benedictines)
+    - XIIth century: First classification of vineyards (Cistercians)
+    - 1789: First administrative delineation of /communes/
+    - 1810: First delineations at the vineyard plot scale
+    - 1855: First hierarchical delineations of vineyards
+    - 1935: Creation of the National Institute for GIs (INAO)
+    - Continuous modifications of vineyard delineations 
+
+*** Interaction between GIs and /communes/
 
 #+begin_quote 
 
@@ -7170,7 +7531,7 @@ only for each /commune/ taken in isolation. >>
  d'Or.
 #+Latex:}
 
-*** Citation 2
+*** Interaction between GIs and /communes/
 
 #+begin_quote
 
@@ -7186,25 +7547,7 @@ only for each /commune/ taken in isolation. >>
     Un siècle de construction du vignoble bourguignon.
 #+Latex: }
 
-*** Resume
-
-    Two =dimensions of differentiation=:
-      + Vertical: BGOR< BOUR< VILL< PRCU< GCRU
-      + Horizontal: /Communes/ ~ /Lieux dits/ ~ /Parcelles/
-
-#+LATEX: \vspace{.5cm}\pause
-
-    =Complex interaction= between the two:
-      + /commune/ and /village/ synonyms (/Côte de Beaune-Village/)
-      + some /communes/ share the name of /grand cru/
-      + some /communes/ share a same /grand cru/
-      + some /communes/ share the name of the same /grand cru/
-
-# Franchement, il y en a qui pensent que la profusion et la complexité
-# des labels créent de la confusion chez le consommateur, ce n'est
-# clairement pas le cas en Bourgogne.
-
-** 3 -- Models
+** 3 -- Model
 *** Latent structure
 
 #+begin_export latex
@@ -7223,7 +7566,7 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 \vspace{-1.5cm}
 \begin{flalign*}
  y= j &\;\;\mbox{ if }\;\; \alpha_{j-1}^c< y^* \leqslant \alpha_{j}^c & \nonumber\\
-&\mbox{ for }\;\; j \in \big\{\mbox{\small Côteaux, Bourgogne, Village, Premier Cru, Grand Cru}\big\}&\nonumber
+&\mbox{ for }\;\; j \in \big\{\mbox{\small Côteaux b., Bourgogne, Village, Premier Cru, Grand Cru}\big\}&\nonumber
 \end{flalign*}\pause
 #+end_export
 
@@ -7279,14 +7622,14 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
     $\Rightarrow$ Geographical coordinates allow to control for /terroir/
 #+LATEX: \vspace{.5cm}
 
-     =So= we fit Ordered Generalized Additive Models
+     =So= we fit an Ordered GeoAdditive Model (penalized semiparametric)
 
 *** Informational content
 #+LATEX: \small
 
 #+begin_export latex
 \begin{flalign*}
-\mathbb{V}(y^*)= \underbrace{\mathbb{V}\left[q\left(X^*\right)\right]}_{\mbox{signal}}+ \underbrace{\mathbb{V}\left[\;\xi\;\right]}_{\mbox{noise}}&& [D1]\nonumber
+\mathbb{V}(y^*)= \underbrace{\mathbb{V}\left[\widehat{q}\left(X\right)\right]}_{\mbox{signal}}+ \underbrace{\mathbb{V}\left[\;\xi\;\right]}_{\mbox{noise}}&& [D1]\nonumber
 \end{flalign*}\pause
 #+end_export
 
@@ -7303,27 +7646,27 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mathbb{V}\left[q\left(X^*\right)\right]=
-    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}}_{\mbox{joint signal}}+
-    \underbrace{\mathbb{E}\left\{\mathbb{V}\left[q\left(X^*\right)\mid y, c\right]\right\}}_{\mbox{joint residual}}&& [D2]
+  \mathbb{V}\left[\widehat{q}\left(X\right)\right]=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y, c\right]\right\}}_{\mbox{joint signal}}+
+    \underbrace{\mathbb{E}\left\{\mathbb{V}\left[\widehat{q}\left(X\right)\mid y, c\right]\right\}}_{\mbox{joint residual}}&& [D2]
 \end{flalign*}\pause
 #+end_export
 
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}=
-    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y\right]\right\}}_{\mbox{vertical signal}}+
-    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c \right]\mid y\right\}}_{\mbox{vertical residual}}&& [D3]
+  \mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y, c\right]\right\}=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y\right]\right\}}_{\mbox{vertical signal}}+
+    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y, c \right]\mid y\right\}}_{\mbox{vertical residual}}&& [D3]
 \end{flalign*}\pause
 #+end_export
 
 #+begin_export latex
 \vspace{-1cm}
 \begin{flalign*}
-  \mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c\right]\right\}=
-    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid c\right]\right\}}_{\mbox{horizontal signal}}+
-    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[q\left(X^*\right)\mid y, c \right]\mid c\right\}}_{\mbox{horizontal residual}}&& [D4]
+  \mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y, c\right]\right\}=
+    \underbrace{\mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid c\right]\right\}}_{\mbox{horizontal signal}}+
+    \underbrace{\mathbb{E}\mathbb{V}\left\{\mathbb{E}\left[\widehat{q}\left(X\right)\mid y, c \right]\mid c\right\}}_{\mbox{horizontal residual}}&& [D4]
 \end{flalign*}
 #+end_export
 
@@ -7332,10 +7675,74 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 
 # Certaine redondance entre les niveaux et les communes
 
-** 4 -- Results
+** 4 -- Data
+*** \null
+
+# Pour cela nous avons compiler les cractéristiques...
+
+#+LATEX: \vspace*{-1cm}\small \input{Tables/StatDesP1.tex}
+
+*** Geology
+**** Image                                   :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3, page= 1]{./Figures/MapGeol}
+#+END_CENTER     
+
+**** Legend                                  :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-1.8cm}
+\includegraphics[scale= .4, page= 2]{./Figures/MapGeol}
+#+END_CENTER     
+
+*** Pedology
+**** Image                                   :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3, page= 1]{./Figures/MapPedo}
+#+END_CENTER     
+
+**** Legend                                  :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-1.6cm}
+\includegraphics[scale= .38, page= 2]{./Figures/MapPedo}
+#+END_CENTER     
+
+*** Geographical Indications
+
+#+LATEX: \input{Tables/StatDesP2.tex}
+
+*** \null                                    :noexport:
+     
+#+BEGIN_CENTER
+\vspace*{-1.35cm}\hspace*{-1cm}
+\includegraphics[scale= .39]{./Figures/CrossGIs}
+#+END_CENTER     
+
+** 5 -- Results
 *** Ordered models of GI designations
 
-#+LATEX: \footnotesize\input{Tables/VarSign1.tex}
+#+LATEX: \footnotesize\input{Tables/VarSignPres.tex}
+
+*** Omitted /terroir/ effects
+
+#+LATEX: \includegraphics[scale= .4]{Figures/SignifPlot.pdf}
 
 *** Marginal effect of elevation
 
@@ -7349,14 +7756,6 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 
 #+LATEX: \vspace*{.2cm}\hspace*{-1cm}\includegraphics[trim=0cm 0cm 0cm 13.65cm, clip=true, scale= 1.05]{Figures/PltEff.pdf}
 
-*** \null
-
-#+LATEX: \vspace{-.75cm}\includegraphics[scale=.425]{Figures/SmoothMap.pdf}
-
-*** Omitted /terroir/ effects
-
-#+LATEX: \includegraphics[scale= .4]{Figures/SignifPlot.pdf}
-
 *** Ordinal superiority
 
 #+LATEX: \includegraphics[scale= .5]{./Figures/ComEff.pdf}
@@ -7369,7 +7768,7 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 
 #+LATEX: \vspace{-.5cm}\small \input{Tables/DecoldmpPres.tex}
 
-** 5 -- Conclusion
+** 6 -- Conclusion
 *** Summary
 
     =High informational content= of GIs
@@ -7403,8 +7802,12 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 *** \null
 #+LaTeX: \Large
 
-    Open data, \textbf{R} codes and Shiny app : @@latex:
+    Open data, R codes and Shiny app : @@latex:
     {\fontfamily{pcr}\selectfont https://github.com/jsay/geoInd/}@@
+
+*** \null
+
+#+LATEX: \vspace{-.75cm}\includegraphics[scale=.425]{Figures/SmoothMap.pdf}
 
 * Figures
 ** Commune descriptive map
@@ -7572,6 +7975,59 @@ dev.off()
 #+RESULTS:
 : X11cairo 
 :        2
+
+** Geology descriptive map
+
+#+begin_src R
+library(rgdal) ; library(maptools) ; library(sp) ; library(sf)
+MapCom <- readOGR("Carto/", "MapCom")
+Bord.Area <- unionSpatialPolygons(MapCom, rep(1, nrow(MapCom)))
+Geol.Map <- readOGR("./Carto/", "GeolMap")
+
+library(raster)
+pi <- intersect(Bord.Area, Geol.Map)
+mycol <- sample(col_vector, length(unique(pi$DESCR)))
+
+library(RColorBrewer)
+qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
+                           rownames(qual_col_pals)))
+
+pdf("Figures/MapGeol.pdf", width= 7, height= 9)
+par(mar = c(0, 0, 0, 0))
+plot(pi, col= mycol)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
+dev.off()
+
+#+end_src
+
+** Pedology descriptive map
+
+#+begin_src R
+library(rgdal) ; library(maptools) ; library(sp) ; library(sf)
+MapCom <- readOGR("Carto/", "MapCom")
+Bord.Area <- unionSpatialPolygons(MapCom, rep(1, nrow(MapCom)))
+Pedo.Map <- readOGR("./Carto", "PedoMap")
+
+library(raster)
+pi <- intersect(Bord.Area, Pedo.Map)
+mycol <- sample(col_vector, length(unique(pi$DESCRp)))
+
+library(RColorBrewer)
+qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
+                           rownames(qual_col_pals)))
+
+pdf("Figures/MapPedo.pdf", width= 7, height= 9)
+par(mar = c(0, 0, 0, 0))
+plot(pi, col= mycol)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCRp), 1, 60), fill= mycol)
+dev.off()
+#+end_src
 
 ** Multi gam effects New AOCs
 
@@ -8095,6 +8551,70 @@ stargazer(RRank@data[, c("AREA", "Altitude", "SLOPE", "RAYAT", "X", "Y",
 
 #+RESULTS:
 [[file:Tables/StatDes.tex]]
+
+** Descriptive Presentation
+*** Topographic
+
+#+begin_src R :results value :exports code :file "Tables/StatDesP1.tex"
+load("Inter/GeoRas.Rda") ; library(sp)
+GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
+dd <- coordinates(GR84)
+Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
+Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
+                  & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION))
+Reg.Ras$EXPO <- factor(ifelse(Reg.Ras$ASPECT< 45, "0-45",
+                       ifelse(Reg.Ras$ASPECT< 90, "45-90",
+                       ifelse(Reg.Ras$ASPECT<135, "90-135",
+                       ifelse(Reg.Ras$ASPECT<180, "135-180",
+                       ifelse(Reg.Ras$ASPECT<225, "180-225",
+                       ifelse(Reg.Ras$ASPECT<270, "225-270",
+                       ifelse(Reg.Ras$ASPECT<315, "270-315", "315-360"))))))),
+                       levels= c("0-45", "45-90", "90-135", "135-180",
+                                 "180-225","225-270","270-315","315-360"))
+
+Reg.Ras$X0t45    <- ifelse(Reg.Ras$EXPO== "0-45"   , 1, 0)
+Reg.Ras$X45t90   <- ifelse(Reg.Ras$EXPO== "45-90"  , 1, 0)
+Reg.Ras$X90t135  <- ifelse(Reg.Ras$EXPO== "90-135" , 1, 0)
+Reg.Ras$X135t180 <- ifelse(Reg.Ras$EXPO== "135-180", 1, 0)
+Reg.Ras$X180t225 <- ifelse(Reg.Ras$EXPO== "180-225", 1, 0)
+Reg.Ras$X225t270 <- ifelse(Reg.Ras$EXPO== "225-270", 1, 0)
+Reg.Ras$X270t315 <- ifelse(Reg.Ras$EXPO== "270-315", 1, 0)
+Reg.Ras$X315t360 <- ifelse(Reg.Ras$EXPO== "315-360", 1, 0)
+Reg.Ras$Area <- Reg.Ras$AREA/ 10000
+Reg.Ras$Altitude <- Reg.Ras$DEM/ 1000
+Reg.Ras$Solar <- Reg.Ras$SOLAR/ 1000000
+
+lab1 <- c("Acreage [hectare]", "Elevation [1000 m]", "Slope [degree]",
+          "Solar radiation [MJ]", "Longitude [degree]","Latitude [degree]",
+          "Aspect [$0-45$]", "Aspect [$45-90$]", "Aspect [$90-135$]",
+          "Aspect [$135-180$]", "Aspect [$180-225$]", "Aspect [$225-270$]",
+          "Aspect [$270-315$]", "Aspect [$315-360$]") 
+library(stargazer)          
+stargazer(Reg.Ras@data[, c("Area", "Altitude", "SLOPE", "Solar", "X", "Y",
+                         "X0t45", "X45t90", "X90t135", "X135t180",
+                         "X180t225", "X225t270", "X270t315", "X315t360")],
+          covariate.labels= lab1, column.sep.width= "0pt", float= F,
+	  digit.separate= c(0, 3))
+#+end_src
+
+#+RESULTS:
+[[file:Tables/StatDesP1.tex]]
+
+*** GIs
+
+#+begin_src R :results value :exports code :file "Tables/StatDesP2.tex"
+library(plyr) ; library(xtable)
+AOCtab <- revalue(factor(Reg.Ras$AOC),
+                  c("1"= "Coteaux b.", "2"= "Bourgogne",
+                    "3"= "Village", "4"= "Premier Cru",
+                    "5"= "Grand Cru"))
+print(xtable(rbind(round(table(AOCtab)),
+                   round(table(AOCtab)/ length(AOCtab)* 100, 1))),
+      include.rownames= F)
+#+end_src
+
+#+RESULTS:
+[[file:Tables/StatDesP2.tex]]
 
 ** Variable significance New AOCs
 
