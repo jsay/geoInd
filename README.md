@@ -1,17 +1,16 @@
-# The Informational Content of Geographical Indications
+# A statistical classification of Côte d'Or vineyards
 
-This repo contains R code and Shiny application used to predict vineyard quality in the *Côte de Beaune* and *Côte de Nuits* (Burgundy, France).
 
-Relating fine-scale biophysical attributes of vineyards to the hierarchical scheme of *Appellations d'Origine Contrôlée* allows to estimate a continuous quality score for each of the 60000 plots.
+# Une classification statistique des vignobles de Côte d'Or
 
-The Figure below reports the score distribution for each actual item, with and without the correction for unequal treatments between administrative *communes*.
-
-Figure: yopla
-
-![img](Figures/MainPlot.png)
+![img](Figures/Capture.png)
 
 
 # English version
+
+Relating statistically biophysical attributes of vineyards to the hierarchical scheme of *appellations d'origine contrôlée* allows to estimate a continuous quality score for each vineyard plots.
+
+This repo contains R code and Shiny application used to predict vineyard quality in the *Côte de Beaune* and *Côte de Nuits* (Burgundy, France).
 
 -   [Working paper](WorkingPaper.pdf)
 -   Data: <https://www6.inra.fr/datapartage/>
@@ -21,9 +20,9 @@ Figure: yopla
 
 # Version Française
 
--   Présentation des données : [PDF version](DataPaper.pdf) or [Markdown](DataPaper.md)
--   Accéder aux données : <https://www6.inra.fr/datapartage/>
--   Cartographie dynamique : <https://geoind-wine.firebaseapp.com>
+La corrélation statistique entre les attributs biophysiques des vignobles et la structure hiérarchique des appellations d'origine contrôlées permet d'estimer un score continu de qualité pour chaque parcelle de vigne.
+
+Ce répertoire contient la construction des données et des procédures d'estimation en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessible sur le serveur de l'INRA <https://www6.inra.fr/datapartage/> et les résultats sont consultables par une application cartographique <https://geoind-wine.firebaseapp.com>.
 
 
 # Credits
