@@ -17,40 +17,40 @@ Cet article présente la construction de données au niveau des parcelles cadast
 
 # Table of Contents
 
-1.  [Introduction](#org811c935)
+1.  [Introduction](#org81fd840)
 2.  [Construction des données](#Sec:1)
-    1.  [Les AOC au niveau des parcelles](#orgc34aa2c)
-    2.  [Enrichissement de la topographie](#orged4ffb6)
-    3.  [Enrichissement de la géologie](#orgde0f4eb)
-    4.  [Enrichissement de la pédologie](#org7a98c4a)
-    5.  [Enrichissement des AOC de 1936](#org60981b1)
-    6.  [Enrichissement des lieux dits](#orgc495df5)
-    7.  [Enregistrement de la base](#org7a576ab)
+    1.  [Les AOC au niveau des parcelles](#org058c015)
+    2.  [Enrichissement de la topographie](#org6416e5e)
+    3.  [Enrichissement de la géologie](#org250e0de)
+    4.  [Enrichissement de la pédologie](#orgaf37db9)
+    5.  [Enrichissement des AOC de 1936](#org0b4765b)
+    6.  [Enrichissement des lieux dits](#org68d148d)
+    7.  [Enregistrement de la base](#org9645ab8)
 3.  [Statistiques descriptives](#Sec:2)
-    1.  [Filtrage des données](#org658fcc9)
-    2.  [Distribution des AOC](#org641d31d)
-    3.  [Les AOC historiques](#orga00ef6a)
-    4.  [Autre graphique](#org12ee81b)
-    5.  [yop](#org348f691)
+    1.  [Filtrage des données](#org13b0438)
+    2.  [Distribution des AOC](#org0ab47da)
+    3.  [Les AOC historiques](#orga74de4d)
+    4.  [Autre graphique](#orgad6a806)
+    5.  [yop](#org5967e04)
 4.  [Modèle économétrique](#Sec:3)
-    1.  [Estimation du modèle](#org67e8206)
-    2.  [Variables biophysiques](#org2c8d04c)
-    3.  [Effets communaux](#orgc1b17cd)
-    4.  [Prédiction continue](#org357fab7)
+    1.  [Estimation du modèle](#org6ddf2a2)
+    2.  [Variables biophysiques](#org653fc11)
+    3.  [Effets communaux](#orgd7979db)
+    4.  [Prédiction continue](#org27c4db0)
 5.  [Application cartographique](#Sec:4)
-    1.  [Agrégation par lieux dits](#orgba8ba98)
-    2.  [Cartographie dynamique](#org5f32ea2)
-    3.  [Interface utilisateur](#org4e410b2)
-    4.  [Calculs serveur](#orgde1a8e8)
-    5.  [Lancement de l'application](#orgb81b863)
+    1.  [Agrégation par lieux dits](#org26a4e60)
+    2.  [Cartographie dynamique](#orgae1e65b)
+    3.  [Interface utilisateur](#orgee72077)
+    4.  [Calculs serveur](#org5ebf38b)
+    5.  [Lancement de l'application](#org3070b1b)
 6.  [Conclusion](#Sec:5)
 7.  [Bibliographie](#Sec:6)
 8.  [Annexes](#Sec:A)
 
 
-<a id="org811c935"></a>
+<a id="org81fd840"></a>
 
-# <a id="org9fb4a43"></a> Introduction
+# <a id="orgcec1da1"></a> Introduction
 
 Les appellations d'origine contrôlée (AOC) viticoles en Bourgogne résultent de processus historiques complexes au cours desquels les parcelles de vigne ont été classifiées selon leurs caractéristiques biophysiques et les rapports économiques, politiques et sociaux en vigueur <sup id="121170804c03a6ffd9b6598b03e5ae59"><a href="#Garc11" title="Garcia, Les \emph{climats} du vignoble de {B}ourgogne comme patrimoine mondial de l'humanit{\'e}, Ed. Universitaires de Dijon (2011).">Garc11</a></sup><sup>,</sup><sup id="7e3cc4e952baf2ace29bc97117ad514c"><a href="#WJac11" title="Wolikow \&amp; Jacquet, Territoires et terroirs du vin du XVIIIe au XXIe si&#232;cles, &#201;ditions Universitaires de Dijon (2011).">WJac11</a></sup>. La classification actuelle est issue de plusieurs siècles de culture de la vigne, de production de vin et de négociation sur les dénominations. Ces trois ensembles de pratiques forment les usages loyaux et constants définis dans la doctrine de l'institut national de l'origine et de la qualité (INAO) qui est elle-même un processus historique <sup id="95abb746101aa32ae2b154f5bdee7ad0"><a href="#Capu47" title="Capus, L'{\'E}volution de la l{\'e}gislation sur les appellations d'origine. Gen{\`e}se des appellations contr{\^o}l{\'e}es, L. Larmat (1947).">Capu47</a></sup><sup>,</sup><sup id="36d1387edd76d672ddb30e2817a44c44"><a href="#Humb11" title="@phdthesis{Humb11, title={L'INAO, de ses origines {\`a} la fin des ann{\'e}es 1960: gen{\`e}se et {\'e}volutions du syst{\`e}me des vins d'AOC}, author={Humbert, Florian}, year={2011}, school={Universit{\'e} de Bourgogne} }">Humb11</a></sup>. La complexité des informations contenues dans la référence au lieu de production et leur évolution dans le temps sont à la fois la force et la faiblesse des AOC, car elles permettent de simplifier les nombreux déterminants de la qualité des vins au risque d'une faible pertinence et d'une opacité croissante pour les acteurs des marchés du vin.
 
@@ -68,7 +68,7 @@ La base de données utilisée pour estimer le modèle est disponible en shapefil
 # Construction des données
 
 
-<a id="orgc34aa2c"></a>
+<a id="org058c015"></a>
 
 ## Les AOC au niveau des parcelles
 
@@ -90,7 +90,7 @@ sapply(Geo.Cad@data, function(x) sum(is.na(x)))
        BOUR    VILL    COMM    PCRU    GCRU     AOC   AOCtp   AOClb 
       49718   49718   49718   49718   49718       0   49718   49718
 
-Ce fichier contient \(110\,350\) parcelles et 16 variables que la Table [1](#org9ea5506) suivante présente plus en détails. L'information brute issue de la superposition avec la couche INAO est présente dans les variables `PAOC` à `GCRU`. Les \(49\,718\) valeurs manquantes qui apparaissent en sortie correspondent aux parcelles hors AOC. Nous avons retravaillé cette information dans les trois variables qui suivent, plus opérationnelles pour l'analyse économétrique. En effet, selon le principe des replis, les parcelles d'un niveau hiérarchique supérieur peuvent être revendiquées dans un niveau inférieur. Cela produit la présence de plusieurs AOC sur une même parcelle selon les variables issues de la superposition des couches de l'INAO alors qu'il est interdit de revendiquer des AOC différentes. La variable `AOC` représente l'AOC maximale à laquelle la parcelle peut prétendre, elle est codée `0` pour les parcelles hors AOC, `1` pour les Coteaux Bourguignons, `2` pour les Bourgognes Régionaux, jusqu'à `5` pour les Grands Crus. Par contre, les informations présentes sur l'étiquette des vins peuvent être des appellations ou des dénominations au sein du système des AOC (même si cette distinction n'est pas toujours claires pour les individus, nous utilisons AOC comme le terme générique qui englobe les deux en précisant lorsque c'est nécessaire). Le libellé `AOClb` renvoi généralement l'appellation sauf pour les "Bourgognes Régionaux" (ou la dénomination "Bourgogne Côte d'Or" est prédominante) et les "Premiers Crus" (qui ont chacun une dénomination qui permet de les distinguer). La commande `table(Geo.Cad$AOC, Geo.Cad$AOCtp)` permet de rendre compte de cette structuration de ces variables.
+Ce fichier contient \(110\,350\) parcelles et 16 variables que la Table [1](#orgb91b4c4) suivante présente plus en détails. L'information brute issue de la superposition avec la couche INAO est présente dans les variables `PAOC` à `GCRU`. Les \(49\,718\) valeurs manquantes qui apparaissent en sortie correspondent aux parcelles hors AOC. Nous avons retravaillé cette information dans les trois variables qui suivent, plus opérationnelles pour l'analyse économétrique. En effet, selon le principe des replis, les parcelles d'un niveau hiérarchique supérieur peuvent être revendiquées dans un niveau inférieur. Cela produit la présence de plusieurs AOC sur une même parcelle selon les variables issues de la superposition des couches de l'INAO alors qu'il est interdit de revendiquer des AOC différentes. La variable `AOC` représente l'AOC maximale à laquelle la parcelle peut prétendre, elle est codée `0` pour les parcelles hors AOC, `1` pour les Coteaux Bourguignons, `2` pour les Bourgognes Régionaux, jusqu'à `5` pour les Grands Crus. Par contre, les informations présentes sur l'étiquette des vins peuvent être des appellations ou des dénominations au sein du système des AOC (même si cette distinction n'est pas toujours claires pour les individus, nous utilisons AOC comme le terme générique qui englobe les deux en précisant lorsque c'est nécessaire). Le libellé `AOClb` renvoi généralement l'appellation sauf pour les "Bourgognes Régionaux" (ou la dénomination "Bourgogne Côte d'Or" est prédominante) et les "Premiers Crus" (qui ont chacun une dénomination qui permet de les distinguer). La commande `table(Geo.Cad$AOC, Geo.Cad$AOCtp)` permet de rendre compte de cette structuration de ces variables.
 
 | NOM       |  | TYPE          |  | DESCRIPTION                                                             |
 |--------- |--- |------------- |--- |----------------------------------------------------------------------- |
@@ -112,7 +112,7 @@ Ce fichier contient \(110\,350\) parcelles et 16 variables que la Table [1](#org
 | `AOClb`   |  | *Caractère*   |  | Libellé de l'appelation ou de la dénomination selon la variable `AOCtp` |
 
 
-<a id="orged4ffb6"></a>
+<a id="org6416e5e"></a>
 
 ## Enrichissement de la topographie
 
@@ -134,7 +134,7 @@ sapply(Geo.Ras@data[, 17: 26], function(x) sum(is.na(x))); rm(Dat.Ras)
       XL93   YL93  NOMOS  URBAN FOREST  WATER    DEM  SLOPE ASPECT  SOLAR 
       2096   2096   2096   2096   2096   2096   2096   2096   2096   2096
 
-Le détails des variables issue du fichier raster est disponible dans la Table [2](#org272b6ea) ci-dessous. Nous obtenons \(2\,096\) valeurs manquantes pour lesquelles le code `PAR2RAS` des parcelles ne s'apparie à aucune cellule raster. Ces parcelles sont de très petites parcelles avec des géométrie particulières et font penser à des "erreurs" du cadastre. Nous les enlèverons de l'analyse sachant que cela revient à enlever 2.7 ha, moins de 0.01 % de la surface totale. Nous n'utilisons qu'un sous ensemble du MOS principalement afin de distinguer le non agricole.
+Le détails des variables issue du fichier raster est disponible dans la Table [2](#orgd8a4030) ci-dessous. Nous obtenons \(2\,096\) valeurs manquantes pour lesquelles le code `PAR2RAS` des parcelles ne s'apparie à aucune cellule raster. Ces parcelles sont de très petites parcelles avec des géométrie particulières et font penser à des "erreurs" du cadastre. Nous les enlèverons de l'analyse sachant que cela revient à enlever 2.7 ha, moins de 0.01 % de la surface totale. Nous n'utilisons qu'un sous ensemble du MOS principalement afin de distinguer le non agricole.
 
 | NOM      |  | TYPE        |  | DESCRIPTION                                                          |
 |-------- |--- |----------- |--- |-------------------------------------------------------------------- |
@@ -151,7 +151,7 @@ Le détails des variables issue du fichier raster est disponible dans la Table [
 | `PERMEA` |  | *Numérique* |  | Perméabilité des sols moyenne (entre 0 et 4)                         |
 
 
-<a id="orgde0f4eb"></a>
+<a id="org250e0de"></a>
 
 ## Enrichissement de la géologie
 
@@ -176,7 +176,7 @@ sapply(Geo.Ras@data[, 28: 43], function(x) sum(is.na(x)))
         DURETE  ENVIRONMT  GEOCHIMIE   LITHOCOM 
             69         31         31         69
 
-Les détails des 16 variables géologiques issues de la procédure sont disponibles dans la Table [3](#org241e5b5) suivante. La description des variables manque de détails car les données géologiques ne possèdent pas encore de dictionnaire (une demande est en cours auprès du BRGM). Ce manque de détails n'est pas fondamental pour l'analyse économétrique (il peut l'être pour d'autres usages des données) car les variables géologiques ne sont utilisés qu'au travers d'effets fixes qui correspondent à la technique la plus générale. Cela permet de contrôler l'hétérogénéité des parcelles sans avec à spécifier le rôle des caractéristiques géologiques, au prix d'une interprétation moindre. Les parcelles non appariées qui produisent des valeurs manquantes sont peut nombreuses (entre 31 et 862 selon les variables) et seront négligées dans l'analyse économétrique sans conséquence.
+Les détails des 16 variables géologiques issues de la procédure sont disponibles dans la Table [3](#org36ac0e9) suivante. La description des variables manque de détails car les données géologiques ne possèdent pas encore de dictionnaire (une demande est en cours auprès du BRGM). Ce manque de détails n'est pas fondamental pour l'analyse économétrique (il peut l'être pour d'autres usages des données) car les variables géologiques ne sont utilisés qu'au travers d'effets fixes qui correspondent à la technique la plus générale. Cela permet de contrôler l'hétérogénéité des parcelles sans avec à spécifier le rôle des caractéristiques géologiques, au prix d'une interprétation moindre. Les parcelles non appariées qui produisent des valeurs manquantes sont peut nombreuses (entre 31 et 862 selon les variables) et seront négligées dans l'analyse économétrique sans conséquence.
 
 | NOM          |  | TYPE        |  | DESCRIPTION                              |
 |------------ |--- |----------- |--- |---------------------------------------- |
@@ -198,7 +198,7 @@ Les détails des 16 variables géologiques issues de la procédure sont disponib
 | `LITHOCOM`   |  | *Caractère* |  | Litho détaillée (30 modalités)           |
 
 
-<a id="org7a98c4a"></a>
+<a id="orgaf37db9"></a>
 
 ## Enrichissement de la pédologie
 
@@ -222,7 +222,7 @@ sapply(Geo.Ras@data[, 44: 56], function(x) sum(is.na(x)))
        RUD  OCCUP DESCRp 
      14645  14645  14645
 
-Les détails des 13 variables pédologiques issues de la procédure sont disponibles dans la Table [4](#orgd043aa5) suivante. Les valeurs manquantes associées aux parcelles non couvertes par la pédologie sont \(14\,645\), soit XX %. Ces parcelle correspondent visuellement aux espaces urbanisés bien que cela ne se retrouve pas vraiment à partir du MOS. A DECIDER.
+Les détails des 13 variables pédologiques issues de la procédure sont disponibles dans la Table [4](#org460a9ff) suivante. Les valeurs manquantes associées aux parcelles non couvertes par la pédologie sont \(14\,645\), soit XX %. Ces parcelle correspondent visuellement aux espaces urbanisés bien que cela ne se retrouve pas vraiment à partir du MOS. A DECIDER.
 
 | NOM      |  | TYPE        |  | DESCRIPTION                                                              |
 |-------- |--- |----------- |--- |------------------------------------------------------------------------ |
@@ -241,7 +241,7 @@ Les détails des 13 variables pédologiques issues de la procédure sont disponi
 | `DESCRp` |  | *Caractère* |  | Libellé de la classe pédologique en 33 modalités                         |
 
 
-<a id="org60981b1"></a>
+<a id="org0b4765b"></a>
 
 ## Enrichissement des AOC de 1936
 
@@ -268,7 +268,7 @@ Nous obtenons des aires sensiblement plus réduites que les actuelles, 27% au li
 | `AOC36lvl` |  | *Caractère* |  | Rang de la parcelle dans la hiérarchie des AOC (entre 0 et 5) |
 
 
-<a id="orgc495df5"></a>
+<a id="org68d148d"></a>
 
 ## Enrichissement des lieux dits
 
@@ -306,7 +306,7 @@ Pour 4% des parcelles, aucun lieu dit n'a été apparié. Ces parcelles se conce
 | `REGION`   |  | *Caractère* |  | Region viticole (`CDB` Côte de Beaune, `CDN` Côte de Nuits)     |
 
 
-<a id="org7a576ab"></a>
+<a id="org9645ab8"></a>
 
 ## Enregistrement de la base
 
@@ -326,7 +326,7 @@ writeOGR(Geo.Ras, "Carto/", "GeoRas", driver= "ESRI Shapefile")
 # Statistiques descriptives
 
 
-<a id="org658fcc9"></a>
+<a id="org13b0438"></a>
 
 ## Filtrage des données
 
@@ -360,7 +360,7 @@ dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
 La limitation aux parcelle ayant des AOC contribue largement à la diminution du nombre d'information (perte de XX contre XX pour les valeurs manquantes).
 
 
-<a id="org641d31d"></a>
+<a id="org0ab47da"></a>
 
 ## Distribution des AOC
 
@@ -380,7 +380,7 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
          data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
          par.settings= list(superpose.polygon= list(col= my.pal)),
          auto.key= list(space= "top", points= F, rectangles= T, columns= 5,
-                        text=c("Hors AOC", "Coteaux b.", "Bourgogne",
+                        text=c("Coteaux b.", "Bourgogne",
                                "Village", "Premier cru", "Grand cru")),
          panel=function(x, y, ...) {
              panel.grid(h= 0, v = -11, col= "grey60")
@@ -391,14 +391,14 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
 <./Figures/InterGIs.pdf>
 
 
-<a id="orga00ef6a"></a>
+<a id="orga74de4d"></a>
 
 ## Les AOC historiques
 
 Hiérachisation des données historiques par les nom de crus et s'il sont présents dans les nouvelles données.
 
 
-<a id="org12ee81b"></a>
+<a id="orgad6a806"></a>
 
 ## Autre graphique
 
@@ -420,7 +420,7 @@ ggplot(ddd, aes(x= AOC, y= SURFACES, fill= REGION))+
 <./Figures/PyramGIs.pdf>
 
 
-<a id="org348f691"></a>
+<a id="org5967e04"></a>
 
 ## yop
 
@@ -430,7 +430,7 @@ ggplot(ddd, aes(x= AOC, y= SURFACES, fill= REGION))+
 # Modèle économétrique
 
 
-<a id="org67e8206"></a>
+<a id="org6ddf2a2"></a>
 
 ## Estimation du modèle
 
@@ -484,7 +484,7 @@ anova(gam900)
 Effets des variables et pourcentages de bonnes prédictions.
 
 
-<a id="org2c8d04c"></a>
+<a id="org653fc11"></a>
 
 ## Variables biophysiques
 
@@ -499,7 +499,7 @@ plot(gamodM$gam700, page= 1, scale= 0)
 Des Figures plus détaillées sont reportées dans l'article associé.
 
 
-<a id="orgc1b17cd"></a>
+<a id="orgd7979db"></a>
 
 ## Effets communaux
 
@@ -525,7 +525,7 @@ segplot(reorder(factor(LIBCOM), OS)~ OSi+ OSa, length= 5, draw.bands= T,
 Mesure de supériorité ordinale blabla. Attention, ce n'est pas la même incertitude qui est représentée que dans le graphique du papier associé.
 
 
-<a id="org357fab7"></a>
+<a id="org27c4db0"></a>
 
 ## Prédiction continue
 
@@ -586,7 +586,7 @@ Regarder comment la distinction entre les premiers crus et les grands se restrei
 # Application cartographique
 
 
-<a id="orgba8ba98"></a>
+<a id="org26a4e60"></a>
 
 ## Agrégation par lieux dits
 
@@ -642,7 +642,7 @@ save(Poly.Ras, file= "Inter/PolyRas.Rda")
 Sauvegarde disponible sur le serveur de l'INRA.
 
 
-<a id="org5f32ea2"></a>
+<a id="orgae1e65b"></a>
 
 ## Cartographie dynamique
 
@@ -670,7 +670,7 @@ map <- mapview(Poly.Ras, zcol= "NIVEAU", label= Poly.Ras$NOM,
 ```
 
 
-<a id="org4e410b2"></a>
+<a id="orgee72077"></a>
 
 ## Interface utilisateur
 
@@ -720,7 +720,7 @@ ui <- dashboardPage(
 ```
 
 
-<a id="orgde1a8e8"></a>
+<a id="org5ebf38b"></a>
 
 ## Calculs serveur
 
@@ -793,7 +793,7 @@ server <- function(input, output, session) {
 ```
 
 
-<a id="orgb81b863"></a>
+<a id="org3070b1b"></a>
 
 ## Lancement de l'application
 

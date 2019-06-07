@@ -32,9 +32,6 @@
 
 # https://www.youtube.com/watch?v=FVibThj9v6Y
 # https://www.youtube.com/watch?v=L6vnJIMwLSQ
-# https://github.com/davesteps/geoExploreR
-# https://github.com/wowChelios/BrazilianEcommerce/blob/master/analysis.R
-# https://paula-moraga.github.io/tutorial-shiny-spatial/
 # https://www6.inra.fr/datapartage/Partager-Publier/Deposer-dans-Data-Inra2,
 # https://www.sfedit.net
 # https://www.comeetie.fr/
@@ -43,7 +40,7 @@
 # prediction equations for simulations 
 
 # Manque les coteaux bourguignons à Chambolle et chassagnen c'est
-# peut-etre les lieux dits.
+# peut-etre que ça part au moment des lieux dits.
 
 # attention sur les degrés de liberté sur les splines spatiales entre
 # les modèles auxiliaires et les modèles avec les communes.
@@ -54,42 +51,41 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
-*** Une classification statistique des vignes de la Côte d'Or
+*** Classification statistique du vignoble en Côte d'Or
 
 [[file:Figures/Capture.png]]
 
 *** English version
 
-    Modeling statistically the link between biophysical attributes of
+    Modeling statistically the link between natural attributes of
     vineyards and the hierarchical scheme of /appellations d'origine
     contrôlée/ allows to estimate a continuous quality score for each
     plot with corrected /commune/ effects.
 
-    This research is described in the [[file:WorkingPaper.pdf][AAWE working Paper XX]] and
-    associated reproducibility file in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]].  Raw data are
-    on an [[https://www6.inra.fr/datapartage/][INRA dataverse repository]] and the results are accessible through
-    a [[https://geoind-wine.firebaseapp.com][Shiny application]].
+    This research is described in the [[file:WorkingPaper.pdf][AAWE Working Paper XX]] and
+    associated Reproducibility Material in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]].  Raw data
+    are on an [[https://www6.inra.fr/datapartage/][INRA dataverse repository]] and the results are accessible
+    through a [[https://geoind-wine.firebaseapp.com][Shiny application]].
 
 *** Version Française
 
-    La modélisation statistique des liens entre les attributs
-    biophysiques des vignes et la hiérarchie des appellations
-    d'origine contrôlées permet d'estimer un score continu de qualité
-    pour chaque parcelle et de corriger les effets communaux.
+    La modélisation statistique des liens entre les attributs naturels
+    des vignobles et la hiérarchie des appellations d'origine
+    contrôlées permet d'estimer un score de qualité pour chaque
+    parcelle et de corriger les effets communaux.
 
-    Les détails de la construction des données, de l'estimation du
-    modèle et de l'utilisation de l'application sont disponibles en
-    versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données brutes sont accessibles sur
-    [[https://www6.inra.fr/datapartage/][le serveur de l'INRA]] et les résultats sont consultables via [[https://geoind-wine.firebaseapp.com][une
-    application cartographique]].
+    Les détails de la construction des données et de l'estimation du
+    modèle sont disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données
+    brutes sont accessibles sur [[https://www6.inra.fr/datapartage/][le serveur data de l'INRA]] et les
+    résultats sont consultables par [[https://geoind-wine.firebaseapp.com][une application cartographique]].
 
 *** Credits
 
-    Bug reports, comments and suggestions by opening an issue or
-    [[mailto:jsay@inra.fr][sending an email]].
+    Bug reports, comments and suggestions by opening an issue
+    (preferred) or [[mailto:jsay@inra.fr][sending an email]].
     
 
-    Made on =emacs= =org-mode= to juggle with =R=, =LaTex= and
+    Made on =emacs= with =org-mode= to juggle with =R=, =LaTex= and
     =Markdown=.
 
     Special thanks to XX.
@@ -1398,7 +1394,7 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
          data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
          par.settings= list(superpose.polygon= list(col= my.pal)),
          auto.key= list(space= "top", points= F, rectangles= T, columns= 5,
-                        text=c("Hors AOC", "Coteaux b.", "Bourgogne",
+                        text=c("Coteaux b.", "Bourgogne",
                                "Village", "Premier cru", "Grand cru")),
          panel=function(x, y, ...) {
              panel.grid(h= 0, v = -11, col= "grey60")
@@ -1406,6 +1402,7 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
              ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))})
 #+end_src
 
+#+CAPTION: *Distribution des niveaux des AOC entre les communes*
 #+ATTR_LATEX: :options scale= .5
 #+RESULTS:
 [[file:./Figures/InterGIs.pdf]]
@@ -3123,8 +3120,8 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
   :EXPORT_LATEX_CLASS:  ManueStat
   :EXPORT_LANGUAGE:     en
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
-  :EXPORT_TITLE:        @@latex: \textbf{The Informational Content of Geographical Indications}\\[.5cm] @@
-  :EXPORT_AUTHOR:       @@latex: \textsc{Jean-Sauveur Ay}\footnote{\url{jsay@inra.fr}, UMR CESAER, AgroSup, INRA, Univ. Bourgogne Franche-Comté, 26 bd Dr Petitjean, 21000 Dijon (FR).} \\[.15cm] INRA UMR CESAER @@
+  :EXPORT_TITLE:        @@latex: \vspace{-1cm} The informational content of geographical indications@@
+  :EXPORT_AUTHOR:       @@latex: Jean-Sauveur AY\footnote{\url{jsay@inra.fr}, UMR CESAER, AgroSup, INRA, Univ. Bourgogne Franche-Comté, 26 bd Dr Petitjean, 21000 Dijon (FR).} \\[.15cm] INRA UMR CESAER @@
   :EXPORT_DATE:         @@latex: Reproducibility Material Version 0.1 : \today @@
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc}\usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat}  \usepackage{tocloft} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm}
   :END:
@@ -3142,12 +3139,12 @@ author: |
 #+BEGIN_abstract
 This file contents the R codes associated with the paper "The
 informational content of geographical indications" AAWE Working Paper
-No XXX.  The data used are under licence Creative Commons Attribution
-Share Alike 4.0 International, available on the INRA dataverse
-website: https://data.inra.fr.  Some R functions are reported in the
-appendix to preserve the visibility of codes.  Additional elements and
-last version of the document are available from
-https://github.com/jsay/geoInd.
+No XXX.  Data, code and results are under the copyleft licence GNU GPL
+V3 (licence notices must be preserved).  Data are available from the
+INRA dataverse website: https://data.inra.fr/geoInd.  Some R functions
+are reported in the Appendix to preserve the visibility of codes.  The
+most recent version of this document and a Shiny application are
+available from the online repository: https://github.com/jsay/geoInd.
 #+END_abstract
 #+TOC: headlines 3
 ** Simulation                                :noexport:
@@ -3256,106 +3253,134 @@ save(PolyVine, file= "Inter/PolyVine.Rda")
 #+end_src
 
 ** Descriptive Statistics
-*** Data consistency
+*** Data shaping
 
-    Data are available from the github repo, I put them in the folder
-    =/Inter=
+    The details of data construction are presented (in French) in the
+    data paper:
+    https://github.com/jsay/geoInd/blob/master/DataPaper.pdf which
+    also contains the metadata.  The file that results from these
+    preliminary treatments can be downloaded from the INRA dataverse
+    website: https://data.inra.fr/geoInd/GeoRas.Rda. The following
+    code allows to load the file once located in the =/Inter/= folder
+    at the root of the working directory of the R session.  It loads a
+    =SpatialPolygonDataFrame= object from the =sp= package that
+    contains the characteristics of the vineyard plots under
+    consideration (session information is reported at Section XX).
+
+    The following code also reshapes some variables of particular
+    interest:
+    - It reorders the /commune/ levels along the North-South gradient
+    - It computes the distance of each parcel from the /commune/
+      centers
+    - It standardizes the variable about solar radiation
+    - It recodes the variable about exposition in 8 quadrants
+    - It projects the geographical coordinates inside the WGS84 system
+    - It selects the parcels with GIs and drop omitted values 
 
 #+begin_src R :wrap example
-library(sp) ; load("Inter/PolyVine.Rda")
-Reg.Rank <- subset(PolyVine, PolyVine$PAOC!= 0 & 
-                   !is.na(PolyVine$DEM) & !is.na(PolyVine$LIBCOM))
-
-Reg.Rank$AOCc <- ifelse(Reg.Rank$GCRU== 1, 5,
-                 ifelse(Reg.Rank$PCRU== 1, 4,
-                 ifelse(Reg.Rank$VILL== 1 | Reg.Rank$COMM== 1, 3,
-                 ifelse(Reg.Rank$BOUR== 1, 2, 1))))
-tst <- Reg.Rank@data[, 12: 17]
-tst$COMM <- ifelse(tst$VILL== 1 | tst$COMM== 1, 1, 0)
-tst$VILL <- 0
-table(rowSums(tst), Reg.Rank$AOCc)
-
-
-tmp <- Reg.Rank$LIBCOM[order(Reg.Rank$YCHF, decreasing= TRUE)]
-Reg.Rank$LIBCOM <- factor(Reg.Rank$LIBCOM, levels= unique(tmp))
-Reg.Rank$RAYAT <- with(Reg.Rank@data, (SOLAR- mean(SOLAR))/ sd(SOLAR))
-Reg.Rank$EXPO <- cut(Reg.Rank$ASPECT,
-                     breaks= c(-2, 45, 90, 135, 180, 225, 270, 315, 360))
-sapply(Reg.Rank@data, function(x) sum(is.na(x)))
-#table(Reg.Old$LIBCOM, Reg.Old$AOCo)
+library(sp) ; load("Inter/GeoRas.Rda")
+tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
+Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
+Geo.Ras$DISTCHF <- sqrt((Geo.Ras$XL93- Geo.Ras$XCHF* 100)^2
+                        + (Geo.Ras$YL93- Geo.Ras$YCHF* 100)^2)
+Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
+    sd(Geo.Ras$SOLAR, na.rm= TRUE)
+Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT,
+                    breaks= c(-2, 45, 90, 135, 180, 225, 270, 315, 360))
+GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
+dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
+dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
+                      & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
-
-   
-        1     2     3     4     5
-  0   657     0     0     0     0
-  1  9110   195     0     1     0
-  2     0 15300     0     1     0
-  3     0     0 24052    88     0
-  4     0     0     0  8499     0
-  5     0     0     0     0  1906
-
-   PAR2RAS        IDU    CODECOM       AREA      PERIM    MAXDIST 
-         0          0          0          0          0          0 
-      PAOC       ALIG       BPTG       CREM       MOUS       BGOR 
-         0          0          0          0          0          0 
-      BOUR       VILL       COMM       PCRU       GCRU       XL93 
-         0          0          0          0          0          0 
-      YL93      NOMOS      URBAN     FOREST      WATER        DEM 
-         0          0          0          0          0          0 
-     SLOPE     ASPECT      SOLAR     PERMEA       CODE   NOTATION 
-         0          0          0          0         22         22 
-     DESCR  TYPE_GEOL  AP_LOCALE    TYPE_AP   GEOL_NAT   ISOPIQUE 
-        22         22        102        102         22         22 
-   AGE_DEB    ERA_DEB    SYS_DEB LITHOLOGIE     DURETE  ENVIRONMT 
-        22         22         22         22         32         22 
- GEOCHIMIE  LITHO_COM       NOUC      NO_UC   NO_ETUDE     SURFUC 
-        22         32        668        668        668        668 
-      TARG       TSAB       TLIM     TEXTAG      EPAIS        TEG 
-       668        668        668        668        668        668 
-       TMO        RUE        RUD       NOUS      OCCUP     DESCRp 
-       668        668        668        668        668        668 
-  AOC36lab   AOC36lvl    LIEUDIT     CLDVIN     LIBCOM       XCHF 
-        18         18          0          0          0          0 
-      YCHF     ALTCOM     SUPCOM     POPCOM   CODECANT     REGION 
-         0          0          0          0          0          0 
-         X          Y       AOCc      RAYAT       EXPO 
-         0          0          0          0          0
+[1] 59113    73
 #+end_example
+
+    The resulting object contains $59\,113$ vineyard plots with $73$
+    variables without omitted values.  All the information that is
+    needed to reproduce the econometric results are in the
+    =SpatialPolygonDataFrame=.
+
+#+Latex: \clearpage
+
+*** Geology and pedology 
+
+    The control of sub-soil and soil characteristics is made with
+    fixed effects that is the more general way knowing the raw spatial
+    resolution of these data.  A too small number of observation can
+    be a problem for the estimation, we choose to include a fixed
+    effects only for polygons with more than $1\,000$ vineyard plots.
+    This recodage is made     
+
+#+begin_src R
+Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
+tmp <- table(Reg.Ras$NOTATION)< 1000
+Geo.Ras$GEOL <- factor(
+    ifelse(Geo.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
+           as.character(Geo.Ras$NOTATION)))
+Reg.Ras$NOUC <- factor(Reg.Ras$NOUC)
+tmp <- table(Reg.Ras$NOUC)< 1000
+Geo.Ras$PEDO <- factor(
+    ifelse(Geo.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
+           as.character(Geo.Ras$NOUC)))
+Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
+                  & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION))
+
+
+library(maptools) ; library(rgeos) ; library(RColorBrewer)
+tmp_geol <- gBuffer(Geo.Ras, byid= TRUE, width= 0)
+geol <- unionSpatialPolygons(tmp_geol, Geo.Ras$GEOL)
+pedo <- unionSpatialPolygons(tmp_geol, Geo.Ras$PEDO)
+
+qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
+                           rownames(qual_col_pals)))
+mycol <- sample(col_vector, length(unique(Reg.Ras$GEOL))+
+                            length(unique(Reg.Ras$PEDO)))
+
+par(mar = c(0, 0, 0, 0))
+plot(pi, col= mycol)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
+
+plot(geol, col= mycol)
+plot(pedo, col= mycol)
+#+end_src
 
 *** Crossing GIs dimensions
 
-    The interaction between the horizontal (/communes/) and the
-    horizontal (/ranking/) dimension of GIs is assessed through the
-    following Figure, which corresponds to Figure XX in the working
-    paper.
+    The GIs on the area of interest contains both an horizontal
+    (/communes/) and a vertical (/ranking/) dimension.  The balance of
+    the distribution can be assessed with the following Figure, which
+    is Figure 3 (p.36) in the working paper.
 
 #+begin_src R :results graphics :height 9 :width 13 :file "./Figures/CrossGIs.pdf"
-library(lattice)
-fig.dat <- aggregate(model.matrix(~0+ factor(Reg.Rank$AOCc))*
-                     Reg.Rank$AREA/ 1000, by= list(Reg.Rank$LIBCOM), sum)
+library(lattice) ; library(RColorBrewer)
+fig.dat <- aggregate(model.matrix(~0+ factor(Reg.Ras$AOC))*
+                     Reg.Ras$AREA/ 1000, by= list(Reg.Ras$LIBCOM), sum)
 names(fig.dat) <- c("LIBCOM", "BGOR", "BOUR", "VILL", "PCRU", "GCRU")
-fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, levels= rev(levels(fig.dat$LIBCOM)))
+fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, lev= rev(levels(fig.dat$LIBCOM)))
 fig.crd <- t(apply(fig.dat[, -1], 1, function(t) cumsum(t)- t/2))
 fig.lab <- round(t(apply(fig.dat[, -1], 1, function(t) t/ sum(t)))* 100)
-barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10500),
-         xlab="Vineyards designated as Geographical Indications (hectare)",
-         data= fig.dat, horiz= T, stack= T, col= my.pal, border= "blue",
+my.pal <- brewer.pal(n= 9, name = "BuPu")[ 2: 8]
+barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
+         xlab="Vineyards delineated as Geographical Indications (hectare)",
+         data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
          par.settings= list(superpose.polygon= list(col= my.pal)),
-         auto.key= list(space= "top", points= F, rectangles= T, #corner= c(.85, 0.5)
-	                columns= 5,
+         auto.key= list(space= "top", points= F, rectangles= T, columns= 5,
                         text=c("Coteaux b.", "Bourgogne",
                                "Village", "Premier cru", "Grand cru")),
          panel=function(x, y, ...) {
              panel.grid(h= 0, v = -11, col= "grey60")
              panel.barchart(x, y, ...)
-             ltext(fig.crd, y,
-                   lab= ifelse(fig.lab> 0, fig.lab, ""))}) #paste0(fig.lab, "%")
+             ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))})
 #+end_src
 
-#+ATTR_LATEX: :options scale= .5
+#+CAPTION: *Cross distribution of GI levels among communes*
+#+ATTR_LATEX: :options scale= .45
 #+RESULTS:
 [[file:./Figures/CrossGIs.pdf]]
 
@@ -3530,12 +3555,13 @@ table(RegRank$Cp10)
 ** Models of GI designation
 *** Parametric ordered logit
 
-   Benchmark parametric ordered logistic model, =por1= corresponds to
-   model ( 0 ) of Table XX in the working paper.  Model =por1a= is the
-   auxiliary regression used to test the presence of omitted /terroir/
-   effect.  Model =por1b= is also an auxiliary regression to compute
-   the Fisher statistics associated to spatial smoothing terms in
-   Table XX.
+   We first estimate the benchmark parametric ordered logistic model
+   =polm1= that corresponds to model ( 0 ) of Table 1 in the working
+   paper.  Model =polm1a= is the auxiliary regression used to test the
+   presence of omitted /terroir/ effect.  Model =polm1b= is also
+   auxiliary to compute the Fisher statistics associated to spatial
+   smoothing terms in Table 1.  We use the standard =polr= function
+   from =MASS= package.
 
 #+begin_src R :wrap example
 library(MASS)
@@ -3548,6 +3574,25 @@ por1a <- polr(factor(AOCc)~ 0 + EXPO
 por1b <- polr(factor(AOCc)~ 0+ LIBCOM+ EXPO
               + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
             , data= Reg.Rank, Hess= TRUE)
+
+
+library(mgcv) ; load("Inter/gamodM.Rda")
+## system.time(
+##
+gam900 <- gam(AOC~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
+##
++ s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= 900)
+##
+, data= Reg.Ras, family= ocat(R= 5))
+## )
+## utilisateur
+système
+écoulé
+##
+32271.43
+93.78
+32366.00
+## save(gam900, file= "Inter/gam900.Rda")
 
 qor1 <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO
              + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
@@ -5304,9 +5349,94 @@ loaded via a namespace (and not attached):
 [46] haven_1.1.2
 #+end_example
 
-#+LATEX: \appendix
+#+LATEX: \clearpage\appendix
 
 ** Custom functions
+*** Translation of geology
+
+#+begin_src R :tangle ./myFcts.R
+trans_geol <- data.frame(
+    GEOL= Reg.Ras$GEOL[!duplicated(Reg.Ras$GEOL)],
+    GEOf= c(
+        "Calcaires massifs de \"Comblanchien\" (Bathonien sup.)",
+        "Marnes et calcaires divers (Callovien inférieur)",
+        "Marnes et calcaires argileux (Oxfordien moyen)",
+        "Eboulis ordonnés cryoclastiques et colluvions diverses",
+        "Oolithe ferrugineuse (Oxfordien moyen-sup)",
+        "Calcaires hydrauliques de Molesmes et Noiron (Oxfordien sup.)",
+        "Colluvions diverses",
+        "Dépôts argilo-limoneux, sables et graviers du Villafranchien",
+        "Calcaires de Tonnerre, Oisellemont et calcaires à Astartes",
+        "Eboulis et glissements de terrains",
+        "Calcaires grenus bicolores (Bathonien terminal)",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Formation de Saint-Cosme (marnes fluvio-lacustres varvées)",
+        "Alluvions anciennes indifférenciées, argilo-limoneuses",
+        "Calcaires bioclastiques, graveleux, à oolithes (Bathonien inf.)"
+    ),
+    GEOe= c(
+        "Massive limestones from \"Comblanchien\" (upper Bathonian)",
+        "Various marls and limestones (lower Callovian)",
+        "Marls and argillaceous limestones (middle Oxfordian)",
+        "Ordered cryoclastic scree and various colluviums",
+        "Ferruginous Oolite (middle-upper Oxfordian)",
+        "Hydraulic limestones of Molesmes and Noiron (upper Oxfordian)",
+        "Various colluviums",
+        "Clay-silt deposits, sand and gravel from Villafranchien",
+        "Limestones of Thunder, Oisellemont and limestones in Astartes",
+        "Screes and landslides",
+        "Two-tone gray limestones (terminal Bathonian)",
+        "Clay-silty terrace of Saint-Usage",
+        "Formation of Saint-Cosme (varnished fluvio-lacustrine marls)",
+        "Undifferentiated ancient alluvium, clay-silty",
+        "Bioclastic limestones, gravelly, with oolites (lower Bathonian)")
+)
+#+end_src
+
+#+LATEX: \clearpage
+
+*** Translation of pedology
+
+#+begin_src R  :tangle ./myFcts.R
+trans_pedo <- data.frame(
+    PEDO= Reg.Ras$PEDO[!duplicated(Reg.Ras$PEDO)],
+    PEDf= c(
+        "Vignoble de la Côte de de Beaune",
+        "Cônes de déjection du pied de Côte",
+        "Côteaux viticoles des Hautes Côtes de Nuits",
+        "Courtes pentes marneuses des plateaux plio-pléistocène",
+        "Piedmont de la côte viticole",
+        "Versants pentus des Hautes Côtes de Beaune",
+        "Sommets des collines des Hautes Côtes de Beaune",
+        "Alluvions récentes calcaires des vallées (Ouche, Tille, Meuzin)",
+        "Pentes liasiques du Haut-Auxois",
+        "Basses terrasses gravelo-caillouteuses des plaines alluviales",
+        "Basses terrasses argileuses des plaines alluviales",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Vignoble de la Côte de Nuits",
+        "Rebord oriental des plateaux calcaires dominant la Côte viticole"
+    ),
+    PEDe= c(
+        "Vineyard of the Côte de Beaune",
+        "Coot footing cones",
+        "Wine hills of Hautes Côtes de Nuits",
+        "Oxfordian limestone-marly trays of the Hautes Côtes",
+        "Short marly slopes of Plio-Pleistocene plateaus",
+        "Piedmont of the vineyard of the Côte",
+        "Sloping slopes of the Hautes Côtes de Beaune",
+        "Summits of the hills of the Hautes Côtes de Beaune",
+        "Recent alluvial limestone valleys (Ouche, Tille, Meuzin)",
+        "Liastic slopes of Haut-Auxois",
+        "Gravelo-stony low terraces of alluvial plains",
+        "Low clay terraces of alluvial plains",
+        "Vineyard of the Côte de Nuits",
+        "Eastern edge of the limestone plateaus overlooking the Côte"
+    )
+)
+#+end_src
+
+#+LATEX: \clearpage
+
 *** Surrogate Residuals
 **** Ordered Logit                           :noheading:
 
@@ -8358,7 +8488,6 @@ par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
 plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
 dev.off()
-
 #+end_src
 
 ** Pedology descriptive map
