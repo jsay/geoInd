@@ -5,9 +5,9 @@
 
 # English version
 
-Modeling statistically the relationships between biophysical attributes of vineyards and the hierarchical scheme of *appellations d'origine contrôlée* allows to estimate a continuous quality score for each vineyard plot and to correct *commune* effects.
+Modeling statistically the relationships between biophysical attributes of vineyards and the hierarchical scheme of *appellations d'origine contrôlée* allows to estimate a continuous quality score for each plot with corrected *commune* effects.
 
-The research is described in the [AAWE working Paper XX](WorkingPaper.pdf) and the associated reproducibility file in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md). Raw data are on the [INRA dataverse repo](https://www6.inra.fr/datapartage/) and the results are accessible through a [Shiny application](https://geoind-wine.firebaseapp.com).
+This research is described in the [AAWE working Paper XX](WorkingPaper.pdf) and associated reproducibility file in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md). Raw data are on an [INRA dataverse repository](https://www6.inra.fr/datapartage/) and the results are accessible through a [Shiny application](https://geoind-wine.firebaseapp.com).
 
 
 # Version Française
