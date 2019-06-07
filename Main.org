@@ -54,48 +54,49 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
-*** A statistical classification of Côte d'Or vineyards
-*** Une classification statistique des vignobles de Côte d'Or 
+*** Une classification statistique des vignes de la Côte d'Or
 
 [[file:Figures/Capture.png]]
 
 *** English version
 
-    Relating statistically biophysical attributes of vineyards to the
-    hierarchical scheme of /appellations d'origine contrôlée/ allows
-    to estimate a continuous quality score for each vineyard plots.
+    Modeling statistically the relationships between biophysical
+    attributes of vineyards and the hierarchical scheme of
+    /appellations d'origine contrôlée/ allows to estimate a continuous
+    quality score for each vineyard plot and to correct /commune/
+    effects.
 
-    This repo contains R code and Shiny application used to predict
-    vineyard quality in the /Côte de Beaune/ and /Côte de Nuits/
-    (Burgundy, France).
-
-   - [[file:WorkingPaper.pdf][Working paper]]
-   - Data: https://www6.inra.fr/datapartage/
-   - Code: [[file:ReproPaper.pdf][PDF version]] or [[file:ReproPaper.md][Markdown]]
-   - Dynamic carto: [[https://geoind-wine.firebaseapp.com]]
+    The research is described in the [[file:WorkingPaper.pdf][AAWE working Paper XX]] and the
+    associated reproducibility file in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]].  Raw data are
+    on the [[https://www6.inra.fr/datapartage/][INRA dataverse repo]] and the results are accessible through
+    a [[https://geoind-wine.firebaseapp.com][Shiny application]].
 
 *** Version Française
 
-    La corrélation statistique entre les attributs biophysiques des
-    vignobles et la structure hiérarchique des appellations d'origine
-    contrôlées permet d'estimer un score continu de qualité pour
-    chaque parcelle de vigne. 
+    La modélisation statistique des liens entre les attributs
+    biophysiques des vignes et la hiérarchie des appellations
+    d'origine contrôlées permet d'estimer un score continu de qualité
+    pour chaque parcelle et de corriger les effets communaux.
 
-    Ce répertoire contient la construction des données et des
-    procédures d'estimation en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données
-    sont accessible sur le serveur de l'INRA
-    https://www6.inra.fr/datapartage/ et les résultats sont
-    consultables par une application cartographique
-    [[https://geoind-wine.firebaseapp.com]].
+    Les détails de la construction des données, de l'estimation du
+    modèle et de l'utilisation de l'application sont disponibles en
+    versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données brutes sont accessibles sur
+    [[https://www6.inra.fr/datapartage/][le serveur de l'INRA]] et les résultats sont consultables via [[https://geoind-wine.firebaseapp.com][une
+    application cartographique]].
 
 *** Credits
 
-   Made on =emacs= =org-mode=, to interect with =R=, =LaTex=,
-   =Markdown=.
+    Bug reports, comments and suggestions by opening an issue or
+    [[mailto:jsay@inra.fr][sending an email]].
+    
 
-#+begin_export html
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-#+end_export
+    Made on =emacs= =org-mode= to juggle with =R=, =LaTex= and
+    =Markdown=.
+
+    Special thanks to XX.
+
+    Licence GNU GPL V3, Copyright and licence notices must be
+    preserved: https://www.gnu.org/licenses/gpl-3.0.en.html.
 
 * Data Papier
   :PROPERTIES:
