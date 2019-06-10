@@ -51,7 +51,7 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
-*** Classification statistique du vignoble en Côte d'Or
+*** Classification statistique des vignobles de Côte d'Or
 
 [[file:Figures/Capture.png]]
 
@@ -63,21 +63,21 @@
     plot with corrected /commune/ effects.
 
     This research is described in the [[file:WorkingPaper.pdf][AAWE Working Paper XX]] and
-    associated Reproducibility Material in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]].  Raw data
-    are on an [[https://www6.inra.fr/datapartage/][INRA dataverse repository]] and the results are accessible
-    through a [[https://geoind-wine.firebaseapp.com][Shiny application]].
+    associated Reproducibility Material in [[file:ReproPaper.pdf][PDF]] or [[file:ReproPaper.md][Markdown]].  Raw data
+    are on the [[https://www6.inra.fr/datapartage/][INRA dataverse server]] and the results are accessible
+    by a [[https://geoind-wine.firebaseapp.com][Shiny application]].
 
 *** Version Française
 
     La modélisation statistique des liens entre les attributs naturels
     des vignobles et la hiérarchie des appellations d'origine
-    contrôlées permet d'estimer un score de qualité pour chaque
+    contrôlée permet d'estimer un score de qualité pour chaque
     parcelle et de corriger les effets communaux.
 
-    Les détails de la construction des données et de l'estimation du
-    modèle sont disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données
-    brutes sont accessibles sur [[https://www6.inra.fr/datapartage/][le serveur data de l'INRA]] et les
-    résultats sont consultables par [[https://geoind-wine.firebaseapp.com][une application cartographique]].
+    Les détails de la construction des données et de l'estimation sont
+    disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données sont
+    accessibles sur [[https://www6.inra.fr/datapartage/][le serveur data de l'INRA]] et les résultats sont
+    consultables par [[https://geoind-wine.firebaseapp.com][une application cartographique]].
 
 *** Credits
 
@@ -91,7 +91,7 @@
     Special thanks to XX.
 
     Licence GNU GPL V3, Copyright and licence notices must be
-    preserved: https://www.gnu.org/licenses/gpl-3.0.en.html.
+    preserved (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 * Data Papier
   :PROPERTIES:
@@ -3258,20 +3258,20 @@ save(PolyVine, file= "Inter/PolyVine.Rda")
     The details of data construction are presented (in French) in the
     data paper:
     https://github.com/jsay/geoInd/blob/master/DataPaper.pdf which
-    also contains the metadata.  The file that results from these
-    preliminary treatments can be downloaded from the INRA dataverse
-    website: https://data.inra.fr/geoInd/GeoRas.Rda. The following
-    code allows to load the file once located in the =/Inter/= folder
-    at the root of the working directory of the R session.  It loads a
-    =SpatialPolygonDataFrame= object from the =sp= package that
-    contains the characteristics of the vineyard plots under
-    consideration (session information is reported at Section XX).
+    also contains the details of the variables used here.  The file
+    that results from these preliminary treatments can be downloaded
+    from the INRA dataverse server:
+    https://data.inra.fr/geoInd/GeoRas.Rda. The following code allows
+    to load this file once downloaded and located in the =/Inter/=
+    folder at the root of the working directory of the R session
+    (CHANGE).  It loads a =SpatialPolygonDataFrame= object from the
+    =sp= package that contains the characteristics of the vineyard
+    plots under consideration (session information used for this
+    article is reported at Section XX).
 
     The following code also reshapes some variables of particular
     interest:
     - It reorders the /commune/ levels along the North-South gradient
-    - It computes the distance of each parcel from the /commune/
-      centers
     - It standardizes the variable about solar radiation
     - It recodes the variable about exposition in 8 quadrants
     - It projects the geographical coordinates inside the WGS84 system
@@ -3279,14 +3279,10 @@ save(PolyVine, file= "Inter/PolyVine.Rda")
 
 #+begin_src R :wrap example
 library(sp) ; load("Inter/GeoRas.Rda")
-tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
-Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
-Geo.Ras$DISTCHF <- sqrt((Geo.Ras$XL93- Geo.Ras$XCHF* 100)^2
-                        + (Geo.Ras$YL93- Geo.Ras$YCHF* 100)^2)
-Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
-    sd(Geo.Ras$SOLAR, na.rm= TRUE)
-Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT,
-                    breaks= c(-2, 45, 90, 135, 180, 225, 270, 315, 360))
+Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels=
+              unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= T)]))
+Geo.Ras$RAYAT <- as.numeric(scale(Geo.Ras$SOLAR))
+Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT, breaks= c(-2, 1: 8* 45))
 GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
 dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
 dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
@@ -3295,67 +3291,75 @@ dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
 
 #+RESULTS:
 #+begin_example
-[1] 59113    73
+[1] 59113    72
 #+end_example
 
-    The resulting object contains $59\,113$ vineyard plots with $73$
-    variables without omitted values.  All the information that is
-    needed to reproduce the econometric results are in the
-    =SpatialPolygonDataFrame=.
+    The resulting object is a =SpatialPolygonDataFrame= that contains
+    $59\,113$ observations of vineyard plots with $72$ variables
+    without omitted values for each.
 
 #+Latex: \clearpage
 
 *** Geology and pedology 
 
-    The control of sub-soil and soil characteristics is made with
-    fixed effects that is the more general way knowing the raw spatial
-    resolution of these data.  A too small number of observation can
-    be a problem for the estimation, we choose to include a fixed
-    effects only for polygons with more than $1\,000$ vineyard plots.
-    This recodage is made     
+    Another preamble treatment is about the geological and pedological
+    variables to be included in regressions.  We control sub-soil and
+    soil characteristics with fixed effects, which is the more general
+    way knowing the raw spatial resolution of these data and the
+    numerous correlated variables that are available.  A too small
+    number of observation can nevertheless be a problem for the
+    convergence of the estimation, hence we choose to include a fixed
+    effects only for geological and pedological polygons with more
+    than $1\,000$ vineyard plots.  The details of this choice is
+    presented in the data paper mentioned above.
 
-#+begin_src R
+#+begin_src R :wrap example
 Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
 tmp <- table(Reg.Ras$NOTATION)< 1000
-Geo.Ras$GEOL <- factor(
-    ifelse(Geo.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
-           as.character(Geo.Ras$NOTATION)))
+Reg.Ras$GEOL <- factor(
+    ifelse(Reg.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
+           as.character(Reg.Ras$NOTATION)))
 Reg.Ras$NOUC <- factor(Reg.Ras$NOUC)
 tmp <- table(Reg.Ras$NOUC)< 1000
-Geo.Ras$PEDO <- factor(
-    ifelse(Geo.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
-           as.character(Geo.Ras$NOUC)))
-Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
-                  & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION))
-
-
-library(maptools) ; library(rgeos) ; library(RColorBrewer)
-tmp_geol <- gBuffer(Geo.Ras, byid= TRUE, width= 0)
-geol <- unionSpatialPolygons(tmp_geol, Geo.Ras$GEOL)
-pedo <- unionSpatialPolygons(tmp_geol, Geo.Ras$PEDO)
-
-qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
-                           rownames(qual_col_pals)))
-mycol <- sample(col_vector, length(unique(Reg.Ras$GEOL))+
-                            length(unique(Reg.Ras$PEDO)))
-
-par(mar = c(0, 0, 0, 0))
-plot(pi, col= mycol)
-par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
-plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
-legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
-
-plot(geol, col= mycol)
-plot(pedo, col= mycol)
+Reg.Ras$PEDO <- factor(
+    ifelse(Reg.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
+           as.character(Reg.Ras$NOUC)))
+apply(Reg.Ras@data[, c("GEOL", "PEDO")], 2, table)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+$GEOL
+
+0AREF     C     E    Fu    Fx    Fy    GP    j3   j3a   j3b   j4a 
+ 5208 19014  1997  1060  2142  1460  8372  1288  2570  2539  1531 
+  j5a   j5b   j6a  p-IV 
+ 3526  3928  3087  1391 
+
+$PEDO
+
+0AREF    13    14    26    28    29    30    32    34    35    36 
+ 3310  1553 17475  3718  8687  6241  4563  1802  1700  5255  1116 
+    5    69     8 
+ 1051  1484  1158
+#+end_example
+
+     The characteristics of sub-soils and soils are controlled with
+     respectively 14 and 13 fixed effects.  In each case, the
+     reference modality coded =0AREF= contains all the vineyards plots
+     from geological and pedological polygons without sufficient
+     observations.  Robustness checks have been made with other
+     threshold values without that changes the results.
+
+#+Latex: \clearpage
 
 *** Crossing GIs dimensions
 
-    The GIs on the area of interest contains both an horizontal
-    (/communes/) and a vertical (/ranking/) dimension.  The balance of
-    the distribution can be assessed with the following Figure, which
-    is Figure 3 (p.36) in the working paper.
+    The data are now ready for the analysis.  The GIs on the area of
+    interest contains both an horizontal (/communes/) and a vertical
+    (/ranking/) dimension.  The balance of the distribution can be
+    assessed with the following Figure, which corresponds to Figure 3
+    (p.36) in the working paper.
 
 #+begin_src R :results graphics :height 9 :width 13 :file "./Figures/CrossGIs.pdf"
 library(lattice) ; library(RColorBrewer)
@@ -3365,7 +3369,7 @@ names(fig.dat) <- c("LIBCOM", "BGOR", "BOUR", "VILL", "PCRU", "GCRU")
 fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, lev= rev(levels(fig.dat$LIBCOM)))
 fig.crd <- t(apply(fig.dat[, -1], 1, function(t) cumsum(t)- t/2))
 fig.lab <- round(t(apply(fig.dat[, -1], 1, function(t) t/ sum(t)))* 100)
-my.pal <- brewer.pal(n= 9, name = "BuPu")[ 2: 8]
+my.pal  <- brewer.pal(n= 9, name = "BuPu")[ 2: 8]
 barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
          xlab="Vineyards delineated as Geographical Indications (hectare)",
          data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
@@ -3560,49 +3564,20 @@ table(RegRank$Cp10)
    paper.  Model =polm1a= is the auxiliary regression used to test the
    presence of omitted /terroir/ effect.  Model =polm1b= is also
    auxiliary to compute the Fisher statistics associated to spatial
-   smoothing terms in Table 1.  We use the standard =polr= function
-   from =MASS= package.
+   smoothing terms in Table 1.  We use for this the standard =polr=
+   function from =MASS= package.
 
 #+begin_src R :wrap example
 library(MASS)
-por1 <- polr(factor(AOCc)~ 0+ LIBCOM+ EXPO
-             + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
-             + poly(X, 3)* poly(Y, 3), data= Reg.Rank, Hess= TRUE)
-por1a <- polr(factor(AOCc)~ 0 + EXPO
+polm1 <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
               + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
-              + poly(X, 3)* poly(Y, 3), data= Reg.Rank, Hess= TRUE)
-por1b <- polr(factor(AOCc)~ 0+ LIBCOM+ EXPO
-              + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
-            , data= Reg.Rank, Hess= TRUE)
-
-
-library(mgcv) ; load("Inter/gamodM.Rda")
-## system.time(
-##
-gam900 <- gam(AOC~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
-##
-+ s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= 900)
-##
-, data= Reg.Ras, family= ocat(R= 5))
-## )
-## utilisateur
-système
-écoulé
-##
-32271.43
-93.78
-32366.00
-## save(gam900, file= "Inter/gam900.Rda")
-
-qor1 <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO
-             + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
-             + poly(X, 3)* poly(Y, 3)+ GEOL+ PEDO, data= Reg.Ras, Hess= T)
-qor1a <- polr(factor(AOC)~ 0 + EXPO
-              + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
-              + poly(X, 3)* poly(Y, 3)+ GEOL+ PEDO, data= Reg.Ras, Hess= T)
-qor1b <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO
-              + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)+ GEOL+ PEDO
-            , data= Reg.Ras, Hess= TRUE)
+              + poly(X, 3)* poly(Y, 3), data= Reg.Ras, Hess= TRUE)
+polm1a <- polr(factor(AOC)~ 0+ EXPO+ GEOL+ PEDO
+               + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
+               + poly(X, 3)* poly(Y, 3), data= Reg.Ras, Hess= TRUE)
+polm1b <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
+               + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
+             , data= Reg.Ras, Hess= TRUE)
 #+end_src
 
 #+RESULTS:
@@ -3614,23 +3589,26 @@ Warning messages:
   le plan ne semble pas de rang plein, des coefs seront ignorés
 #+end_example
 
-   The warning messages are due to the lack of intercept that we force
-   to compute the ordinal superiority measures for each /communes/
-   below.  This has no impact on the quality of the ML estimators.
+   The warning messages are due to the choice to drop of intercept to
+   obtain a coefficient for each /commune/ (through the variable
+   =LIBCOM=) in order to compute the ordinal superiority measures.
+   They can be neglected as this has no impact on the estimation.
+
+#+Latex: \clearpage
 
 *** Ordered generalized additive 
 
-   The following code presents 2 loops that allow to estimate the OGAM
-   models of GIs designations.  Models (I) to ( V ) reported in Table
-   XX are only a subset of all models estimated here.  The =gamod=
-   object contents the full models, the =gammod= object contents the
-   auxiliary regression to test the omitted /terroir/ effects.
-   Because of the complexity of the models, each loop needs about 2
-   days to run (Dell Precision 7520, 64Go of RAM).  I advice the
-   reader to not run the loop entirely but pick some value of =listk=
-   for the maximum degree of freedom and run the models individually.
-   The objects =gamod.Rda= and =gammod.Rda= are available from the git
-   repo mentioned in the first page.
+   We then estimate the ordered generalized additive models (OGAMs) of
+   GIs designations with the following loop.  Models (I) to ( V )
+   reported in Table XX are only a subset of all models estimated
+   here.  The =gamod= object contents the full models, the =gammod=
+   object contents the auxiliary regression to test the omitted
+   /terroir/ effects.  Because of the complexity of the models, each
+   loop needs about 2 days to run (Dell Precision 7520, 64Go of RAM).
+   I advice the reader to not run the loop entirely but pick some
+   value of =listk= for the maximum degree of freedom and run the
+   models individually.  The objects =gamod.Rda= and =gammod.Rda= are
+   available from the git repo mentioned in the first page.
 
 #+begin_src R :wrap example
 library(mgcv)
@@ -3638,50 +3616,38 @@ listk <- c(50, 100, 200, 300, 400, 500, 600, 700, 800, 900)
 gamod <- vector("list", length(listk))
 system.time(
 for (i in 1: length(listk)){
-    gamod[[ i]] <- gam(AOCc~ 0+ LIBCOM+ EXPO+ s(DEM)+ s(SLOPE)+ s(RAYAT)
-                       + s(X, Y, k= listk[ i])
-                     , data= Reg.Rank, family= ocat(R= 5))
+    gamod[[ i]] <- gam(AOC~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
+                       + s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= listk[ i])
+                     , data= Reg.Ras, family= ocat(R= 5))
 })
 names(gamod) <- paste0("gam", listk)
 save(gamod, file= "Inter/gamod.Rda")
+## utilisateur     système      écoulé (<800)
+##     50121.5       215.5     50340.1
+## utilisateur     système      écoulé (800)
+##   30646.94        98.54    30748.57 
+## utilisateur     système      écoulé (900)
+##   32271.43        93.78    32366.00
 
 gammod <- vector("list", length(listk))
 system.time(
 for (i in 1: length(listk)){
-    gammod[[ i]] <- gam(AOCc~ 0+ EXPO+ s(DEM)+ s(SLOPE)+ s(RAYAT)
-                        + s(X, Y, k= listk[ i])
-                      , data= Reg.Rank, family= ocat(R= 5))
+    gammod[[ i]] <- gam(AOC~ 0+ EXPO+ GEOL+ PEDO
+                        + s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= listk[ i])
+                      , data= Reg.Ras, family= ocat(R= 5))
 })
 names(gammod) <- paste0("gam", listk)
 save(gammod, file= "Inter/gammod.Rda")
-
-library(mgcv)
-listk <- c(50, 100, 200, 300, 400, 500, 600, 700)
-gamodM <- vector("list", length(listk))
-system.time(
-for (i in 1: length(listk)){
-    gamodM[[ i]] <- gam(AOC~ 0+ LIBCOM+ EXPO+ s(DEM)+ s(SLOPE)+ s(RAYAT)
-                       + s(X, Y, k= listk[ i])+ GEOL+ PEDO
-                     , data= Reg.Ras, family= ocat(R= 5))
-})
-names(gamodM) <- paste0("gam", listk)
-save(gamodM, file= "Inter/gamodM.Rda")
-## Timing stopped at: 2.645e+05 1109 2.656e+05
-
-gammodM <- vector("list", length(listk))
-system.time(
-    for (i in 1: length(listk)){
-        print(i)
-        gammodM[[ i]] <- gam(AOC~ 0+ EXPO+ s(DEM)+ s(SLOPE)+ s(RAYAT)
-                             + s(X, Y, k= listk[ i])+ GEOL+ PEDO
-                           , data= Reg.Ras, family= ocat(R= 5))
-    }
-)
-names(gammodM) <- paste0("gam", listk)
-save(gammodM, file= "Inter/gammodM.Rda")
-
 ## utilisateur     système      écoulé 
-##     47749.1       235.7     47988.9 
+##     41832.9       148.6     41990.0 
+
+system.time(
+    gam900 <- gam(AOC~ 0+ EXPO+ GEOL+ PEDO
+                  + s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= 900)
+                , data= Reg.Ras, family= ocat(R= 5))
+)
+## utilisateur     système      écoulé 
+##    29806.96       94.43    29911.32
 
 #+end_src
 
