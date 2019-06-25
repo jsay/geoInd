@@ -183,7 +183,7 @@ surpGLM <- function(mod, newd= NULL){
            rtrunc(nn, spec= "norm", a= 0, b=  Inf, mean= g6))
 }
 
-jointSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+jointSignal <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     jS <- rep(0, nrow(dat))
     for (i in unique(dat[, vt])){
         for (j in unique(dat[, hz])){
@@ -194,7 +194,7 @@ jointSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Joint Signal"= var(jS))
 }
 
-jointNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+jointNoise <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     jN <- 0
     for (i in unique(dat[, vt])){
         for (j in unique(dat[, hz])){
@@ -205,7 +205,7 @@ jointNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Joint Noise"= jN)
 }
 
-vertiSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+vertiSignal <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     vS <- rep(0, nrow(dat))
     for (i in unique(dat[, vt])){
         vS[ dat[, vt]== i] <- mean(dat[dat[, vt]== i, lt])
@@ -213,7 +213,7 @@ vertiSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Vertical Signal"= var(vS))
 }
 
-vertiResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+vertiResid <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     sig <- rep(0, nrow(dat)) ; vR <- 0
     for (i in unique(dat[, vt])){
         for (j in unique(dat[, hz])){
@@ -227,7 +227,7 @@ vertiResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Vertical Residual"= vR)
 }
 
-vertiNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+vertiNoise <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     vN <- 0
     for (i in unique(dat[, vt])){
         vN <- vN+ var(dat[dat[, vt]== i, lt])* mean(dat[, vt]== i)
@@ -235,7 +235,7 @@ vertiNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Vertical Noise"= vN)
 }
 
-horizSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+horizSignal <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     hS <- rep(0, nrow(dat))
     for (j in unique(dat[, hz])){
         hS[ dat[, hz]== j] <- mean(dat[dat[, hz]== j, lt])
@@ -243,7 +243,7 @@ horizSignal <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Horizontal Signal"= var(hS))
 }
 
-horizResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+horizResid <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     sig <- rep(0, nrow(dat)) ; hR <- 0
     for (i in unique(dat[, vt])){
         for (j in unique(dat[, hz])){
@@ -257,7 +257,7 @@ horizResid <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
     c("Horizontal Residual"= hR)
 }
 
-horizNoise <- function(dat, lt, vt= "AOCc", hz= "LIBCOM"){
+horizNoise <- function(dat, lt, vt= "AOC", hz= "LIBCOM"){
     hN <- 0
     for (j in unique(dat[, hz])){
         hN <- hN+ (var(dat[dat[, hz]== j, lt])* mean(dat[, hz]== j)) 
