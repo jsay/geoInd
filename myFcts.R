@@ -1,3 +1,76 @@
+trans_geol <- data.frame(
+    GEOL= Reg.Ras$GEOL[!duplicated(Reg.Ras$GEOL)],
+    GEOf= c(
+        "Calcaires massifs de \"Comblanchien\" (Bathonien sup.)",
+        "Marnes et calcaires divers (Callovien inférieur)",
+        "Marnes et calcaires argileux (Oxfordien moyen)",
+        "Eboulis ordonnés cryoclastiques et colluvions diverses",
+        "Oolithe ferrugineuse (Oxfordien moyen-sup)",
+        "Calcaires hydrauliques de Molesmes et Noiron (Oxfordien sup.)",
+        "Colluvions diverses",
+        "Dépôts argilo-limoneux, sables et graviers du Villafranchien",
+        "Calcaires de Tonnerre, Oisellemont et calcaires à Astartes",
+        "Eboulis et glissements de terrains",
+        "Calcaires grenus bicolores (Bathonien terminal)",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Formation de Saint-Cosme (marnes fluvio-lacustres varvées)",
+        "Alluvions anciennes indifférenciées, argilo-limoneuses",
+        "Calcaires bioclastiques, graveleux, à oolithes (Bathonien inf.)"
+    ),
+    GEOe= c(
+        "Massive limestones from \"Comblanchien\" (upper Bathonian)",
+        "Various marls and limestones (lower Callovian)",
+        "Marls and argillaceous limestones (middle Oxfordian)",
+        "Ordered cryoclastic scree and various colluviums",
+        "Ferruginous Oolite (middle-upper Oxfordian)",
+        "Hydraulic limestones of Molesmes and Noiron (upper Oxfordian)",
+        "Various colluviums",
+        "Clay-silt deposits, sand and gravel from Villafranchien",
+        "Limestones of Thunder, Oisellemont and limestones in Astartes",
+        "Screes and landslides",
+        "Two-tone gray limestones (terminal Bathonian)",
+        "Clay-silty terrace of Saint-Usage",
+        "Formation of Saint-Cosme (varnished fluvio-lacustrine marls)",
+        "Undifferentiated ancient alluvium, clay-silty",
+        "Bioclastic limestones, gravelly, with oolites (lower Bathonian)")
+)
+
+trans_pedo <- data.frame(
+    PEDO= Reg.Ras$PEDO[!duplicated(Reg.Ras$PEDO)],
+    PEDf= c(
+        "Vignoble de la Côte de de Beaune",
+        "Cônes de déjection du pied de Côte",
+        "Côteaux viticoles des Hautes Côtes de Nuits",
+        "Courtes pentes marneuses des plateaux plio-pléistocène",
+        "Piedmont de la côte viticole",
+        "Versants pentus des Hautes Côtes de Beaune",
+        "Sommets des collines des Hautes Côtes de Beaune",
+        "Alluvions récentes calcaires des vallées (Ouche, Tille, Meuzin)",
+        "Pentes liasiques du Haut-Auxois",
+        "Basses terrasses gravelo-caillouteuses des plaines alluviales",
+        "Basses terrasses argileuses des plaines alluviales",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Vignoble de la Côte de Nuits",
+        "Rebord oriental des plateaux calcaires dominant la Côte viticole"
+    ),
+    PEDe= c(
+        "Vineyard of the Côte de Beaune",
+        "Coot footing cones",
+        "Wine hills of Hautes Côtes de Nuits",
+        "Oxfordian limestone-marly trays of the Hautes Côtes",
+        "Short marly slopes of Plio-Pleistocene plateaus",
+        "Piedmont of the vineyard of the Côte",
+        "Sloping slopes of the Hautes Côtes de Beaune",
+        "Summits of the hills of the Hautes Côtes de Beaune",
+        "Recent alluvial limestone valleys (Ouche, Tille, Meuzin)",
+        "Liastic slopes of Haut-Auxois",
+        "Gravelo-stony low terraces of alluvial plains",
+        "Low clay terraces of alluvial plains",
+        "Vineyard of the Côte de Nuits",
+        "Eastern edge of the limestone plateaus overlooking the Côte"
+    )
+)
+
 GeomSplitViolin <- ggproto("GeomSplitViolin", GeomViolin,
   draw_group = function(self, data, ..., draw_quantiles = NULL) {
     # Original function by Jan Gleixner (@jan-glx)
@@ -124,6 +197,7 @@ trans_pedo <- data.frame(
 )
 
 truncLogis <- function(n, spec, a = -Inf, b = Inf, ...) {
+    require(truncdist)
     p <- runif(n, min = 0, max = 1)
     G <- get(paste("p", spec, sep = ""), mode = "function")
     Gin <- get(paste("q", spec, sep = ""), mode = "function")

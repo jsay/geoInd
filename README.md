@@ -1,20 +1,20 @@
 # Classification statistique des vignobles de Côte d'Or
 
-![img](Figures/Capture.png)
+[![img](Figures/Capture.png)](https://geoind-wine.firebaseapp.com)
 
 
 # English version
 
-Modeling statistically the link between natural attributes of vineyards and the hierarchical scheme of *appellations d'origine contrôlée* allows to estimate a continuous quality score for each plot with corrected *commune* effects.
+Modeling statistically the link between natural attributes of vineyards and the hierarchical scheme of *appellations d'origine contrôlée* (AOC) allows to correct *commune* effects and to estimate a continuous quality score for each vineyard plot.
 
-This research is described in the [AAWE Working Paper XX](WorkingPaper.pdf) and associated Reproducibility Material in [PDF](ReproPaper.pdf) or [Markdown](ReproPaper.md). Raw data are on the [INRA dataverse server](https://www6.inra.fr/datapartage/) and the results are accessible by a [Shiny application](https://geoind-wine.firebaseapp.com).
+This research is described in the [AAWE Working Paper XX](WorkingPaper.pdf) and the Reproducibility Material in [PDF](ReproPaper.pdf) or [Markdown](ReproPaper.md). Raw data are on the [INRA dataverse server](https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) and the results are accessible by a [Shiny application](https://geoind.shinyapps.io/application/).
 
 
 # Version Française
 
 La modélisation statistique des liens entre les attributs naturels des vignobles et la hiérarchie des appellations d'origine contrôlée permet d'estimer un score de qualité pour chaque parcelle et de corriger les effets communaux.
 
-Les détails de la construction des données et de l'estimation sont disponibles en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessibles sur [le serveur data de l'INRA](https://www6.inra.fr/datapartage/) et les résultats sont consultables par [une application cartographique](https://geoind-wine.firebaseapp.com).
+Les détails de la construction des données et de l'estimation sont disponibles en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessibles sur [le serveur data de l'INRA](https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) et les résultats sont consultables par [une application cartographique](https://geoind.shinyapps.io/application/).
 
 
 # Credits
