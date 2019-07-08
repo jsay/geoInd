@@ -34,10 +34,6 @@
 # https://www.youtube.com/watch?v=L6vnJIMwLSQ
 # https://www6.inra.fr/datapartage/Partager-Publier/Deposer-dans-Data-Inra2,
 
-# https://rtask.thinkr.fr/blog/a-tale-of-two-shiny-apps-google-auth-shinyproxy/
-# http://code.markedmondson.me/
-# https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/
-
 # Manque les coteaux bourguignons à Chambolle et chassagne c'est
 # peut-etre que ça part au moment des lieux dits.
 
@@ -50,6 +46,7 @@
 # DataPaper.pdf
 # myFcts.R
 # gamod.Rda, gammod.Rda
+# voir au niveau de l'appli
 
 * README
   :PROPERTIES:
@@ -129,9 +126,9 @@ l'ensemble des parcelles sur une échelle continue à partir de leurs
 caractéristiques biophysiques.  Nous montrons également la persistance
 d'effets communaux que nous interprétons comme issus d'éléments
 historiques.  Les données, méthodes et prédictions sont disponibles
-sous licence GNU GPL v3 sur https://data.inra.fr/geoInd/ et sont
-consultables par le biais d'une application /Shiny/ présenté sur
-[[http://github.com/jsay/geoInd/]].\\
+sous licence GNU GPL v3 sur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]] et sont consultables
+par le biais d'une application /Shiny/ sur
+[[http://github.com/jsay/geoInd/][http://github.com/jsay/geoInd/]].\\
 
 *Mots-clés*: Économie viti-vinicole ; signes de qualité ; recherche
 reproductible ; système d'information géographique ; modélisation
@@ -3138,11 +3135,27 @@ shinyApp(ui,server)
 
 *** Développements à venir
 
+    - Régler le LIBCOM = NA sur la commune de Marsannay (pres des
+      echzeaux)
+
+    - Diminuer la taille du graphique pour fitter le smart phone
+
+    - Faire un onglet pour des croisements exhaustifs, réfléchir à
+    l'interaction avec la carte et le graphique
+
+    - Pour le rank, mettre la position plutôt que la part
+
+    - Réfléchir à l'emplacement d'enrgistrement de la base     
 
 *** Déploiement                              :noheading:
 
     https://www.shinyapps.io/admin/#/dashboard
     http://shiny.rstudio.com/articles/shinyapps.html
+
+
+# https://rtask.thinkr.fr/blog/a-tale-of-two-shiny-apps-google-auth-shinyproxy/
+# http://code.markedmondson.me/
+# https://code.markedmondson.me/r-on-kubernetes-serverless-shiny-r-apis-and-scheduled-scripts/
 
 #+begin_src R
 library(rsconnect)
@@ -6721,7 +6734,7 @@ summary(res_cor_probit_simple, call= FALSE)
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_TITLE:        @@latex: \vspace{-1cm} The informational content of geographical indications@@
   :EXPORT_AUTHOR:       @@latex:  Jean-Sauveur AY\thanks{\protect\singlespacing \vspace{-.8cm}\hspace{.4cm}Contact: \url{jsay@inra.fr}, UMR CESAER, AgroSup Dijon, INRA, Université de Bourgogne Franche-Comté.  Adress: 25 boulevard Docteur Petitjean, 21000 Dijon (France).  Data and R code are available in the Reproducibility Material (RM) from the repository \url{https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf} under copyleft licence GNU GPL V3.  I acknowledge Mohamed Hilal, Jean-Marc Brayer and Pierre Curmi for their help with the biophysical data, and XXX for discussions about this work.} \\ INRA UMR CESAER @@
-  :EXPORT_DATE:         Working Paper Version 0.1 : \today
+  :EXPORT_DATE:         Working Paper Version 1.1 : \today
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage[doublespacing]{setspace} \usepackage{tabularx, rotating, booktabs, pdflscape, amssymb, amsmath, amsthm, bbm, eurosym, pdflscape, txfonts, rotfloat, caption}\usepackage[para,online,flushleft]{threeparttable} 
   :END:
 ** Abstract                                  :noheading:
