@@ -3678,7 +3678,7 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_TITLE:        @@latex: \vspace{-1cm} The informational content of geographical indications@@
   :EXPORT_AUTHOR:       @@latex: Jean-Sauveur AY\footnote{\url{jsay@inra.fr}, UMR CESAER, AgroSup, INRA, Univ. Bourgogne Franche-Comté, 26 bd Dr Petitjean, 21000 Dijon (FR).} \\[.15cm] INRA UMR CESAER @@
-  :EXPORT_DATE:         @@latex: Reproducibility Material Version 0.2 : \today @@
+  :EXPORT_DATE:         @@latex: Replication Material Version 1.1 : \today @@
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc}\usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat}  \usepackage{tocloft} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm}
   :END:
 ** Abstract                                  :noheading:
@@ -3698,12 +3698,11 @@ AAWE Working Paper No XXX entitled /The informational content of
 geographical indications/.  Data, code and prediction materials are
 under the copyleft license GNU GPL V3, which means that license
 notices must be preserved.  Raw data are available from the INRA
-dataverse server https://data.inra.fr/geoInd.  Some R functions are
-reported in the Appendix to preserve the readability of codes in the
-main text.  The most recent version of this document and a Shiny
-application about vineyards' classification in /Côte d'Or/ (Burgundy,
-France) are available from the shared repository
-https://github.com/jsay/geoInd.
+dataverse server [[https://doi.org/10.15454/ZZWQMN][https://data.inra.fr]].  Some R functions are reported
+in the Appendix to preserve the readability of codes in the main text.
+The most recent version of this document and a Shiny application about
+vineyards' classification in /Côte d'Or/ (Burgundy, France) are
+available from the remote repository [[https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf][https://github.com/jsay/geoInd]].
 #+END_abstract
 #+TOC: headlines 3
 ** Simulation                                :noexport:
@@ -3802,13 +3801,11 @@ lines(x= 2: 10, y= rep(mean(yop$y[yap$x< 2]), 9), col= "red")
 ** Descriptive Statistics
 *** Data shaping
 
-    The data construction process is presented (in French) in a data
-    paper available at the shared repository
-    https://github.com/jsay/geoInd/blob/master/DataPaper.pdf.  This
-    data paper also presents in details of the variables used here.
-    The result of these preliminary treatments can be directly
-    downloaded from the INRA dataverse server
-    https://data.inra.fr/geoInd/GeoRas.Rda.
+    The full detail of data construction is presented in a data paper
+    available at [[https://github.com/jsay/geoInd/blob/master/DataPaper.pdf][https://github.com/jsay/geoInd/]].  The data paper also
+    contains the dictionary of the variables used here.  The result of
+    these preliminary treatments can be directly downloaded from the
+    INRA dataverse server at [[https://doi.org/10.15454/ZZWQMN/][https://data.inra.fr]].
     
     The following R code allows to load the data once downloaded and
     located in the =/Inter/= folder at the root of the working
@@ -6733,7 +6730,7 @@ summary(res_cor_probit_simple, call= FALSE)
   :EXPORT_LANGUAGE:     en
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_TITLE:        @@latex: \vspace{-1cm} The informational content of geographical indications@@
-  :EXPORT_AUTHOR:       @@latex:  Jean-Sauveur AY\thanks{\protect\singlespacing \vspace{-.8cm}\hspace{.4cm}Contact: \url{jsay@inra.fr}, UMR CESAER, AgroSup Dijon, INRA, Université de Bourgogne Franche-Comté.  Adress: 25 boulevard Docteur Petitjean, 21000 Dijon (France).  Data and R code are available in the Reproducibility Material (RM) from the repository \url{https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf} under copyleft licence GNU GPL V3.  I acknowledge Mohamed Hilal, Jean-Marc Brayer and Pierre Curmi for their help with the biophysical data, and XXX for discussions about this work.} \\ INRA UMR CESAER @@
+  :EXPORT_AUTHOR:       @@latex:  Jean-Sauveur AY\thanks{\protect\singlespacing \vspace{-.8cm}\hspace{.4cm}Contact: \url{jsay@inra.fr}, UMR CESAER, AgroSup Dijon, INRA, Université de Bourgogne Franche-Comté.  Adress: 25 boulevard Docteur Petitjean, 21000 Dijon (France).  Data and R code are available in the Replication Material (RM) from the repository \href{http://github.com/jsay/geoInd/blob/master/ReproPaper.pdf}{http://github.com/jsay/geoInd/} under copyleft licence GNU GPL V3.  I acknowledge Mohamed Hilal, Jean-Marc Brayer, Pierre Curmi, and Florian Humbert for their help with the data.} \\ INRA UMR CESAER @@
   :EXPORT_DATE:         Working Paper Version 1.1 : \today
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage[doublespacing]{setspace} \usepackage{tabularx, rotating, booktabs, pdflscape, amssymb, amsmath, amsthm, bbm, eurosym, pdflscape, txfonts, rotfloat, caption}\usepackage[para,online,flushleft]{threeparttable} 
   :END:
@@ -6742,16 +6739,16 @@ summary(res_cor_probit_simple, call= FALSE)
 Geographical indications (GIs) convey information about the place of
 production as a proxy for the quality of agricultural products.  The
 quality of the GI proxy depends on its ability to follow the tangible
-characteristics of production site instead of intangible factors such
-as the influence of producers on the designation process.  We
-disentangle the informational content of wine-related GIs for the
-/Côte d'Or/ region of Burgundy, France.  Thanks to their hierarchical
-and nested structure, GIs have a high informational content in terms
-of tangible characteristics with a signal to noise ratio of about 4.
-We also apply the decomposition to alternative wine classifications
-from history and from counterfactual simulations to show significant
-improvements of GIs in the last century and potential guidelines for
-better designated GIs in the future.\\
+characteristics of a production site instead of intangible factors,
+such as the influence of producers on the designation process.  In
+this article, we disentangle the informational content of wine-related
+GIs for the /Côte d'Or/ region of Burgundy, France.  Due to their
+hierarchical and nested structure, GIs have high informational content
+with a signal to noise ratio of approximately 4.  We also apply the
+signal decomposition to alternative wine classifications from history
+and counterfactual simulations to show significant improvements in GIs
+in the last century and potentially provide guidelines for better
+designated GIs in the future.\\
 
 \textbf{Keywords}: Food certification, wine economics, strategic
 quality disclosure, variance decomposition, ordered semi-parametric
@@ -6764,167 +6761,166 @@ model.
 
     Using the place of production to signal the quality of
     agricultural products is not consensual in trade relations
-    citep:Josl06,USTR17.  It is nevertheless well recognized that
-    distinguishing products of good quality from bad is fundamental
-    for consumers and producers when the quality cannot be assessed
-    before buying and selling choices are made citep:Aker70,Nels70.
-    Thus, one stumble point in the debate is the extend to which
-    geographical indications (GIs) provide information about product
-    quality citep:WMCl05,YBMZ17.  We study this informational content
-    of GIs through the econometric relationship between the natural
-    and human characteristics of vineyards and the wine-related GIs of
-    the /Côte d'Or/ region (Burgundy, France).
+    citep:Josl06,USTR17 but distinguishing good quality products from
+    those of bad quality is recognized as being fundamental for
+    consumers and producers when the quality cannot be assessed before
+    deciding to buy or sell citep:Aker70,Nels70.  Thus, one obstacle
+    in the debate is the extent to which geographical indications
+    (GIs) provide information about product quality
+    citep:WMCl05,YBMZ17.  We studied this informational content of GIs
+    through the econometric relationship between the natural and human
+    characteristics of the vineyards and wine-related GIs of the /Côte
+    d'Or/ region (Burgundy, France).
 
 *** Why wine in Burgundy?                    :noheading:
 
-    Wine is an emblematic agricultural product whose quality strongly
-    depends on the natural conditions prevailing on production sites
-    citep:JLom93,BTRM14,KKFG15,VLRR18.  Wine is also an experience
-    good well-suited to study the transmission of quality information
-    between producers and consumers citep:CLVi97,ANau07,Ashe08,Stor12.
-    In Burgundy, the ranking of vineyards according to their quality
-    potential for wine production has a long history that date back to
-    the middle age, with numerous modifications that have resulted to
-    the actual scheme citep:Jull16,More31,Lava55,Dang92,Garc11,WJac18.
-    In short -- more details will be given in the next section -- the
-    GIs that we study are based on the fine-scale location of the
-    vineyard plots, with both a vertical and a horizontal dimension of
+    Wine is an emblematic agricultural product, and its quality
+    strongly depends on the natural conditions prevailing at
+    production sites citep:JLom93,BTRM14,KKFG15,VLRR18.  Wine is also
+    an experience good well-suited to studying the transmission of
+    quality information between producers and consumers
+    citep:CLVi97,ANau07,Ashe08,Stor12.  In Burgundy, the ranking of
+    vineyards according to their quality potential for wine production
+    has a long history dating back to the Middle Ages, with numerous
+    modifications to the actual scheme
+    citep:Jull16,More31,Lava55,Dang92,Garc11,WJac18.  Thus, the GIs
+    that we study are based on the fine-scale location of the vineyard
+    plots, with both a vertical and horizontal dimension of
     differentiation.  The vertical dimension is a quality ranking with
-    5 items: /Côteaux Bourguignons/ < /Bourgogne Régional/ <
+    five items: /Côteaux Bourguignons/ < /Bourgogne Régional/ <
     /Bourgogne Village/ < /Premier Cru/ < /Grand Cru/.  The horizontal
-    dimension is the name of one among the 31 /communes/ (i.e.,
-    administrative municipalities) without an explicit hierarchy
-    between them : /Beaune/, /Gevrey-Chambertin/, /Pommard/, /Fixin/,
-    for example.  Such a hierarchical and nested structure is quite
-    usual for wine-related GIs in France (Bordeaux, Rhône Valley, see
-    citealp:GLRW17) and other wine-producing countries (Germany,
-    United States and Italy, see citealp:Stor05,CMCG10,CSCa19).
+    dimension is 1 of the 31 /communes/ (i.e., administrative
+    municipalities) without an explicit hierarchy between them, such
+    as /Beaune/, /Gevrey-Chambertin/, /Pommard/, or /Fixin/.  Such a
+    hierarchical and nested structure is common for wine-related GIs
+    in France (Bordeaux, Rhône Valley, see citealp:GLRW17) and other
+    wine-producing countries (Germany, United States and Italy, see
+    citealp:Stor05,CMCG10,CSCa19).
 
 *** Our contribution                         :noheading:
 
-    The main objective of this work is to estimate the informational
-    content of actual, past and simulated GI designation schemes for
-    about $60\,000$ vineyard plots.  The informational content is
-    defined as its ability to follow tangible characteristics of
-    production sites, according to the property that more informative
-    signals lead to greater variability of conditional expectations
-    citep:GPen10.  We propose to disentangle tangible from intangible
-    information about production sites by decomposing the conditional
-    variance of a latent quality index estimated from actual GIs
-    citep:BSwa12.  The first set of tangible information relates to
-    the natural attributes of vineyard plots that are known to impact
-    wine quality: topography (elevation, slope, aspect), geology
-    (subsoil material, soil depth, soil humidity) and climate (solar
-    radiation, longitude, latitude).  The second set of information
-    relates to the human characteristics that have historically
-    impacted the GI designation process.  Through the reputation of
-    landowners, their influence with the decision makers or their
-    collective actions, some administrative units have had a
-    differential treatment that could bias the quality signal of GIs
-    from tangible characteristics.  Knowing the geographical
-    co-variations between tangible and intangible characteristics and
-    the difficulty to control for all tangible variables that impact
-    vineyard quality (i.e., /terroir/ variables), the major empirical
-    challenge is to disentangle these two sources of variations.  We
-    propose a semiparametric approach that exploits the precise
-    location of vineyard plots to control for the unobserved spatial
-    heterogeneity from /terroir/ through smooth functions of
-    geographical coordinates citep:WPSa16.  The empirical strategy is
-    based on the difference between the spatial continuity of
-    /terroir/ and the discontinuity of administrative borders
-    according to the axiom that nature does not make jumps.
+    The main objective of this article was to estimate the
+    informational content of actual, past, and simulated GI
+    designation schemes for approximately $60\,000$ vineyard plots.
+    The informational content is defined as the ability to describe
+    the tangible characteristics of production sites.  It is measured
+    by the variance of a conditional quality index, according to the
+    principle that more informative signals lead to greater
+    variability of conditional expectation citep:GPen10.  We propose
+    disentangling tangible information from intangible information
+    about production sites by decomposing a latent quality index
+    estimated from actual GIs citep:BSwa12.  The first set of tangible
+    information relates to the natural attributes of vineyard plots
+    that are known to impact wine quality: topography (elevation,
+    slope, aspect), geology (subsoil material, soil depth, soil
+    humidity), and climate (solar radiation, longitude, latitude).
+    The second set of information relates to human characteristics
+    that have historically impacted the GI designation process.
+    Through the reputation of landowners, their influence with
+    decision-makers or their collective actions, some administrative
+    units have had differential treatment that could bias the signaled
+    quality.  Knowing the geographic co-variations between tangible
+    and intangible characteristics, and the difficulty controlling for
+    all tangible variables that impact vineyard quality (i.e.,
+    /terroir/ variables), the major empirical challenge is to
+    disentangle these two sources of variations.  We propose a
+    semiparametric approach that exploits the precise location of
+    vineyard plots to control for the unobserved spatial heterogeneity
+    through smooth functions of geographic coordinates citep:WPSa16.
+    The empirical strategy is based on the difference between the
+    spatial continuity of /terroir/ and the discontinuity of
+    administrative borders according to the axiom that nature does not
+    make jumps.
 
 *** Literature reputation                    :noheading:
     
     This article is an empirical contribution to the literature about
     quality disclosure and strategic certification (see
     citealp:Bagw01,DJin10 for reviews).  The vineyard quality index
-    that we study is exclusively based on vineyard characteristics
-    given by the nature, that contrasts to typical frameworks where
+    that we study is based exclusively on natural vineyard
+    characteristics, in contrast to typical frameworks in which
     quality is strategically chosen by producers
     citep:Shap82,BDWh87,ALiz01,JLes03,DMDi14.  The resulting
-    exogeneity makes the identification of the informational content
-    of the quality signal easier and allows to analyze more
-    transparently the role of history in the information conveyed by
-    actual GIs put on the label of wine bottles.  We argue that the
-    long history of GIs designations allows to neglect the role of
-    actual wine producers and their undoubtedly tangible impact on
-    wine quality.  In effect, as generations of producers succeed each
-    other with numerous vineyards bought and sold, the informational
-    content of GIs is a predetermined collective reputation
-    citep:Tiro96 reasonably independent from actual individual
-    practices or skills of producers.  In addition, the long run
-    vineyard quality index relies exclusively on the unchangeable
-    location of productions sites, which precludes spurious
-    correlation from the assortative matching between qualities and
-    names as in cite:Tade99.  Because a GI name can not be sold
-    without its associated vineyard quality from tangible
-    characteristics, the GI information puts on the label by producers
-    is not related to their own characteristics, which is another
-    source of tangible information not studied here.
+    exogeneity makes identification of the informational content of
+    the quality signal easier and allows more transparent analysis of
+    the role of history in the information conveyed by actual GIs put
+    on the labels of wine bottles.  We argue that the long history of
+    GI designations allows us to neglect the role of actual wine
+    producers and their undoubtedly tangible impact on wine quality.
+    In effect, as generations of producers succeed each other with
+    numerous vineyards bought and sold, the informational content of
+    GIs is a predetermined collective reputation citep:Tiro96 that is
+    reasonably independent from the actual individual practices or
+    skills of producers.  In addition, the vineyard quality index
+    relies exclusively on the unchangeable location of production
+    sites, which precludes spurious correlations from the assortative
+    matching between quality and name as in cite:Tade99.  Because a GI
+    name cannot be separated from its associated vineyard quality
+    based on tangible characteristics, the GI information put on the
+    label by producers is not related to their own characteristics,
+    which is another source of tangible information not studied here.
 
 *** Literature quality disclosure            :noheading:
 
     A large body of literature about wine quality disclosure is
     concerned with expert reviews and the use of this information by
-    consumers.  Such ratings are shown to have mainly short run
-    effects, both on the demand citep:FGro12 and the price of wines
-    citep:ALVi08,DNau10.  The major problems about their aggregation
-    citep:AQua99 and their consistence citep:CSto10,Bodi17 put some
-    doubts about their own interest for consumers citep:AJon13.
-    Ratings by experts, judges or websites are also shown to be
-    significantly divergent from historical GIs for Bordeaux wines
-    citep:TMut11 probably because of their fundamental differences.
-    Ratings are exogenous paying year-to-year sources of information,
-    not directly comparable with more stable public GIs voluntarily
-    put on wine labels by producers.  This observation introduces the
-    tedious question of the endogenous adoption of quality disclosure
-    for GIs that is not a concern for expert review citep:HMDO99.
-    This could produce unintended economic consequences such as
-    counter-signaling, in situations where the certification is not
-    adopted to signal the high quality of products citep:BZJL18.  This
-    is /a priori/ not the case for wine-related GIs in Burgundy,
-    because their economic citep:CLVi00,CFlo10,SNCS13 and historical
-    citep:MSwi18 importance is such that, to the best of our
-    knowledge, the entirety of wine producers and sellers in the
-    region puts the GIs as the main information message on wine
-    labels.
+    consumers.  Such ratings have been shown to have mainly short-term
+    effects, both on the demand for citep:FGro12 and the price of
+    wines citep:ALVi08,DNau10.  The major problems with their
+    aggregation citep:AQua99,CPar15 and consistency
+    citep:CSto10,Bodi17 create some doubts about their own interest to
+    consumers citep:AJon13.  Ratings by experts, judges, or websites
+    have also been shown to be significantly divergent from historical
+    GIs for Bordeaux wines citep:TMut11, probably because of their
+    fundamental differences.  Ratings are exogenous year-to-year
+    sources of information and not directly comparable to more stable
+    public GIs voluntarily put on wine labels by producers.  This
+    observation introduces the tedious question of the endogenous
+    adoption of quality disclosure for GIs, which is not a concern for
+    expert review citep:HMDO99.  This could have unintended economic
+    consequences, such as counter-signaling, in situations in which
+    the certification is not adopted to signal the high quality of
+    products citep:BZJL18.  This is /a priori/ not the case for
+    wine-related GIs in Burgundy, because their economic
+    citep:CLVi00,CFlo10,SNCS13 and historical citep:MSwi18 importance
+    is such that, to the best of our knowledge, wine producers and
+    sellers in the region puts the GIs as the main informational
+    message on wine labels.
 
 *** Literature certification                 :noheading:
 
-    The analysis shows a high informational content of actual GIs in
-    terms of the underlying tangible vineyard characteristics, with a
-    variance of the signal 4 times higher than the variance of the
-    noise (this corresponds to a R$^2$ of about 80 %).  This high
-    informational content gets along with the evidence of some signal
-    bias due to intangible /commune/ effects.  This small
-    administrative unit in France corresponds to the scale at which
-    collective actions and lobbying have been operated historically,
-    in particular the scale at which the /syndicats/ (groups of wine
-    producers) get structured citep:Jacq09.  Nevertheless, this bias
-    has decreased since the creation of GIs in 1936 trough continuous
-    evolution of GIs designation schemes that happened.  This
-    decreasing bias from history is an illustration of the theory
-    developed by cite:BLar92 about strategic information transmission.
-    We find that some producers or landowners could have profited from
-    their private information about vineyard quality to manipulate the
-    GI signal and extract rents through undeserved high rated
-    vineyards in their administrative units.  However, the
-    hierarchical GI certification appears increasingly less biased, or
-    more efficient in the sens of cite:DNab91: the probability that a
-    vineyard plot gets classified at least in its category becomes
-    higher than the probability of lower quality plots being
-    classified in that category.  We also show that a monopolistic
-    certifying party discloses useful information in the form of rank
-    orderings as predicted by the theory of cite:Guer01.  This
-    contrasts with models that found weak (if any) welfare gains
-    associated to the information conveyed by a monopolistic
-    certifying party citep:Shap86,Lizz99.  These two results suggest
-    that the high informational content of GIs and their actual
-    economic importance in Burgundy comes from their long history and
-    their independent management.
+    The analysis shows high informational content of actual GIs in
+    terms of the underlying tangible vineyard characteristics, with
+    4-time times higher signal variance than noise variance
+    (corresponding to an R$^2$ of $\sim$ 80%).  This high
+    informational content agrees with the evidence of some signal bias
+    due to intangible /commune/ effects.  This small administrative
+    unit in France corresponds to the scale at which collective
+    actions and lobbying have been performed historically,
+    particularly the scale at which the syndicates (groups of wine
+    producers) are structured citep:Jacq09.  Nevertheless, this bias
+    has decreased since the creation of GIs in 1936 through continuous
+    evolution of GI designation schemes.  This historical decrease in
+    bias illustrates of the theory developed by cite:BLar92 regarding
+    strategic information transmission.  We found that some producers
+    or landowners could have profited from private information on
+    vineyard quality manipulating the GI signal and extracted rents
+    through undeserved high rating for vineyards in their
+    administrative units.  However, the hierarchical GI certification
+    appears increasingly less biased, or more efficient in the sense
+    of cite:DNab91; the probability that a vineyard plot is classified
+    at least in its category is increasingly higher than the
+    probability of lower quality plots being classified in that
+    category.  We also show that a monopolistic certifying party
+    discloses useful information in the form of rank orderings, as
+    predicted by cite:Guer01.  This contrasts with models that found
+    weak, if any, welfare gains associated with the information
+    conveyed by a monopolistic certifying party citep:Shap86,Lizz99.
+    These two results suggest that the high informational content of
+    GIs and their actual economic importance in Burgundy come from
+    their long history and independent management.
 
-*** Outline                                  :noheading:
+*** Outline                                  :noexport:
 
     The following Section [[#Sec:1]] presents in greater details the
     historical and regional contexts of the work, jointly with the
@@ -6946,40 +6942,40 @@ model.
 
      The /Côte d'Or/ (literally, slope of gold) is a northeastern
      French administrative unit (/département/) included in the larger
-     wine-producing region of Burgundy (\autoref{Fig:1}).  We study a
-     subset of the most famous vineyards of this region that was
+     wine-producing region of Burgundy (\autoref{Fig:1}).  We studied
+     a subset of the most famous vineyards in this region, which was
      granted World Heritage Status by UNESCO in 2015
      (https://whc.unesco.org/fr/list/1425).  The area under
-     consideration is a strip of about 65\nbsp{}km from the north to
-     the south of at most 5 km from east to west, located between
+     consideration is a strip of approximately 65\nbsp{}km from the
+     north to south and at most 5 km from east to west located between
      latitudes 46.9 and 47.3 and longitudes 4.7 and 5 (World Geodetic
      System 1984).  The main tangible attributes of vineyards in the
      area are illustrated by the distribution of elevation in the left
      panel of \autoref{Fig:1}.  The presence of /combes/ (dry valley)
-     produces some rounded patterns with fine-scale variations of the
-     typical topographical variables (elevation, slope and exposition)
-     that are known to have some direct and indirect impacts on wine
-     quality.  Firstly, elevation is expected to determine wine
-     quality principally through its indirect correlation with
-     temperatures and atmospheric outcomes.  Temperatures during the
-     growing season and the harvest are major determinant for the
-     grape maturity cycle, its sugar content and structure of
-     aromas. The latitude position of vineyards is also indirectly
-     correlated with temperature along the north-south gradient.
-     Secondly, slope is expected to have both a direct effect through
-     the drainage capacity of vineyard plots and an indirect effect
-     through the correlated soil characteristics (steeper soils are in
-     general older and thinner).  The longitude position of vineyards
-     is indirectly correlated with precipitations on the area, as the
-     hill at the west provides a protective barrier that limits rains
-     and, consequently, soil moisture.  Thirdly, the exposition is
-     expected to have a direct effect through sunshine cycles and
-     indirect effect through its correlation with the wind, which is
-     known to have a strong importance to dry grapes and to
-     concentrate aromas.  Recognizing the indirect effects of these
-     observed topographical and position variables is important as
-     fine climate data does not exist to be consistently used at the
-     vineyard plot scale.
+     results in some rounded patterns with fine-scale variations in
+     the typical topographical variables (elevation, slope and
+     exposition) that are known to have some direct and indirect
+     impacts on wine quality.  Firstly, elevation is expected to
+     determine wine quality principally through its indirect
+     correlation with temperatures and atmospheric outcomes.
+     Temperatures during the growing season and harvest are major
+     determinants of the grape maturity cycle, sugar content, and the
+     structure of aromas. The latitude position of vineyards is also
+     indirectly correlated with temperature along the north-south
+     gradient.  Secondly, slope is expected to have both a direct
+     effect through the drainage capacity of vineyard plots and an
+     indirect effect through the correlated soil characteristics
+     (steeper soils are generally older and thinner).  The longitude
+     position of vineyards indirectly correlates with precipitation on
+     the area, as a hill at the west provides a protective barrier
+     that limits rains and, consequently, soil moisture.  Thirdly, the
+     exposition is expected to have a direct effect through sunshine
+     cycles and an indirect effect through its correlation with the
+     wind, which is known to have strong importance for dry grapes and
+     to concentrate aromas.  Recognizing the indirect effects of these
+     observed topographical and position variables is important, as
+     fine climate data do not exist for consistent use on the vineyard
+     plot scale.
      
 # Local particularity in terms of (i) temperature hail and frost. the
 # region less precipitation than its neighbors (less than 700mm/ year,
@@ -6993,18 +6989,17 @@ model.
 #+begin_export latex
 \vspace{.5cm}
 \begin{figure}[!h]
-  \caption{\textbf{Vineyards of the \emph{Côte d'Or}, topography
-      (left) and geographical indications (right)}\\[.1cm]
-    \footnotesize Notes: Elevation on the left side map is decretized
-    in 8 classes of 50 m intervals.  From the east to the west, the
-    elevation is first convex then concave, which means that highest
-    slopes are for average elevations.  GIs on the right side map are
-    located on these highest slopes.  The spatial precision of the
-    vertical dimension of GIs is such that best vineyards classified
-    as \emph{Grands Crus} are not visually well separated from just
-    below \emph{Premiers Crus}.  The right panel also reports the
-    names of the 31 \emph{communes} of the area, considered as the
-    horinzontal dimension of GIs.}\label{Fig:1}
+  \caption{\textbf{Topography and geographical indications (GIs) of the vineyards of the \emph{Côte d'Or}}\\[.1cm]
+    \footnotesize Notes: The elevation on the left side map is
+    decretized in 8 classes of 50 m intervals.  From the east to the
+    west, the elevation is first convex then concave, which means that
+    the highest slopes are for average elevations.  GIs on the right
+    side map are located on these highest slopes.  The spatial
+    precision of the vertical dimension of GIs is such that best
+    vineyards, classified as \emph{Grands Crus}, are not visually
+    well-separated from just below \emph{Premiers Crus}.  The right
+    panel also reports the names of the 31 \emph{communes} of the
+    area, considered as the horizontal dimension of GIs.}\label{Fig:1}
   \centering\hspace{-2cm}
 \begin{minipage}{.5\textwidth}
   \centering
@@ -7020,187 +7015,183 @@ model.
 *** Historical context
 **** Until Lavalle                           :noheading:
 
-    Some archaeological evidences locate the first vineyards in the
-    region in the antiquity citep:Garc14.  The first written evidences
-    date from the 7th century, with abbeys archives that describe the
-    donation of vineyards between groups of Benedictines monks whose
-    names are still used in actual GI classifications (/Abbayes de
-    Bèze/ or /de Saint-Vivant/ for instance).  The origin of
-    Burgundy's vineyard classification can be found in the work of the
-    Cistercians monks who delineate plots of land that produced wine
-    of distinct character (12th century, according to citealp:Lava55).
-    However, the first exhaustive spatial delineation of the region is
-    an administrative separation of /communes/ following the decree of
-    1789 after the french revolution.  What we consider as the
-    horizontal dimension happened before the vertical dimension of
-    actual GIs (citealp:Garc11, p.40).  The delineation of /communes/
-    was based on the spatial distribution of churches (usually built
-    between the 9th and the 12th centuries) without the goal of
-    signaling wine quality.  The first exhaustive vertical
-    classification scheme about the quality of vineyards is due to
-    cite:Lava55, a Professor of natural and medical history from Dijon
-    university inspired from previous writings of other scientists,
-    cite:Jull16 and cite:More31 in particular.  He provides a ranking
-    of vineyards in 4 levels, from the best /Tête de Cuvée/ to
-    /Première/, /Deuxième/ and /Troisième Cuvées/.  The interaction
-    between the horizontal and vertical dimension is of particular
-    matter in his work, as he write (p.162, translation from the
-    author) "I have studied the wines of each of the /communes/ of the
-    /Côte/ as if the other /communes/ had not existed and the
-    classification that I give is true only for each /commune/ taken
-    in isolation."
+    Some archaeological evidence located the first vineyards in the
+    region in antiquity citep:Garc14.  The first written evidence
+    dated from the 7th century, with abbey archives describing the
+    donation of vineyards between groups of Benedictine monks whose
+    names are still used in actual GI classifications (e.g., /Abbayes
+    de Bèze/ or /de Saint-Vivant/).  The origin of Burgundy's vineyard
+    classification can be found in the work of the Cistercian monks
+    who delineated plots of land that produced wine of distinct
+    character (12th century according to citealp:Lava55).  However,
+    the first exhaustive spatial delineation of the region was an
+    administrative separation of /communes/ following the decree of
+    1789 after the French revolution.  What we consider the horizontal
+    dimension developed before the vertical dimension of actual GIs
+    (citealp:Garc11, p.40).  The delineation of /communes/ was based
+    on the spatial distribution of churches (usually built between the
+    9th and the 12th centuries), without the goal of signaling wine
+    quality.  The first exhaustive vertical classification scheme of
+    vineyard quality was created by cite:Lava55, a Professor of
+    Natural and Medical History at Dijon University, inspired by the
+    writings of other scientists, particularly cite:Jull16 and
+    cite:More31.  He providesd a ranking of vineyards on four levels,
+    from the best /Tête de Cuvée/ to /Première/, /Deuxième/ and
+    /Troisième Cuvées/.  The interaction between the horizontal and
+    vertical dimensions is of particular importance in his work: "I
+    have studied the wines of each of the /communes/ of the /Côte/ as
+    if the other /communes/ had not existed and the classification
+    that I give is true only for each /commune/ taken in isolation"
+    (p.162, translation from the author).
 
 **** After Lavalle                           :noheading:
 
-     These two spatial delineations were merged in a 1860 map by the
+     These two spatial delineations were merged in an 1860 map by the
      /Comité d'Agriculture et de Viticulture de l'Arrondissement de
      Beaune/, the local organization of wine producers.  This map
      contains small modifications from the initial 1789 and 1855
-     classifications citep:WJac18 and was extensively used afterward
-     as a legal basis to regulate wine trade in the region.  It opens
-     an avenue for court trials, collective actions and lobbying about
-     the right to use the names of both dimensions that are not yet
-     called GIs.  As it is well documented by cite:Jacq09, the
-     capacity of producers and owners to negotiate or influence the
-     judgments and the delineations was determinate by the reputation
-     of the /commune/ to which they belong.  The author shows that
-     there was an unequal treatment between /communes/ in terms of the
-     vertical differentiation of vineyards, whereas the separation
-     between advantaged and disadvantaged /communes/ is not well
-     established ("the reputation of the wine-growing /communes/ of
-     Burgundy is not an objectively measurable phenomenon," p.189 of
-     citealp:Jacq09, translation from the author).  In 1936, a French
-     national institute was created (INAO) to legally manage what
-     become the GIs of all wine regions of the country on a common
-     legal basis.  In Burgundy, the first official GIs come from the
-     map of 1860, jointly with the jurisprudence which has taken place
-     since then.  Some modifications are then implemented during the
-     20th century with the creation of /Premiers Crus/ in 1943 and the
-     fine-scale digitalization of plot-level delineation in a
-     Geographical Information System after 2000.  The GIs are called
-     /Appellation d'Origine Contrôlée/ in France since 1936 and
-     corresponds to Protected Designation of Origin for the European
+     classifications citep:WJac18 and was used extensively as a legal
+     basis to regulate wine trade in the region.  It paved the way for
+     court trials, collective actions, and lobbying for the right to
+     use the names of both dimensions that are not yet called GIs.
+     The capacity of producers and owners to negotiate or influence
+     judgments and delineations is determined by the reputation of the
+     /commune/ to which they belong citep:Jacq09.  The author showed
+     that there was unequal treatment between /communes/ in terms of
+     the vertical differentiation of vineyards, whereas the separation
+     between advantaged and disadvantaged /communes/ was not well
+     established: "the reputation of the wine-growing /communes/ of
+     Burgundy is not an objectively measurable phenomenon"
+     (citealp:Jacq09, p.189; translation by the author).  In 1936, a
+     French national institute, INAO, was created to legally manage
+     what became the GIs of all wine regions of the country on a
+     common legal basis.  In Burgundy, the first official GIs came
+     from the map of 1860 and the jurisprudence occurring thereafter.
+     Some modifications were then implemented during the 20th century
+     with the creation of /Premiers Crus/ in 1943 and the fine-scale
+     digitization of plot-level delineation in a Geographical
+     Information System after 2000.  The GIs have been called
+     /Appellation d'Origine Contrôlée/ in France since 1936,
+     corresponding to Protected Designation of Origin for the European
      Union (https://ec.europa.eu/agriculture/quality/schemes_en).
 
 *** Actual GI designations
 **** Description                             :noheading:
 
-    Actual GIs are a nest between a vertical quality ranking in 5
+    Actual GIs are a nest between a vertical quality ranking of five
     items and a horizontal differentiation scheme through 31
-    administrative municipalities (/communes/) that are shown in the
-    right panel of \autoref{Fig:1}.  The highest-quality vineyards are
-    labeled /Grands Crus/, each of which has its own independent
-    appellation title (ex: "/Clos de la Roche/" or
-    "/Chevalier-Montrachet/").  There are 32 /Grands Crus/ on the
-    area, 8 in the /Côte de Beaune/ (southern part) and 24 in the
-    /Côte de Nuits/ (northern part) for a total area of 472.6 ha (4.2
-    % of acreages with GIs).  It follows in the hierarchy 404
-    /Premiers Crus/ on the area which have to be associated with their
-    /commune/ names on wine labels (ex: "/Les Chaumes/" from
-    /Vosne-Romanée/ or "/La Chapelle/" from /Auxey-Duresse/).  There
-    are $1\,619$ ha of /Premiers Crus/ in the /Côte de Beaune/ that
-    count for 20.5 % of the sub-region and 433 ha in the /Côte de
-    Nuits/ (12.75 %).  The third vertical level corresponds to
-    /Bourgogne Village/ with or without name (ex: /Pommard Village/
-    with name and /Côte de Nuits Village/ without).  It counts for
-    $2\,500$ ha (31.75 %) in the /Côte de Beaune/ and $1\,563$ ha (46
-    %) in the /Côte de Nuits/.  The vertical differentiation of GIs
-    ends with /Bourgogne Régional/ ($2\,788$ ha, 24.73 % of the GI
-    area) and /Coteaux Bourguignons/ ($1\,899$ ha, 16.85%) that are
-    sometimes grouped in a same /régional/ level.  The difference
-    between these 2 lasts GIs was initially justified in terms of
-    grape varieties (/Pinot noir/ or /Chardonnay/ for /Bourgogne
-    Régional/ and /Gamay noir/ or /Aligoté/ for /Côteaux
-    Bourguignons/) but this distinction is less and less relevant as
-    /Pinot noir/ and /Chardonnay/ becomes the main varieties.
+    administrative municipalities (/communes/, \autoref{Fig:1}, right
+    panel).  The highest quality vineyards are labeled /Grands Crus/,
+    each of which has its own independent appellation title (e.g.,
+    "/Clos de la Roche/" or "/Chevalier-Montrachet/").  There are 32
+    /Grands Crus/ in the area, 8 in the /Côte de Beaune/ (southern
+    part) and 24 in the /Côte de Nuits/ (northern part), with a total
+    area of 472.6 ha (4.2% of acreage with GIs).  In the hierarchy, it
+    follows 404 /Premiers Crus/ in the area that have to be associated
+    with their /commune/ names on wine labels (e.g., "/Les Chaumes/"
+    from /Vosne-Romanée/ or "/La Chapelle/" from /Auxey-Duresse/).
+    There are $1619$ ha of /Premiers Crus/ in the /Côte de Beaune/,
+    accounting for 20.5% of the sub-region and 433 ha in the /Côte de
+    Nuits/ (12.75%).  The third vertical level corresponds to
+    /Bourgogne Village/ with or without a name (e.g., /Pommard
+    Village/ with name and /Côte de Nuits Village/ without),
+    accounting for $2500$ ha (31.75%) in the /Côte de Beaune/ and
+    $1563$ ha (46%) in the /Côte de Nuits/.  The vertical
+    differentiation of GIs ends with /Bourgogne Régional/ ($2788$ ha,
+    24.73% of the GI area) and /Coteaux Bourguignons/ ($1899$ ha,
+    16.85%), which are sometimes grouped in the same /régional/ level.
+    The difference between these last two GIs was justified initially
+    in terms of grape varieties (/Pinot noir/ or /Chardonnay/ for
+    /Bourgogne Régional/ and /Gamay noir/ or /Aligoté/ for /Côteaux
+    Bourguignons/), but this distinction is less and less relevant as
+    /Pinot noir/ and /Chardonnay/ become the main varieties.
 
 **** Confusion                               :noheading:
 
-    The picture of actual GIs on the area is not complete without the
-    mention of the complexities that exists between the vertical and
-    the horizontal dimensions, which could lead to difficulties for
-    consumers to distinguish their respective informational content.
-    First note that the terms /commune/ and /village/ are often used
-    as synonymous for the administrative delineations in rural areas
-    of France, whereas the first is related to the horizontal
-    dimension and the second for the vertical dimension.  Secondly, a
-    same name for a vertical item from /Grand Cru/, /Premier Cru/ or
-    even /Villages/ can be located on two different /communes/: the
-    /Grand Cru/ /Bonnes Mares/ is shared between the /communes/ of
+    The picture of actual GIs in the area is not complete without
+    mentioning of the complexities that exist between the vertical and
+    horizontal dimensions, which could lead to difficulties for
+    consumers distinguishing their respective informational content.
+    Note that the terms /commune/ and /village/ are often used
+    synonymously for the administrative delineations in rural areas of
+    France, whereas the first is related to the horizontal dimension
+    and the second to the vertical dimension.  In addition, the same
+    name as a vertical item from /Grand Cru/, /Premier Cru/ or even
+    /Villages/ can be found in two different /communes/: the /Grand
+    Cru/ /Bonnes Mares/ is shared between the /communes/ of
     /Chambolle-Musigny/ and /Morey-Saint-Denis/, the /Fixin Premier
     Cru/ /Clos de la Perrière/ is shared between the /communes/ of
     /Brochon/ and /Fixin/, and the /Vosnes-Romanée/ /Village/ is
     shared between the /communes/ of /Vosnes-Romanée/ and
-    /Flagey-Echézeaux/.  Thirdly, at the beginning of the 20th
-    century, 10 /communes/ have added the name of their most famous
-    /Grand Cru/ to their administrative name, such as /Aloxe-Corton/
-    or /Gevrey-Chambertin/.  Consequently, the name of a /Grand Cru/
-    is labeled in the horizontal information for wines that are not
+    /Flagey-Echézeaux/.  Furthermore, at the beginning of the 20th
+    century, 10 /communes/ added the name of their most famous /Grand
+    Cru/ to their administrative name, such as /Aloxe-Corton/ or
+    /Gevrey-Chambertin/.  Consequently, the name of a /Grand Cru/ is
+    labeled in the horizontal information for wines that are not
     /Grand Cru/.  This complexity reaches its maximum in the two
-    /communes/ of /Chassagne-Montrachet/ and /Puligny-Montrachet/ that
-    share the same /Grand Cru/ /Montrachet/ and have chosen to add it
-    to their administrative names.  However, the legal obligation or
+    /communes/ of /Chassagne-Montrachet/ and /Puligny-Montrachet/,
+    which share /Grand Cru/ /Montrachet/ and have chosen to add it to
+    their administrative names.  However, the legal obligation or
     prohibition to mention the vertical item /Grand Cru/, /Premier
     Cru/, /Village/, /Régional/ or /Coteaux Bourguignons/ as the main
     information on wine bottle labels suggests that this information
-    is clearly identifiable to informed consumers.
+    is clearly identifiable to consumers.
 
 *** Summary Statistics
 **** Particularities                         :noheading:
 
-     The precision of the econometric estimation for disentangling the
-     sources of variations of the GIs depends on a balanced
-     distribution of tangible variables and vertical items between and
-     within the horizontal /commune/ items.  The left panel of
-     \autoref{Fig:1} shows that each /commune/ approximately contains
-     the whole range of elevation, slope and exposition of the area.
-     The right panel shows that administrative delineations of
-     /communes/ articulate with each other on the north-south
-     gradient, which ensures sharp climatic differences between them.
-     \autoref{Fig:A0} in the Appendix displays the acreages and shares
-     of each vertical items for each horizontal /commune/ items.
-     Every /commune/ has at least 2 vertical items among the 5
-     possible.  The majority of /communes/ counts 3 different veritcal
-     items with an average number of 3.87 items by /commune/.
-     Vineyards ranked as /Village/, /Premier Cru/ and /Grand Cru/ are
-     present in respectively 28, 24 and 11 /communes/ that count
-     respectively for 90 %, 77.4 % and 35.5 % of all of them.
+     The precision of econometric estimations for disentangling the
+     sources of variation in GIs depends on a balanced distribution of
+     tangible variables and vertical items between and within the
+     horizontal /commune/ items.  The left panel of \autoref{Fig:1}
+     shows that each /commune/ approximately contains the whole range
+     of elevation, slope, and exposition of the area, whereas the
+     right panel shows that administrative delineations of /communes/
+     articulate with each other on the north-south gradient, which
+     ensures sharp climatic differences between them.
+     \autoref{Fig:A0} in the Appendix presents the acreages and shares
+     of each vertical item for each horizontal /commune/ item.  Every
+     /commune/ has at least two of the five possible vertical items.
+     The majority of /communes/ count three different vertical items,
+     with an average number of 3.87 items per /commune/.  Vineyards
+     ranked as /Village/, /Premier Cru/ and /Grand Cru/ are present in
+     28, 24, and 11 /communes/ accounting for 90%, 77.4%, and 35.5% of
+     all of them, respectively.
 
 **** Banalities                              :noheading:
 
-     \autoref{Tab:SD} in Appendix [[#App:A]] presents some summary
-     statistics about the exhaustive plot-level data that we use on
-     the 31 /communes/ of the region.  For about $60\,000$ vineyard
-     plots of a tiny average size of 0.2 ha (about 0.5 acres) the
-     elevation is distributed between 200 and 500 m with an average of
-     286 m.  Slopes have an average of 5.73 degrees with a high
-     standard deviation (the coefficient of variation is about 100 %).
-     The solar radiation is distributed from 0.58 to 1.23 millions of
-     Joules with an average of about 1.05 millions J.  To add
-     flexibility in the econometric estimations, the aspect variable
-     is discretized in 8 dummy variables for different semi-quadrants,
-     which shows that more than 50 % of vineyard plots have a
-     south-eastern exposition, between 90 and 180 degrees.  The Table
-     also reports the current distribution of the vertical dimensions
-     of GIs and the distribution in 1936 when the national INAO was
-     created.  We also use additional geological and pedological as
-     fixed effects to control for sub-soil and soil characteristics of
-     vineyards.  Because such variables are not determinant in the
-     empirical strategy that we propose, we do not report them here.
-     Interested reader can have access to these variables through the
-     Reproducibility Material, RM, from the link at the title page of
-     this document.
+     \autoref{Tab:SD} in the Appendix presents some summary statistics
+     about the exhaustive plot-level data that we use on the 31
+     /communes/ of the region.  For approximately $60\,000$ vineyard
+     plots of a tiny average size of 0.2 ha ($\sim$ 0.5 acres), the
+     elevation is distributed between 200 and 500 m, with an average
+     of 286 m.  Slopes are an average 5.73 degrees wit high standard
+     deviation (the coefficient of variation is $\sim$ 100%).  The
+     solar radiation is distributed from 0.58 to 1.23 million Joules,
+     with an average of 1.05 million J.  To add flexibility to the
+     econometric estimations, the aspect variable is discretized in
+     eight dummy variables for different semi-quadrants, which shows
+     that more than 50% of vineyard plots have a south-eastern
+     exposition, between 90 and 180 degrees.  \autoref{Tab:SD} also
+     shows the current distribution of the vertical dimensions of GIs
+     and the distribution in 1936 when the INAO was created.  We also
+     use additional geological and pedological variables as fixed
+     effects to control for sub-soil and soil characteristics.
+     Because such variables are not central in the empirical strategy
+     that we propose, we do not report them here.  Interested readers
+     can access these variables through the Replication Material (RM)
+     from the link on the title page of this article.
 
 ** Model of GI designation
    :PROPERTIES:
    :CUSTOM_ID: Sec:2
    :END:
 
-   We first present the structural model of GI designation that is
-   assumed to be the data generating process.  Secondly, we describe
-   the decomposition of the vineyard quality signal from the GI
-   information available to consumers.  Thirdly, we discuss the
-   empirical challenge to separate the /terroir/ effects from the
+   First, we present the structural model of GI designation that is
+   assumed to be the data-generating process.  Next, we describe the
+   decomposition of the vineyard quality signal from the GI
+   information available to consumers.  Finally, we discuss the
+   empirical challenge of separating the /terroir/ effects from the
    intangible influences and the specification procedure that we
    propose.
 
@@ -7209,40 +7200,39 @@ model.
 
     The fine-scale variation of natural characteristics (i.e.,
     /terroir/) between vineyard sites is the basis of the GI
-    classification scheme.  Vineyard quality index in the long run of
-    history is supposed to be an unknown function
+    classification scheme.  The historical vineyard quality index is
+    supposed to be an unknown function
     $q:\mathbb{R}^{K^*}\mapsto\mathbb{R}$ of the $K^*$ natural
     characteristics $X^*$ of each vineyard plot.  From this scalar
     quality, GIs are designated through a continuous latent variable
-    $y^*$ defined as the difference between the long run quality
-    signal and idiosyncratic random term $\xi$ called designation
-    noise:
+    $y^*$ defined as the difference between the long-term quality
+    signal and idiosyncratic random designation noise ($\xi$):
 #+begin_export latex
 \begin{equation}
 y^*= q(X^*)- \xi.
 \end{equation}
 #+end_export
     The mapping between tangible /terroir/ characteristics $X^*$ and
-    the objective quality index represents the accumulate knowledge
+    the objective quality index represents the cumulative knowledge
     from informed people that have contributed to the vineyard
-    classification on the long run of history.  At this stage, we
-    consider the latent variable as an unbiased (while not perfect)
-    signal of the quality of vineyards with $\mathbb{E}(\xi\mid
-    X^*)=0$.  The designation noise could be attributed to imperfect
-    knowledge or anecdotal facts that cause random deviations around
-    the signal.  The presence of designation noise is more generally
-    due to the absence of a deterministic rule between vineyard
-    natural characteristics and the GIs, hence the orthogonality of
-    the designation noise is more a definition than an assumption.
-    The adequacy between this quality signal and consumer preferences
-    for the taste of wines and the related question of the value of
-    the GI information would require economic data about wine prices
-    or consumers' surveys that we do not use here.  Instead, we
-    evaluate the relevance of the GI information according to this
-    long run quality signal which is different than evaluating the
-    relevance of the quality signal itself.  The ordered structure of
-    the vertical dimension of GIs explains our reference to objective
-    quality.
+    classification throughout history.  At this stage, we consider the
+    latent variable as an unbiased, through imperfect, signal of the
+    quality of vineyards with $\mathbb{E}(\xi\mid X^*)=0$.  The
+    designation noise could be attributed to imperfect knowledge or
+    anecdotal facts that cause random deviations around the signal.
+    The presence of designation noise is more generally due to the
+    absence of a deterministic rule between vineyard natural
+    characteristics and GIs; thus, the orthogonality of the
+    designation noise is more a definition than an assumption.
+    Determining the correlation between this quality signal and
+    consumer preferences for the taste of wines and the related
+    question of the value of GI information would require economic
+    data about wine prices or consumer' surveys that we did not use
+    here.  Instead, we evaluated the relevance of the GI information
+    according to this long-term quality signal which is different than
+    evaluating the relevance of the quality signal itself.  The
+    ordered structure of the vertical dimension of GIs explains our
+    reference to objective quality.
 
 **** Dimensions of GIs                       :noheading:
 
@@ -7258,17 +7248,17 @@ y^*= q(X^*)- \xi.
 y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j},\;\;\;\mbox{ for }\;\;\; j= 1, \dots, 5,\label{Eq:STR}
 \end{equation}
 #+end_export
-     with $\alpha_0^c= -\infty < \alpha_1^c< \cdots < \alpha_5^c=
+     where $\alpha_0^c= -\infty < \alpha_1^c< \cdots < \alpha_5^c=
      +\infty$ for all /commune/ $c\in\{1, \dots, 31\}$ by
      construction.  The exponent $c$ on the thresholds marks the
      /commune/ in which the vineyard is located among the 31
-     /communes/ of the area under consideration, it represents the
+     /communes/ of the area under consideration and represents the
      horizontal dimension of GIs.  The variation in the thresholds
      between /communes/ corresponds to the differential treatments
      that have been documented by historians and presented above.  For
-     instance, a /commune/ $c_1$ has a preferential treatment in terms
-     of /Premier Cru/ ($j=4$) if its corresponding thresholds are
-     smaller than those of another given /commune/ $c_2$:
+     example, a /commune/ $c_1$ receives preferential treatment in
+     terms of /Premier Cru/ ($j=4$) if its corresponding thresholds
+     are smaller than those of another given /commune/ $c_2$:
      $\alpha^{c_1}_{3}< \alpha^{c_2}_{3}$ and $\alpha^{c_1}_{4}<
      \alpha^{c_2}_{4}$.  This means that the quality requirements for
      /Premier Cru/ of the /commune/ $c_1$ are less stringent and,
@@ -7278,25 +7268,24 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      last inequality requires the addtional assumption that
      $\mathbb{E}(\xi\mid X^*, c)= 0$, i.e., that the random part of
      the latent variable is unrelated between \emph{communes}.  We
-     make this assumption in the rest of the paper, which has the same
-     rationale than the orthogonality of designation noise in regard
-     to \emph{terroir} variables presented above and implies it by the
-     law of iterated expectations: $\mathbb{E}(\xi\mid X^*)=
+     make this assumption in the rest of the article, which has the
+     same rationale as the orthogonality of designation noise in
+     regard to \emph{terroir} variables presented above and implies it
+     by the law of iterated expectations: $\mathbb{E}(\xi\mid X^*)=
      \mathbb{E}[\mathbb{E}(\xi\mid X^*, c)\mid X^*]=0$.}@@
 
 **** Efficient case                          :noheading:
 
      Within a given /commune/, the ordered structure of GIs provides
-     an efficient certification process according to the definition of
-     cite:DNab91: the probability with which a vineyard get classified
-     into at least its own quality category is higher than the
-     probability with which another vineyard with lower quality levels
-     will get classified into at least that category.  For two
-     vineyard plots $1$ and $2$ with differentiated tangible
-     characteristics such that $q(X_1^*)> q(X_2^*)$ and located within
-     the same /commune/ $c_0$, one can show that
-     $\mbox{Prob}(y_{1}\geqslant j)> \mbox{Prob}(y_{2}\geqslant j)$
-     for all $j$ because:
+     an efficient certification process as defined by cite:DNab91; the
+     probability that a vineyard is classified into at least its own
+     quality category is higher than the probability that another
+     vineyard with lower quality will be classified into at least that
+     category.  For two vineyard plots, $1$ and $2$, with
+     differentiated tangible characteristics such that $q(X_1^*)>
+     q(X_2^*)$ and located within the same /commune/ $c_0$, one can
+     show that $\mbox{Prob}(y_{1}\geqslant j)>
+     \mbox{Prob}(y_{2}\geqslant j)$ for all $j$ because:
 #+begin_export latex
 \begin{equation}
 \mbox{Prob}(y_{i}\geqslant j)= F\left[q(X_i^*)- \alpha_{j-1}^{c_0}\right],
@@ -7307,27 +7296,27 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      function of the designation noise $\xi$.  The efficiency of the
      GI designation scheme is also verified in the absence of
      threshold variations between /communes/ ($\alpha_j^c$ constant
-     among $c$ for each $j$) which is equivalent to GI signal
-     unbiasedness.
+     among $c$ for each $j$), which is equivalent to lack of bias in
+     the GI signal.
 
 **** Ordinal superiority                     :noheading:
 
-     The efficiency property and the absence of bias are no longer
-     true for vineyard plots located in different /communes/, say
-     $c_1$ and $c_2$ to continue with the same example.  The vineyard
-     plot $2$ of lesser quality has a higher probability of being
-     classified at least $j_1$ (the GI quality rank of vineyard $1$)
-     if $\alpha_{j_1}^{c_2}- \alpha_{j_1}^{c_1}> q(X_1^*)- q(X_2^*)$.
-     In this case, the preferential treatment accorded to the
-     /commune/ $c_2$ is a source of bias in the GI classification that
-     contradicts the efficiency of the vertical GI
-     differentiation.@@latex:\footnote{$\alpha_{j_1}^{c_2}>
-     \alpha_{j_1}^{c_1}$ is a necessary condition to have a higher
-     probability for the vineyard plot $2$ compared to $1$.}@@ In
-     particular, the probability that another given plot 3 of the same
-     quality that plot 1 while from another /commune/ $c_3$ is higher
-     in the GI classification scheme is equal to the ordinal
-     superiority measure defined by cite:AKat17:
+     The efficiency property and absence of bias are no longer true
+     for vineyard plots located in different /communes/, say $c_1$ and
+     $c_2$ to continue with the same example.  The lesser quality
+     vineyard plot $2$ has a higher probability of being classified at
+     least $j_1$ (the GI quality rank of vineyard $1$) if
+     $\alpha_{j_1}^{c_2}- \alpha_{j_1}^{c_1}> q(X_1^*)- q(X_2^*)$.  In
+     this case, the preferential treatment given to /commune/ $c_2$ is
+     a source of bias in the GI classification that contradicts the
+     efficiency of the vertical GI differentiation
+     ($\alpha_{j_1}^{c_2}> \alpha_{j_1}^{c_1}$ is a necessary
+     condition to have a higher probability for the vineyard plot $2$
+     compared to $1$).  In particular, the probability that another
+     given plot from another /commune/ (e.g., plot 3 from /commune/
+     $c_3$) of the same quality as plot 1 but higher in the GI
+     classification scheme is equal to the ordinal superiority measure
+     defined by cite:AKat17:
 #+begin_export latex
 \begin{equation}
 \gamma^{j_1}_{3\mid 1}\equiv \mbox{Prob}(y_{3}> y_{1}\mid X^*_1)= F\left(\frac{\alpha_{j_1}^{c_3}- \alpha_{j_1}^{c_1}}{\sqrt{2}}\right).\label{Eq:OS}
@@ -7335,46 +7324,44 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 #+end_export
      We use the approximation that the cdf of the normalized
      difference between designation noises is equal to the marginal
-     cdf (this approximation is exact in the case of a Gaussian
-     distribution).  This measure of ordinal superiority computes the
-     bias in GI designation independently of the conditioning tangible
-     characteristics $X^*_1$ of vineyard plots.  This allows a direct
-     comparison between the horizontal dimension $c$ of GIs for each
-     vertical level $j$.  For a given /commune/ of reference (as $c_1$
-     in \autoref{Eq:OS}), this implies $30 \times 5= 150$ measures of
-     ordinal superiority.  Hence, we assume an additive separability
-     between the horizontal and vertical intercepts to simplify the
-     comparison, this means $\alpha^c_{j}= \alpha_{j}- \mu_c$.  The
-     ordinal superiority measure between 2 plots located in given
-     /communes/ A and B becomes $\gamma_{A\mid B}= F\left[(\mu_{c_B}-
-     \mu_{c_A})/ \sqrt{2}\right]$ regardless of $j$, which allows to
-     divide by 5 the number of ordinal superiority statistics.  The
-     resulting 30 statistics provide objective measures of the
-     differential treatments that have been applied between /communes/
-     according to the GI vertical classification of their vineyards.
-     The presence of significant ordinal superiority measures
-     indicates some bias in the GIs signal and the ordinal superiority
-     measure are used to estimate the size of the bias.
+     cdf; this approximation is exact in the case of a Gaussian
+     distribution.  This measure of ordinal superiority determines the
+     bias in the GI designation independently of the conditioning
+     tangible characteristics $X^*_1$ of vineyard plots.  This allows
+     a direct comparison between the horizontal dimension $c$ of GIs
+     for each vertical level $j$.  For a given /commune/ of reference
+     (e.g., $c_1$ in \autoref{Eq:OS}), this implies $30 \times 5= 150$
+     measures of ordinal superiority.  Therefore, we assume an
+     additive separability between the horizontal and vertical
+     intercepts to simplify the comparison, $\alpha^c_{j}= \alpha_{j}-
+     \mu_c$.  The ordinal superiority measure between two identical
+     plots located in given /communes/ A and B becomes $\gamma_{A\mid
+     B}= F\left[(\mu_{c_B}- \mu_{c_A})/ \sqrt{2}\right]$ regardless of
+     $j$, which allows the number of ordinal superiority measures to
+     be divided by 5.  The resulting 30 statistics provide objective
+     measures of the differential treatments that have been applied
+     between /communes/ according to the GI vertical classification of
+     their vineyards.  The presence of significant ordinal superiority
+     measures indicates some bias in the GI signal, and the ordinal
+     superiority measures are used to estimate the size of the bias.
 
 *** Informational content
 **** General decomposition                   :noheading:
 
-     The formal analysis about the informational content of GIs is
-     based on the framework of cite:GPen10 about information signal
-     ordering, in addition to the variance decomposition formulas
-     provided by cite:BSwa12.  Following the former authors, we
-     consider GIs as an information structure, i.e., a joint
-     distribution between the states of the world (long run vineyard
-     qualities index) and the GIs (respectively noted $y$ and $c$ for
-     their vertical and horizontal dimensions).  We propose to
-     evaluate to what extend the observation of $y$ and $c$ from the
-     wine labels allows the consumers to recover wine quality,
-     according to the precision criteria that a more informative
-     signal leads to a more disperse distribution of expectations of
-     the state of the world conditionally to the signal.  Contrary to
+     The formal analysis of the informational content of GIs is based
+     on the framework of cite:GPen10 for information signal ordering,
+     in addition to the variance decomposition formulas provided by
+     cite:BSwa12.  Thus, we consider GIs as an information structure,
+     i.e., a joint distribution between the states of the world
+     (long-term vineyard qualities index) and the GIs ($y$ and $c$
+     represent the vertical and horizontal dimensions, respectively).
+     We propose evaluating the extend to which the observation of $y$
+     and $c$ from wine labels allows consumers to recover wine
+     quality, assuming that a more informative signal leads to a more
+     dispersed distribution of conditional expectations.  Contrary to
      cite:GPen10, we measure the dispersion through conditional
      variance of the signals as it is allowed by the work of
-     cite:BSwa12.  This leads to 4 nested variance decomposition:
+     cite:BSwa12.  This leads to four nested variance decomposition:
 #+begin_export latex
 \begin{align}
 \mbox{\emph{Total decomposition :} }& \mathbb{V}(y^*)= \mathbb{V}[q(X^*)]+ \mathbb{V}[\xi]  \label{eq:dec1}\\
@@ -7389,96 +7376,95 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 \end{align}
 #+end_export
 
-    The /total decomposition/ of \autoref{eq:dec1} comes from the law
-    of total variance, the law of iterated expectations and the
+    The /total decomposition/ in \autoref{eq:dec1} comes from the law
+    of total variance, the law of iterated expectations, and the
     definition of designation errors by $\mathbb{E}(\xi\mid X^*)=0$.
     It presents the variance of the latent variable as the sum of a
-    /signal variance/ and a /noise variance/ defined from the data
-    generating process.  The signal to noise ratio
+    /signal variance/ and a /noise variance/ defined from the
+    data-generating process.  The signal to noise ratio
     $\mathbb{V}[q(X^*)]/\mathbb{V}[\xi]$ gives the proportion of
     relevant information conveyed by the continuous quality grade
-    $q(X^*)$ in terms of the irrelevant information from the noise
-    $\xi$.  This decomposition represents the maximum informational
-    content that any GI signal can reach for the data generating
-    process under consideration.  This corresponds to the case where
-    the continuous quality grade are conveyed to consumers as a
-    continous score put on the wine label.
+    $q(X^*)$ in terms of the irrelevant information from noise $\xi$.
+    This decomposition represents the maximum informational content
+    that any GI signal can achieve for the data-generating process
+    under consideration.  This corresponds to the case in which the
+    continuous quality grade is conveyed to consumers as a continuous
+    score on the wine label.
 
 **** Joint decomposition                     :noheading:
 
-     The /joint decomposition/ of \autoref{eq:dec2} comes from the law
+     The /joint decomposition/ in \autoref{eq:dec2} comes from the law
      of total variance applied to the continuous quality grade
      citep:BSwa12.  It disentangles the part of the signal that is
-     conveyed jointly by the vertical and the horizontal dimensions of
-     GIs (the /joint signal/, which is the variance of the
-     expectation) and the part that is lost due to the discretization
-     of the continuous quality information (the /joint noise/, which
-     is the expectation of the variance).  If the continuous quality
-     grade $q(X^*)$ would be observable, the share of the /joint
-     signal/ in the /total signal/ would be the R$^2$ of the
-     regression of $q(X^*)$ on the full set of dummy variables from
-     $y$ and $c$.  According to the nested structure of the /total/
-     and /joint/ decomposition, we define the /joint informational
-     content/ of horizontal and vertical dimensions of GIs as
+     conveyed jointly by the vertical and horizontal dimensions of GIs
+     (the /joint signal/, which is the variance of the expectation)
+     and the part that is lost due to the discretization of the
+     continuous quality information (the /joint noise/, which is the
+     expectation of the variance).  If the continuous quality grade
+     $q(X^*)$ was observable, the share of the /joint signal/ in the
+     /total signal/ would be the R$^2$ of the regression of $q(X^*)$
+     on the full set of dummy variables from $y$ and $c$.  According
+     to the nested structure of the /total/ and /joint/ decomposition,
+     we define the /joint informational content/ of horizontal and
+     vertical dimensions of GIs as
      $\mathbb{V}\big\{\,\mathbb{E}[q(X^*)\mid y, c]\,\big\}/
      \big(\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y, c]\,\big\}+
      \mathbb{V}[\xi]\big)$.  This statistic measures the share of the
      quality information that is conveyed to consumers through both
-     $y$ and $c$ dimensions of GIs.
+     dimensions of GIs.
 
 **** Vertical decomposition                  :noheading:
 
-     The /vertical decomposition/ of \autoref{eq:dec3} separates the
-     /joint signal/ between the part that is conveyed through the
+     The /vertical decomposition/ in \autoref{eq:dec3} separates the
+     /joint signal/ into the part that is conveyed through the
      vertical dimension of GIs (the /vertical signal/, the variance of
-     the expectation) and the residual part that remains to the
+     the expectation) and the residual part that remains for the
      horizontal dimension (the /vertical residual/).  The first term
      represents the variance of the quality information that can be
      assessed by consumers only through the vertical dimension $y$ of
      GIs.  Consumers may choose to favor this dimension by choice
      based on their experience or they can have a bounded rationality
-     due to limited cognitive ability to understand the full
-     complexities of GIs.  An important point is that in the absence
+     due to limited cognitive ability in understanding the full
+     complexities of GIs.  An important point is that, in the absence
      of preferential treatment between /communes/ in the GI
-     designation scheme, the residual part of this decomposition (the
-     /vertical residual/) would be zero.  In such a case, the vertical
-     dimension is unbiased and provide all the relevant information
-     about quality available to consumers.  The only loss in
-     information is due to the discretization of the continuous
-     quality grade and the /joint signal/ is equal to the /vertical
-     signal/.  We also propose to define a /vertical noise/ as the sum
-     of the /vertical residual/ and the /joint noise/.  This
-     corresponds to the information loss of using only the vertical
-     dimension:
+     designation scheme, the residual part of this decomposition would
+     be zero.  In such a case, the vertical dimension would be
+     unbiased and provide all of the relevant information about
+     quality available to consumers.  The only loss in information
+     would be due to the discretization of the continuous quality
+     index and the /joint signal/ would be equal to the /vertical
+     signal/.  We also propose defining /vertical noise/ as the sum of
+     the /vertical residual/ and the /joint noise/.  This corresponds
+     to the information loss of using only the vertical dimension:
 #+begin_export latex
 \begin{align}
 \mbox{\emph{Vertical noise :} }& \mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y]\,\big\}=
-\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y, c]\,\big\}+\mathbb{E}\big\{\,\mathbb{V}[\mathbb{E}(q(X^*)\mid y, c)\mid y]
+\mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid y, c]\,\big\}+\mathbb{E}\big\{\,\mathbb{V}[\mathbb{E}(q(X^*)\mid y, c)\mid y]\big\}
 \end{align}
 #+end_export
 
 **** Horizontal decomposition                :noheading:
 
-     The last /horizontal decomposition/ of \autoref{eq:dec4} is the
-     symmetric of the previous one as it defines a /horizontal signal/
-     and a /horizontal residual/.  This means that the decomposition
-     of the /joint signal/ between a /vertical/ and a /horizontal/
-     part is non-unique, depending on the GI dimension that is
-     privileged.  The first /horizontal signal/ measures the
-     dispersion of the expectation of vineyard quality conditionally
-     on the /commune/ of the vineyards.  This informational content is
-     due both to the incidental spatial correlation between vineyard
-     quality and /commune/ delineations, and to the historical factors
-     that have made GI thresholds to depend on the /communes/.  In the
-     absence of any preferential treatment of certain /communes/, this
-     signal is still reliable as it indicates that some /communes/
-     have better tangible conditions to make wines of better quality.
-     As before, the residual part of the decomposition is the marginal
-     gain of using the vertical dimension of GIs for consumers that
-     rely only on the horizontal dimension.  Finally, we also define
-     the /horizontal noise/ as the sum of the /joint noise/ and the
-     /horizontal residual/, it corresponds to the loss in GIs signal
-     of using only the horizontal dimension of GIs:
+     The /horizontal decomposition/ in \autoref{eq:dec4} is symmetric
+     to vertical decomposition, as it defines a /horizontal signal/
+     and a /horizontal residual/.  This means that decomposition of
+     the /joint signal/ between a /vertical/ and /horizontal/ part is
+     non-unique, depending on the GI dimension that is privileged.
+     The first /horizontal signal/ measures the dispersion of the
+     expectation of vineyard quality conditionally on the /commune/ of
+     the vineyards.  This informational content is due both to the
+     incidental spatial correlation between vineyard quality and
+     /commune/ delineations, and to the historical factors that have
+     made GI thresholds dependent on the /communes/.  In the absence
+     of any preferential treatment of certain /communes/, this signal
+     is reliable, as it indicates that some /communes/ have better
+     tangible conditions to make wines of better quality.  Thus, the
+     residual part of the decomposition is the marginal gain of using
+     the vertical dimension of GIs for consumers that rely only on the
+     horizontal dimension.  Finally, we also define the /horizontal
+     noise/ as the sum of the /joint noise/ and the /horizontal
+     residual/, and it corresponds to the loss in GI signal when using
+     only the horizontal dimension of GIs:
 #+begin_export latex
 \begin{align}
 \mbox{\emph{Horizontal noise :} }& \mathbb{E}\big\{\,\mathbb{V}[q(X^*)\mid c]\,\big\}=
@@ -7491,102 +7477,101 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 **** General                                 :noheading:
 
      The estimation of the unknown function $q(\cdot)$ that relates
-     tangible attributes of vineyards to the long run quality index is
-     subject to 2 empirical challenges that we consider jointly: the
-     specification of the functional form for the effect of a given
-     tangible variable $x_k$ and the presence of unobserved /terroir/
-     variables that impact vineyard quality.  For example, the data
-     set that we use here does not contain fine-scale climate
-     variables (such as temperature, precipitation) but one can also
-     think to other unobserved /terroir/ variables such as local
-     variations in soil quality.  These unobserved effects from the
-     econometrician point of view are taken into account in GI
-     designations by observations on the field because they are known
-     by people involved in GI designations.  This is a serious
-     econometric concern due to the potential confounding effect that
-     such variables could have through their spurious correlations
-     with /commune/ delineations that group together adjacent vineyard
+     tangible attributes of vineyards to the long-term quality index
+     is subject to two empirical challenges that we consider jointly:
+     the specification of the functional form for the effect of a
+     given tangible variable $x_k$ and the presence of unobserved
+     /terroir/ variables that impact vineyard quality.  For example,
+     the data set that we use does not contain fine-scale climate
+     variables, such as temperature or precipitation, but one can also
+     consider other unobserved /terroir/ variables such as local
+     variations in soil quality.  These unobserved effects for the
+     econometrician are taken into account in GI designations by
+     observations in the field because they are known by people
+     involved in GI designations.  This is a serious econometric
+     concern due to the potential confounding effect that such
+     variables could have through their spurious correlations with
+     /commune/ delineations that group together adjacent vineyard
      plots.  Identifying the information conveyed by GIs about
-     tangible variables requires that all these /terroir/ variables
-     would be observable, which is unfortunately not the case and
-     probably never will be.  We propose instead to estimate an
-     Ordered Generalized Additive Model (OGAM, citealp:WPSa16,Wood17
-     with citealp:KWan03,LVEP15 for econometric applications) that
-     allows to specify semiparametrically the effect of each observed
-     tangible variables and to control for omitted /terroir/ variables
-     through a bivariate smoothing of geographical coordinates.  This
+     tangible variables requires that all of these /terroir/ variables
+     be observable, which is unfortunately not the case and probably
+     never will be.  Instead, we propose estimating an Ordered
+     Generalized Additive Model (OGAM, citealp:WPSa16,Wood17;
+     citealp:KWan03,LVEP15 for econometric applications) that allows
+     to semiparametric specification of the effect of each observed
+     tangible variable and to control for omitted /terroir/ variables
+     through bivariate smoothing of geographic coordinates.  This
      identification strategy is based on the definition of /terroir/
-     as the full set of natural variables that impact long run
-     vineyard quality.  As coming from natural processes, we consider
-     them as spatially continuous according to the axiom that nature
-     makes no jumps, in contrast to the discontinuities introduced by
-     /commune/ administrative delineations related to intangible human
-     determinants of GIs.
+     as the full set of natural variables that impact long-term
+     vineyard quality.  As they originate from natural processes, we
+     consider them as spatially continuous according to the axiom that
+     nature makes no jumps, in contrast to the discontinuities
+     introduced by administrative delineations of /communes/ related
+     to intangible human determinants of GIs.
 
 **** Reduced form                            :noheading:
 
      Consider that we only observe the realizations of a subset $X_i
-     \subset X_i^*$ of the whole /terroir/ variables that are taken
-     into account in the GI designation scheme for a given vineyard
-     plot $i= 1, \dots, N$.  These observed tangible variables are
+     \subset X_i^*$ of all /terroir/ variables that are taken into
+     account in the GI designation scheme for a given vineyard plot
+     $i= 1, \dots, N$.  These observed tangible variables are
      elevation, slope, exposition, solar radiation, geology, pedology
-     and geographical coordinates that are described to have both
+     and geographic coordinates that are described as having both
      direct and indirect effects on vineyard quality.  By noting $C_i$
-     the row vector of dimension 31 with the typical element $c_{ih}$
-     equals to 1 if the vineyard $i$ is located in the /commune/ $h$
-     and 0 otherwise, the specification of a logistic distribution for
-     the reduced-form errors leads to a parametric ordered logit model
+     the row vector of dimension 31, with the typical element $c_{ih}$
+     equal to 1 if vineyard $i$ is located in /commune/ $h$ and zero
+     otherwise, the specification of a logistic distribution for the
+     reduced-form errors leads to a parametric ordered logit model
      that can be estimated by maximum likelihood:
 #+begin_export latex
 \begin{equation}
-\mbox{Prob}(y_{i}> j\mid X_i, C_i)= \Lambda\big[ B(X_i)^\top\beta+ C_i^\top\mu- \alpha_{j}\big]\label{Eq:Mod}
+\mbox{Prob}(y_{i}> j\mid X_i, C_i)= \Lambda\big[ B(X_i)^\top\beta+ C_i^\top\mu- \alpha_{j}\big],\label{Eq:Mod}
 \end{equation}
 #+end_export
      where $\Lambda$ is the logistic cdf.  The intangible determinants
-     that impact GIs through varying designation thresholds -- noted
-     $\mu_c$ previously -- are taken into account by the dummy
-     variables $C_i$ which work as /commune/ fixed effects.  In the
-     absence of theoretical priors about the effects of all observed
-     tangible variables $X_i$, we specify them through a series of
-     functional transformations noted $B(\cdot)$ with an associated
-     vector of coefficients $\beta$.  From an initial set of $K$
-     observed tangible variables (with $K<K^*$) the series and the
-     vector of coefficients are of dimension $\widetilde{K}=
-     \sum\nolimits_k L_k$ where $L_k$ is the number of transformations
-     used to specify the effect of each variable $x_k$.  For instance,
-     a second-order polynomial specification for all observed tangible
+     that impact GIs through varying designation thresholds, noted
+     $\mu_c$ previously, are taken into account by the dummy variables
+     $C_i$ which work as /commune/ fixed effects.  In the absence of
+     theoretical priors for the effects of all observed tangible
+     variables $X_i$, we specify them through a series of functional
+     transformations noted as $B(\cdot)$ with an associated vector of
+     coefficients $\beta$.  From an initial set of $K$ observed
+     tangible variables (with $K<K^*$), the series and vector of
+     coefficients are of dimension $\widetilde{K}= \sum\nolimits_k
+     L_k$, where $L_k$ is the number of transformations used to
+     specify the effect of each variable $x_k$.  For example, a
+     second-order polynomial specification for all observed tangible
      variables is noted $B(X_i)= [x_{1i}\; x_{1i}^2\; x_{2i} \;
      x_{2i}^2 \; \cdots \; x_{Ki} \; x_{Ki}^2]$ with a set of
      $\widetilde{K}= 2\times K$ coefficients to estimate.
 
 **** Method of estimation                    :noheading:
 
-     Polynomial specifications are shown empirically to have a limited
-     performance to account for the complex interactions between
-     natural characteristics of vineyards and the continuous quality
-     index used in GI designations.  Hence, we turn to semiparametric
-     thin plate regression splines that have optimal smooth
-     approximation properties according to cite:Wood17.  The matrix
-     $B(X)$ is specified through additive low rank isotropic smoothers
-     of the individual tangible variables $x_k$.  The cost of this
-     additional flexibility is the need to estimate jointly a
-     smoothing parameter that controls the penalization of the
-     superfluous wiggliness.  Accordingly, the complexity of the
-     spline transformations are determined endogenously for a given
-     maximum basis reduction for each variable through a quadratic
-     penalty.  The minimization of the penalized deviance is done by
-     penalized iterated weighted least square and the smoothing
-     parameter is estimated using a separate criterion from restricted
-     maximum likelihood framework.  The computational details are
-     given in cite:WPSa16.  The complexity of the effect of a given
-     variable or of the whole model can be assessed through the
-     effective degree of freedom that accounts for the endogenous
-     penalization of any given dimension reduction (citealp:Wood17,
-     p.273).  The most sensible point is the estimation of the
-     smoothing parameter which is source of additional uncertainty,
-     while cite:WPSa16 provide some corrections for inference and
-     traditional goodness of fit measures such as Akaike Information
-     Criteria (AIC).
+     Polynomial specifications will be shown empirically to have
+     limited performance in accounting for the complex interactions
+     between natural characteristics of vineyards and the continuous
+     quality index used in GI designations.  Thus, we turned to
+     semiparametric thin plate regression splines that have optimal
+     smooth approximation properties citep:Wood17.  The matrix $B(X)$
+     is specified through additive low rank isotropic smoothers of the
+     individual tangible variables $x_k$.  The cost of this additional
+     flexibility is the need to estimate jointly a smoothing parameter
+     that controls the penalization of the superfluous wiggliness.
+     Accordingly, the complexity of the spline transformations is
+     determined endogenously for a given maximum basis reduction for
+     each variable through a quadratic penalty.  The penalized
+     deviance is minimized by penalized iterated weighted least
+     squares and the smoothing parameter is estimated using a separate
+     criterion from the restricted maximum likelihood framework.  The
+     computational details are given in cite:WPSa16.  The complexity
+     of the effect of a given variable or of the whole model can be
+     assessed by the effective degrees of freedom that account for the
+     endogenous penalization of any given dimension reduction
+     (citealp:Wood17, p.273).  The most sensible point is the
+     estimation of the smoothing parameter which is a source of
+     additional uncertainty, whereas cite:WPSa16 provide some
+     corrections for inference and traditional goodness of fit
+     measures, such as Akaike Information Criteria (AIC).
 
      # In practice then, choice of basis dimension has to remain a part
      # of model specification. But it is important to note that all the
@@ -7605,53 +7590,54 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 
 **** Diagnostic procedure                    :noheading:
 
-     Goodness of fit measures provide information about predictive
-     abilities of estimated parameters but give little guidance about
-     the identification of the individual effects of the RHS variables
-     that are impacted by the degree of smoothing of geographical
-     coordinates.  To determine the sufficient complexity that allow
-     to control for unobserved spatial heterogeneity correlated with
-     /commune/ delineations, we use the surrogate residuals recently
+     Goodness of fit measures provide information about the predictive
+     abilities of estimated parameters but give little guidance on
+     identifying the individual effects of the explanatory variables
+     that are impacted by the degree of smoothing of geographic
+     coordinates.  To determine the sufficient complexity that allows
+     control of unobserved spatial heterogeneity that correlates with
+     /commune/ delineations, we used the surrogate residuals recently
      defined by cite:LZha18 from auxiliary regressions that do not
      take into account /commune/ fixed effects.  Using residuals for
-     specification purpose has a long history in econometrics,
-     complemented by generalized residuals for non linear outcomes
-     citep:PHal83,GMRT87,CIri87.  Define a surrogate variable $S\mid
-     X, y \sim \lambda\,\big[\,B(X)^\top\beta- \alpha_{y}\mid
-     y\,\big]$ that follows a truncated logistic distribution
-     conditionally on $y$, the observed distribution of the vertical
-     dimension of GIs.  The principle of using the observed values of
-     $y$ to estimate the residuals is shared by generalized residuals,
-     the originality of the surrogate approach is to draw randomly the
-     realizations instead of computing them analytically.  This allows
-     to estimate the full distribution of model errors instead of only
-     their first moments and sensibly extend the potential
-     applications in regression diagnostics citep:LZha18.  We obtain
-     the residuals from $N$ random draws of the surrogate variable
-     $S_i$ with:
+     specification purposes has a long history in econometrics,
+     complemented by generalized residuals for non-linear outcomes
+     citep:PHal83,GMRT87,CIri87.  
+
+     Define a surrogate variable $S\mid X, y \sim
+     \lambda\,\big[\,B(X)^\top\beta- \alpha_{y}\mid y\,\big]$ that
+     follows a truncated logistic distribution conditionally on the
+     observed distribution of the vertical dimension of GIs.  The
+     principle of using the observed values of $y$ to estimate the
+     residuals is shared by generalized residuals, as the originality
+     of the surrogate approach is to randomly draw the realizations
+     rather than compute them analytically.  This allows an estimation
+     of the full distribution of model errors instead of only their
+     first moments and sensibly extends the potential applications in
+     regression diagnostics citep:LZha18.  We obtained the residuals
+     from $N$ random draws of the surrogate variable $S_i$ with:
 #+begin_export latex
 \begin{equation}
 R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 \end{equation}
 #+end_export
-     and regress them on the /commune/ fixed effects.  This allows to
-     test the presence of correlated residual patterns after
+     and regress them on the /commune/ fixed effects.  This allows us
+     to test the presence of correlated residual patterns after
      accounting only for tangible variables in the auxiliary
      regressions.  By increasing the complexity of $B(X_i)$ through
-     increasing spline bases dimension of the smooth functions of
+     increasing spline base dimensions of the smooth functions of
      geographical coordinates, the joint significance of /commune/
      fixed effect decreases as the unobserved spatial patterns are
      increasingly accounted for.  Failing to reject the null
      hypothesis of a Fisher test of joint significance of /commune/
      fixed effects is expected to determine that the sufficient
      complexity is attained by the auxiliary model.  Once this is
-     attained, we estimate jointly the effect of tangible and
+     attained, we jointly estimate the effect of tangible and
      intangible GI determinants in a full OGAM with the obtained
      degree of spatial smoothing as in any parametric regression
-     framework.  In the absence of residual spatial effects correlated
-     with /communes/ dummies, the estimated ordinal superiority
-     measures are unbiased.  Note that the F-statistics are
-     bootstrapped to take into account the additional uncertainty
+     framework.  In the absence of residual spatial effects
+     correlating with /commune/ dummies, the estimated ordinal
+     superiority measures are unbiased.  Note that the F-statistics
+     are bootstrapped to take into account the additional uncertainty
      attributable to the random draws of surrogate residuals.
 
 ** Results
@@ -7672,27 +7658,27 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
     an overall pseudo-R$^2$ of 36.7%.  The most significant series of
     variables (i.e., with the highest significance statistic) is the
     set of 31 /commune/ dummies that represent the intangible
-    determinants from human influences on GI designations.  This set
-    is closely followed by the pedology fixed effects and the
-    polynomials transformations of spatial coordinates that controls
-    for the effects of longitude and latitude positions of vineyards.
+    determinants of human influence on GI designations.  This set is
+    closely followed by the pedology fixed effects and the polynomial
+    transformation of spatial coordinates that controls for the
+    effects of the longitude and latitude positions of vineyards.
     Elevation, solar radiation, geology, exposition and slope
     variables follow in decreasing order of joint significance, for an
-    overall significance of tangible variables slightly higher than
-    intangible variables (results not reported).  The nonlinear
-    effects of the 3 topographical variables on the latent quality
-    index are reported in \autoref{Fig:A1} of Appendix.  Elevation and
-    slope variables have inverted-U effects with the highest vineyard
-    quality at about 290 meters and 10 degrees.  The effect of solar
-    radiation is linearly increasing and the southern expositions
-    provide the highest marginal probability of a high GI
-    classification (see the Reproducibility Material, RM, from the
-    link at the title page of this article).  The top-left panel of
-    \autoref{Fig:A2} in Appendix shows the marginal effects of spatial
-    coordinates on the latent index.  The third-order parametric
-    specification with full interactions produces some ellipsoidal
-    smooth patterns with two central kernels that describe a
-    core-periphery structure.  The coefficients estimated from
+    overall significance that is slightly higher for tangible
+    variables than intangible variables (data not shown).  The
+    non-linear effects of the three topographical variables on the
+    latent quality index are reported in \autoref{Fig:A1} of the
+    Appendix.  Elevation and slope variables have inverted-U effects,
+    with the highest vineyard quality at about 290 meters and 10
+    degrees.  The effect of solar radiation linearly increases and
+    southern exposition provides the highest marginal probability of a
+    high GI classification (see the Replication Material, RM, from
+    the link on the title page of this article).  The top-left panel
+    of \autoref{Fig:A2} in the Appendix shows the marginal effects of
+    spatial coordinates on the latent index.  The third-order
+    parametric specification with full interactions produces some
+    smooth ellipsoidal patterns with two central kernels that describe
+    a core-periphery structure.  The coefficients estimated from
     /communes/ fixed effects are interpreted in the next subsection in
     terms of ordinal superiority.
 
@@ -7700,25 +7686,25 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{table}[!htb]
-\caption{\textbf{Joint variable significance for ordered models of GI designations}}\singlespacing
+\caption{\textbf{Joint Variable Significance for Ordered Models of GI Designations}}\singlespacing
 \newcolumntype{Y}{>{\centering\arraybackslash}X}\label{Tab:1}  \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/VarSign1.tex}
 \begin{tablenotes}\footnotesize
 \item Notes: $^{**}$ accounts for joint significance at 1\% from the
-  reported Chi-square statistics, effective degrees of freedom are
-  inside brackets.  Column ( 0 ) corresponds to an ordered logit model
+  reported chi-square statistics, effective degrees of freedom are
+  in brackets.  Column ( 0 ) corresponds to an ordered logit model
   with quadratic effects for elevation, slope and solar radiation
-  (df$= 2$) with a full interaction between 3-orders polynomials for
+  (df$= 2$) with a full interaction between third-orders polynomials for
   longitude and latitude (df$= 3+3+3\times 3= 15$) and with
-  respectively 13, 14, 7 and 31 dummy variables for pedology, geology,
-  exposition and \emph{communes} fixed effects.  Models ( I ) to ( V )
+  13, 14, 7 and 31 dummy variables for pedology, geology,
+  exposition, and \emph{communes} fixed effects, respectively.  Models ( I ) to ( V )
   are OGAMs with elevation, slope and solar radiation additively
   specified with a maximum of 9 edf, shrinked endogenously by a
   quadratic penalization.  Spatial coordinates are specified in
   increasing order of complexity with the maximum edf of 100, 300,
   500, 700 and 900.  The last row reports the bootstraped F-statistics
-  for the joint nullity of \emph{communes} effects on surrogate
+  for the joint nullity of \emph{commune} effects on surrogate
   residuals from auxiliary regressions without \emph{commune} dummies.
 \end{tablenotes}
 \end{threeparttable}
@@ -7727,63 +7713,64 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 **** Text 2                                  :noheading:
 
-     Columns ( I ) to ( V ) in \autoref{Tab:1} reports the same
-     significance statistics from ordered generalized additive models
-     (OGAMs) with increasing complexity in the spatial smoothing terms
-     from the left to the right, as it appears from the effective
-     degrees of freedom for spatial coordinates.  The semiparametric
-     structure of these models keeps the same degrees of freedom for
-     pedology, geology, exposition and /commune/ fixed effects with
-     respectively 13, 14, 7 and 31 degrees.  Increasing the complexity
-     of the spline series of spatial coordinates increases sensibly
-     the pseudo-R$^2$ to 75 % and the percent of good predictions to
-     90 % in the most complex OGAM reported in the last column ( V ).
-     Simultaneously, the joint significance of spatial coordinates
-     increases and the significance of all other explanatory variables
-     decreases (except slope and exposition variables for which the
-     decrease of significance is not monotone).  As expected, the
-     spatial pattern of GIs designations are increasingly grasped by
-     spatial coordinates at the expense of other explanatory
-     variables.  \autoref{Fig:A1} in Appendix shows the comparative
-     advantage of OGAMs over the parametric model ( 0 ) in estimating
-     the marginal effects of each explanatory variable.  Panel A shows
-     that the strong effect of elevation on the 0-300 meters range is
-     not found in the parametric model, as for the strong effect of
-     slope on the 0-5 degrees range.  These results are particularly
-     stringent as these ranges concentrate the majority of vineyard
-     plots.  In terms of spatial smooth effects reported in
-     \autoref{Fig:A2} of Appendix, OGAMs produce more detailed spatial
-     variations that the broad ellipsoid pattern from the parametric
-     model ( 0 ).  This suggests some fine-scale spatial variations of
-     the latent quality index according to GI designation scheme.  The
-     significance of /commune/ fixed effect is impacted by increasing
-     the complexity of spatial smoothing, while it stays the second
-     most important set of variable in model ( V ).
+     Columns ( I ) to ( V ) in \autoref{Tab:1} report the same
+     significance statistics from OGAMs with increasing complexity in
+     the spatial smoothing terms from left to right, as it appears
+     from the effective degrees of freedom for spatial coordinates.
+     The semiparametric structure of these models keeps the same
+     degrees of freedom for pedology, geology, exposition and
+     /commune/ fixed effects with 13, 14, 7 and 31 degrees,
+     respectively.  Increasing the complexity of the spline series of
+     spatial coordinates increases the pseudo-R$^2$ to 75% and the
+     percent of good predictions to 90% in the most complex OGAM
+     reported in the last column ( V ).  Simultaneously, the joint
+     significance of spatial coordinates increases and the
+     significance of all other explanatory variables decreases, except
+     slope and exposition variables, for which the decrease of
+     significance is not monotone.  As expected, the spatial patterns
+     of GI designations are increasingly grasped by spatial
+     coordinates at the expense of other explanatory variables.
+     \autoref{Fig:A1} in the Appendix shows the comparative advantage
+     of OGAMs over parametric model ( 0 ) in estimating the marginal
+     effects of each explanatory variable.  Panel A of
+     \autoref{Fig:A1} shows that the strong effect of elevation in the
+     0-300 m range is not found in the parametric model, Panel B shows
+     the same result for slope on the 0-5 degrees range.  These
+     results are particularly stringent as these ranges concentrate
+     the majority of vineyard plots.  In terms of spatial smooth
+     effects reported in \autoref{Fig:A2} of Appendix, OGAMs produce
+     more detailed spatial variations than the broad ellipsoid pattern
+     from the parametric model ( 0 ).  This suggests some fine-scale
+     spatial variations in the latent quality index according to GI
+     designation scheme.  The significance of /commune/ fixed effects
+     is affected by increasing the complexity of spatial smoothing,
+     whereas it remains the second most important set of variable in
+     model ( V ).
 
 *** Ordinal superiority of /communes/
 **** Text 1                                  :noheading:
 
      The last row of \autoref{Tab:1} reports the bootstrapped
-     F-statistics about the joint significance of /communes/ dummies
-     on surrogate residuals from auxiliary models that do not account
-     for such fixed effects.  \autoref{Fig:A2a} in Appendix presents
-     in more details the relevance of smoothing spatial coordinates to
-     control for unobserved /terroir/ variables.  It first appears
-     that OGAMs provide some important progress compared to the
-     parametric ordered logistic model ( 0 ) from which surrogate
-     residuals are highly correlated between /communes/.  Secondly, a
-     maximum effective degrees of freedom of about 700 -- that
-     corresponds to model ( IV ) in \autoref{Tab:1} -- is a sufficient
+     F-statistics for the joint significance of /commune/ dummies on
+     surrogate residuals from auxiliary models that do not account for
+     such fixed effects.  \autoref{Fig:A2a} in the Appendix presents
+     in more detail the relevance of smoothing spatial coordinates to
+     control for unobserved /terroir/ variables.  Initially, it
+     appears that OGAMs provide some important progress compared to
+     the parametric ordered logistic model ( 0 ) from which surrogate
+     residuals are highly correlated between /communes/.  A maximum
+     effective degrees of freedom of approximately 700, which
+     corresponds to model ( IV ) in \autoref{Tab:1}, is a sufficient
      complexity level to rule out potentially correlated omitted
      /terroir/ effects, as the insignificance of /commune/ dummies on
-     the surrogate residuals from the auxiliary regressions can not be
+     the surrogate residuals from the auxiliary regressions cannot be
      rejected according to the median of the bootstrapped statistics.
      This indicates persistent effects of intangible human-related
      characteristics on the GI designation scheme, even for precisely
      controlled /terroir/ effects.  Similar vineyard plots from one
-     side or another from administrative borders are shown to have
-     significantly different probabilities of being in different
-     vertical levels of GIs.
+     side or another of administrative borders have significantly
+     different probabilities of being in different vertical levels of
+     GIs.
 
 **** Figure                                  :noheading:
 
@@ -7791,115 +7778,115 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 \vspace{.5cm}
 \begin{figure}[h]
   \caption{\textbf{Ordinal superiorty measures for the \emph{communes}
-      in actual GI designation scheme}\\[.1cm]
-    \footnotesize Notes: For a given \emph{commune} $c$ on the y axis,
+      in the actual GI designation scheme}\\[.1cm]
+    \footnotesize Notes: For a given \emph{commune} $c$ on the y-axis,
     ordinal superiority measures are computed as the difference
     between the estimated fixed effect $\mu_c$ and the average fixed
     effect $\overline{\mu}$ of all \emph{commune} according to:
     $\Delta_{c}= 2\times \Lambda[(\mu_{c}-\overline{\mu})/
     \sqrt{2}]-1$.  The horizontal bars represent the range of measures
     according to the OGAMs with 700, 800 and 900 maximum edf for the
-    effects of spatial coordinates, black dots represent the average
+    effects of spatial coordinates.  Black dots represent the average
     of these measures.  Relatively privilegied \emph{communes} appear
-    at the top of the Figure, whereas relatively disadvantged
-    \emph{communes} appear at the bottom.}\label{Fig:2}
+    at the top, whereas relatively disadvantged \emph{communes} appear
+    at the bottom.}\label{Fig:2}
   \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale= .75]{./Figures/ComEff.pdf}
 \end{figure}
 #+end_export
 
 **** Text 2                                  :noheading:
 
-     Ordinal superiority measures from models with respectively 700,
-     800 and 900 maximum edf are distributed inside the $-1$ and $1$
-     interval in a way that a positive value indicates an advantage
-     relatively to the average and a negative value indicates a
-     disadvantage citep:AKat17.  From \autoref{Fig:2}, only vineyard
-     plots from 4 /communes/ are not different from the average
-     /commune/ in terms of the designation of their vineyards along
-     the vertical dimension of GIs.  /Communes/ from the /Côte de
-     Nuits/ at the North of the region are more advantaged on average
-     the those of the /Côte de Beaune/ at the South, as 8 /communes/
-     from this part of the region are among the 11 most advantaged.
-     The proximity to Dijon where trials about the use of vineyard
-     names take place between 1860 and 1936 is one potential
-     explanation for this result, jointly with the fact that it was
-     usual that rich and influencing people living in Dijon owns some
-     vineyards at the /Côte de Nuits/, closer to Dijon than /Côte de
-     Beaune/ citep:WJac18.  The /communes/ that have a /syndicat/ (a
-     group of wine producers) engaged in collective action appear to
-     be privileged while the separation is not
+     Ordinal superiority measures from models with 700, 800 and 900
+     maximum edf are distributed inside the $-1$ and $1$ interval in a
+     way that a positive value indicates an advantage to the average
+     and a negative value indicates a disadvantage citep:AKat17.  From
+     \autoref{Fig:2}, only vineyard plots from four /communes/ are not
+     different from the average /commune/ in terms of the designation
+     of their vineyards along the vertical dimension of GIs.
+     /Communes/ from the /Côte de Nuits/ in the north of the region
+     are, on average, more advantaged than those of the /Côte de
+     Beaune/ in the south, as eight /communes/ from this part of the
+     region are among the 11 most advantaged.  The proximity to Dijon,
+     where trials of the use of vineyard names occurred between 1860
+     and 1936, is one potential explanation for this result, as well
+     as the fact that it was usual that influential people living in
+     Dijon own some vineyards in the /Côte de Nuits/, closer to Dijon
+     than /Côte de Beaune/ citep:WJac18.  The /communes/ that have a
+     syndicate engaged in collective action appear to be privileged,
+     but the separation is not
      clear-cut.@@latex:\footnote{\cite{Jacq09} (p.189, 211) reports
-     the \emph{communes} of \emph{Vougeot}, \emph{Aloxe-Corton},
+     that the \emph{communes} of \emph{Vougeot}, \emph{Aloxe-Corton},
      \emph{Ladoix-Serrigny}, \emph{Gevrey-Chambertin},
-     \emph{Vosne-Romanée} and \emph{Santenay} as having experienced
-     the first \emph{syndicats}, with some internal conflicts for
-     \emph{Santenay}.}@@ This hierarchy of advantaged and
-     disadvantaged /communes/ does not follow strictly their past or
-     actual reputations, as some advantaged /communes/ are not reputed
-     (/Ladoix-Serrigny/ and /Chorey-les-Beaune/) and some reputed
-     /communes/ are disadvantaged (/Flagey-Echezeaux/ and /Pommard/).
-     We find the ordinal superiority measures are only weakly
-     positively correlated with average levels of actual GIs (R^2=
-     0.06, see \autoref{Fig:A2b} in the Appendix).
+     \emph{Vosne-Romanée} and \emph{Santenay} had the first
+     syndicates, with some internal conflicts for \emph{Santenay}.}@@
+     This hierarchy of advantaged and disadvantaged /communes/ does
+     not strictly follow their past or actual reputations, as some
+     advantaged /communes/ are not reputed (/Ladoix-Serrigny/ and
+     /Chorey-les-Beaune/), and some reputed /communes/ are
+     disadvantaged (/Flagey-Echezeaux/ and /Pommard/).  We found that
+     the ordinal superiority measures only weakly positively
+     correlated with average levels of actual GIs (R^2= 0.06, see
+     \autoref{Fig:A2b} in the Appendix).
 
 *** Informational content of GIs
 **** Text 1                                  :noheading:
     
-     \autoref{Tab:2} below reports the decomposition computed from
-     equations (\ref{eq:dec1}) to (\ref{eq:dec4}) with $q(X_i^*)$
-     predicted from the five OGAMs reported in \autoref{Tab:1} with
-     increasing complexity order of spatial coordinates (the empirical
-     formulas used are reported in RM Appendix A.4, jointly with the R
-     code to compute them).  As expected, the total signal reported in
-     the first row of \autoref{Tab:2} is increasing from the left to
-     the right and the total noise is decreasing.@@latex:\footnote{As
-     the variance of errors is normalized to identify ordered models
-     and the variance of $y^*$ from the data generating process is
-     constant between models, the increase in the total signal and the
-     decrease in total noise are two sides of the same coin, they come
-     from the increase in the variance of the latent quality index
-     predicted from tangible variables.}@@ In contrast to this
-     monotonic relationship between the total signal and the
-     complexity of the spatial smoothing terms, the results from
-     joint, vertical and horizontal decomposition are more stationary
-     between specifications.  For all models, the vertical and
-     horizontal dimensions of GIs have a high information content.
-     From the last column of \autoref{Tab:2}, the joint signal of
-     about 78% is 4 times higher than the average joint noise of about
-     19%.  The vertical dimension has a higher informational content
-     than the horizontal dimension, with a signal to noise ratio of 2
-     ($=65/32$) compared to 0.33 ($=24/73$).  The horizontal residual
-     terms, which represents the marginal informational content of the
-     vertical dimension once the horizontal dimension is taken into
-     account, is higher than the horizontal signal from only using the
-     horizontal dimension.  This result reinforces the superiority of
-     the vertical dimension to convey quality information, while it
-     content a smaller number of items (5 instead of 31).  From the
-     vertical residual terms (i.e., 6th row), we see that the vertical
-     dimension of GIs has about 20% ($=13/65$) of bias in conveying
-     information about vineyard quality, while this bias due to the
-     preferential treatments between /communes/ can be assessed by
-     consumers through the horizontal dimension.
+     \autoref{Tab:2} reports the decomposition computed from equations
+     (\ref{eq:dec1}) to (\ref{eq:dec4}) with $q(X_i^*)$ predicted from
+     the five OGAMs reported in \autoref{Tab:1} with increasing
+     complexity of spatial coordinates (the empirical formulas used
+     are reported in RM Appendix A, jointly with the R code to compute
+     them).  As expected, the total signal reported in the first row
+     of \autoref{Tab:2} increases from left to right and the total
+     noise decreases.@@latex:\footnote{As the variance of errors is
+     normalized to identify ordered models and the variance of $y^*$
+     from the data-generating process is constant between models, the
+     increase in the total signal and the decrease in total noise are
+     two sides of the same coin, as they come from the increase in the
+     variance of the latent quality index predicted by tangible
+     variables.}@@ In contrast to this monotonic relationship between
+     the total signal and the complexity of the spatial smoothing
+     terms, the results from joint, vertical, and horizontal
+     decomposition are more stationary between specifications.  For
+     all models, the vertical and horizontal dimensions of GIs have
+     high information content.  From the last column of
+     \autoref{Tab:2}, the joint signal of approximately 78% is 4-times
+     higher than the average joint noise of 19%.  The vertical
+     dimension has higher informational content than the horizontal
+     dimension, with a signal to noise ratio of 2 ($65/32$) compared
+     to 0.33 ($24/73$).  The horizontal residual, which represents the
+     marginal informational content of the vertical dimension after
+     the horizontal dimension is taken into account, is higher than
+     the horizontal signal when only using the horizontal dimension.
+     This result reinforces the superiority of the vertical dimension
+     to convey quality information, though the content is fewer items
+     (5 instead of 31).  From the vertical residual terms (i.e., 6th
+     row), we see that the vertical dimension of GIs has approximately
+     20% ($13/65$) bias in conveying information about vineyard
+     quality, and this bias due to preferential treatment between
+     /communes/ can be assessed by consumers through the horizontal
+     dimension.
 
 **** Table                                   :noheading:
 
 #+begin_export latex
 \begin{table}[!htb]
-\caption{\textbf{Signal decompositions from OGAMs with spatial coordinates}}
+\caption{\textbf{Signal Decompositions from OGAMs with Spatial Coordinates}}
 \singlespacing\label{Tab:2} \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/Decomp.tex}
 \begin{tablenotes}\footnotesize
 \item Notes: The effective degrees of freedom for spatial smoothing
-  terms in parenthesis show that the columns correspond to model ( I )
+  terms in parentheses show that the columns correspond to model ( I )
   to ( V ) from \autoref{Tab:1}.  Decomposition terms are expressed in
   percent of variance of the latent variable $y^{*}$ according to
   equations (\ref{eq:dec1}) to (\ref{eq:dec4}) in the text.  For each
-  column, the sum of vertical signal and vertical residual equals the
-  joint signal, as the sum of horizontal signal and horizontal
-  residual.  The vertical noise equals the sum of the vertical
-  residual and the joint noise and the horizontal noise equals the sum
-  of horizontal residual and joint noise.
+  column, the sum of \emph{vertical signal} and \emph{vertical
+    residual} equals the \emph{joint signal}, as does the sum of
+  \emph{horizontal signal} and \emph{horizontal residual}.  The
+  \emph{vertical noise} equals the sum of the \emph{vertical residual}
+  and the \emph{joint noise}, and the \emph{horizontal noise} equals
+  the sum of \emph{horizontal residual} and \emph{joint noise}.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -7909,86 +7896,83 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 **** Text 1                                  :noheading:
 
      We estimate the same ordered models with the GIs of 1936 as
-     outcomes.  This year corresponds to the creation the French
-     national institute for GI management (INAO).  At this period, the
-     vertical dimension of GIs counts only 3 levels as reported in the
-     summary statistics of \autoref{Tab:SD} in Appendix: /Régional/ <
-     /Village/ < /Grand Cru/ with respectively 57%, 41% and 3% of
-     actual vineyard plots.@@latex:\footnote{We drop the
-     \emph{communes} of \emph{Chenôve}, \emph{Marsannay-la-Côte},
-     \emph{Couchey}, \emph{Comblanchien}, \emph{Corgoloin} and
-     \emph{Saint-Romain} as they contains only one vertical level in
-     1936, so their fixed effects are not identified (see RM,
-     p.XX).}@@ The Table of joint significance, the plots of the
-     marginal effects and the spatial smooth effects are reported in
-     \autoref{Tab:A3}, \autoref{Fig:A4} and \autoref{Fig:A5} in the
-     Appendix.  For these older GIs, the control for omitted /terroir/
-     variables is reached for smaller maximum edf of spatial
-     coordinates (bootstrapped F-statistics are reported in the bottom
-     of \autoref{Tab:A3} in Appendix, the violin plot is only reported
-     in the RM, p.XX).  The hierarchy of the joint significance of
-     explanatory variables is surprisingly comparable with what is
-     obtained for actual GIs.  The /commune/ and pedology fixed
-     effects, jointly with spatial coordinates have the highest
-     significance, followed by elevation, geology, solar radiation,
-     slope and exposition.  The marginal effects of elevation and
-     slope have also an inverted-U pattern with close maximum values
-     and the spatial smoothed patterns are also very close to what is
-     found on actual GIs.  Contrariwise, the ordinal superiority
-     measures are more contrasted between /communes/ (see
-     \autoref{Fig:A6} in Appendix and Figure XX in RM, p.XX).  For
-     given /terroir/ characteristics, the /commune/ where a vineyard
-     is located was a more important determinant of GIs designations
-     in the middle of the 20th century than actually.  This is
-     equivalent to claim that the GI designation scheme is
-     increasingly efficient in the sens of cite:DNab91: the
-     probability that a vineyard plot gets classified at least in its
-     category becomes higher than the probability of lower quality
-     plots being classified in that category.  
+     outcomes.  This year corresponds to the creation of the INAO.  At
+     this time, the vertical dimension of GIs counted only three
+     levels, as reported in the summary statistics in \autoref{Tab:SD}
+     in the Appendix: /Régional/ < /Village/ < /Grand Cru/ with
+     respectively 57%, 41%, and 3% of actual vineyard
+     plots.@@latex:\footnote{We drop the \emph{communes} of
+     \emph{Chenôve}, \emph{Marsannay-la-Côte}, \emph{Couchey},
+     \emph{Comblanchien}, \emph{Corgoloin} and \emph{Saint-Romain}
+     because they contained only one vertical level in 1936, so their
+     fixed effects are not identified (see RM, p.XX).}@@ The joint
+     significance, the plots of the marginal effects and the spatial
+     smooth effects are reported in \autoref{Tab:A3}, \autoref{Fig:A4}
+     and \autoref{Fig:A5}, respectively, in the Appendix.  For these
+     older GIs, the control for omitted /terroir/ variables is reached
+     for smaller maximum edf of spatial coordinates (bootstrapped
+     F-statistics are reported in the bottom of \autoref{Tab:A3} in
+     Appendix, the violin plot is only reported in the RM, p.XX).
+     Surprisingly, the hierarchy of the joint significance of
+     explanatory variables is comparable to what is obtained for
+     actual GIs.  The /commune/ and pedology fixed effects, and
+     geographic coordinates have the highest significance, followed by
+     elevation, geology, solar radiation, slope, and exposition.  The
+     marginal effects of elevation and slope also have an inverted-U
+     pattern with close maximum values, and the spatial smoothed
+     patterns are also very close to what is found with actual GIs.
+     In contrast, the ordinal superiority measures are more varied
+     between /communes/ (see \autoref{Fig:A6} in the Appendix and
+     Figure XX in RM, p.XX).  For given /terroir/ characteristics, the
+     /commune/ where a vineyard is located was a more important
+     determinant of GIs designations in the middle of the 20th century
+     than currently.  This is equivalent to claim that the GI
+     designation scheme is increasingly efficient in the sens of
+     cite:DNab91.
 
 **** Text 2                                  :noheading:
 
      The first column of \autoref{Tab:3} reports the decomposition of
      the latent quality index according to the 1936 GIs.  The GIs of
-     1936 have a lower joint informational content than actual GIs
-     with a joint signal to noise ratio close to 1 ($=48/49.5$).
-     Simultaneously, the informational content of the vertical and the
-     horizontal dimensions are more balanced, while the vertical
-     dimension stays more informative.  The vertical dimension of old
-     GIs has a signal to noise ratio of 0.54 ($=34.4/63.1$) compared
-     to 0.32 ($=23.8/73.7$) for the horizontal dimension.  Because the
+     1936 have lower joint informational content than actual GIs with
+     a joint signal to noise ratio close to 1 ($48/49.5$).  However,
+     the informational content of the vertical and horizontal
+     dimensions are more balanced, whereas the vertical dimension
+     stays more informative.  The vertical dimension of 1936 GIs has a
+     signal to noise ratio of 0.54 ($=34.4/63.1$) compared to 0.32
+     ($=23.8/73.7$) for the horizontal dimension.  Because the
      /commune/ delineations have not changed since 1936, the
      informational content of the horizontal dimension does not
      change.  Note that the lower informational level of the vertical
-     dimension of the GIs of 1936 is not exclusively due to the higher
+     dimension of the GIs of 1936 is not due exclusively to the higher
      importance of /communes/ in GI delineation (i.e., intangible
      determinants), an immeasurable part of the loss could be
      attributable to the lower number of vertical items (3 instead of
-     5 in current GIs).  These results indicates significant
-     improvements of the informational content of GIs in the last
-     century, jointly with the decrease of bias from intangible
+     5 in current GIs).  These results indicate significant
+     improvements in the informational content of GIs in the last
+     century in combination with the decreased bias from intangible
      determinants.
 
 **** Table                                   :noheading:
 
 #+begin_export latex
 \begin{table}[!htb]
-\caption{\textbf{Signal decompositions from alternative GI designations}}
+\caption{\textbf{Signal Decompositions from Alternative GI Designations}}
 \singlespacing\label{Tab:3} \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/Decoldmp.tex}
 \begin{tablenotes}\footnotesize
 \item Notes: Latent quality index used to simulate GI designation
   schemes is predicted from model ( V ) of \autoref{Tab:1}, which
-  provides the best fit of actual GIs. The first column reports the
-  informational content of the GIs of 1936.  The scheme S.0 is a
-  benchmark simulation which adds surrogate residuals to the latent
-  quality index to mimic actual GIs.  S.I drops the random
-  idosynchratic terms, S.II drops the intangible determinants through
-  averaging \emph{commune} effects and S.III drops both random terms
-  and intangible determinants of GIs.  Schemes S.IV, S.V and S.VI add
-  a vertical level on actual GIs, respectively for \emph{Bourgogne},
-  \emph{Village} and \emph{Premier Cru}, by an additional threshold
+  provides the best fit of current GIs. The first column reports the
+  informational content of the GIs of 1936.  Scheme S.0 is a benchmark
+  simulation that adds surrogate residuals to the latent quality index
+  to mimic actual GIs.  S.I drops the random idiosynchratic terms,
+  S.II drops the intangible determinants through averaging
+  \emph{commune} effects and S.III drops both random terms and
+  intangible determinants of GIs.  Schemes S.IV, S.V and S.VI add a
+  vertical level on actual GIs for \emph{Bourgogne}, \emph{Village},
+  and \emph{Premier Cru}, respectively, by an additional threshold
   fixed at the mean.
 \end{tablenotes}
 \end{threeparttable}
@@ -7997,64 +7981,65 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 **** Text 3                                  :noheading:
 
-     We perform different simulations of counter-factual GI
-     designations schemes as reported in columns S.0 to S.VI in
-     \autoref{Tab:3}.  The six vertical designation schemes are
+     We performed different simulations of counter-factual GI
+     designation schemes as reported in columns S.0 to S.VI in
+     \autoref{Tab:3}.  The six vertical designation schemes were
      simulated by changing the underlying latent predictions of the
-     quality index (in S.I, S.II and S.III) and by changing the number
-     of vertical items in the GI schemes (in S.IV, S.V and S.VI).  The
-     detailed formula and the R codes used to simulate alternative GI
-     designation schemes are reported in RM (p.XX).  We do not
-     consider changing the horizontal dimension of GIs as changing the
-     administrative boundaries of /communes/ is not policy-relevant.
-     The scheme S.0 is a benchmark scheme that tries to reproduce
-     actual GI designations, by adding simulated designation noises
-     from surrogate residuals to the predictions of the latent quality
-     index.  This noised index is mapped to the vertical dimension of
-     the simulated GIs with estimated thresholds and /commune/ fixed
-     effects.  The second column S.0 in \autoref{Tab:3} shows that the
-     decomposition terms are very close to those obtained in the last
-     column of \autoref{Tab:2}.  Then, we drop the designation errors
-     from surrogate residuals in S.I, we drop the intangible /commune/
-     effects in S.II and we drop both designation errors and /commune/
-     effects in S.III.  The 3 last designation schemes S.IV, S.V and
-     S.VI represent an increase in the number of vertical items of GIs
-     from the actual 5 to 6 items.  The /Bourgogne/, /Village/ and
-     /Premier Cru/ levels are respectively divided in 2 different
-     levels by adding a threshold fixed at the mean of the estimated
-     thresholds used for S.0.  Each of these schemes corresponds to
-     the creation of an additional item (like, for example, /Bourgogne
-     supérieur/, /Village supérieur/ ou /Premier Cru supérieur/) that
-     allows consumer to distinguish them from the wine labels.
+     quality index (in S.I, S.II and S.III), and by changing the
+     number of vertical items in the GI schemes (in S.IV, S.V and
+     S.VI).  The detailed formula and R codes used to simulate
+     alternative GI designation schemes are reported in RM (p.XX).  We
+     did not consider changing the horizontal dimension of GIs,
+     because changing the administrative boundaries of /communes/ is
+     not policy-relevant.  Scheme S.0 is a benchmark scheme that tries
+     to reproduce actual GI designations by adding simulated
+     designation noises from surrogate residuals to the predictions of
+     the latent quality index.  This noised index is mapped to the
+     vertical dimension of the simulated GIs with estimated thresholds
+     and /commune/ fixed effects.  The second column, S.0, in
+     \autoref{Tab:3} shows that the decomposition terms are very close
+     to those obtained in the last column of \autoref{Tab:2}.  Next,
+     we drop the designation errors from surrogate residuals in S.I,
+     we drop the intangible /commune/ effects in S.II, and we drop
+     both designation errors and /commune/ effects in S.III.  The last
+     three designation schemes S.IV, S.V and S.VI represent an
+     increase in the number of vertical items in GIs from the actual 5
+     to 6 items.  The /Bourgogne/, /Village/ and /Premier Cru/ levels
+     are respectively divided into two different levels by adding a
+     threshold fixed at the mean of the estimated thresholds used for
+     S.0.  Each of these schemes corresponds to the creation of an
+     additional item (like, e.g., /Bourgogne supérieur/, /Village
+     supérieur/ ou /Premier Cru supérieur/) that allows consumer to
+     distinguish them from the wine labels.
 
 **** Text 4                                  :noheading:
 
      The numbers reported in \autoref{Tab:3} show that dropping the
-     intangible effects associated to /commune/ effects is the most
-     important policy to do to increase the informational content of
-     the vertical dimension of GIs.  Conversely, reducing the
-     designation noise is more important to increase the joint signal,
-     which corresponds to the assumption that consumers use the
-     information of both dimensions of GIs.  These two policy changes
-     of GIs seem to be additively cumulative for increasing the
-     informational content of both vertical and joint signals.  In
+     intangible effects associated with /commune/ effects is the most
+     important policy to increase the informational content of the
+     vertical dimension of GIs.  Conversely, reducing the designation
+     noise is more important for increasing the joint signal, which
+     corresponds with the assumption that consumers use the
+     information of both GI dimensions.  These two policy changes for
+     GIs seem to be additively cumulative for increasing the
+     informational content of both the vertical and joint signals.  In
      particular, the marginal gain of dropping the /commune/ effects
-     is about the same with and without designations noise.
+     is about the same with and without designation noise.
      \autoref{Tab:3} also shows that dropping the /commune/ effect in
-     designation scheme increase more the joint signal than adding a
-     6th vertical level as in S.III ,S.IV or S.V.  Among these latter
-     alternative schemes, we find that splitting the intermediate
-     level /Village/ is more efficient, while the differences are
-     small.  Note that the measure of the informational content that
-     we propose is not directly related to the value of the GI
-     information, as it treats symmetrically high and low levels of
-     GIs.  More research is needed to convert these results in terms
-     of the efficient amount of information to give to consumers, as
-     the information about high levels of GIs would be more valuable
-     as the wine is more expensive.  In all cases, these potential
-     improvements from the vertical dimension of GIs have no impact on
-     the informational content of the horizontal dimension that keeps
-     the same order of magnitude among simulations.
+     the designation scheme increases the joint signal more than
+     adding a 6th vertical level as in S.III, S.IV or S.V.  Among
+     these latter alternative schemes, we found that splitting the
+     intermediate level /Village/ is more efficient, but the
+     differences are small.  Note that the measure of the
+     informational content that we propose is not directly related to
+     the value of the GI information, as it treats symmetrically high
+     and low levels of GIs.  More research is needed to convert these
+     results in terms of the efficient amount of information to give
+     consumers, as information about high levels of GIs would be more
+     valuable as wine becomes more expensive.  In all cases, these
+     potential improvements from the vertical dimension of GIs have no
+     impact on the informational content of the horizontal dimension,
+     which maintains the same order of magnitude among simulations.
 
 ** Conclusion
    :PROPERTIES:
@@ -8062,81 +8047,80 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
    :END:
 *** Resume of the paper                      :noheading:
 
-    We present a framework to model the geographical indications (GIs)
-    and disentangle their informational content, i.e., their ability
-    to describe the tangible characteristics of production sites.
-    Applied to the wine-producing region of /Côte d'Or/ (Burgundy,
-    France), we find significant effects of both tangible and
-    intangible characteristics of vineyard plots, described
-    respectively as streaming from natural and human outcomes.  In
+    We present a framework for modeling the geographical indications
+    (GIs) and disentangle their informational content, i.e., their
+    ability to describe the tangible characteristics of production
+    sites.  Applied to the wine-producing region of /Côte d'Or/
+    (Burgundy, France), we found significant effects of both tangible
+    and intangible characteristics of vineyard plots, described as
+    stemming from natural and human outcomes, respectively.  In
     particular, the presence of intangible effects is robust to the
     precise control of the omitted /terroir/ variables under the
     assumption that, as a natural pattern, they vary smoothly in
-    space.  This implies that historical elements such as the
+    space.  This implies that historical elements, such as the
     reputation of landowners or producers, their influence with the
-    decision makers or their collective actions have some persistent
-    effects on GI designation scheme.  Nevertheless, this differential
-    treatment between administrative units decreases on the long run
-    of history with the continuous changes in the scheme that have
-    taken place under the control of the French national institute in
-    charge of GIs (INAO).  
+    decision makers, or their collective actions, have some persistent
+    effects on the GI designation scheme.  Nevertheless, this
+    differential treatment between administrative units decreases over
+    the long-term with the continuous changes made in the scheme under
+    the control of the INAO.
 
 *** Theory reputation                        :noheading:
 
-    We interpret this result in regard to the dynamic analysis of
+    We interpret this result in regards to the dynamic analysis of
     strategic transmission information developed by cite:BLar92.  The
-    authors show that when an information is not fully reliable
-    (because of the human influence on the GI designation process
-    here), the possibility of honest mistakes (because of designation
-    noise here) produces some confusions for consumers.  Consequently,
-    market incentives keep the learning process of consumers
-    incomplete and leave a constant scope for market manipulation.
-    According to the authors, this negative economic outcome "is
-    limited only in the long run by the public's constant reassessment
-    of their credibility" (p.947).  This analysis is particularly
-    relevant for the signaling of wine quality as we study it here,
-    knowing the difficulties to define and observe the notion of
-    /terroir/ and to make agreement about the quality of wines that
-    get the problem of verifying the relevance of the informational
-    content of GIs by consumers worse.
+    authors show that, when information is not fully reliable (here,
+    because of the human influence on the GI designation process), the
+    possibility of honest mistakes (here, because of designation
+    noise) produces some confusion for consumers.  Consequently,
+    market incentives keep the consumers' learning process incomplete
+    and allow market manipulation.  According to the authors, this
+    negative economic outcome "is limited only in the long run by the
+    public's constant reassessment of their credibility" (
+    citealp:BLar92, p.947).  This analysis is particularly relevant
+    for signaling wine quality, as we studied it here, knowing the
+    difficulties defining and observing the notion of /terroir/ and
+    agreeing about the quality of wines, which worsens the problem of
+    consumer verification of the relevance of the informational
+    content of GIs.
 
 *** More interpretations                     :noheading:
 
-   These benefits of the long run history on the informational content
-   of GIs put some doubt on the idea that the flexibility is required
-   in regards to changing preferences of consumers and changing
-   determinants of wine quality (in face to climate change in
-   particular, as argued by citealp:WWJo09).  As a human institution,
-   which requires the involvement of producers with a private
-   information about vineyard and wine quality, the unbiasedness of
-   the GIs signal would probably not be reached spontaneously
-   following changes.  Moreover, the regular modifications that would
-   be required to follow the changing preferences or changing
-   environment would increase the correlation between tangible and
-   intangible characteristics and, consequently, decrease the
-   informational content of GIs for consumers.  The stability of GIs
-   and their third-party management count probably for a big part of
-   their value that is actually observed on the wine markets.
+   These benefits of the long-term history of the informational
+   content of GIs creates some doubt about the flexibility required to
+   follow changing consumers' preferences and changing determinants of
+   wine quality (particularly in the face of climate change, as argued
+   by citealp:WWJo09).  As a human institution, which requires the
+   involvement of producers with private information about vineyard
+   and wine quality, the unbiased nature of the GI signal would
+   probably not be reached spontaneously following changes.  Moreover,
+   the regular modifications that would be required to follow the
+   changing preferences or changing environment would increase the
+   confusing correlation between tangible and intangible
+   characteristics and, consequently, decrease the informational
+   content of GIs for consumers.  The stability of GIs and their
+   third-party management probably account for a great portion of
+   their value that is actually observed in the wine markets.
 
 *** Discussion of the identification         :noheading:
 
     Our empirical strategy is based on the difference between the
     assumed spatial continuity of /terroir/ and the discontinuity of
-    administrative borders from which we disentangle the tangible and
-    intangible determinants of GIs.  Thanks to the small size of
-    vineyard plots on the region, smooth functions of centroids'
-    geographical coordinates (longitude and latitude) allow to control
-    for the fine-scale variations of unobserved heterogeneity from the
-    /terroir/.  The estimated spatial patterns of the latent quality
-    index grasped by these functions are not /a priori/ exclusively
-    related to tangible characteristics that matter for wine quality.
-    In particular, spatial interactions about reputation or influence
+    administrative borders, from which we disentangle the tangible and
+    intangible determinants of GIs.  Due to the small size of vineyard
+    plots in the region, the smooth functions of centroid geographic
+    coordinates (longitude and latitude) allow the fine-scale
+    variations of unobserved heterogeneity from the /terroir/ to be
+    controlled.  The estimated spatial patterns of the latent quality
+    index grasped by these functions are not exclusively related /a
+    priori/ to tangible characteristics that matter for wine quality,
+    particularly, spatial interactions of reputation or influence
     between vineyard plots in close proximity on both sides of a
-    /commune/ border.  We nevertheless find that the main
-    decomposition results about the informational content of GIs and
-    the general results of a signal-to-noise ration equals to 4 are
-    robust to the degree of spatial smoothing used in regressions.
-    Taking into account fine-scale variations of /terroir/ is
+    /commune/ border.  Nevertheless, we found that the main
+    decomposition results for the informational content of GIs and the
+    general result of a signal-to-noise ratio of 4 are robust in
+    regards to the degree of spatial smoothing used in regressions.
+    Taking into account fine-scale variations in /terroir/ is
     important to estimate the ordinal superiority measures but not
     determinant of the informational content of GIs.
 
@@ -8157,18 +8141,17 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{table}[h]
-\caption{\textbf{Descriptive statistics for the variables used in the econometric analysis}}\singlespacing
+\caption{\textbf{Descriptive Statistics for the Variables used in the Econometric Analysis}}\singlespacing
 \vspace{-.25cm}\centering\label{Tab:SD}
 \begin{threeparttable}
 \input{Tables/StatDes.tex}
 \begin{tablenotes}\footnotesize
-\item Notes: Topographic variables are computed with a Geographical
-  Information System from a Digital Elevation Model of 5 m resolution.
-  Longitude and Latitude variables correspond to the centroid of each
-  vineyard plot. Current GI are dummy variables that count for the
-  vertical dimension in 2018 and Past GI comes from the map of 1936
-  mentioned in the main text.  Aspect is discretized according to
-  radians range reported between brakets.
+\item Notes: Topographic variables were computed by a Geographical
+  Information System from a Digital Elevation Model with 5 m
+  resolution.  Longitude and latitude correspond to the center of each
+  vineyard plot.  Current GI are dummy variables that account for the
+  vertical dimension in 2018, and Past GI comes from the 1936 map.
+  Aspect is discretized according to radian range reported in brakets.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}\clearpage
@@ -8179,13 +8162,12 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-\caption{\textbf{Distribution of the vertical dimension within and between the horizontal dimension}\\[.1cm]
-    \footnotesize Notes: For each \emph{commune} on the y axis (the
+\caption{\textbf{Distribution of the Vertical Dimension within and between the Horizontal Dimension}\\[.1cm]
+    \footnotesize Notes: For each \emph{commune} on the y-axis (the
     horizontal dimension of GIs), the bars represent the cumulative
     vineyard area designated in each item of the vertical dimension
-    represented with different colors.  The number reported are the
-    percentage for each \emph{commune} that each vertical item
-    represents.  }
+    represented with different colors.  The number reported is the
+    percentage the each vertical item represent in each \emph{commune}.}
   \centering\label{Fig:A0} \rotatebox[origin=c]{-90}{
     \includegraphics[scale=.65,angle=90]{Figures/CrossGIs.pdf} }
  \end{figure}
@@ -8196,16 +8178,16 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Nonlinear effects of topographic variables on GI designations}\\[.1cm]
+  \caption{\textbf{Nonlinear Effects of Topographic Variables on GI Designations}\\[.1cm]
     \footnotesize Notes: Dotted lines represent the quadratic effects
-    from model ( 0 ) of \autoref{Tab:1}, centered at zero with all
-    other explanotory variables at their sample means.  Continuous
+    from model ( 0 ) in \autoref{Tab:1}, centered at zero with all
+    other explanatory variables at their sample means.  Continuous
     lines represent the centered effects from 10 OGAMs with increasing
-    darkened for increasing effective degrees of freedom for spatial
-    smoothing terms.  Model ( I ) to ( V ) of \autoref{Tab:1} are a
+    darkening for increasing effective degrees of freedom for spatial
+    smoothing terms.  Models ( I ) to ( V ) in \autoref{Tab:1} are a
     subset of these OGAMs with maximum effective degrees of freedom
     uniformly distributed between 100 and 1000.  The histograms at the
-    bottom of each plots represent the marginal distributions of each
+    bottom of each plot represent the marginal distributions of each
     explanatory variable in the region.}\label{Fig:A1}
   \centering
 \includegraphics[scale= .85]{Figures/PltEff.pdf}
@@ -8214,17 +8196,18 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 *** Spatial smooth surfaces                  :noheading:
 
+# subtitles are not good
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-  \caption{\textbf{Spatial smoothed effects from ordered GI designation models}\\[.1cm]
+  \caption{\textbf{Spatial Smoothed Effects from Ordered GI Designation Models}\\[.1cm]
     \footnotesize Notes: The smooth surfaces are predicted from
-    spatial coordinates with others explanatory variables at their
+    spatial coordinates with other explanatory variables at their
     sample means, with a uniform normalization to be inside the unit
-    interval.  Panel A displays the smooth prediction from parametric
-    ordered logistic model ( 0 ) of \autoref{Tab:1}.  Panels B to F
-    display the prediction from the OGAMs ( I ) to ( V ) with increasing
-    effective degrees of freedom as reported at the top of each plot.}
+    interval.  A. The smooth prediction from parametric ordered
+    logistic model ( 0 ) in \autoref{Tab:1}.  B to F. the prediction
+    of OGAMs ( I ) to ( V ) with increasing effective degrees of
+    freedom as reported at the top of each plot.}
   \centering\label{Fig:A2} \rotatebox[origin=c]{-90}{
     \includegraphics[scale=.7,angle=90]{Figures/SmoothMap.pdf} }
  \end{figure}
@@ -8233,10 +8216,16 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 *** Omitted variable test                    :noheading:
 
+# Changer bootstrap on the y-axis
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{F-statistics for the diagnostic of correlated residual effects}\\[.1cm]
-    \footnotesize Notes: log scale.}\label{Fig:A2a}
+  \caption{\textbf{F-statistics for Correlated Residual Effects}\\[.1cm]
+    \footnotesize Notes: For each model on the x-axis, the Figure
+    reports the distribution of the bootstrapped F-statistics (log
+    scale).  Increasing the complexity of spatial effects from left to
+    right decreases the significance of the \emph{commune} effects on
+    the surrogate residuals from auxiliary
+    regressions.}\label{Fig:A2a}
   \centering
 \includegraphics[scale= .65]{Figures/SignifPlot.pdf}
 \end{figure}\clearpage
@@ -8246,13 +8235,13 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Correlation between ranking and ordinal superiority measures}\\[.1cm]
+  \caption{\textbf{Correlation between GI Grade and Ordinal Superiority Measures}\\[.1cm]
     \footnotesize Notes: The ordinal superiority measures come from
-    the mean of \autoref{Fig:2} in the main text.  The average GI
+    means in \autoref{Fig:2}.  The average GI
     grade for each \emph{commune} is the area-weighted mean of GIs
-    coded from 1 to 5.  Privilegied \emph{communes} (according to
-    ordinal superiority measures) does not appear to have
-    systematically more than average high GIs.}\label{Fig:A2b}
+    coded from 1 to 5.  Privileged \emph{communes} (according to
+    ordinal superiority measures) do not appear to have
+    systematically more high GIs than average.}\label{Fig:A2b}
   \centering \includegraphics[scale= .65]{Figures/ComCor.pdf}
 \end{figure}\clearpage
 #+end_export
@@ -8260,27 +8249,27 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 *** Significance for old GIs                 :noheading:
 
 #+begin_export latex
-\begin{table}{h}
-\caption{\textbf{Joint variable significance for ordered models of 1936 GI designations}}\singlespacing
+\begin{table}[!htp]
+\caption{\textbf{Joint Variable Significance for Ordered Models of the 1936 GI Designations}}\singlespacing
 \newcolumntype{Y}{>{\centering\arraybackslash}X}\label{Tab:A3}\vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/VarSign2.tex}
 \begin{tablenotes}\footnotesize
 \item Notes: $^{**}$ accounts for joint significance at 1\% from the
-  reported Chi-square statistics, effective number of freedom are in
-  brackets.  Column ( 0 ) corresponds to an ordered logit model with
-  quadratic effects for elevation, slope and solar radiation
+  reported chi-squared statistics.  The effective degrees of freedom
+  are in brackets.  Column ( 0 ) corresponds to an ordered logit model
+  with quadratic effects for elevation, slope and solar radiation
   (df$= 2$) with a full interaction between 3-orders polynomials for
-  longitude and latitude (edf$= 3+3+3\times 3= 15$) and with
-  respectively 7 and 25 dummy variables for exposition and
-  \emph{communes}.  5 \emph{communes} have been dropped because they
-  contained only one GIs in 1935. Models ( I ) to ( V ) are OGAMs with
-  elevation, slope and solar radiation additively specified with a
-  maximum of 9 edf, shrinked endogenously by a quadratic penalization.
-  Spatial coordinates are specified in an increasing order of
-  complexity with the maximum edf of 100, 150, 200, 250 and 300.  The
-  last row reports the average of bootstraped Fisher statistics for
-  the joint nullity of \emph{communes} dummies on surrogate residuals.
+  longitude and latitude (edf$= 3+3+3\times 3= 15$), with 7 and 25
+  dummy variables for exposition and \emph{communes}, respectively.
+  Five \emph{communes} were dropped because they contained only one GI
+  in 1935.  Models ( I ) to ( V ) are OGAMs with elevation, slope and
+  solar radiation additively specified with a maximum of 9 edf,
+  shrinked endogenously by a quadratic penalization.  Spatial
+  coordinates are specified in increasing order of complexity with the
+  maximum edf of 100, 150, 200, 250 and 300.  The last row reports the
+  average of bootstrapped Fisher statistics for the joint nullity of
+  \emph{commune} dummies on surrogate residuals.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}\clearpage
@@ -8290,11 +8279,11 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Nonlinear effects of tangible variables on 1936 GI designations}\\[.1cm]
+  \caption{\textbf{Non-linear effects of tangible variables in the 1936 GI designations}\\[.1cm]
     \footnotesize Notes: Dotted lines represent the quadratic centered effects
-    of model ( 0 ) presented in the main text.  Continuous lines
-    represent the centered effects from OGAM models ( I ) to ( V ) with
-    increasing darkened with increasing effective degrees of
+    of model ( 0 ) presented in \autoref{Tab:A3}.  Continuous lines
+    represent the centered effects from OGAMs ( I ) to ( V ) with
+    increasing darkening with increasing effective degrees of
     freedom.  The histograms at the bottom of the plots represent the 
     marginal distributions of each explanatory variable.}\label{Fig:A4}
   \centering
@@ -8304,13 +8293,19 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 *** Spatial smooth surfaces for old GIs      :noheading:
 
+# Put panel A and the other subtitles
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-  \caption{\textbf{Spatial smoothed effects from 1936 GI designation models}\\[.1cm]
+  \caption{\textbf{Spatial Smoothed Effects from 1936 GI Designation Models}\\[.1cm]
 \label{Fig:A6}
-    \footnotesize Notes: Smooth surfaces are normalized predictions of
-    the latent variables from models ( 0 ) to ( V ) with all other covariates at their sample means.}
+\footnotesize Notes: The smooth surfaces are predicted from spatial
+coordinates with others explanatory variables at their sample means,
+with a uniform normalization to be inside the unit interval. Panel A
+displays the smooth prediction from parametric ordered logistic model
+( 0 ) of \autoref{Tab:A3}. Panels B to F display the prediction from
+the OGAMs ( I ) to ( V ) with increasing effective degrees of freedom
+as reported at the top of each plot.}
   \centering\label{Fig:A5} \rotatebox[origin=c]{-90}{
   \includegraphics[scale=.7,angle=90]{Figures/SmoothMapOld.pdf} 
   }
@@ -8322,8 +8317,8 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Ordinal superiorty measures for the \emph{communes}
-    in 1936 GI designation scheme}\\[.1cm]
+  \caption{\textbf{Ordinal Superiority Measures for the \emph{communes}
+    in the 1936 GI designation scheme}\\[.1cm]
     \footnotesize Notes: For a given \emph{commune} $c$, ordinal
     superiority measures are computed from the difference between the
     own estimated fixed effect $\mu_c$ and the average fixed effect
@@ -13378,6 +13373,24 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
   vraiment arriver au résultat sur le bais des experts, je dirais
   qu'il faut faire de l'out of sample (ou du
   jacknife). Rétrospectivement, c'est facile.
+
+*** cite:CPar15 [[file:Biblio/Trie/CPar15.pdf][JWE: Standardize expert]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{CPar15,
+  title={Standardizing expert wine scores: An application for Bordeaux
+                  en primeur},
+  author={Cardebat, Jean-Marie and Paroissien, Emmanuel},
+  journal={Journal of Wine Economics},
+  volume={10},
+  number={3},
+  pages={329--348},
+  year={2015},
+  publisher={Cambridge University Press}
+}
+#+end_src
+
+- yop
 
 *** cite:Bodi17 [[file:Biblio/Trie/Bodi17.pdf][JWE: Judge consistency]]
 

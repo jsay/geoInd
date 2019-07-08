@@ -8,65 +8,65 @@ author: |
 # Abstract
 
 <div class="abstract">
-This file contents the Replication Material (RM) associated to the AAWE Working Paper No XXX entitled *The informational content of geographical indications*. Data, code and prediction materials are under the copyleft license GNU GPL V3, which means that license notices must be preserved. Raw data are available from the INRA dataverse server <https://data.inra.fr/geoInd>. Some R functions are reported in the Appendix to preserve the readability of codes in the main text. The most recent version of this document and a Shiny application about vineyards' classification in *Côte d'Or* (Burgundy, France) are available from the shared repository <https://github.com/jsay/geoInd>.
+This file contents the Replication Material (RM) associated to the AAWE Working Paper No XXX entitled *The informational content of geographical indications*. Data, code and prediction materials are under the copyleft license GNU GPL V3, which means that license notices must be preserved. Raw data are available from the INRA dataverse server [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN). Some R functions are reported in the Appendix to preserve the readability of codes in the main text. The most recent version of this document and a Shiny application about vineyards' classification in *Côte d'Or* (Burgundy, France) are available from the remote repository [https://github.com/jsay/geoInd](https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf).
 
 </div>
 
 
 # Table of Contents
 
-1.  [Descriptive Statistics](#org7729f0c)
-    1.  [Data shaping](#org5942f01)
-    2.  [Geology and pedology](#orgd92782e)
-    3.  [Crossing GIs dimensions](#org08ea5cf)
-2.  [Models of GI designation](#org48834f8)
-    1.  [Parametric ordered logit models](#org272e97e)
-    2.  [Ordered generalized additive models](#org8f41945)
-3.  [Diagnostics](#org933ccdd)
-    1.  [Significance](#orgaadeeaa)
-    2.  [Goodness of fit](#org6ecd7ec)
-    3.  [Omitted variable bias](#org53918f1)
-    4.  [Specification](#org29a5eb6)
-4.  [Marginal effects](#org2a05036)
-    1.  [Parametric ordered logit](#orgc88b53d)
-    2.  [Ordered generalized additive](#org67410b8)
-    3.  [Ordinal superiority figure](#org6514ce4)
-    4.  [Correlation between *Communes*](#org3efda31)
-5.  [Informational content](#org0df0025)
-    1.  [Decomposition tables](#orgbb16a1d)
-6.  [Models for GIs of 1936](#orgbe0ecfb)
-    1.  [Descriptive statistics](#org41d8f93)
-    2.  [Estimation](#orgc8f51b6)
-    3.  [Significance](#orge5c87ba)
-    4.  [Goodness of fit](#org3299c00)
-    5.  [Omitted variable](#org62b4ddd)
-    6.  [Specification](#orgb28a626)
-    7.  [Marginal effects](#org2958569)
-    8.  [Ordinal superiority](#orga662fc9)
-    9.  [Correlation between models](#orgc1bc3be)
-    10. [Decomposition table](#orge6028dc)
-7.  [Alternative GI designations](#org08b1f4d)
-    1.  [Change latent vineyard quality](#orge3ce5cf)
-    2.  [Add a vertical level in GIs](#org5be763d)
-    3.  [Decomposition table](#org4c06b0e)
-8.  [Session information](#orga6d83b3)
-9.  [Custom R functions](#org6a4e67e)
-    1.  [Translation of geology](#org0f05ac7)
-    2.  [Translation of pedology](#orgbb39593)
+1.  [Descriptive Statistics](#org055b436)
+    1.  [Data shaping](#org1f22775)
+    2.  [Geology and pedology](#org63164f8)
+    3.  [Crossing GIs dimensions](#org9b5e39b)
+2.  [Models of GI designation](#orgf648632)
+    1.  [Parametric ordered logit models](#org10ec112)
+    2.  [Ordered generalized additive models](#org2a5304e)
+3.  [Diagnostics](#org6d300e9)
+    1.  [Significance](#org83fa01a)
+    2.  [Goodness of fit](#org80bff19)
+    3.  [Omitted variable bias](#orgf5bedd8)
+    4.  [Specification](#org955f9af)
+4.  [Marginal effects](#org447f9c0)
+    1.  [Parametric ordered logit](#org597d71b)
+    2.  [Ordered generalized additive](#orgde7f31f)
+    3.  [Ordinal superiority figure](#org7b71873)
+    4.  [Correlation between *Communes*](#org11f4533)
+5.  [Informational content](#orgfe8f050)
+    1.  [Decomposition tables](#org74fbec1)
+6.  [Models for GIs of 1936](#org9336a24)
+    1.  [Descriptive statistics](#org3a9cc2c)
+    2.  [Estimation](#org60369b9)
+    3.  [Significance](#orge80bcbf)
+    4.  [Goodness of fit](#orgcbc7894)
+    5.  [Omitted variable](#orgd69da65)
+    6.  [Specification](#org638de9d)
+    7.  [Marginal effects](#org87e6a61)
+    8.  [Ordinal superiority](#org4aa9e4d)
+    9.  [Correlation between models](#org8a4a84e)
+    10. [Decomposition table](#org5b37b57)
+7.  [Alternative GI designations](#org12668d5)
+    1.  [Change latent vineyard quality](#org10d67da)
+    2.  [Add a vertical level in GIs](#orge215481)
+    3.  [Decomposition table](#org9ba84bd)
+8.  [Session information](#org5586733)
+9.  [Custom R functions](#orgef6af12)
+    1.  [Translation of geology](#org83e1be6)
+    2.  [Translation of pedology](#org4639b75)
     3.  [Surrogate Residuals](#Sec:rOGAM)
     4.  [Decomposition terms](#Sec:rDCMP)
 
 
-<a id="org7729f0c"></a>
+<a id="org055b436"></a>
 
 # Descriptive Statistics
 
 
-<a id="org5942f01"></a>
+<a id="org1f22775"></a>
 
 ## Data shaping
 
-The data construction process is presented (in French) in a data paper available at the shared repository <https://github.com/jsay/geoInd/blob/master/DataPaper.pdf>. This data paper also presents in details of the variables used here. The result of these preliminary treatments can be directly downloaded from the INRA dataverse server <https://data.inra.fr/geoInd/GeoRas.Rda>.
+The full detail of data construction is presented in a data paper available at [https://github.com/jsay/geoInd/](https://github.com/jsay/geoInd/blob/master/DataPaper.pdf). The data paper also contains the dictionary of the variables used here. The result of these preliminary treatments can be directly downloaded from the INRA dataverse server at [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN/).
 
 The following R code allows to load the data once downloaded and located in the `/Inter/` folder at the root of the working directory of the R session. It loads a `SpatialPolygonDataFrame` object from the `sp` package (cite) that contains the characteristics of the vineyard plots under consideration (session information used for this article is reported at Section XX). It also reshapes some variables of particular interest:
 
@@ -93,7 +93,7 @@ dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
 The resulting object is a `SpatialPolygonDataFrame` that contains \(59\,113\) observations of vineyard plots with \(72\) variables without omitted values.
 
 
-<a id="orgd92782e"></a>
+<a id="org63164f8"></a>
 
 ## Geology and pedology
 
@@ -130,7 +130,7 @@ apply(Reg.Ras@data[, c("GEOL", "PEDO")], 2, table)
 The characteristics of sub-soils and soils are modeled with respectively 14 and 13 fixed effects. In each case, the reference modality coded `0AREF` is equal to 1 for all vineyards plots inside geological and pedological polygons without sufficient observations. Robustness checks have been made with other threshold values than \(1\,000\) without this arbitrary choice changes the results.
 
 
-<a id="org08ea5cf"></a>
+<a id="org9b5e39b"></a>
 
 ## Crossing GIs dimensions
 
@@ -161,12 +161,12 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
 <./Figures/CrossGIs.pdf>
 
 
-<a id="org48834f8"></a>
+<a id="orgf648632"></a>
 
 # Models of GI designation
 
 
-<a id="org272e97e"></a>
+<a id="org10ec112"></a>
 
 ## Parametric ordered logit models
 
@@ -194,7 +194,7 @@ polm1b <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
 The warning messages come from the choice to drop the intercept in order to estimate a coefficient for each *commune* from the variable `LIBCOM`. This does not have any effect on the other estimated coefficients. This choice is made to compute more easily the ordinal superiority measures from fixed effects.
 
 
-<a id="org8f41945"></a>
+<a id="org2a5304e"></a>
 
 ## Ordered generalized additive models
 
@@ -235,12 +235,12 @@ save(gammod, file= "Inter/gammod.Rda")
          103037         262      102775
 
 
-<a id="org933ccdd"></a>
+<a id="org6d300e9"></a>
 
 # Diagnostics
 
 
-<a id="orgaadeeaa"></a>
+<a id="org83fa01a"></a>
 
 ## Significance
 
@@ -311,7 +311,7 @@ sapply(gamod[ 1: 5* 2], resume)
                 13.0    13.0    13.0    13.0    13.0
 
 
-<a id="org6ecd7ec"></a>
+<a id="org80bff19"></a>
 
 ## Goodness of fit
 
@@ -349,7 +349,7 @@ rbind(psR2= sapply(gamod[ 1: 5* 2], psR2),
     Pcgp 74.8600 80.387 84.376 87.2566 89.4778
 
 
-<a id="org53918f1"></a>
+<a id="orgf5bedd8"></a>
 
 ## Omitted variable bias
 
@@ -421,7 +421,7 @@ bwplot(log(values)~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPlot.pdf>
 
 
-<a id="org29a5eb6"></a>
+<a id="org955f9af"></a>
 
 ## Specification
 
@@ -445,12 +445,12 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Ras@data[, i], i)
 ```
 
 
-<a id="org2a05036"></a>
+<a id="org447f9c0"></a>
 
 # Marginal effects
 
 
-<a id="orgc88b53d"></a>
+<a id="org597d71b"></a>
 
 ## Parametric ordered logit
 
@@ -466,7 +466,7 @@ plot(predictorEffects(polm1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
 <./Figures/Effects1.pdf>
 
 
-<a id="org67410b8"></a>
+<a id="orgde7f31f"></a>
 
 ## Ordered generalized additive
 
@@ -479,7 +479,7 @@ plot(gamod[[ 10]], pages= 1, scale= 0)
 <./Figures/Effects2.pdf>
 
 
-<a id="org6514ce4"></a>
+<a id="org7b71873"></a>
 
 ## Ordinal superiority figure
 
@@ -504,7 +504,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEff.pdf>
 
 
-<a id="org3efda31"></a>
+<a id="org11f4533"></a>
 
 ## Correlation between *Communes*
 
@@ -531,12 +531,12 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
 <./Figures/ComCor.pdf>
 
 
-<a id="org0df0025"></a>
+<a id="orgfe8f050"></a>
 
 # Informational content
 
 
-<a id="orgbb16a1d"></a>
+<a id="org74fbec1"></a>
 
 ## Decomposition tables
 
@@ -567,12 +567,12 @@ round(t(apply(dcmp, 1, function(x) x/ (pi^2/ 3+ dcmp[1, ])* 100)), 1)
     Horizontal Noise      67.0   77.9   70.5   74.7   73.7
 
 
-<a id="orgbe0ecfb"></a>
+<a id="org9336a24"></a>
 
 # Models for GIs of 1936
 
 
-<a id="org41d8f93"></a>
+<a id="org3a9cc2c"></a>
 
 ## Descriptive statistics
 
@@ -617,7 +617,7 @@ table(Reg.Old$LIBCOM, Reg.Old$AOCo)
     SANTENAY              594 1435    0
 
 
-<a id="orgc8f51b6"></a>
+<a id="org60369b9"></a>
 
 ## Estimation
 
@@ -667,7 +667,7 @@ save(gammold, file= "Inter/gammold.Rda")
         28307.5       462.8     28772.0 
 
 
-<a id="orge5c87ba"></a>
+<a id="orge80bcbf"></a>
 
 ## Significance
 
@@ -699,7 +699,7 @@ sapply(gamold[ 1: 7], resume)
                12.0   12.0    12.0    12.0    12.0    12.0    12.0
 
 
-<a id="org3299c00"></a>
+<a id="orgcbc7894"></a>
 
 ## Goodness of fit
 
@@ -721,7 +721,7 @@ rbind(Pcgp= sapply(gamold[1: 7 ], pcgp),
     psR2  0.4629  0.4968  0.6132  0.636  0.6606  0.6982  0.7236
 
 
-<a id="org62b4ddd"></a>
+<a id="orgd69da65"></a>
 
 ## Omitted variable
 
@@ -772,7 +772,7 @@ bwplot(log(values)~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPold.pdf>
 
 
-<a id="orgb28a626"></a>
+<a id="org638de9d"></a>
 
 ## Specification
 
@@ -793,7 +793,7 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Old@data[, i], i)
 ```
 
 
-<a id="org2958569"></a>
+<a id="org87e6a61"></a>
 
 ## Marginal effects
 
@@ -811,7 +811,7 @@ plot(predictorEffects(polm2, ~ DEM+ SLOPE+ RAYAT+ EXPO+ GEOL+ PEDO,
 <./Figures/Effectsold.pdf>
 
 
-<a id="orga662fc9"></a>
+<a id="org4aa9e4d"></a>
 
 ## Ordinal superiority
 
@@ -835,7 +835,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEffOld.pdf>
 
 
-<a id="orgc1bc3be"></a>
+<a id="org8a4a84e"></a>
 
 ## Correlation between models
 
@@ -854,7 +854,7 @@ segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
 We obtain 11 *communes* for which the measure keeps the same sign and decrease in absolute value, against 6 for which the value keeps the same sign but increase in absolute value. We have 7 *communes* for which the measure changes its sign.
 
 
-<a id="orge6028dc"></a>
+<a id="org5b37b57"></a>
 
 ## Decomposition table
 
@@ -887,12 +887,12 @@ round(t(apply(dcop, 1, function(x) x/ (pi^2/ 3+ dcop[1, ])* 100)), 1)
     Horizontal Noise      9.9   6.4   42.7   65.8    2.1   59.4   24.8
 
 
-<a id="org08b1f4d"></a>
+<a id="org12668d5"></a>
 
 # Alternative GI designations
 
 
-<a id="orge3ce5cf"></a>
+<a id="org10d67da"></a>
 
 ## Change latent vineyard quality
 
@@ -955,7 +955,7 @@ table(Simu$AOC, Simu$SII) ; table(Simu$AOC, Simu$SIII)
     5         0         0        83     636      1185
 
 
-<a id="org5be763d"></a>
+<a id="orge215481"></a>
 
 ## Add a vertical level in GIs
 
@@ -1001,7 +1001,7 @@ table(Simv$AOC, Simv$SIV) ; table(Simv$AOC, Simv$SV) ; table(Simv$AOC, Simv$SVI)
     5     0     0     0     0     0  1904
 
 
-<a id="org4c06b0e"></a>
+<a id="org9ba84bd"></a>
 
 ## Decomposition table
 
@@ -1031,7 +1031,7 @@ round(t(apply(decf, 1, function(x) x/ (pi^2/ 3+ decf[1, ])* 100)), 1)
     Horizontal Noise    73.7 73.7 73.7 73.7 73.7 73.7 73.7 73.7
 
 
-<a id="orga6d83b3"></a>
+<a id="org5586733"></a>
 
 # Session information
 
@@ -1082,12 +1082,12 @@ sessionInfo()
     [46] nnet_7.3-12       compiler_3.6.0
 
 
-<a id="org6a4e67e"></a>
+<a id="orgef6af12"></a>
 
 # Custom R functions
 
 
-<a id="org0f05ac7"></a>
+<a id="org83e1be6"></a>
 
 ## Translation of geology
 
@@ -1131,7 +1131,7 @@ trans_geol <- data.frame(
 ```
 
 
-<a id="orgbb39593"></a>
+<a id="org4639b75"></a>
 
 ## Translation of pedology
 
