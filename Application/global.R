@@ -1,5 +1,6 @@
 library(RColorBrewer) ; library(mapview) ; library(sf)
 load("Inter/PolyRas.Rda")
+
 AocPal <- brewer.pal(5, "BuPu")
 mapviewOptions(basemaps= c("Esri.WorldImagery", "OpenStreetMap",
                            "OpenTopoMap", "CartoDB.Positron"),
@@ -21,7 +22,5 @@ library(shiny) ; library(shinydashboard) ; library(shinyjs)
 library(leaflet) ; library(maptools) ; library(ggplot2)
 Pts.Crd <- st_centroid(Poly.Ras)
 
-source("ui.R")
-source("server.R")
-
+source("ui.R") ; source("server.R")
 shinyApp(ui,server)
