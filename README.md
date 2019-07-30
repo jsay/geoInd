@@ -23,6 +23,6 @@ Bug reports, comments and suggestions by opening an issue (preferred) or [sendin
 
 Made on `emacs` with `org-mode` to juggle with `R`, `LaTex` and `Markdown`.
 
-Special thanks to XX.
+Special thanks to Pauline Mialhe, Vincent Larmet, and Guillaume Royet for their help with the application.
 
 Licence GNU GPL V3, Copyright and licence notices must be preserved (see <https://www.gnu.org/licenses/gpl-3.0.en.html>)

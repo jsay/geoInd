@@ -8,67 +8,67 @@ author: |
 # Abstract
 
 <div class="abstract">
-This file contents the Replication Material (RM) associated to the AAWE Working Paper No XXX entitled *The informational content of geographical indications*. Data, code and prediction materials are under the copyleft license GNU GPL V3, which means that license notices must be preserved. Raw data are available from the INRA dataverse server [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN). Some R functions are reported in the Appendix to preserve the readability of codes in the main text. The most recent version of this document and a Shiny application about vineyards' classification in *Côte d'Or* (Burgundy, France) are available from the remote repository [https://github.com/jsay/geoInd](https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf).
+This file contents the Replication Material (RM) associated to the AAWE Working Paper No XXX entitled *The informational content of geographical indications*. Data, code and prediction materials are under the copyright license GNU GPL V3, which means that license notices must be preserved. Raw data are available from the INRA dataverse server [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN). Some R functions are reported in the Appendix to preserve the readability of codes in the main text. The most recent version of this document and a Shiny application about the econometric classification of vineyards in the *Côte d'Or* (Burgundy, France) are available from the remote repository [https://github.com/jsay/geoInd](https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf).
 
 </div>
 
 
 # Table of Contents
 
-1.  [Descriptive Statistics](#org055b436)
-    1.  [Data shaping](#org1f22775)
-    2.  [Geology and pedology](#org63164f8)
-    3.  [Crossing GIs dimensions](#org9b5e39b)
-2.  [Models of GI designation](#orgf648632)
-    1.  [Parametric ordered logit models](#org10ec112)
-    2.  [Ordered generalized additive models](#org2a5304e)
-3.  [Diagnostics](#org6d300e9)
-    1.  [Significance](#org83fa01a)
-    2.  [Goodness of fit](#org80bff19)
-    3.  [Omitted variable bias](#orgf5bedd8)
-    4.  [Specification](#org955f9af)
-4.  [Marginal effects](#org447f9c0)
-    1.  [Parametric ordered logit](#org597d71b)
-    2.  [Ordered generalized additive](#orgde7f31f)
-    3.  [Ordinal superiority figure](#org7b71873)
-    4.  [Correlation between *Communes*](#org11f4533)
-5.  [Informational content](#orgfe8f050)
-    1.  [Decomposition tables](#org74fbec1)
-6.  [Models for GIs of 1936](#org9336a24)
-    1.  [Descriptive statistics](#org3a9cc2c)
-    2.  [Estimation](#org60369b9)
-    3.  [Significance](#orge80bcbf)
-    4.  [Goodness of fit](#orgcbc7894)
-    5.  [Omitted variable](#orgd69da65)
-    6.  [Specification](#org638de9d)
-    7.  [Marginal effects](#org87e6a61)
-    8.  [Ordinal superiority](#org4aa9e4d)
-    9.  [Correlation between models](#org8a4a84e)
-    10. [Decomposition table](#org5b37b57)
-7.  [Alternative GI designations](#org12668d5)
-    1.  [Change latent vineyard quality](#org10d67da)
-    2.  [Add a vertical level in GIs](#orge215481)
-    3.  [Decomposition table](#org9ba84bd)
-8.  [Session information](#org5586733)
-9.  [Custom R functions](#orgef6af12)
-    1.  [Translation of geology](#org83e1be6)
-    2.  [Translation of pedology](#org4639b75)
+1.  [Descriptive Statistics](#org4e9d5a1)
+    1.  [Data shaping](#org230f861)
+    2.  [Geology and pedology](#orgbe5b032)
+    3.  [Crossing GIs dimensions](#org1c6ca13)
+2.  [Models of GI designation](#org5fd1136)
+    1.  [Parametric ordered logit models](#orgdf959e3)
+    2.  [Ordered generalized additive models](#orgd0ccb97)
+3.  [Diagnostics](#orge6caeab)
+    1.  [Significance](#org8f43ba0)
+    2.  [Goodness of fit](#org1768077)
+    3.  [Omitted variable bias](#org8b9363a)
+    4.  [Specification](#orgf14cbaf)
+4.  [Marginal effects](#org5db566a)
+    1.  [Parametric ordered logit](#orgdfab28f)
+    2.  [Ordered generalized additive](#org1a2a06f)
+    3.  [Ordinal superiority figure](#orge5bf48e)
+    4.  [Correlation between *Communes*](#org65efc79)
+5.  [Informational content](#orgf4477ac)
+    1.  [Decomposition tables](#orgbc4e156)
+6.  [Models for GIs of 1936](#orgdcb07b5)
+    1.  [Descriptive statistics](#orge02ce71)
+    2.  [Estimation](#org689c408)
+    3.  [Significance](#orgce3ec20)
+    4.  [Goodness of fit](#org65c0f06)
+    5.  [Omitted variable](#orga7e5815)
+    6.  [Specification](#org3a1326d)
+    7.  [Marginal effects](#orgc5d778d)
+    8.  [Ordinal superiority measures](#org5a446ce)
+    9.  [Temporal variations](#org6ed2650)
+    10. [Decomposition table](#org98861a0)
+7.  [Alternative GI designations](#org4b11dd2)
+    1.  [Change latent vineyard quality](#orgb1a9497)
+    2.  [Add a vertical level in GIs](#org57f7005)
+    3.  [Decomposition table](#org3e9441e)
+8.  [Session information](#org52519b3)
+9.  [Custom R functions](#org64b80c7)
+    1.  [Translation of geology](#org206153d)
+    2.  [Translation of pedology](#orge6c5480)
     3.  [Surrogate Residuals](#Sec:rOGAM)
     4.  [Decomposition terms](#Sec:rDCMP)
 
 
-<a id="org055b436"></a>
+<a id="org4e9d5a1"></a>
 
 # Descriptive Statistics
 
 
-<a id="org1f22775"></a>
+<a id="org230f861"></a>
 
 ## Data shaping
 
 The full detail of data construction is presented in a data paper available at [https://github.com/jsay/geoInd/](https://github.com/jsay/geoInd/blob/master/DataPaper.pdf). The data paper also contains the dictionary of the variables used here. The result of these preliminary treatments can be directly downloaded from the INRA dataverse server at [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN/).
 
-The following R code allows to load the data once downloaded and located in the `/Inter/` folder at the root of the working directory of the R session. It loads a `SpatialPolygonDataFrame` object from the `sp` package (cite) that contains the characteristics of the vineyard plots under consideration (session information used for this article is reported at Section XX). It also reshapes some variables of particular interest:
+The following R code allows to load the data once downloaded and located in the `/Inter/` folder at the root of the working directory of the R session. It loads a `SpatialPolygonDataFrame` object from the `sp` package that contains the characteristics of the vineyard plots under consideration (session information used for this article is reported at Section 8). It also reshapes some variables of particular interest:
 
 -   It reorders the *commune* levels along the North-South gradient
 -   It standardizes the variable about solar radiation
@@ -88,12 +88,12 @@ dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
                       & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION)))
 ```
 
-    [1] 59113    72
+    [1] 59113    71
 
 The resulting object is a `SpatialPolygonDataFrame` that contains \(59\,113\) observations of vineyard plots with \(72\) variables without omitted values.
 
 
-<a id="org63164f8"></a>
+<a id="orgbe5b032"></a>
 
 ## Geology and pedology
 
@@ -130,11 +130,11 @@ apply(Reg.Ras@data[, c("GEOL", "PEDO")], 2, table)
 The characteristics of sub-soils and soils are modeled with respectively 14 and 13 fixed effects. In each case, the reference modality coded `0AREF` is equal to 1 for all vineyards plots inside geological and pedological polygons without sufficient observations. Robustness checks have been made with other threshold values than \(1\,000\) without this arbitrary choice changes the results.
 
 
-<a id="org9b5e39b"></a>
+<a id="org1c6ca13"></a>
 
 ## Crossing GIs dimensions
 
-The data are now ready for the econometric analysis. The GIs on the area of interest contains both an horizontal (*commune*) and a vertical (*rank*) dimension as detailed in the Working Paper. The balance of the 2 distributions can be assessed with the following Figure 3 (p.36) in the Working Paper.
+The data are now ready for the econometric analysis. The GIs on the area of interest contains both an horizontal (*commune*) and a vertical (*hierarchical level*) dimension as detailed in the Working Paper. The balance of the two distributions can be assessed with the following Figure 3 (p.37) in the Working Paper.
 
 ```R
 library(lattice) ; library(RColorBrewer)
@@ -160,17 +160,42 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
 
 <./Figures/CrossGIs.pdf>
 
+We also use historical GI designation scheme from 1936, the year of creation of the French national institute in charge of geographical indications (INAO). At his time, the vertical dimension counted only three levels, whereas the horizontal dimension was identical. The balance of the distribution can be assessed by the following Figure.
 
-<a id="orgf648632"></a>
+```R
+library(lattice) ; library(RColorBrewer)
+fig.old <- aggregate(model.matrix(~0+ factor(Reg.Ras$AOC36lvl))*
+                     Reg.Ras$AREA/ 1000, by= list(Reg.Ras$LIBCOM), sum)
+names(fig.old) <- c("LIBCOM", "BOUR", "VILL", "GCRU")
+fig.old$LIBCOM <- factor(fig.old$LIBCOM, lev= rev(levels(fig.old$LIBCOM)))
+old.crd <- t(apply(fig.old[, -1], 1, function(t) cumsum(t)- t/2))
+old.lab <- round(t(apply(fig.old[, -1], 1, function(t) t/ sum(t)))* 100)
+old.pal  <- brewer.pal(n= 9, name = "BuPu")[ c(2, 5, 8)]
+barchart(LIBCOM~ BOUR+ VILL+ GCRU, xlim= c(-100, 10200),
+         xlab="Vineyards delineated as 1936 GI (hectare)",
+         data= fig.old, horiz= T, stack= T, col= old.pal, border= "black",
+         par.settings= list(superpose.polygon= list(col= old.pal)),
+         auto.key= list(space= "top", points= F, rectangles= T, columns= 3,
+                        text=c("Bourgogne", "Village", "Grand cru")),
+         panel=function(x, y, ...) {
+             panel.grid(h= 0, v = -11, col= "grey60")
+             panel.barchart(x, y, ...)
+             ltext(old.crd, y, lab= ifelse(old.lab> 0, old.lab, ""))})
+```
+
+<./Figures/CrossOldGIs.pdf>
+
+
+<a id="org5fd1136"></a>
 
 # Models of GI designation
 
 
-<a id="org10ec112"></a>
+<a id="orgdf959e3"></a>
 
 ## Parametric ordered logit models
 
-We first estimate the benchmark parametric ordered logistic model `polm1` that corresponds to model ( 0 ) of Table 1 (p.XX) in the Working Paper. Model `polm1a` is the auxiliary regression without *commune* fixed effects used to test the presence of omitted *terroir* effect as detailed in the Working Paper. Model `polm1b` is also an auxiliary regression without smoothing of spatial coordinates to compute the Fisher statistics associated to these terms in Table 1. We use for this the standard `polr` function from `MASS` package (cite).
+We first estimate the benchmark parametric ordered logistic model `polm1` that corresponds to model ( 0 ) of Table 1 (p.22) in the Working Paper. Model `polm1a` is the auxiliary regression without *commune* fixed effects used to test the presence of omitted *terroir* effect as detailed in the Working Paper. Model `polm1b` is also an auxiliary regression without smoothing of spatial coordinates to compute the Fisher statistics associated to these terms in Table 1. We use for this the standard `polr` function from `MASS` package.
 
 ```R
 library(MASS)
@@ -191,14 +216,14 @@ polm1b <- polr(factor(AOC)~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO
     2: In polr(factor(AOC) ~ 0 + LIBCOM + EXPO + GEOL + PEDO + poly(DEM,  :
       le plan ne semble pas de rang plein, des coefs seront ignorés
 
-The warning messages come from the choice to drop the intercept in order to estimate a coefficient for each *commune* from the variable `LIBCOM`. This does not have any effect on the other estimated coefficients. This choice is made to compute more easily the ordinal superiority measures from fixed effects.
+The warning messages come from the choice to drop the intercept in order to estimate a coefficient for each *commune* from the variable `LIBCOM`. This choice is made to compute more easily the ordinal superiority measures from fixed effects. This does not have any effect on the other estimated coefficients.
 
 
-<a id="org2a5304e"></a>
+<a id="orgd0ccb97"></a>
 
 ## Ordered generalized additive models
 
-We estimate the series of ordered generalized additive models (OGAMs) of GIs designations within a loop. Models ( I ) to ( V ) reported in Table XX (p.XX) of the Working Paper are only a subset of all models of the `gamod` object that can be downloaded directly from the INRA server, <https://data.inra.fr/geoInd/gamod.Rda>. Models with high complexities for the spatial effects (more than 600 edf) are long to run. They require about 8 hours each, with the full loop requires about 2 days to run with Intel Core i7-7820HQ CPU 2.90 GHz x 8 and 64 Go of RAM.
+We estimate the series of ordered generalized additive models (OGAMs) of GIs designations within a loop. Models ( I ) to ( V ) reported in Table 1 (p.22) of the Working Paper are only a subset of all models of the `gamod` object that can be downloaded directly from the INRA server, <https://data.inra.fr/geoInd/gamod.Rda>. Models with high complexities for the spatial effects (more than 600 edf) are long to run. They require about 8 hours each, with the full loop requires about 2 days to run with Intel Core i7-7820HQ CPU 2.90 GHz x 8 and 64 Go of RAM. We advise the reader to not run the full loop, but instead to select values of `listk` and estimate each model separately.
 
 ```R
 library(mgcv)
@@ -217,7 +242,7 @@ save(gamod, file= "Inter/gamod.Rda")
     utilisateur     système      écoulé 
          113038         384      109562 
 
-The second loop below produces the `gammod` object that contains the auxiliary regressions to test the omitted *terroir* effects as presented in the Working Paper, Section 3.XX. The reader is not expected to run the loop entirely but pick some value of `k` in `listk` between 0 and \(1\,000\) to estimate each model individually.
+The second loop below produces the `gammod` object that contains the auxiliary regressions to test the omitted *terroir* effects as presented in the Working Paper, Section 4.2. The reader is not expected to run the loop entirely but pick some value of `k` in `listk` between 0 and \(1\,000\) to estimate each model individually.
 
 ```R
 gammod <- vector("list", length(listk))
@@ -235,16 +260,16 @@ save(gammod, file= "Inter/gammod.Rda")
          103037         262      102775
 
 
-<a id="org6d300e9"></a>
+<a id="orge6caeab"></a>
 
 # Diagnostics
 
 
-<a id="org83fa01a"></a>
+<a id="org8f43ba0"></a>
 
 ## Significance
 
-We first reports the Chi-square statistics for the joint significance of the parametric ordered logit model `polm1` that corresponds to model ( 0 ) of Table XX in the Working Paper.
+We first reports the Chi-square statistics for the joint significance of the parametric ordered logit model `polm1` that corresponds to model ( 0 ) of Table 1 (p.22) in the Working Paper.
 
 ```R
 library(car)
@@ -277,7 +302,7 @@ res1a <- anova(polm1, polm1b)
     4: glm.fit: fitted probabilities numerically 0 or 1 occurred 
     5: glm.fit: fitted probabilities numerically 0 or 1 occurred
 
-Then, we compute the same Chi-square statistics for all the OGAMs with the function `resume`. They are also reported in Table XX in the Working Paper. Recall that the estimated models can be downloaded from <https://data.inra.fr/geoInd/gamod.Rda>.
+Then, we compute the same Chi-square statistics for all the OGAMs with the function `resume`. They are also reported in Table 1 (p.22) in the Working Paper. Recall that the estimated models can be downloaded from <https://data.inra.fr/geoInd/gamod.Rda>.
 
 ```R
 load("Inter/gamod.Rda")
@@ -311,11 +336,11 @@ sapply(gamod[ 1: 5* 2], resume)
                 13.0    13.0    13.0    13.0    13.0
 
 
-<a id="org80bff19"></a>
+<a id="org1768077"></a>
 
 ## Goodness of fit
 
-We report below the code used to compute the goodness-of-fit measures for model ( 0 ) reported in Table XX: McFadden R\(^2\), Akaike information criteria (AIC), and percent of good predictions.
+We report below the code used to compute the goodness-of-fit measures for model ( 0 ) reported in Table 1 (p.22): Pseudo-R\(^2\), Akaike information criteria (AIC), and percent of good predictions.
 
 ```R
 psR2 <- function(x) 1- (logLik(x)/ logLik(update(x, . ~ + 1)))
@@ -349,11 +374,11 @@ rbind(psR2= sapply(gamod[ 1: 5* 2], psR2),
     Pcgp 74.8600 80.387 84.376 87.2566 89.4778
 
 
-<a id="orgf5bedd8"></a>
+<a id="org8b9363a"></a>
 
 ## Omitted variable bias
 
-As indicated in the Working Paper (Section 3.X), we evaluate the potential omitted *terroir* variables through the joint significance of *commune* fixed effects on the residuals from auxiliary regressions without such fixed effects. Code below allows to compute the bootstrapped Fisher statistics with 100 replications from parametric ordered logistic model. The absence of correlated effects is strongly rejected. Note that we use the `sure` package (cite) to compute the surrogate residuals from this parametric model.
+As indicated in the Working Paper (Appendix A.1), we evaluate the potential omitted *terroir* variables through the joint significance of *commune* fixed effects on the residuals from auxiliary regressions without such fixed effects. Code below allows to compute the bootstrapped Fisher statistics with 100 replications from parametric ordered logistic model. The absence of correlated effects is strongly rejected. Note that we use the `sure` package to compute the surrogate residuals from this parametric model.
 
 ```R
 library(lmtest) ; library(sandwich) ; library(sure)
@@ -370,7 +395,7 @@ quantile(wal1, c(.05, .5, .95))
 
 Note that the values obtained are not exactly equal to those reported in the Working Paper because of the bootstrap procedure.
 
-The `sure` package does not allow to compute surrogate residuals for `gam` models from the `mgcv` package. Because this framework is also consistent for OGAMs, we write the function `sureOGAM` presented and tested in Appendix [9.3](#Sec:rOGAM) to adapt the framework. This function is also available in the file of custom function `./myFcts.R` that is sourced in the following code. Hence, we compute the bootstrapped F-statistics for the full set of OGAM belows. The estimation of auxiliary models is presented above, they can be directly downloaded from <https://data.inra.fr/geoInd/gamod.Rda>.
+The `sure` package does not allow to compute surrogate residuals for `gam` models from the `mgcv` package. Because this framework is also consistent for OGAMs, we write the function `sureOGAM` presented and tested in Appendix [9.3](#Sec:rOGAM) to adapt the framework. This function is also available in the file of custom function `./myFcts.R` that is sourced in the following code. Hence, we compute the bootstrapped F-statistics for the full set of OGAM belows. The estimation of auxiliary models is presented above, they can be directly downloaded from [https://data.inra.fr](https://doi.org/10.15454/ZZWQMN).
 
 ```R
 load("Inter/gammod.Rda") ; library(ggplot2) ; source("myFcts.R")
@@ -392,9 +417,9 @@ apply(wal2[, -1], 2, function(x) quantile(x, c(.05, .5, .95)))
     50%  16.86  6.504  5.658  4.690  4.056  3.373  2.439  2.132  1.722
     95%  18.35  7.429  6.536  5.487  4.916  4.024  3.195  2.827  2.203
 
-Again, the values are not exactly the same. Note that the critical value at 0.01 % for the F-distribution in this case is 2.3, as can be assessed from `qf(.9999, 31, Inf)`.
+Again, the values are not exactly the same. Note that the critical value at 0.01% for the F-distribution in this case is 2.3, as can be assessed from `qf(.9999, 31, Inf)`.
 
-The following plot resumes the specification diagnostics and shows the relevance of OGAMs to control for omitted spatial effects. It corresponds to Figure XX in the Working Paper.
+The following plot resumes the specification diagnostics and shows the relevance of OGAMs to control for omitted spatial effects. It corresponds to Figure 7 (p.42) in the Working Paper.
 
 ```R
 library(lattice)
@@ -421,7 +446,7 @@ bwplot(log(values)~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPlot.pdf>
 
 
-<a id="org955f9af"></a>
+<a id="orgf14cbaf"></a>
 
 ## Specification
 
@@ -445,16 +470,16 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Ras@data[, i], i)
 ```
 
 
-<a id="org447f9c0"></a>
+<a id="org5db566a"></a>
 
 # Marginal effects
 
 
-<a id="org597d71b"></a>
+<a id="orgdfab28f"></a>
 
 ## Parametric ordered logit
 
-The marginal effects from parametric model `polm1` can be directly plotted with the package `effect`. The following plots corresponds to the dotted lines in Figure XX, Appendix XX of the Working Paper.
+The marginal effects from parametric model `polm1` can be directly plotted with the package `effect`. The following plots corresponds to the dotted lines in Figure 5 (p.40) in the Appendix of the Working Paper.
 
 ```R
 library(effects)
@@ -466,11 +491,11 @@ plot(predictorEffects(polm1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
 <./Figures/Effects1.pdf>
 
 
-<a id="orgde7f31f"></a>
+<a id="org1a2a06f"></a>
 
 ## Ordered generalized additive
 
-The same effect plots can be drawn for the OGAMs models. We report below the effects from the OGAM `gam900` which corresponds to a maximum effective degrees of freedom of 900. For all models of `gamod`, we obtain the gray curves of Figure XX, Appendix XX of the Working Paper.
+The same effect plots can be drawn for the OGAMs models. We report below the effects from the OGAM `gam900` which corresponds to a maximum effective degrees of freedom of 900. For all models of `gamod`, we obtain the gray curves of Figure 5 (p.40) in the Appendix of the Working Paper.
 
 ```R
 plot(gamod[[ 10]], pages= 1, scale= 0)
@@ -479,24 +504,29 @@ plot(gamod[[ 10]], pages= 1, scale= 0)
 <./Figures/Effects2.pdf>
 
 
-<a id="org7b71873"></a>
+<a id="orge5bf48e"></a>
 
 ## Ordinal superiority figure
 
-From the equation XX of the Working Paper, we can compute ordinal superiority measures for each *communes* relatively to the average. The code below reproduces the Figure XX (p. XX) of the Working Paper. Note that we drop the isolated Northern *communes* of *Chenôve*, *Marsannay-la-Côte* and *Couchey* which do not have comparable neighbors. The effect of the proximity to Dijon is too high for these *communes* and they present high ordinal superiority measures without high rated vineyards.
+From the equation (4) of the Working Paper (p.14), we can compute ordinal superiority measures for each *communes* relatively to the average. The code below reproduces the Figure 2 (p. 23) of the Working Paper. Note that we drop the isolated Northern *communes* of *Chenôve*, *Marsannay-la-Côte* and *Couchey* which do not have comparable neighbors. The effect of the proximity to Dijon is too high for these *communes* and they present high ordinal superiority measures without high rated vineyards.
 
 ```R
 library(latticeExtra)
 plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
 xx <- data.frame(sapply(gamod, function(x)
     2* plogi(I(x$coeff[ 4: 31]- mean(x$coeff[ 4: 31])))- 1))
+foo_key <- list(x = .35, y = .95, corner = c(1, 1),
+            text = list(c("Côte de Beaune", "Côte de Nuits")),
+            rectangle = list(col = c("chartreuse", "tomato")))
 ww <- data.frame(xx,
                  LIBCOM= substr(names(gamod[[1]]$coef[ 4: 31]), 7, 30),
+                 REGION= c(rep("tomato", 12), rep("chartreuse", 16)),
                  MIN= apply(xx[ 8: 10], 1, min),
                  MAX= apply(xx[ 8: 10], 1, max),
                  MEAN= apply(xx[ 8: 10], 1, mean))
 segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
         data= ww[order(ww$MEAN), ], center= MEAN, type= "o",
+        key= foo_key, col= as.character(ww$REGION[order(ww$MEAN)]),
         unit = "mm", axis = axis.grid, col.symbol= "black", cex= 1, 
         xlab= "Min, Mean and Max of Ordinal Superiorty Measures")
 ```
@@ -504,11 +534,11 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEff.pdf>
 
 
-<a id="org11f4533"></a>
+<a id="org65efc79"></a>
 
 ## Correlation between *Communes*
 
-Below the code to produce the Figure XX in Appendix XX of the Working Paper. This Figure illustrates the claim that "*commune* with higher GIs do not have necessary a preferential treatment" (p.XX). It shows the correlation between the average vertical GI score and the mean ordinal superiority measures estimated from OGAMs with high effective degrees of freedom.
+Below the code to produce the Figure 8 in Appendix p.42 of the Working Paper. It shows the correlation between the average vertical GI score and the mean ordinal superiority measures estimated from OGAMs with high effective degrees of freedom.
 
 ```R
 library(plyr) ; library(ggrepel)
@@ -531,16 +561,16 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
 <./Figures/ComCor.pdf>
 
 
-<a id="orgfe8f050"></a>
+<a id="orgf4477ac"></a>
 
 # Informational content
 
 
-<a id="org74fbec1"></a>
+<a id="orgbc4e156"></a>
 
 ## Decomposition tables
 
-We proceed now to the decomposition of variance of the latent quality index from the GI designations. The mathematical formula and codes used in the decomposition are presented and tested in Appendix [9.4](#Sec:rDCMP). These functions are also available in the file of custom function `./myFcts.R` that can be directly sourced. The following codes perform the decomposition for the subset of models reported in Table XX of the Working Paper. The predictions of the latent quality index in the first rows need some time to run, the decomposition that follow are computed rapidly.
+We proceed now to the decomposition of variance of the latent quality index from the GI designations. The mathematical formula and codes used in the decomposition are presented and tested in Appendix [9.4](#Sec:rDCMP). These functions are also available in the file of custom function `./myFcts.R` that can be directly sourced. The following codes perform the decomposition for the subset of models reported in Table 2 (p.25) of the Working Paper. The predictions of the latent quality index in the first rows need some time to run, the decomposition that follow are computed rapidly.
 
 ```R
 ddtt <- data.frame(AOC= Reg.Ras$AOC, LIBCOM= Reg.Ras$LIBCOM,
@@ -567,12 +597,12 @@ round(t(apply(dcmp, 1, function(x) x/ (pi^2/ 3+ dcmp[1, ])* 100)), 1)
     Horizontal Noise      67.0   77.9   70.5   74.7   73.7
 
 
-<a id="org9336a24"></a>
+<a id="orgdcb07b5"></a>
 
 # Models for GIs of 1936
 
 
-<a id="org3a9cc2c"></a>
+<a id="orge02ce71"></a>
 
 ## Descriptive statistics
 
@@ -585,39 +615,16 @@ Reg.Old <- subset(Reg.Ras, !Reg.Ras$LIBCOM %in%
 Reg.Old$LIBCOM <- factor(Reg.Old$LIBCOM)
 Reg.Old$AOCo <- as.numeric(ifelse(Reg.Old$AOC36lvl== "0", 1,
                            ifelse(Reg.Old$AOC36lvl== "3", 2, 3)))
-#table(Reg.Old$AOCo, Reg.Old$AOC)
-table(Reg.Old$LIBCOM, Reg.Old$AOCo)
+table(Reg.Old$AOCo, Reg.Old$AOC)
 ```
 
-                            1    2    3
-    FIXIN                1152  174    0
-    BROCHON               638  375    0
-    GEVREY-CHAMBERTIN     658 2837  381
-    MOREY-SAINT-DENIS    1340  605   37
-    CHAMBOLLE-MUSIGNY     654 1125   34
-    VOUGEOT                29   37  145
-    FLAGEY-ECHEZEAUX      253  252  273
-    VOSNE-ROMANEE         394  904   60
-    NUITS-SAINT-GEORGES   873 1409    0
-    PREMEAUX-PRISSEY      648   95    0
-    PERNAND-VERGELESSES  1147  616  113
-    LADOIX-SERRIGNY      1039  718   39
-    ALOXE-CORTON          248  333  377
-    SAVIGNY-LES-BEAUNE    323 1097    0
-    CHOREY-LES-BEAUNE     653  576    0
-    BEAUNE                910 1308    0
-    POMMARD              2023 1556    0
-    VOLNAY                786 1152    0
-    MONTHELIE             658  585    0
-    AUXEY-DURESSES       1813  747    0
-    MEURSAULT            2402 1624    0
-    SAINT-AUBIN          3150 1498    0
-    PULIGNY-MONTRACHET   1333 1034   89
-    CHASSAGNE-MONTRACHET  583 1986   73
-    SANTENAY              594 1435    0
+          1     2     3     4     5
+    1  7124 11452  5111   575    39
+    2     5   536 15175  8101   261
+    3     0     1    13     3  1604
 
 
-<a id="org60369b9"></a>
+<a id="org689c408"></a>
 
 ## Estimation
 
@@ -667,11 +674,11 @@ save(gammold, file= "Inter/gammold.Rda")
         28307.5       462.8     28772.0 
 
 
-<a id="orge80bcbf"></a>
+<a id="orgce3ec20"></a>
 
 ## Significance
 
-We first assess the joint significance of variables in all OGAMs of GIs designation. The following results are reported in Table XX in Appendix XX of the Working Paper (p.XX).
+We first assess the joint significance of variables in all OGAMs of GIs designation. The following results are reported in Table 5 in Appendix p.43 of the Working Paper.
 
 ```R
 load("Inter/gamold.Rda")
@@ -699,11 +706,11 @@ sapply(gamold[ 1: 7], resume)
                12.0   12.0    12.0    12.0    12.0    12.0    12.0
 
 
-<a id="orgcbc7894"></a>
+<a id="org65c0f06"></a>
 
 ## Goodness of fit
 
-Goodness of fit measures from the same Table XX in Appendix XX of the Working Paper.
+Goodness of fit measures from the same Table 5 in Appendix p.43 of the Working Paper.
 
 ```R
 round(c(McFaddenR2= psR2(polm2), AIC= AIC(polm2)/ 1000,
@@ -721,11 +728,11 @@ rbind(Pcgp= sapply(gamold[1: 7 ], pcgp),
     psR2  0.4629  0.4968  0.6132  0.636  0.6606  0.6982  0.7236
 
 
-<a id="orgd69da65"></a>
+<a id="orga7e5815"></a>
 
 ## Omitted variable
 
-Bootstrapped statistics for omitted variables, not reported in the working paper, mentioned at p.XX.
+Bootstrapped statistics for omitted variables, reported in Table 5 in Appendix p.43 of the Working Paper.
 
 ```R
 library(lmtest) ; library(sandwich) ; library(sure) ; library(ggplot2)
@@ -745,7 +752,7 @@ apply(wold, 2, function(x) quantile(x, c(.05, .5, .95)))
     50% 92.78 26.62 10.171  4.802  4.372  2.740  2.308  1.748
     95% 97.08 28.57 11.472  5.594  5.647  3.638  3.452  2.583
 
-Now the same violon plot as for current GIs, not reported the Working Paper but mentioned at p.XX.
+Now the same violon plot as for current GIs, not reported the Working Paper but mentioned at p.24.
 
 ```R
 library(lattice)
@@ -772,11 +779,11 @@ bwplot(log(values)~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 <./Figures/SignifPold.pdf>
 
 
-<a id="org638de9d"></a>
+<a id="org3a1326d"></a>
 
 ## Specification
 
-the use of surrogate residuals to test the specification process for models of 1936 GI designations. As before, the results are not reported because the resulting file is too big.
+The use of surrogate residuals to test the specification process for models of 1936 GI designations. As before, the results are not reported because the resulting file is too big.
 
 ```R
 library(sure) ; library(ggplot2) ; library(gridExtra)
@@ -793,11 +800,11 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Old@data[, i], i)
 ```
 
 
-<a id="org87e6a61"></a>
+<a id="orgc5d778d"></a>
 
 ## Marginal effects
 
-Marginal effect ca be assessed as for current GIs, the code belows can be used on the models from the `gamold` object to produce Figure XX in the Appendix XX in the Working Paper.
+Marginal effect can be assessed as for current GIs, the code belows can be used on the models from the `gamold` object to produce Figure 9 in the Appendix p.44 in the Working Paper.
 
 ```R
 library(effects)
@@ -811,23 +818,26 @@ plot(predictorEffects(polm2, ~ DEM+ SLOPE+ RAYAT+ EXPO+ GEOL+ PEDO,
 <./Figures/Effectsold.pdf>
 
 
-<a id="org4aa9e4d"></a>
+<a id="org5a446ce"></a>
 
-## Ordinal superiority
+## Ordinal superiority measures
 
-Ordinal superiority for the GIs of 1936, that corresponds to Figure XX in the Appendix of the Working Paper.
+Ordinal superiority for the GIs of 1936, that corresponds to Figure 11 in the Appendix p. 46 of the Working Paper.
 
 ```R
 plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
+load("Inter/gamold.Rda")
 xxx <- data.frame(sapply(gamold, function(x)
-    2* plogi(I(x$coeff[ 1: 25]- mean(x$coeff[ 1: 25])))- 1))
+    2* plogi(I(x$coef[ 1: 25]- mean(x$coef[ 1: 25])))- 1))
 www <- data.frame(xxx,
                   LIBCOM= substr(names(gamold[[ 1]]$coef[ 1: 25]), 7, 30),
-                  MIN= apply(xxx[ 11: 13], 1, min),
-                  MAX= apply(xxx[ 11: 13], 1, max),
-                  MEAN= apply(xxx[ 11: 13], 1, mean))
+                  REGION= c(rep("tomato", 10), rep("chartreuse", 15)),
+                  MIN= apply(xxx[ 11: 12], 1, min),
+                  MAX= apply(xxx[ 11: 12], 1, max),
+                  MEAN= apply(xxx[ 11: 12], 1, mean))
 segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
         data= www[order(www$MEAN), ], center= MEAN, type= "o",
+        key= foo_key, col= as.character(www$REGION[order(www$MEAN)]),
         unit = "mm", axis = axis.grid, col.symbol= "black", cex= 1, 
         xlab= "Min, Mean and Max of Ordinal Superiorty Measures")
 ```
@@ -835,30 +845,29 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 <./Figures/ComEffOld.pdf>
 
 
-<a id="org8a4a84e"></a>
+<a id="org6ed2650"></a>
 
-## Correlation between models
+## Temporal variations
 
-An additional unreported Figure to show the claim that "the importance of *communes* has decreased since the 1936 scheme" (p.XX)
+An additional Figure 3 (p.26) of the Working Paper.
 
 ```R
 zzz <- merge(ww, www, by= "LIBCOM")
 segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
         segments.fun = panel.arrows, length = 5, unit = "mm",
-        draw.bands= F, axis = axis.grid, lwd= 2,
-        xlab= "Variation for ordinal superiority between 1936 and now")
+        key= foo_key, col= as.character(zzz$REGION.x),
+        draw.bands= F, axis = axis.grid, lwd= 3,
+        xlab= "Variation of ordinal superiority measure from 1936 to now")
 ```
 
 <./Figures/ComDyn.pdf>
 
-We obtain 11 *communes* for which the measure keeps the same sign and decrease in absolute value, against 6 for which the value keeps the same sign but increase in absolute value. We have 7 *communes* for which the measure changes its sign.
 
-
-<a id="org5b37b57"></a>
+<a id="org98861a0"></a>
 
 ## Decomposition table
 
-The code below compute the decomposition table for GIs of 1936, reported as Table XX in Appendix (p.XX) of the working Paper. Again, the first row are long to run.
+The code below compute the decomposition table for GIs of 1936, unreported.
 
 ```R
 ddoo <- data.frame(AOCo= Reg.Old$AOCo, LIBCOM= Reg.Old$LIBCOM,
@@ -887,12 +896,12 @@ round(t(apply(dcop, 1, function(x) x/ (pi^2/ 3+ dcop[1, ])* 100)), 1)
     Horizontal Noise      9.9   6.4   42.7   65.8    2.1   59.4   24.8
 
 
-<a id="org12668d5"></a>
+<a id="org4b11dd2"></a>
 
 # Alternative GI designations
 
 
-<a id="org10d67da"></a>
+<a id="orgb1a9497"></a>
 
 ## Change latent vineyard quality
 
@@ -955,7 +964,7 @@ table(Simu$AOC, Simu$SII) ; table(Simu$AOC, Simu$SIII)
     5         0         0        83     636      1185
 
 
-<a id="orge215481"></a>
+<a id="org57f7005"></a>
 
 ## Add a vertical level in GIs
 
@@ -1001,11 +1010,11 @@ table(Simv$AOC, Simv$SIV) ; table(Simv$AOC, Simv$SV) ; table(Simv$AOC, Simv$SVI)
     5     0     0     0     0     0  1904
 
 
-<a id="org9ba84bd"></a>
+<a id="org3e9441e"></a>
 
 ## Decomposition table
 
-And we conclude with the decomposition that are reported Table XX (p.XX) of the Working Paper.
+And we conclude with the decomposition that are reported Table 3 (p.27) of the Working Paper.
 
 ```R
 decf <- sapply(names(Simv[, 76: 83]), function(x)
@@ -1031,7 +1040,7 @@ round(t(apply(decf, 1, function(x) x/ (pi^2/ 3+ decf[1, ])* 100)), 1)
     Horizontal Noise    73.7 73.7 73.7 73.7 73.7 73.7 73.7 73.7
 
 
-<a id="org5586733"></a>
+<a id="org52519b3"></a>
 
 # Session information
 
@@ -1082,12 +1091,12 @@ sessionInfo()
     [46] nnet_7.3-12       compiler_3.6.0
 
 
-<a id="orgef6af12"></a>
+<a id="org64b80c7"></a>
 
 # Custom R functions
 
 
-<a id="org83e1be6"></a>
+<a id="org206153d"></a>
 
 ## Translation of geology
 
@@ -1131,7 +1140,7 @@ trans_geol <- data.frame(
 ```
 
 
-<a id="org4639b75"></a>
+<a id="orge6c5480"></a>
 
 ## Translation of pedology
 

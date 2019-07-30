@@ -38,11 +38,6 @@
 # corton-charlemeagne peu utilisé et Charmes-Chambertain sous-ensemble
 # de Mazoyere Chambertin.
 
-# citer swinen political economy
-# être claire sur la décomposition dans l'abstract/plan, réserver le
-# terme pour l'informational cantent
-# Relire une dernière fois.
-
 * README
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
@@ -80,11 +75,11 @@
     Bug reports, comments and suggestions by opening an issue
     (preferred) or [[mailto:jsay@inra.fr][sending an email]].
     
-
     Made on =emacs= with =org-mode= to juggle with =R=, =LaTex= and
     =Markdown=.
 
-    Special thanks to XX.
+    Special thanks to Pauline Mialhe, Vincent Larmet, and Guillaume
+    Royet for their help with the application.
 
     Licence GNU GPL V3, Copyright and licence notices must be
     preserved (see https://www.gnu.org/licenses/gpl-3.0.en.html)
@@ -4065,10 +4060,10 @@ lines(x= 2: 10, y= rep(mean(yop$y[yap$x< 2]), 9), col= "red")
     The following R code allows to load the data once downloaded and
     located in the =/Inter/= folder at the root of the working
     directory of the R session.  It loads a =SpatialPolygonDataFrame=
-    object from the =sp= package (cite) that contains the
-    characteristics of the vineyard plots under consideration (session
-    information used for this article is reported at Section XX).  It
-    also reshapes some variables of particular interest:
+    object from the =sp= package that contains the characteristics of
+    the vineyard plots under consideration (session information used
+    for this article is reported at Section 8).  It also reshapes some
+    variables of particular interest:
     - It reorders the /commune/ levels along the North-South gradient
     - It standardizes the variable about solar radiation
     - It recodes the variable about exposition in 8 quadrants
@@ -4158,7 +4153,7 @@ $PEDO
      the area of interest contains both an horizontal (/commune/) and
      a vertical (/hierarchical level/) dimension as detailed in the
      Working Paper.  The balance of the two distributions can be
-     assessed with the following Figure 3 (p.36) in the Working Paper.
+     assessed with the following Figure 3 (p.37) in the Working Paper.
 
 #+begin_src R :results graphics :height 9 :width 13 :file "./Figures/CrossGIs.pdf"
 library(lattice) ; library(RColorBrewer)
@@ -4401,14 +4396,14 @@ table(RegRank$Cp10)
 *** Parametric ordered logit models
 
    We first estimate the benchmark parametric ordered logistic model
-   =polm1= that corresponds to model ( 0 ) of Table 1 (p.XX) in the
+   =polm1= that corresponds to model ( 0 ) of Table 1 (p.22) in the
    Working Paper.  Model =polm1a= is the auxiliary regression without
    /commune/ fixed effects used to test the presence of omitted
    /terroir/ effect as detailed in the Working Paper.  Model =polm1b=
    is also an auxiliary regression without smoothing of spatial
    coordinates to compute the Fisher statistics associated to these
    terms in Table 1.  We use for this the standard =polr= function
-   from =MASS= package (cite).
+   from =MASS= package.
 
 #+begin_src R :wrap example
 library(MASS)
@@ -4444,7 +4439,7 @@ Warning messages:
 
    We estimate the series of ordered generalized additive models
    (OGAMs) of GIs designations within a loop.  Models ( I ) to ( V )
-   reported in Table XX (p.XX) of the Working Paper are only a subset
+   reported in Table 1 (p.22) of the Working Paper are only a subset
    of all models of the =gamod= object that can be downloaded directly
    from the INRA server, https://data.inra.fr/geoInd/gamod.Rda.
    Models with high complexities for the spatial effects (more than
@@ -4476,7 +4471,7 @@ utilisateur     système      écoulé
 
    The second loop below produces the =gammod= object that contains
    the auxiliary regressions to test the omitted /terroir/ effects as
-   presented in the Working Paper, Section 3.XX.  The reader is not
+   presented in the Working Paper, Section 4.2.  The reader is not
    expected to run the loop entirely but pick some value of =k= in
    =listk= between 0 and $1\,000$ to estimate each model individually.
 
@@ -4506,7 +4501,8 @@ utilisateur     système      écoulé
 
      We first reports the Chi-square statistics for the joint
      significance of the parametric ordered logit model =polm1= that
-     corresponds to model ( 0 ) of Table XX in the Working Paper.
+     corresponds to model ( 0 ) of Table 1 (p.22) in the Working
+     Paper.
 
 #+begin_src R :wrap example
 library(car)
@@ -4547,9 +4543,9 @@ Warning messages:
 **** OGAM                                    :noheading:
 
      Then, we compute the same Chi-square statistics for all the OGAMs
-     with the function =resume=.  They are also reported in Table XX
-     in the Working Paper.  Recall that the estimated models can be
-     downloaded from https://data.inra.fr/geoInd/gamod.Rda.
+     with the function =resume=.  They are also reported in Table 1
+     (p.22) in the Working Paper.  Recall that the estimated models
+     can be downloaded from https://data.inra.fr/geoInd/gamod.Rda.
 
 #+begin_src R :wrap example
 load("Inter/gamod.Rda")
@@ -4591,9 +4587,9 @@ PEDO      2447.2   713.1   450.4   408.6   387.9
 **** POL                                     :noheading:
 
      We report below the code used to compute the goodness-of-fit
-     measures for model ( 0 ) reported in Table XX: McFadden R$^2$,
-     Akaike information criteria (AIC), and percent of good
-     predictions.
+     measures for model ( 0 ) reported in Table 1 (p.22):
+     Pseudo-R$^2$, Akaike information criteria (AIC), and percent of
+     good predictions.
 
 #+begin_src R :wrap example
 psR2 <- function(x) 1- (logLik(x)/ logLik(update(x, . ~ + 1)))
@@ -4639,15 +4635,15 @@ Pcgp 74.8600 80.387 84.376 87.2566 89.4778
 *** Omitted variable bias
 **** POL                                     :noheading:
 
-     As indicated in the Working Paper (Section 3.X), we evaluate the
+     As indicated in the Working Paper (Appendix A.1), we evaluate the
      potential omitted /terroir/ variables through the joint
      significance of /commune/ fixed effects on the residuals from
      auxiliary regressions without such fixed effects.  Code below
      allows to compute the bootstrapped Fisher statistics with 100
      replications from parametric ordered logistic model.  The absence
      of correlated effects is strongly rejected.  Note that we use the
-     =sure= package (cite) to compute the surrogate residuals from
-     this parametric model.
+     =sure= package to compute the surrogate residuals from this
+     parametric model.
 
 #+begin_src R :wrap example
 library(lmtest) ; library(sandwich) ; library(sure)
@@ -4678,8 +4674,7 @@ quantile(wal1, c(.05, .5, .95))
      function =./myFcts.R= that is sourced in the following code.
      Hence, we compute the bootstrapped F-statistics for the full set
      of OGAM belows.  The estimation of auxiliary models is presented
-     above, they can be directly downloaded from
-     https://data.inra.fr/geoInd/gamod.Rda.
+     above, they can be directly downloaded from [[https://doi.org/10.15454/ZZWQMN][https://data.inra.fr]].
 
 #+begin_src R :wrap example
 load("Inter/gammod.Rda") ; library(ggplot2) ; source("myFcts.R")
@@ -4704,9 +4699,8 @@ apply(wal2[, -1], 2, function(x) quantile(x, c(.05, .5, .95)))
 95%  18.35  7.429  6.536  5.487  4.916  4.024  3.195  2.827  2.203
 #+end_example
 
-
      Again, the values are not exactly the same.  Note that the
-     critical value at 0.01 % for the F-distribution in this case is
+     critical value at 0.01% for the F-distribution in this case is
      2.3, as can be assessed from =qf(.9999, 31, Inf)=.
 
 #+Latex: \clearpage
@@ -4715,7 +4709,7 @@ apply(wal2[, -1], 2, function(x) quantile(x, c(.05, .5, .95)))
 
      The following plot resumes the specification diagnostics and
      shows the relevance of OGAMs to control for omitted spatial
-     effects.  It corresponds to Figure XX in the Working Paper.
+     effects.  It corresponds to Figure 7 (p.42) in the Working Paper.
 
 #+begin_src R :results graphics :height 7 :width 10 :file "./Figures/SignifPlot.pdf"
 library(lattice)
@@ -4770,7 +4764,7 @@ pltSURE <- function(resid, xvar, lab){
 par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Ras@data[, i], i)
 #+end_src
 
-#+CAPTION: Surrogate for the model XX
+#+CAPTION: Surrogate for the OGAMs on Current GIs
 #+ATTR_LATEX: :options scale= .4
 #+RESULTS:
 [[file:./Figures/Surrogate.pdf]]
@@ -4782,8 +4776,8 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Ras@data[, i], i)
 
     The marginal effects from parametric model =polm1= can be directly
     plotted with the package =effect=.  The following plots
-    corresponds to the dotted lines in Figure XX, Appendix XX of the
-    Working Paper.
+    corresponds to the dotted lines in Figure 5 (p.40) in the Appendix
+    of the Working Paper.
 
 #+begin_src R :results graphics :height 7 :width 12 :file "./Figures/Effects1.pdf"
 library(effects)
@@ -4804,8 +4798,8 @@ plot(predictorEffects(polm1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
     The same effect plots can be drawn for the OGAMs models.  We
     report below the effects from the OGAM =gam900= which corresponds
     to a maximum effective degrees of freedom of 900.  For all models
-    of =gamod=, we obtain the gray curves of Figure XX, Appendix XX of
-    the Working Paper.
+    of =gamod=, we obtain the gray curves of Figure 5 (p.40) in the
+    Appendix of the Working Paper.
 
 #+begin_src R :results graphics :height 9 :width 15 :file "./Figures/Effects2.pdf"
 plot(gamod[[ 10]], pages= 1, scale= 0)
@@ -4820,9 +4814,9 @@ plot(gamod[[ 10]], pages= 1, scale= 0)
 
 *** Ordinal superiority figure
 
-    From the equation XX of the Working Paper, we can compute ordinal
-    superiority measures for each /communes/ relatively to the
-    average.  The code below reproduces the Figure XX (p. XX) of the
+    From the equation (4) of the Working Paper (p.14), we can compute
+    ordinal superiority measures for each /communes/ relatively to the
+    average.  The code below reproduces the Figure 2 (p. 23) of the
     Working Paper.  Note that we drop the isolated Northern /communes/
     of /Chenôve/, /Marsannay-la-Côte/ and /Couchey/ which do not have
     comparable neighbors.  The effect of the proximity to Dijon is too
@@ -4859,12 +4853,10 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 
 *** Correlation between /Communes/
 
-    Below the code to produce the Figure XX in Appendix XX of the
-    Working Paper.  This Figure illustrates the claim that "/commune/
-    with higher GIs do not have necessary a preferential treatment"
-    (p.XX).  It shows the correlation between the average vertical GI
-    score and the mean ordinal superiority measures estimated from
-    OGAMs with high effective degrees of freedom.
+    Below the code to produce the Figure 8 in Appendix p.42 of the
+    Working Paper.  It shows the correlation between the average
+    vertical GI score and the mean ordinal superiority measures
+    estimated from OGAMs with high effective degrees of freedom.
 
 #+begin_src R :results graphics :height 6 :width 9 :file "./Figures/ComCor.pdf"
 library(plyr) ; library(ggrepel)
@@ -4900,9 +4892,10 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
     Appendix [[#Sec:rDCMP]].  These functions are also available in the
     file of custom function =./myFcts.R= that can be directly sourced.
     The following codes perform the decomposition for the subset of
-    models reported in Table XX of the Working Paper.  The predictions
-    of the latent quality index in the first rows need some time to
-    run, the decomposition that follow are computed rapidly.
+    models reported in Table 2 (p.25) of the Working Paper.  The
+    predictions of the latent quality index in the first rows need
+    some time to run, the decomposition that follow are computed
+    rapidly.
 
 #+begin_src R :wrap example
 ddtt <- data.frame(AOC= Reg.Ras$AOC, LIBCOM= Reg.Ras$LIBCOM,
@@ -5324,8 +5317,8 @@ utilisateur     système      écoulé
 *** Significance
 
     We first assess the joint significance of variables in all OGAMs
-    of GIs designation.  The following results are reported in Table
-    XX in Appendix XX of the Working Paper (p.XX).
+    of GIs designation.  The following results are reported in Table 5
+    in Appendix p.43 of the Working Paper.
 
 #+begin_src R :wrap example
 load("Inter/gamold.Rda")
@@ -5357,7 +5350,7 @@ PEDO     3335.3 2820.6   898.8   660.3   599.4   537.0   539.3
 
 *** Goodness of fit
 
-    Goodness of fit measures from the same Table XX in Appendix XX of
+    Goodness of fit measures from the same Table 5 in Appendix p.43 of
     the Working Paper.
 
 #+begin_src R :wrap example
@@ -5383,8 +5376,8 @@ psR2  0.4629  0.4968  0.6132  0.636  0.6606  0.6982  0.7236
 *** Omitted variable
 **** Bootstrap                               :noheading:
 
-     Bootstrapped statistics for omitted variables, not reported in
-     the working paper, mentioned at p.XX.
+     Bootstrapped statistics for omitted variables, reported in Table
+     5 in Appendix p.43 of the Working Paper.
 
 #+begin_src R :wrap example
 library(lmtest) ; library(sandwich) ; library(sure) ; library(ggplot2)
@@ -5412,7 +5405,7 @@ apply(wold, 2, function(x) quantile(x, c(.05, .5, .95)))
 **** Plot                                    :noheading:
 
      Now the same violon plot as for current GIs, not reported the
-     Working Paper but mentioned at p.XX.
+     Working Paper but mentioned at p.24.
 
 #+begin_src R :results graphics :height 7 :width 10 :file "./Figures/SignifPold.pdf"
 library(lattice)
@@ -5469,9 +5462,9 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Old@data[, i], i)
 
 *** Marginal effects
 
-    Marginal effect ca be assessed as for current GIs, the code belows
-    can be used on the models from the =gamold= object to produce
-    Figure XX in the Appendix XX in the Working Paper.
+    Marginal effect can be assessed as for current GIs, the code
+    belows can be used on the models from the =gamold= object to
+    produce Figure 9 in the Appendix p.44 in the Working Paper.
 
 #+begin_src R :results graphics :height 7 :width 12 :file "./Figures/Effectsold.pdf"
 library(effects)
@@ -5491,7 +5484,7 @@ plot(predictorEffects(polm2, ~ DEM+ SLOPE+ RAYAT+ EXPO+ GEOL+ PEDO,
 *** Ordinal superiority measures
     
     Ordinal superiority for the GIs of 1936, that corresponds to
-    Figure XX in the Appendix of the Working Paper.
+    Figure 11 in the Appendix p. 46 of the Working Paper.
 
 #+begin_src R :results graphics :height 6 :width 9 :file "./Figures/ComEffOld.pdf"
 plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
@@ -5520,9 +5513,7 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 
 *** Temporal variations
 
-    An additional unreported Figure to show the claim that "the
-    importance of /communes/ has decreased since the 1936 scheme"
-    (p.XX)
+    An additional Figure 3 (p.26) of the Working Paper.
 
 #+begin_src R :results graphics :height 6 :width 11 :file "./Figures/ComDyn.pdf"
 zzz <- merge(ww, www, by= "LIBCOM")
@@ -5538,18 +5529,12 @@ segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
 #+RESULTS:
 [[file:./Figures/ComDyn.pdf]]
 
-    We obtain 11 /communes/ for which the measure keeps the same sign
-    and decrease in absolute value, against 6 for which the value
-    keeps the same sign but increase in absolute value.  We have 7
-    /communes/ for which the measure changes its sign.
-
 #+Latex: \clearpage
 
 *** Decomposition table
 
     The code below compute the decomposition table for GIs of 1936,
-    reported as Table XX in Appendix (p.XX) of the working Paper.
-    Again, the first row are long to run.
+    unreported.
 
 #+begin_src R :wrap example
 ddoo <- data.frame(AOCo= Reg.Old$AOCo, LIBCOM= Reg.Old$LIBCOM,
@@ -5704,8 +5689,8 @@ table(Simv$AOC, Simv$SIV) ; table(Simv$AOC, Simv$SV) ; table(Simv$AOC, Simv$SVI)
 
 *** Decomposition table
 
-    And we conclude with the decomposition that are reported Table XX
-    (p.XX) of the Working Paper.
+    And we conclude with the decomposition that are reported Table 3
+    (p.27) of the Working Paper.
 
 #+begin_src R :wrap example
 decf <- sapply(names(Simv[, 76: 83]), function(x)
@@ -7036,14 +7021,14 @@ production as a proxy for the quality of agricultural products.  We
 define the informational content of the GI proxy as its ability to
 describe the tangible characteristics of a production site, instead of
 intangible factors from the political bargaining on the designation
-process.  Empirically, we disentangle this informational content of
+process.  We estimate econometrically this informational content of
 wine-related GIs for the /Côte d'Or/ region of Burgundy, France.  Due
 to their hierarchical and nested structure, GIs have high
 informational content while we found some persistent lobbying effects.
-We apply the signal decomposition to alternative wine classifications
-from history and counterfactual simulations to show significant gains
-of efficiency in the last century and provide guidelines for better
-designated GIs in the future.\\
+We apply the same signal decomposition to alternative wine
+classifications from history and counterfactual simulations to show
+significant gains of efficiency in the last century and provide
+guidelines for better designated GIs in the future.\\
 
 \textbf{Keywords}: Food certification, wine economics, strategic
 quality disclosure, variance decomposition, ordered semi-parametric
@@ -7074,10 +7059,10 @@ model.
     designation schemes for an exhaustive data set of $60\,000$
     vineyard plots.  We defined the informational content as the
     ability to describe the tangible characteristics of production
-    sites, and measured it by the variance of a latent quality index
+    sites, and estimate it by the variance of a latent quality index
     according to the principle that more informative signals lead to
     greater variability citep:GPen10.  We propose disentangling
-    tangible information from intangible information with ordered
+    tangible information from intangible information from ordered
     logit models explaining the GI hierarchy by the natural and
     administrative attributes of vineyard plots.  The first set of
     variables relates to the tangible attributes of vineyard plots
@@ -7150,10 +7135,9 @@ model.
     corresponds to the spatial scale at which the lobbying was made
     for GI designations citep:Jacq09.  This conjunction between GI and
     administrative scales is not particular to Burgundy, as similar
-    patterns are found for Bordeaux citep:Four12.  Moreover, GIs could
-    be presented as cartels with embedded quality signaling and
-    quantity control, both determined at the same scale
-    citep:MCSc99,MCre03.
+    patterns are found for Bordeaux citep:Four12.  Indeed, GIs could
+    be viewed as cartels with quality signaling and quantity control
+    determined at the same scale citep:MCSc99,MCre03,DSwi14.
 
 *** Literature reputation                    :noheading:
     
@@ -7216,25 +7200,24 @@ model.
 
 *** Literature certification                 :noheading:
 
-    We finally propose to evaluate the informational content of GI
-    designation in terms of tangible attributes from an original
-    framework based on variance decomposition citep:BSwa12.  This
-    allows to decompose the vineyard quality index into a part that is
-    described by the vertical dimension of GIs, the part that is
-    described by the horizontal part of GIs, and a noised part that is
-    not described by GIs.  The application of this framework to our
-    empirical results shows high informational content of both
-    dimensions of actual GIs, with 4-times higher signal variance than
-    noise variance (corresponding to an R$^2$ of $\sim$ 80%).  The
-    vertical part of the GIs is found to be more informative than the
-    horizontal part, even if we control for lobby effects.  In
-    addition, applying the same signal decomposition on historical GIs
-    from 1936 shows that the informational content of the vertical
-    dimension has slightly increased in the last century, through
-    continuous evolution of GI designation schemes by the national
-    institute in charge of geographical indications (INAO).  This
-    historical increase of the informational content of GIs
-    illustrates the theory developed by cite:BLar92 regarding
+    We finally decompose the informational content of GI designation
+    from an original framework based on the law of total variance
+    citep:BSwa12.  This allows to estimate the part of the vineyard
+    quality index that is described by the vertical dimension of GIs,
+    the part that is described by the horizontal part of GIs, and a
+    noised part that is not described by GIs.  The application of this
+    framework to our empirical results shows high informational
+    content of both dimensions of actual GIs, with 4-times higher
+    signal variance than noise variance (corresponding to an R$^2$ of
+    $\sim$ 80%).  The vertical part of the GIs is found to be more
+    informative than the horizontal part, even if we control for lobby
+    effects.  In addition, applying the same signal decomposition on
+    historical GIs from 1936 shows that the informational content of
+    the vertical dimension has slightly increased in the last century,
+    through continuous evolution of GI designation schemes by the
+    French national institute in charge of geographical indications
+    (INAO).  This historical increase of the informational content of
+    GIs illustrates the theory developed by cite:BLar92 regarding
     strategic information transmission.  We found that some producers
     or landowners could have profited from private information on
     vineyard quality manipulating the GI signal and extracted rents
@@ -7311,17 +7294,17 @@ model.
      cycles and an indirect effect through its correlation with the
      wind, which is known to have strong importance for dry grapes and
      to concentrate aromas.  Note that we do not use climate data due
-     to their typical coarse scale, which makes them unsuitable to the
-     narrowness of our study area and the tiny size of vineyard plots.
-     For example, historical climate data from /Météo-France/ are
-     usually available at the 8 km resolution where the vineyard strip
-     depicted in \autoref{Fig:1} is at most 5 km large.  Moreover,
-     topography (available at a 5 m resolution in our data) is
-     regularly used to downscale climate observations to artificially
-     increase the resolution of climate variables.  Using such
-     interpolations to measure climate variables are unappropriated to
-     our econometric analysis as they produce a strong redundancy with
-     raw topographic variables.
+     to their typical coarse scale availability, which makes them
+     unsuitable to the narrowness of our study area and the tiny size
+     of vineyard plots.  For example, historical climate data from
+     /Météo-France/ are usually available at 8 km resolution where the
+     vineyard strip depicted in \autoref{Fig:1} is at most 5 km large.
+     Moreover, topography (available at a 5 m resolution in our data)
+     is regularly used to interpolate climate observations that
+     artificially increase the resolution of climate variables.  Using
+     such interpolations to control for climate variables are
+     unappropriated to our econometric analysis as they produce a
+     strong redundancy with raw topographic variables.
      
 # Local particularity in terms of (i) temperature hail and frost. the
 # region less precipitation than its neighbors (less than 700mm/ year,
@@ -7345,8 +7328,8 @@ model.
     vineyards, classified as \emph{Grands Crus}, are not visually
     well-separated from just below \emph{Premiers Crus}.  The right
     panel also reports the names of the 31 \emph{communes} of the
-    area, considered as the horizontal dimension of GIs.}\label{Fig:1}
-  \centering\hspace{-2cm}
+    area, considered as the horizontal dimension of GIs.\vspace*{-.6cm}}\label{Fig:1}
+  \centering\hspace{-2.5cm}
 \begin{minipage}{.5\textwidth}
   \centering
  \includegraphics[scale= .4]{./Figures/MapCom1}
@@ -7372,23 +7355,22 @@ model.
     character (12th century according to citealp:Lava55).  However,
     the first exhaustive spatial delineation of the region was an
     administrative separation of /communes/ following the decree of
-    1789 after the French revolution.  What we consider the horizontal
-    dimension developed before the vertical dimension of actual GIs
-    (citealp:Garc11, p.40).  The delineation of /communes/ was based
-    on the spatial distribution of churches (usually built between the
-    9th and the 12th centuries), without the goal of signaling wine
-    quality.  The first exhaustive vertical classification scheme of
-    vineyard quality was created by cite:Lava55, a Professor of
-    Natural and Medical History at Dijon University, inspired by the
-    writings of other scientists, particularly cite:Jull16 and
-    cite:More31.  He providesd a ranking of vineyards on four levels,
-    from the best /Tête de Cuvée/ to /Première/, /Deuxième/ and
-    /Troisième Cuvées/.  The interaction between the horizontal and
-    vertical dimensions is of particular importance in his work: "I
-    have studied the wines of each of the /communes/ of the /Côte/ as
-    if the other /communes/ had not existed and the classification
-    that I give is true only for each /commune/ taken in isolation"
-    (p.162, translation from the author).
+    1789 after the French revolution.  The delineation of /communes/
+    was based on the spatial distribution of churches (usually built
+    between the 9th and the 12th centuries), without the goal of
+    signaling wine quality.  The first exhaustive vertical
+    classification scheme of vineyard quality was created by
+    cite:Lava55, a Professor of Natural and Medical History at Dijon
+    University, inspired by the writings of other scientists,
+    particularly cite:Jull16 and cite:More31.  He providesd a ranking
+    of vineyards on four levels, from the best /Tête de Cuvée/ to
+    /Première/, /Deuxième/ and /Troisième Cuvées/.  The interaction
+    between the horizontal and vertical dimensions is of particular
+    importance in his work: "I have studied the wines of each of the
+    /communes/ of the /Côte/ as if the other /communes/ had not
+    existed and the classification that I give is true only for each
+    /commune/ taken in isolation" (p.162, translation from the
+    author).
 
 **** After Lavalle                           :noheading:
 
@@ -7552,14 +7534,14 @@ model.
     the $K^*$ natural characteristics $X^*$ of each vineyard plot.
     From this scalar quality, GIs are designated through a continuous
     latent variable $y^*$ defined as the sum between the quality index
-    and idiosyncratic random designation noise $\xi$:
+    and idiosyncratic random designation noise noted $\xi$ such that:
 #+begin_export latex
 \begin{equation}
 y^*= q(X^*)+ \xi.
 \end{equation}
 #+end_export
     The mapping between tangible /terroir/ characteristics $X^*$ and
-    the objective quality index represents the cumulative knowledge
+    the vineyard quality index represents the cumulative knowledge
     from informed people that have contributed to the vineyard
     classification throughout history.  At this stage, we consider the
     latent variable as an unbiased, though imperfect because of
@@ -7651,7 +7633,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      for vineyard plots located in different /communes/, say $c_1$ and
      $c_2$ to continue with the same example.  The lesser quality
      vineyard plot $2$ has a higher probability of being classified at
-     least $j_1$ (the GI quality rank of vineyard $1$) if
+     least $j_1$ (the GI quality level of vineyard $1$) if
      $\alpha_{j_1}^{c_2}- \alpha_{j_1}^{c_1}> q(X_1^*)- q(X_2^*)$.  In
      this case, the preferential treatment given to /commune/ $c_2$ is
      a source of bias in the GI classification that contradicts the
@@ -7665,7 +7647,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      defined by cite:AKat17:
 #+begin_export latex
 \begin{equation}
-\gamma^{j_1}_{3\mid 1}\equiv \mbox{Prob}(y_{3}> y_{1}\mid X^*_1)= F\left(\frac{\alpha_{j_1}^{c_3}- \alpha_{j_1}^{c_1}}{\sqrt{2}}\right).\label{Eq:OS}
+\gamma^{j_1}_{3\mid 1}\equiv \mbox{Prob}(y_{3}> y_{1}\mid X^*_1)\approx F\left(\frac{\alpha_{j_1}^{c_3}- \alpha_{j_1}^{c_1}}{\sqrt{2}}\right).\label{Eq:OS}
 \end{equation}
 #+end_export
      We use the approximation that the cdf of the normalized
@@ -7688,8 +7670,8 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      measures of the differential treatments that have been applied
      between /communes/ according to the GI vertical classification of
      their vineyards.  The presence of significant ordinal superiority
-     measures indicates some bias in the GI signal, and the ordinal
-     superiority measures provide estimate the size.
+     measures indicates some significant bias in the GI signal, and
+     the ordinal superiority measures estimate the size.
 
 *** Ordered Generalized Additive Model
 **** General                                 :noheading:
@@ -7708,7 +7690,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      /commune/ delineations that group together adjacent vineyard
      plots.  Identifying the information conveyed by GIs about
      tangible variables requires that all of these /terroir/ variables
-     be observable, which is unfortunately not the case and probably
+     be observable, which is unfortunately not the case, and probably
      never will be.  Instead, we propose estimating an Ordered
      Generalized Additive Model (OGAM, citealp:WPSa16,Wood17;
      citealp:KWan03,LVEP15 for econometric applications) that allows a
@@ -7717,11 +7699,11 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      through bivariate smoothing of geographic coordinates.  This
      identification strategy is based on the definition of /terroir/
      as the full set of natural variables that impact vineyard quality
-     index.  As they originate from natural processes, we consider
-     them as spatially continuous according to the axiom that nature
-     makes no jumps, in contrast to the discontinuities introduced by
-     administrative delineations of /communes/ related to intangible
-     human determinants of GIs.
+     index.  As they originate from natural processes citep:PCad95, we
+     consider them as spatially continuous according to the axiom that
+     nature makes no jumps, in contrast to the discontinuities
+     introduced by administrative delineations of /communes/ related
+     to intangible human determinants of GIs.
 
 **** Reduced form                            :noheading:
 
@@ -7790,8 +7772,8 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      intangible effects that bias the GI signal.  We propose to
      determine the sufficient level of spatial smoothing with an
      heuristic procedure based on auxiliary regressions and surrogate
-     residuals recently defined by cite:LZha18 (see Appendix A.1 for
-     details).
+     residuals recently defined by cite:LZha18, Appendix A.1 presents
+     the procedure in more details.
 
      # In practice then, choice of basis dimension has to remain a part
      # of model specification. But it is important to note that all the
@@ -7969,7 +7951,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
     quality at about 290 meters and 10 degrees.  The effect of solar
     radiation linearly increases and southern exposition provides the
     highest marginal probability of a high GI classification (see the
-    Replication Material, RM p.XX, from the link on the title page of
+    Replication Material, RM p.14, from the link on the title page of
     this article).  The top-left panel of \autoref{Fig:A2} in the
     Appendix shows the marginal effects of spatial coordinates on the
     latent index.  The third-order parametric specification with full
@@ -7983,12 +7965,12 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 
 #+begin_export latex
 \begin{table}[!htb]
-\caption{\textbf{Joint Variable Significance for Ordered Models of GI Designations}}\singlespacing
+\caption{\textbf{Joint Variable Significance for Ordered Logit Models of Current GI Designations}}\singlespacing
 \newcolumntype{Y}{>{\centering\arraybackslash}X}\label{Tab:1}  \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/VarSign1.tex}
 \begin{tablenotes}\footnotesize
-\item Notes: $^{**}$ accounts for joint significance at 1\% from the
+\item Notes: $^{**} p< 0.001$ for joint significance tests from the
   reported chi-square statistics, effective degrees of freedom are in
   brackets.  Column ( 0 ) corresponds to an ordered logit model with
   quadratic effects for elevation, slope and solar radiation (df$= 2$)
@@ -8050,32 +8032,34 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      The last row of \autoref{Tab:1} reports the bootstrapped
      F-statistics for the joint significance of /commune/ dummies on
      surrogate residuals from auxiliary models that do not account for
-     such fixed effects.  \autoref{Fig:A2a} in the Appendix presents
-     in more detail the relevance of smoothing spatial coordinates to
+     such fixed effects (see Appendix A.1).  \autoref{Fig:A2a} in the
+     Appendix shows the relevance of smoothing spatial coordinates to
      control for unobserved /terroir/ variables and improve the causal
-     inference.  Initially, it appears that OGAMs allow to decreasing
-     significantly the correlation between auxiliary residuals and
-     /commune/ effects, compared to the parametric ordered logistic
-     model ( 0 ).  A maximum effective degrees of freedom of
-     approximately 700, which corresponds to model ( IV ) in
-     \autoref{Tab:1}, is a sufficient complexity level to rule out
-     potentially correlated omitted /terroir/ effects, as the
-     insignificance of /commune/ dummies on the surrogate residuals
-     from the auxiliary regressions cannot be rejected according to
-     the median of the bootstrapped F-statistics.  This indicates
-     persistent effects of intangible lobbying effects from political
-     bargaining about the GI designation scheme, even for precisely
-     controlled /terroir/ effects.  Similar vineyard plots from one
-     side or another of administrative borders have significantly
-     different probabilities of being in different vertical levels of
-     GIs.
+     inference about /commune/ effects.  Initially, it appears that
+     OGAMs allow to decreasing significantly the correlation between
+     auxiliary residuals and /commune/ effects, compared to the
+     parametric ordered logistic model ( 0 ).  A maximum effective
+     degrees of freedom of approximately 700, which corresponds to
+     model ( IV ) in \autoref{Tab:1}, is a sufficient complexity level
+     to rule out potentially correlated omitted /terroir/ effects, as
+     the insignificance of /commune/ dummies on the surrogate
+     residuals from the auxiliary regressions cannot be rejected
+     according to the median of the bootstrapped F-statistics.  The
+     fact that /commune/ effects remain significant in model ( IV )
+     and ( V ) of \autoref{Tab:1} indicates persistent effects of
+     intangible lobbying effects from political bargaining about the
+     GI designation scheme, even for precisely controlled /terroir/
+     effects.  Similar vineyard plots from one side or another of
+     administrative borders have significantly different probabilities
+     of being in different vertical levels of GIs.
 
 **** Figure                                  :noheading:
 
 #+begin_export latex
 \vspace{.5cm}
 \begin{figure}[h]
-  \caption{\textbf{Ordinal superiorty measures in the current GI designation scheme}\\[.1cm]
+  \caption{\textbf{Ordinal Superiorty Measures for the Current GI
+      Designation Scheme} \\[.1cm]
     \footnotesize Notes: For a given \emph{commune} on the y-axis,
     ordinal superiority measures are computed as the difference
     between the estimated fixed effect $\mu_c$ and the average fixed
@@ -8085,45 +8069,47 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
     according to the OGAMs with 700, 800 and 900 maximum edf for the
     effects of spatial coordinates.  Black dots represent the average
     of these measures.  Relatively privilegied \emph{communes} appear
-    at the top, whereas relatively disadvantged \emph{communes} appear
-    at the bottom.}\label{Fig:2}
-  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale= .75]{./Figures/ComEff.pdf}
+    at the top of the y-axis, whereas relatively disadvantged
+    \emph{communes} appear at the bottom.}\label{Fig:2}
+  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale=
+  .75]{./Figures/ComEff.pdf}
 \end{figure}
 #+end_export
 
 **** Text 2                                  :noheading:
 
-     Ordinal superiority measures from models with 700, 800 and 900
-     maximum edf are reported in \autoref{Fig:2}.  A positive measure
-     indicates that the /commune/ is advantaged relatively to the
-     average /commune/ citep:AKat17.  We see that only vineyard plots
-     from four /communes/ are not differently designated from the
-     average /commune/.  /Communes/ from the /Côte de Nuits/ in the
-     north of the region are, on average, more advantaged than those
-     of the /Côte de Beaune/ in the south, as eight /communes/ from
-     this part of the region are among the 11 most advantaged.  The
-     proximity to Dijon, where trials of the use of vineyard names
-     occurred between 1860 and 1936, is one potential explanation for
-     this result, as well as the fact that it was usual that
-     influential people living in Dijon own some vineyards in the
-     /Côte de Nuits/, closer to Dijon than /Côte de Beaune/
-     (citealp:WJac18, see \autoref{Fig:1}).  The /communes/ that have
-     a syndicate engaged in collective action appear to be privileged,
-     but the separation is not
-     clear-cut.@@latex:\footnote{\cite{Jacq09} (p.189, 211) reports
-     that the \emph{communes} of \emph{Vougeot}, \emph{Aloxe-Corton},
-     \emph{Ladoix-Serrigny}, \emph{Gevrey-Chambertin},
-     \emph{Vosne-Romanée} and \emph{Santenay} had the first
-     syndicates, with some internal conflicts for \emph{Santenay}.}@@
-     This hierarchy of advantaged and disadvantaged /communes/ from GI
-     designations is not significantly correlated with the average
-     level of their vineyards, as some advantaged /communes/ do not
-     have vineyards of high level on average (/Ladoix-Serrigny/ and
+     Ordinal superiority measures computed from OGAMs with 700, 800
+     and 900 maximum edf are reported in \autoref{Fig:2}.  A positive
+     measure indicates that the /commune/ is advantaged relatively to
+     the average /commune/ citep:AKat17.  We see that only vineyard
+     plots from four /communes/ are not differently designated from
+     the average /commune/ of the area.  /Communes/ from the /Côte de
+     Nuits/ in the north of the region are, on average, more
+     advantaged than those of the /Côte de Beaune/ in the south, as
+     eight /communes/ from this part of the region are among the 12
+     most advantaged.  The proximity to Dijon, where trials of the use
+     of vineyard names occurred between 1860 and 1936, is one
+     potential explanation for this result, as well as the fact that
+     it was usual that influential people living in Dijon own some
+     vineyards in the /Côte de Nuits/, closer to Dijon than /Côte de
+     Beaune/ (citealp:WJac18, see \autoref{Fig:1} for the location of
+     Dijon).  The /communes/ that have a syndicate engaged in
+     collective action appear to be privileged, but the separation is
+     not clear-cut.@@latex:\footnote{\citealt{Jacq09} (p.189, 211)
+     reports that the \emph{communes} of \emph{Vougeot},
+     \emph{Aloxe-Corton}, \emph{Ladoix-Serrigny},
+     \emph{Gevrey-Chambertin}, \emph{Vosne-Romanée} and
+     \emph{Santenay} had the first syndicates, with some internal
+     conflicts for \emph{Santenay}.}@@ This hierarchy of advantaged
+     and disadvantaged /communes/ from current GI designation scheme
+     is not significantly correlated with the average vertical level
+     of the vineyards, as some advantaged /communes/ do not have
+     vineyards of high level on average (/Ladoix-Serrigny/ and
      /Chorey-les-Beaune/), and some /communes/ with high level
      vineyards are disadvantaged by the designation scheme
      (/Flagey-Echezeaux/ and /Pommard/).  We found that the ordinal
      superiority measures only weakly positively correlated with
-     average levels of current GIs ($R^2= 0.06$, $t= 1.27$,
+     average levels of current GIs ($R^2= 0.06$, $t= 1.27$, see
      \autoref{Fig:A2b} in the Appendix).
 
 *** Informational content of current GIs
@@ -8131,12 +8117,12 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
     
      \autoref{Tab:2} reports the decomposition computed from equations
      (\ref{eq:dec1}) to (\ref{eq:dec4}) with $q(X_i^*)$ predicted from
-     the five OGAMs reported in \autoref{Tab:1} with increasing
-     complexity of spatial coordinates (the empirical formulas used
-     are reported in RM p.XX, jointly with the R code to compute
-     them).  As expected, the total signal reported in the first row
-     of \autoref{Tab:2} increases from left to right and the total
-     noise decreases.@@latex:\footnote{As the variance of errors is
+     the five OGAMs ( I ) to ( V ) reported in \autoref{Tab:1}.  The
+     empirical formulas used to compute the different terms are
+     reported in RM p.37, jointly with the R code used.  As expected,
+     the total signal shares reported in the first row of
+     \autoref{Tab:2} increases from left to right and the total noise
+     decreases.@@latex:\footnote{As the variance of errors is
      normalized to identify ordered models and the variance of $y^*$
      from the data-generating process is constant between models, the
      increase in the total signal and the decrease in total noise are
@@ -8163,13 +8149,15 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      the vertical dimension of GIs has approximately 20% ($13/65$)
      bias in conveying information about vineyard quality, and this
      bias due to preferential treatment between /communes/ can be
-     assessed by consumers through the horizontal dimension.
+     assessed by well informed consumers through the horizontal
+     dimension.
 
 **** Table                                   :noheading:
 
 #+begin_export latex
 \begin{table}[!htb]
-\caption{\textbf{Signal Decompositions from OGAMs with Spatial Coordinates}}
+\caption{\textbf{Signal Decompositions of the Informational Content of
+    GIs from OGAMs}}
 \singlespacing\label{Tab:2} \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/Decomp.tex}
@@ -8193,55 +8181,54 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 *** Models of the 1936 GIs
 **** Text 1                                  :noheading:
 
-     We estimate the same set of ordered models with the GIs of 1936
-     as the outcome variable.  At this point of history, the vertical
-     dimension of GIs counted only three levels, as reported in the
-     summary statistics in \autoref{Tab:SD} in the Appendix:
+     We estimate the same set of ordered models with the vertical GIs
+     of 1936 as the outcome variable.  At this point of history, the
+     vertical dimension of GIs counted only three levels, as reported
+     in the summary statistics in \autoref{Tab:SD} in the Appendix:
      /Régional/ < /Village/ < /Grand Cru/ with respectively 57%, 41%,
      and 3% of current vineyard plots.@@latex:\footnote{We drop the
      \emph{communes} of \emph{Chenôve}, \emph{Marsannay-la-Côte},
      \emph{Couchey}, \emph{Comblanchien}, \emph{Corgoloin} and
      \emph{Saint-Romain} because they contained only one vertical
      level in 1936, so their fixed effects are not identified (see RM,
-     p.XX).}@@ The joint significance, the marginal effects of
-     tangible variables, and the spatial smooth effects are reported
-     in \autoref{Tab:A3}, \autoref{Fig:A4} and \autoref{Fig:A5},
-     respectively, in the Appendix.  For this older designation
-     scheme, the control for omitted /terroir/ variables is reached
-     for smaller maximum edf of spatial coordinates (bootstrapped
-     F-statistics are reported in the bottom of \autoref{Tab:A3} in
-     Appendix, the violin plot is reported in the RM, p.XX).
-     Surprisingly, the hierarchy of the joint significance of
-     explanatory variables is very close to what is obtained for
-     current GIs.  The /commune/ and pedology fixed effects, and
-     geographic coordinates have the highest significance, followed by
-     elevation, geology, solar radiation, slope, and exposition.  The
-     marginal effects of elevation and slope also have an inverted-U
-     pattern with close maximum values, and the spatial smoothed
-     patterns are also very close to what is found for current GIs.
-     In contrast, the ordinal superiority measures are more varied
-     between /communes/ (see \autoref{Fig:A6} in the Appendix).  The
+     p.5).}@@ The joint significance, and the marginal effects of
+     tangible variables are reported in \autoref{Tab:A3}, and
+     \autoref{Fig:A4}, respectively, in the Appendix.  The hierarchy
+     of the joint significance of explanatory variables is very close
+     to what is obtained for current GIs.  The /commune/, pedology
+     fixed effects, and geographic coordinates have the highest
+     significance, followed by elevation, geology, solar radiation,
+     slope, and exposition.  The marginal effects of elevation and
+     slope also have an inverted-U pattern with close maximum values,
+     and the spatial smoothed patterns are also very close to what is
+     found for current GIs.  For the 1936 GI designation scheme, the
+     control for omitted /terroir/ variables is reached for smaller
+     maximum edf of spatial coordinates (bootstrapped F-statistics are
+     reported in the bottom of \autoref{Tab:A3} in Appendix, the
+     violin plot is reported in the RM, p.23).  In contrast,
+     \autoref{Fig:A6} in the Appendix show the ordinal superiority
+     measures were more marked between /communes/ in 1936.  The
      /communes/ from the /Côte de Nuits/ already appeared as
      relatively advantaged (seven /communes/ among the 11 most
      advantaged) and the effect of the syndicates of producers appear
-     more clearly than in current GIs (see footnote 3).
-     \autoref{Fig:3} shows that the /commune/ where a vineyard is
-     located was a more important determinant of GIs designations in
-     the middle of the 20th century than it is currently.  For 18
-     /communes/ among 25 (72%) the ordinal superiority measure
-     decreases in absolute values.  This indicates that the GI
-     designation scheme is increasingly efficient.  Some /communes/
-     such as /Santenay/ and /Vosnes-Romanée/ go from advantaged to
-     disadvantaged since the creation of INAO, while the majority of
-     /communes/ stays in the same category.
+     more clearly (see footnote 3).  \autoref{Fig:3} shows that the
+     /commune/ where a vineyard is located was a more important
+     determinant of GIs designations in the middle of the 20th century
+     than it is currently.  For 18 /communes/ among 25 (72%) the
+     ordinal superiority measure decreases in absolute values in the
+     last decades.  This indicates that the GI designation scheme is
+     increasingly efficient in the sens of cite:DNab91.  Some
+     /communes/ such as /Santenay/ and /Vosnes-Romanée/ are moving
+     from advantaged to disadvantaged since the creation of INAO,
+     while the majority of /communes/ stays in the same category.
 
 **** Figure                                  :noheading:
 
 #+begin_export latex
 \vspace{.5cm}
 \begin{figure}[h]
-  \caption{\textbf{Variations of ordinal superiorty measures 
-      between 1936 and now}\\[.1cm]
+  \caption{\textbf{Variations of Ordinal Superiorty Measures 
+      between 1936 GIs and Current GIs}\\[.1cm]
     \footnotesize Notes: For a given \emph{commune} on the y-axis,
     ordinal superiority measures are computed as the difference
     between the estimated fixed effect $\mu_c$ and the average fixed
@@ -8250,7 +8237,8 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
     \sqrt{2}]-1$.  The arrows represent the change in the measures
     between the creation of INAO in 1936 and current
     GIs.}\label{Fig:3}
-  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale= .62]{./Figures/ComDyn.pdf}
+  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale=
+  .62]{./Figures/ComDyn.pdf}
 \end{figure}
 #+end_export
 
@@ -8283,7 +8271,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 #+begin_export latex
 \vspace{.5cm}
 \begin{table}[!htb]
-\caption{\textbf{Signal Decompositions from Alternative GI Designations}}
+\caption{\textbf{Signal Decompositions from Alternative GI Designation Schemes}}
 \singlespacing\label{Tab:3} \vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/Decoldmp.tex}
@@ -8315,31 +8303,32 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
      schemes and evaluates the consequences on their informational
      content.  The six vertical designation schemes under
      consideration were simulated by changing the predictions of the
-     latent quality index (in columns S.I, S.II, and S.III), and by
-     changing the number of vertical levels from five to six (in S.IV,
-     S.V and S.VI).  The detailed formula and R codes used to simulate
-     alternative GI designation schemes are reported in RM (p.XX).  We
-     did not consider changing the horizontal dimension of GIs,
-     because changing the administrative boundaries of /communes/ in
-     order to improve wine quality signaling is not policy-relevant.
-     Scheme S.0 is a benchmark scheme that tries to reproduce actual
-     GI designations by adding simulated designation noises from
-     surrogate residuals to the predictions of the latent quality
-     index.  This noised index is mapped to the vertical dimension of
-     the simulated GIs with estimated thresholds and /commune/ fixed
-     effects.  The second column, S.0, in \autoref{Tab:3} shows that
-     the decomposition terms are very close to those obtained in the
-     last column of \autoref{Tab:2} from actual GIs.  Next, we drop
-     the designation errors from surrogate residuals in S.I, we drop
-     the intangible /commune/ effects in S.II, and we drop both
-     designation errors and /commune/ effects in S.III.  In the last
-     simulated designation schemes S.IV, S.V and S.VI, /Bourgogne/,
-     /Village/ and /Premier Cru/ levels are respectively divided into
-     two different levels by adding a threshold, fixed at the mean of
-     the estimated thresholds used for S.0.  Each of these schemes
-     corresponds to the creation of an additional item (like, e.g.,
-     /Bourgogne supérieur/, /Village supérieur/ ou /Premier Cru
-     supérieur/) that allows consumer to distinguish them.
+     latent quality index that is mapped to GIs by thresholds (in
+     columns S.I, S.II, and S.III), and by changing the number of
+     vertical levels from five to six (in S.IV, S.V and S.VI).  The
+     detailed formula and R codes used to simulate them are reported
+     in RM (p.28).  We did not consider changing the horizontal
+     dimension of GIs, because changing the administrative boundaries
+     of /communes/ in order to improve wine quality signaling is not
+     policy-relevant.  Scheme S.0 is a benchmark scheme that tries to
+     reproduce actual GI designations by adding simulated designation
+     noises from surrogate residuals to the predictions of the latent
+     quality index.  This noised index is mapped to the vertical
+     dimension of the simulated GIs with estimated thresholds and
+     /commune/ fixed effects.  The second column, S.0, in
+     \autoref{Tab:3} shows that the decomposition terms are very close
+     to those obtained in the last column of \autoref{Tab:2} from
+     actual GIs.  Next, we drop the designation errors from surrogate
+     residuals in S.I, we drop the intangible /commune/ effects in
+     S.II, and we drop both designation errors and /commune/ effects
+     in S.III.  In the last simulated designation schemes S.IV, S.V
+     and S.VI, /Bourgogne/, /Village/ and /Premier Cru/ levels are
+     respectively divided into two different levels by adding a
+     threshold, fixed at the mean of the estimated thresholds used for
+     S.0.  Each of these schemes corresponds to the creation of an
+     additional level (like, e.g., /Bourgogne supérieur/, /Village
+     supérieur/ ou /Premier Cru supérieur/) that allows consumer to
+     distinguish them.
 
 **** Text 2                                  :noheading:
 
@@ -8384,16 +8373,17 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
     content of the vertical levels of GIs, and some persistent
     differential treatments between administrative boundaries that
     bias the GI signal.  This two-dimensional segmentation inspired
-    many GIs among the wine-producing regions of the "old world", in
-    France, Germany, and Italy for example.  Similar empirical
+    many GIs among the wine-producing regions of the "old world" (in
+    France, Germany, and Italy for example) but also in the "new
+    world" (in the United States in particular).  Similar empirical
     analysis have to be conducted to evaluate the external validity of
     our results, and identify the various determinants of the
     informational content of GIs between these regions.  We also
     showed that the long history of GIs in Burgundy and their
     independent management by INAO has decreased the bias of the GI
-    signal.  This results is of particular importance to explain the
-    differential performance on wine markets between the "old world"
-    and the "new world".
+    signal in the last decades.  This results is of particular
+    importance to explain the differential performance on wine markets
+    between the "old world" and the "new world".
 
 *** Theory reputation                        :noheading:
 
@@ -8436,7 +8426,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 
 *** Discussion of the identification         :noheading:
 
-    Our empirical strategy is based on the difference between the
+    Our empirical strategy was based on the difference between the
     assumed spatial continuity of /terroir/ and the discontinuity of
     administrative borders, from which we disentangle the tangible and
     intangible determinants of GIs.  Due to the small size of vineyard
@@ -8470,55 +8460,48 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 ** Appendix
 *** About causal inference
 
-    We consider that the causal effects of /commune/ dummies is
-    identified once the smoothing functions of geographical
-    coordinates control for all the spatial heterogeneity that is
-    correlated with /commune/ dummies.  This sufficient level of
-    spatial smoothing is expected to be reached once the residuals
-    from auxiliary regressions that do not include /commune/ fixed
-    effects are not correlated with /communes/ dummies.  Using
-    residuals for specification purposes has a long history in
+    We consider that the causal /commune/ effects are identified once
+    the spatial heterogeneity correlated between /commune/ is
+    controlled by the smoothing functions of geographical coordinates.
+    This sufficient level of spatial smoothing is expected to be
+    reached once the residuals from auxiliary regressions that do not
+    include /commune/ effects are not correlated between /communes/.
+    Using residuals for specification purposes has a long history in
     econometrics, complemented by generalized residuals for non-linear
-    outcomes citep:PHal83,GMRT87,CIri87.  We use here the more
-    accurate surrogate residuals defined by cite:LZha18.
+    outcomes citep:PHal83,GMRT87,CIri87.  We use here the surrogate
+    residuals recently defined by cite:LZha18.
 
-     Define a surrogate variable $S\mid X, y \sim
-     \lambda\,\big[\,B(X)^\top\beta- \alpha_{y}\mid y\,\big]$ that
-     follows a truncated logistic distribution conditionally on the
-     observed distribution of the vertical dimension of GIs.  The
-     principle of using the observed values of $y$ to estimate the
-     residuals is shared by generalized residuals, as the originality
-     of the surrogate approach is to randomly draw the realizations
-     rather than compute them analytically.  This allows an estimation
-     of the full distribution of model errors instead of only their
-     first moments and sensibly extends the potential applications in
-     regression diagnostics citep:LZha18.  We obtained the residuals
-     from $N$ random draws of the surrogate variable $S_i$ with:
+    Define a surrogate variable $S\mid X, y \sim
+    \lambda\,\big[\,B(X)^\top\beta- \alpha_{y}\mid y\,\big]$ that
+    follows a truncated logistic distribution conditionally on $y$.
+    The principle of using the observed values of $y$ to estimate the
+    residuals is shared by generalized residuals, the originality of
+    the surrogate approach is to randomly draw the residuals rather
+    than computing them analytically.  This allows the estimation of
+    their full distribution instead of only their first 2 moments,
+    which sensibly extends their potential applications in regression
+    diagnostics citep:LZha18.  We estimated the residuals of auxiliary
+    models from $N$ random draws of the surrogate variable $S_i$ with:
 #+begin_export latex
 \begin{equation}
-R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
+R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta,
 \end{equation}
 #+end_export
-     and regress them on the /commune/ fixed effects.  This allows us
-     to test the presence of correlated residual patterns after
-     accounting only for tangible variables in the auxiliary
-     regressions.  By increasing the complexity of $B(X_i)$ through
-     increasing spline base dimensions of the smooth functions of
-     geographical coordinates, the joint significance of /commune/
-     fixed effect decreases as the unobserved spatial patterns are
-     increasingly accounted for.  Failing to reject the null
-     hypothesis of a Fisher test of joint significance of /commune/
-     fixed effects is expected to determine that the sufficient
-     complexity is attained by the auxiliary model.  Once this is
-     attained, we jointly estimate the effect of tangible and
-     intangible GI determinants in a full OGAM with the obtained
-     degree of spatial smoothing as in any parametric regression
-     framework.  In the absence of residual spatial effects
-     correlating with /commune/ dummies, the estimated ordinal
-     superiority measures are expected to be unbiased.  Note that the
-     F-statistics are bootstrapped to take into account the additional
-     uncertainty attributable to the random draws used in the
-     computation of surrogate residuals.
+     and we regress them on /commune/ dummies.  By increasing the
+     complexity of $B(X_i)$ through increasing spline base dimensions
+     of the smooth functions of geographical coordinates, the joint
+     significance of /commune/ dummies decreases as the unobserved
+     spatial patterns are increasingly accounted for.  Failing to
+     reject the null hypothesis of a classical Fisher test of joint
+     significance is expected to indicate that the sufficient
+     complexity is attained by the auxiliary model.  Hence, we
+     estimate a full OGAM of GI designation with the sufficient level
+     of spatial smoothing.  In the absence of residual effects
+     correlated between /commune/, the estimated ordinal superiority
+     measures are expected to be causal.  The F-statistics are
+     bootstrapped to take into account the additional uncertainty
+     attributable to the random draws used in the computation of
+     surrogate residuals.
 
 *** Table of summary statistics              :noheading:
     :PROPERTIES:
@@ -8534,10 +8517,12 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 \begin{tablenotes}\footnotesize
 \item Notes: Topographic variables were computed by a Geographical
   Information System from a Digital Elevation Model with 5 m
-  resolution.  Longitude and latitude correspond to the center of each
-  vineyard plot.  Current GI are dummy variables that account for the
-  vertical dimension in 2018, and Past GI comes from the 1936 map.
-  Aspect is discretized according to radian range reported in brakets.
+  resolution.  Longitude and latitude variables correspond to the
+  center of each vineyard plot.  Current GI are modeled as dummy
+  variables that account for the vertical dimension in january 2018,
+  and 1936 GI comes from MSH data (see RM).  Exposition is discretized
+  in the Aspect variable according to the degree ranges reported within
+  brakets.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}\clearpage
@@ -8548,12 +8533,13 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-\caption{\textbf{Distribution of the Vertical Dimension within and between the Horizontal Dimension}\\[.1cm]
-    \footnotesize Notes: For each \emph{commune} on the y-axis (the
-    horizontal dimension of GIs), the bars represent the cumulative
-    vineyard area designated in each item of the vertical dimension
-    represented with different colors.  The number reported is the
-    percentage the each vertical item represent in each \emph{commune}.}
+  \caption{\textbf{The Distribution of GI Levels within each
+      \emph{Communes}} \\[.1cm]
+    \footnotesize Notes: For each \emph{commune} on the y-axis (i.e.,
+    the horizontal dimension of GIs), the bar represents the vineyard
+    area designated in each vertical level of GIs.  The number
+    reported within the bar is the percentage that each vertical item
+    represent in the total vineyard area of each \emph{commune}.}
   \centering\label{Fig:A0} \rotatebox[origin=c]{-90}{
     \includegraphics[scale=.65,angle=90]{Figures/CrossGIs.pdf} }
  \end{figure}
@@ -8564,7 +8550,7 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Nonlinear Effects of Topographic Variables on GI Designations}\\[.1cm]
+  \caption{\textbf{Nonlinear Effects of Topographic Variables on Current GI Designations}\\[.1cm]
     \footnotesize Notes: Dotted lines represent the quadratic effects
     from model ( 0 ) in \autoref{Tab:1}, centered at zero with all
     other explanatory variables at their sample means.  Continuous
@@ -8582,18 +8568,18 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 *** Spatial smooth surfaces                  :noheading:
 
-# subtitles are not good
 #+begin_export latex
 \begin{landscape}
 \begin{figure}[b]
-  \caption{\textbf{Spatial Smoothed Effects from Ordered GI Designation Models}\\[.1cm]
-    \footnotesize Notes: The smooth surfaces are predicted from
-    spatial coordinates with other explanatory variables at their
-    sample means, with a uniform normalization to be inside the unit
-    interval.  A. The smooth prediction from parametric ordered
-    logistic model ( 0 ) in \autoref{Tab:1}.  B to F. the prediction
-    of OGAMs ( I ) to ( V ) with increasing effective degrees of
-    freedom as reported at the top of each plot.}
+  \caption{\textbf{Smoothed Functions of Geographic Coordinates from Current GI Designations}\\[.1cm]
+    \footnotesize Notes: The smooth surfaces are predicted only from
+    spatial coordinates, other explanatory variables are fixed to
+    their sample means.  Predictions of the latent vineyard quality
+    index are uniformly normalized to be inside the unit interval.
+    Each Panel corresponds to a model reported in \autoref{Tab:1},
+    from model ( 0 ) at the top-left to model ( V ) at the
+    bottom-right.  The effective degrees of freedom for the smooth
+    functions are reported at the top of each plot.}
   \centering\label{Fig:A2} \rotatebox[origin=c]{-90}{
     \includegraphics[scale=.7,angle=90]{Figures/SmoothMap.pdf} }
  \end{figure}
@@ -8605,15 +8591,14 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 # Changer bootstrap on the y-axis
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{F-statistics for Correlated Residual Effects}\\[.1cm]
-    \footnotesize Notes: For each model on the x-axis, the Figure
-    reports the distribution of the bootstrapped F-statistics (log
-    scale).  Increasing the complexity of spatial effects from left to
-    right decreases the significance of the \emph{commune} effects on
-    the surrogate residuals from auxiliary
-    regressions.}\label{Fig:A2a}
-  \centering
-\includegraphics[scale= .65]{Figures/SignifPlot.pdf}
+  \caption{\textbf{Joint Significance of \emph{commune} dummies on
+      surrogate residuals}\\[.1cm]
+    \footnotesize Notes: For each model on the x-axis (with increasing
+    level of spatial smoothing), the Figure reports the distribution
+    of the bootstrapped F-statistics about the joint significance of
+    \emph{commune} dummies on surrogate residuals (log
+    scale).}\label{Fig:A2a}
+  \centering \includegraphics[scale= .65]{Figures/SignifPlot.pdf}
 \end{figure}\clearpage
 #+end_export
 
@@ -8621,13 +8606,14 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Correlation between GI Grade and Ordinal Superiority Measures}\\[.1cm]
-    \footnotesize Notes: The ordinal superiority measures come from
-    means in \autoref{Fig:2}.  The average GI grade for each
-    \emph{commune} is the area-weighted mean of GIs coded from 1 to 5.
-    Privileged \emph{communes} (according to ordinal superiority
-    measures) do not appear to have systematically more high GIs than
-    average ($t=1.27$).}\label{Fig:A2b}
+  \caption{\textbf{Relation between Average GI Level and Ordinal
+      Superiority Measures} \\[.1cm]
+    \footnotesize Notes: The ordinal superiority measures on the
+    x-axis are those of \autoref{Fig:2} in the main text.  The average
+    GI level for each \emph{commune} is the area-weighted average of
+    GIs coded from 1 to 5 from the worst \emph{Coteaux bourguignons}
+    to the best \emph{Grands Crus}.  The nullity of the slope cannot
+    be rejected at 1\% ($t=1.27$).}\label{Fig:A2b}
   \centering \includegraphics[scale= .65]{Figures/ComCor.pdf}
 \end{figure}\clearpage
 #+end_export
@@ -8636,26 +8622,28 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{table}[!htp]
-\caption{\textbf{Joint Variable Significance for Ordered Models of the 1936 GI Designations}}\singlespacing
-\newcolumntype{Y}{>{\centering\arraybackslash}X}\label{Tab:A3}\vspace{-.5cm}
+\caption{\textbf{Joint Variable Significance for Ordered Logit Models
+    of 1936 GI Designations}} \singlespacing
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\label{Tab:A3}\vspace{-.5cm}
 \begin{threeparttable}
 \input{Tables/VarSign2.tex}
 \begin{tablenotes}\footnotesize
-\item Notes: $^{**}$ accounts for joint significance at 1\% from the
-  reported chi-squared statistics.  The effective degrees of freedom
-  are in brackets.  Column ( 0 ) corresponds to an ordered logit model
-  with quadratic effects for elevation, slope and solar radiation
-  (df$= 2$) with a full interaction between 3-orders polynomials for
-  longitude and latitude (edf$= 3+3+3\times 3= 15$), with 7 and 25
-  dummy variables for exposition and \emph{communes}, respectively.
-  Five \emph{communes} were dropped because they contained only one GI
-  in 1935.  Models ( I ) to ( V ) are OGAMs with elevation, slope and
-  solar radiation additively specified with a maximum of 9 edf,
-  shrinked endogenously by a quadratic penalization.  Spatial
-  coordinates are specified in increasing order of complexity with the
-  maximum edf of 100, 150, 200, 250 and 300.  The last row reports the
-  average of bootstrapped Fisher statistics for the joint nullity of
-  \emph{commune} dummies on surrogate residuals.
+\item Notes: $^{**} p< 0.001$ for joint significance tests from the
+  reported chi-square statistics, effective degrees of freedom are in
+  brackets.  Column ( 0 ) corresponds to an ordered logit model with
+  quadratic effects for elevation, slope and solar radiation (df$= 2$)
+  with a full interaction between third-orders polynomials for
+  longitude and latitude (df$= 3+3+3\times 3= 15$) and with 13, 14, 7
+  and 25 dummy variables for pedology, geology, exposition, and
+  \emph{communes} fixed effects, respectively.  Models ( I ) to ( V )
+  are OGAMs with elevation, slope and solar radiation additively
+  specified with a maximum of 9 edf, shrinked endogenously by a
+  quadratic penalization.  Spatial coordinates are specified in
+  increasing order of complexity with the maximum edf of 50, 100, 150,
+  200, and 250.  The last row reports the bootstraped F-statistics for
+  the joint nullity of \emph{commune} effects on residuals from
+  auxiliary regressions without \emph{commune} dummies.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}\clearpage
@@ -8665,60 +8653,41 @@ R_i= S_i-\mathbb{E}(S_i)= S_i+ \alpha_{y_i}- B(X_i)^\top\beta
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Non-linear effects of tangible variables in the 1936 GI designations}\\[.1cm]
-    \footnotesize Notes: Dotted lines represent the quadratic centered effects
-    of model ( 0 ) presented in \autoref{Tab:A3}.  Continuous lines
-    represent the centered effects from OGAMs ( I ) to ( V ) with
-    increasing darkening with increasing effective degrees of
-    freedom.  The histograms at the bottom of the plots represent the 
-    marginal distributions of each explanatory variable.}\label{Fig:A4}
-  \centering
-\includegraphics[scale= .85]{Figures/PltEffOld.pdf}
+  \caption{\textbf{Nonlinear Effects of Topographic Variables on
+      1936 GI Designations} \\[.1cm]
+    \footnotesize Notes: Dotted lines represent the quadratic effects
+    from model ( 0 ) in \autoref{Tab:A3}, centered at zero with all
+    other explanatory variables at their sample means.  Continuous
+    lines represent the centered effects from 10 OGAMs with increasing
+    darkening for increasing effective degrees of freedom for spatial
+    smoothing terms.  Models ( I ) to ( V ) in \autoref{Tab:A3} are a
+    subset of these OGAMs with maximum effective degrees of freedom
+    uniformly distributed between 50 and 350.  The histograms at the
+    bottom of each plot represent the marginal distributions of the
+    explanatory variables.} \label{Fig:A4} \centering
+  \includegraphics[scale= .85]{Figures/PltEffOld.pdf}
 \end{figure}\clearpage
-#+end_export
-
-*** Spatial smooth surfaces for old GIs      :noheading:
-
-# Put panel A and the other subtitles
-#+begin_export latex
-\begin{landscape}
-\begin{figure}[b]
-  \caption{\textbf{Spatial Smoothed Effects from 1936 GI Designation Models}\\[.1cm]
-\label{Fig:A6}
-\footnotesize Notes: The smooth surfaces are predicted from spatial
-coordinates with others explanatory variables at their sample means,
-with a uniform normalization to be inside the unit interval. Panel A
-displays the smooth prediction from parametric ordered logistic model
-( 0 ) of \autoref{Tab:A3}. Panels B to F display the prediction from
-the OGAMs ( I ) to ( V ) with increasing effective degrees of freedom
-as reported at the top of each plot.}
-  \centering\label{Fig:A5} \rotatebox[origin=c]{-90}{
-  \includegraphics[scale=.7,angle=90]{Figures/SmoothMapOld.pdf} 
-  }
- \end{figure}
-\end{landscape}
 #+end_export
 
 *** Ordinal superiority for old GI models    :noheading:
 
 #+begin_export latex
 \begin{figure}[!t]
-  \caption{\textbf{Ordinal Superiority Measures for the \emph{communes}
-    in the 1936 GI designation scheme}\\[.1cm]
-    \footnotesize Notes: For a given \emph{commune} $c$, ordinal
-    superiority measures are computed from the difference between the
-    own estimated fixed effect $\mu_c$ and the average fixed effect
-    $\overline{\mu}$ according to:
+  \caption{\textbf{Ordinal Superiority Measures for 1936 GI
+      designation scheme}\\[.1cm]
+    \footnotesize Notes: For a given \emph{commune} on the y-axis,
+    ordinal superiority measures are computed as the difference
+    between the estimated fixed effect $\mu_c$ and the average fixed
+    effect $\overline{\mu}$ of all \emph{commune} according to:
     $\Delta_{c}= 2\times \Lambda[(\mu_{c}-\overline{\mu})/
-    \sqrt{2}]-1$ as in the main text.  The horizontal bars represent
-    the range of measures according to different OGAMs with varying
-    complexity for the effects of spatial coordinates, black dots
-    represent the average of these measures.  Relatively privilegied
-    \emph{communes} appear at the top of the Figure, whereas
-    relatively disadvantged \emph{communes} appear at the
-    bottom.}\label{Fig:A5}
-  \centering\vspace*{-.75cm}\hspace*{-.5cm}
-\includegraphics[scale= .75]{./Figures/ComEffOld.pdf}
+    \sqrt{2}]-1$.  The horizontal bars represent the range of measures
+    according to the OGAMs with 150, 200 and 250 maximum edf for the
+    effects of spatial coordinates.  Black dots represent the average
+    of these measures.  Relatively privilegied \emph{communes} appear
+    at the top of the y-axis, whereas relatively disadvantged
+    \emph{communes} appear at the bottom.}\label{Fig:A6}
+  \centering\vspace*{-.75cm}\hspace*{-.5cm} \includegraphics[scale=
+  .75]{./Figures/ComEffOld.pdf}
 \end{figure}\clearpage
 #+end_export
     
@@ -8873,6 +8842,26 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
 \begin{equation}
 \theta= \frac{\mathbb{C}(\widehat{\varepsilon}_i, C_i^\top\mu)-\mathbb{V}(C_i^\top\mu)\times (1-R^2)}{\mathbb{V}(C_i^\top\mu)(1- R^2)}= \frac{\rho}{1- R^2}-1
 \end{equation}
+#+end_export
+
+*** Spatial smooth surfaces for old GIs      :noexport:
+
+#+begin_export latex
+\begin{landscape}
+\begin{figure}[b]
+  \caption{\textbf{Smoothed Functions of Geographic Coordinates from 1936 GI Designations}\\[.1cm]
+    \footnotesize Notes: The smooth surfaces are predicted only from
+    spatial coordinates, other explanatory variables are fixed to
+    their sample means.  Predictions of the latent vineyard quality
+    index are uniformly normalized to be inside the unit interval.
+    Each Panel corresponds to a model reported in \autoref{Tab:A3},
+    from model ( 0 ) at the top-left to model ( V ) at the
+    bottom-right.  The effective degrees of freedom for the smooth
+    functions are reported at the top of each plot.}
+  \centering\label{Fig:A5} \rotatebox[origin=c]{-90}{
+    \includegraphics[scale=.7,angle=90]{Figures/SmoothMapOld.pdf} }
+ \end{figure}
+\end{landscape}
 #+end_export
 
 ** Research perspectives                    :noexport:
@@ -9685,14 +9674,15 @@ GG <- data.frame(expand.grid(X= seq(min(Reg.Ras$X)- i,
                  mean(Reg.Ras$SLOPE), 0, "(90,135]")
 names(GG)[ 3: 9] <- c("LIBCOM", "DEM",
                       "GEOL", "PEDO", "SLOPE", "RAYAT", "EXPO")
-
+library(MASS)
 polm1c <- polr(factor(AOC)~ LIBCOM+ EXPO+ GEOL+ PEDO
                + poly(DEM, 2)+ poly(SLOPE, 2)+ poly(RAYAT, 2)
+               + poly(X, 3)* poly(Y, 3) 
              , data= Reg.Ras, Hess= TRUE)
-tmp <- qlogis(predict(polm1c, newdata= GG, type= "probs")[, 3]+ 1e-6)
+tmp <- qlogis(predict(polm1c, newdata= GG, type= "probs")[, 3]+ 1e-5)
 GG$por1 <- (tmp- min(tmp))/ (max(tmp)- min(tmp))
 GG$por1 <- 0.5+ GG$por1/ 2
-
+load("Inter/gamod.Rda")
 fctPrd <- function(mod){
     tmp <- predict(mod, newdata= GG)
     (tmp- min(tmp))/ (max(tmp)- min(tmp))
@@ -9701,14 +9691,14 @@ HH <- cbind(GG, sapply(gamod[ 1: 5* 2], fctPrd))
 hh <- SpatialPixelsDataFrame(HH[, c("X", "Y")], HH,
                              proj4string=CRS("+proj=longlat +ellps=WGS84"))
 library(viridis)
-
 ttl <- paste0("Model ( ", c("0", "I", "II", "III", "IV", "V"), " ) - ")
-names(ttl) <- names(hh)[ 8: 13]
+names(ttl) <- names(hh)[ 10: 15]
 
 pdf("Figures/SmoothMap.pdf", width= 12, height= 8)
 par(mar= c(0, 0, 0, 0))
 layout(rbind(c(1, 2, 3, 7),
              c(4, 5, 6, 7)), widths = c(4,4,4,1))
+
 for (i in names(hh)[ 10: 15]){
     plot(hh[!is.na(over(hh, BArea)), i],
          xlim= c(4.65, 5.1), what= "image", axes= TRUE, zlim= c(.5, 1),
@@ -9727,6 +9717,8 @@ dev.off()
 #+end_src
 
 ** Smoothed gam surface Old AOCs
+
+   plus uptodate
 
 #+begin_src R
 library(rgdal) ; library(maptools) ; library(sp)
