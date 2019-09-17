@@ -35,17 +35,19 @@
 # Remigny en Saone et Loire
 
 # On a 30 GCRU au de 32 à cause de Charlemagne, sous ensemble de
-# corton-charlemeagne peu utilisé et Charmes-Chambertain sous-ensemble
+# corton-charlemagne peu utilisé et Charmes-Chambertain sous-ensemble
 # de Mazoyere Chambertin.
+
+# 1930s leading growers chose not to petition for them, for a range of
+# reasons, including a reluctance to pay the higher taxes levied on
+# grand cru wines.  Read more at
+# https://www.decanter.com/learn/burgundy-premier-cru-vs-grand-cru-vineyards-ask-decanter-410099/#KPSkYut5TSE3rcZ7.99
 
 * README
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
 *** Classification statistique des vignobles de Côte d'Or
-
-[[https://geoind-wine.firebaseapp.com][file:Figures/Capture.png]]
-
 *** English version
 
     Modeling statistically the link between natural attributes of
@@ -56,7 +58,7 @@
     This research is described in the [[file:WorkingPaper.pdf][AAWE Working Paper XX]] and the
     Reproducibility Material in [[file:ReproPaper.pdf][PDF]] or [[file:ReproPaper.md][Markdown]].  Raw data are on the
     [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][INRA dataverse server]] and the results are accessible by a [[https://geoind.shinyapps.io/application/][Shiny
-    application]].
+    application]] or only the [[https://geoind-wine.firebaseapp.com][map]].
 
 *** Version Française
 
@@ -68,20 +70,20 @@
     Les détails de la construction des données et de l'estimation sont
     disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données sont
     accessibles sur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][le serveur data de l'INRA]] et les résultats sont
-    consultables par [[https://geoind.shinyapps.io/application/][une application cartographique]].
+    consultables par une [[https://geoind.shinyapps.io/application/][application]] ou une [[https://geoind-wine.firebaseapp.com][carte]].
 
 *** Credits
 
-    Bug reports, comments and suggestions by opening an issue
-    (preferred) or [[mailto:jsay@inra.fr][sending an email]].
+    Bug reports, comments and suggestions by opening an issue on
+    [[https://github.com/jsay/geoInd][GitHub]] (preferred) or [[mailto:jsay@inra.fr][sending an email]].
     
     Made on =emacs= with =org-mode= to juggle with =R=, =LaTex= and
     =Markdown=.
 
-    Special thanks to Pauline Mialhe, Vincent Larmet, and Guillaume
-    Royet for their help with the application.
+    Special thanks to [[https://fr.linkedin.com/in/pauline-mialhe][Pauline Mialhe]], [[https://fr.linkedin.com/in/vincent-larmet-bba997144][Vincent Larmet]], and [[https://www2.dijon.inra.fr/cesaer/membres/guillaume-royer/][Guillaume
+    Royer]] for their help with the application.
 
-    Licence GNU GPL V3, Copyright and licence notices must be
+    Licence GNU GPL V3, copyright and licence notices must be
     preserved (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 * Data Papier
@@ -1564,37 +1566,37 @@ Exposition [$315-360$]         & 59113                 & 0.021                  
 \mbox{Prob}(y_{i}> j\mid X_i, C_i)= \Lambda\big[ B(X_i)^\top\beta+ C_i^\top\mu- \alpha_{j}\big],\label{Eq:Mod}
 \end{equation}
 #+end_export
-     où $\Lambda$ est la fonction cumulative de la loi logistique.
-     Les déterminants humain qui impactent la classification AOC à
-     partir des seuils de désignation sont pris en compte par des
-     effets fixes communaux notés $\mu$.  En l'absence d'/a priori/
-     théoriques sur les effets des variables biophysiques $X_i$, nous
-     les spécifions au travers d'une série de transformations
-     /B-splines/ que nous notons $B(\cdot)$ avec $\beta$ leurs
-     coefficients associés.  Le modèle est estimé avec la fonction
-     =gam= du package =mgcv= comme décrit récemment par cite:WPSa16.
-     Le manuel d'utilisation de l'auteur du package cite:Wood17
-     contient de nombreux détails méthodologiques.
+    où $\Lambda$ est la fonction cumulative de la loi logistique.  Les
+    déterminants humain qui impactent la classification AOC à partir
+    des seuils de désignation sont pris en compte par des effets fixes
+    communaux notés $\mu$.  En l'absence d'/a priori/ théoriques sur
+    les effets des variables biophysiques $X_i$, nous les spécifions
+    au travers d'une série de transformations /B-splines/ que nous
+    notons $B(\cdot)$ avec $\beta$ leurs coefficients associés.  Le
+    modèle est estimé avec la fonction =gam= du package =mgcv= comme
+    décrit récemment par cite:WPSa16.  Le manuel d'utilisation de
+    l'auteur du package cite:Wood17 contient de nombreux détails
+    méthodologiques.
 
-     Notons qu'en préalable à l'estimation, nous opérons un
-     regroupement des unités géologiques et pédologiques afin de
-     pouvoir les inclure comme des variables binaires dans le modèle.
-     En effet, un nombre trop faible d'observation au sein d'une unité
-     géologique ou pédologique diminue sensiblement la précision de
-     l'estimation et peut poser des problèmes de convergence de
-     l'algorithme de régression pénalisée.  Nous choisissons de ne
-     retenir que les unités qui contiennent plus de $1\,000$
-     parcelles, d'autres valeurs ont été testées sans que cela change
-     les résultats.  Notons également que le modèle que nous estimons
-     opère un lissage spatial fin (avec un nombre maximal de degré de
-     liberté effectifs de 900 sur les termes spatiaux) ce qui implique
-     une procédure estimation assez longue (environ 9 heures avec un
-     processeur Intel Core i7-7820HQ CPU 2.90 GHz x8 et 64 Go of RAM).
-     D'autres modèles plus parcimonieux sont également présents dans
-     l'objet =gamod.Rda= téléchargeable sur le [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][serveur data de l'INRA]].
-     Nous conseillons au lecteur de télécharger =gamod.Rda= plutôt que
-     d'effectuer l'estimation en local du modèle, bien que les deux
-     procédures peuvent être effectuées avec le code ci-dessous.
+    Notons qu'en préalable à l'estimation, nous opérons un
+    regroupement des unités géologiques et pédologiques afin de
+    pouvoir les inclure comme des variables binaires dans le modèle.
+    En effet, un nombre trop faible d'observation au sein d'une unité
+    géologique ou pédologique diminue sensiblement la précision de
+    l'estimation et peut poser des problèmes de convergence de
+    l'algorithme de régression pénalisée.  Nous choisissons de ne
+    retenir que les unités qui contiennent plus de $1\,000$ parcelles,
+    d'autres valeurs ont été testées sans que cela change les
+    résultats.  Notons également que le modèle que nous estimons opère
+    un lissage spatial fin (avec un nombre maximal de degré de liberté
+    effectifs de 900 sur les termes spatiaux) ce qui implique une
+    procédure estimation assez longue (environ 9 heures avec un
+    processeur Intel Core i7-7820HQ CPU 2.90 GHz x8 et 64 Go of RAM).
+    D'autres modèles plus parcimonieux sont également présents dans
+    l'objet =gamod.Rda= téléchargeable sur le [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][serveur data de l'INRA]].
+    Nous conseillons au lecteur de télécharger =gamod.Rda= plutôt que
+    d'effectuer l'estimation en local du modèle, bien que les deux
+    procédures peuvent être effectuées avec le code ci-dessous.
  
 #+begin_src R :wrap example
 Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
@@ -1918,9 +1920,10 @@ length(unique(Prd.Ras$Concat))
 
 #+begin_src R :wrap example
 library(data.table) ; Prd.Dtb <- data.table(Prd.Ras@data)
+summary(Prd.Dtb$AREA)
 Dat.Ldt <- Prd.Dtb[, .(LIBCOM= LIBCOM[ 1], NOM= NAME[ 1],
                        NIVEAU= NIVEAU[ 1],
-                       SURFACE_ha= round(sum(AREA)/ 1e5, 2),
+                       SURFACE_ha= round(sum(AREA)/ 1e4, 2),
                        SCORE_brut= round(weighted.mean(UFraw, AREA), 2),
                        SCORE_corrigé=round(weighted.mean(UFcor, AREA), 2)), by= Concat]
 library(rgdal) ; library(rgeos) ; library(maptools)
@@ -1976,7 +1979,6 @@ Poly.Ras$NIVEAU <- factor(Poly.Ras$NIVEAU, levels= NVA)
      utilisée dans l'application /Shiny/.  Ces résultats sont
      accessibles sur le serveur data de l'INRA à l'adresse XX.
      
-
 #+begin_src R
 library(sf)
 Poly.Ras <- st_as_sf(Poly.Ras)
@@ -2015,7 +2017,7 @@ save(Poly.Ras, file= "Inter/PolyRas.Rda")
      générale de la région apparaît également par les variables
      =rang_brut= et =rang_cor= crées précédemment.
 
-#+begin_src R :tangle ./Application/global.R
+#+begin_src R :tangle ./Application2/global.R
 library(RColorBrewer) ; library(mapview) ; library(sf)
 load("Inter/PolyRas.Rda")
 
@@ -2085,8 +2087,8 @@ nvm install 10.15.3
 ***** Déploiement effectif
 
       Toujours être sûr d'être up-to-date.
-
-     npm install -g firebase-tools
+      
+      npm install -g firebase-tools
      To update to the latest version of the Firebase CLI, re-run the
      same npm install command.
      firebase login
@@ -3146,12 +3148,17 @@ server <- function(input, output, session) {
     reporté en Annexe 4 et 5, qui produises les fichiers =ui.R= et
     =server.R= qui sont également disponibles sur [[https://github.com/jsay/geoInd/tree/master/Application][github]].  
 
-#+begin_src R :tangle ./Application/global.R
+#+begin_src R :tangle ./Application2/global.R
 library(shiny) ; library(shinydashboard) ; library(shinyjs)
 library(leaflet) ; library(maptools) ; library(ggplot2)
+library(markdown)
 Pts.Crd <- st_centroid(Poly.Ras)
 
 source("ui.R") ; source("server.R")
+## source("Application/ui.R") ; source("Application/server.R")
+## source("Application2/ui.R") ; source("Application2/server.R")
+
+enableBookmarking(store = "url")
 shinyApp(ui,server)
 #+end_src
 
@@ -3196,17 +3203,23 @@ shinyApp(ui,server)
 
 *** Développements à venir                   :noexport:
 
+    - Corriger les surfaces
+
     - Régler le LIBCOM = NA sur la commune de Marsannay (pres des
-      echzeaux)
+      echzeaux), il y a SAVIGNY-LES-BEAUNE 1ER CRU "Aux Guettes" qui
+      fait planté l'appli
 
     - Diminuer la taille du graphique pour fitter le smart phone
 
     - Faire un onglet pour des croisements exhaustifs, réfléchir à
     l'interaction avec la carte et le graphique
 
-    - Pour le rank, mettre la position plutôt que la part
+    - Pour le rank, mettre la position plutôt que la part, corriger
+      les valeurs qui sont reporter dans les box.
 
-    - Réfléchir à l'emplacement d'enrgistrement de la base     
+    - Réfléchir à l'emplacement d'enregistrement de la base
+
+    - faire des url qui pointent sur les parcelles
 
 *** Déploiement                              :noexport:
 **** Sur Rstudio server
@@ -3225,6 +3238,8 @@ rsconnect::setAccountInfo(name='geoind',
 			  token='82F46B13B55046680E20FD09364E805A',
 			  secret='XXQkLNx5bGEOAIiAsuBcv9Sz5dYjoj1o/KIiag1G')
 rsconnect::deployApp('./Application')
+
+rsconnect::deployApp('./Application2')
 #+end_src
 
 **** Sur serveur cesaer
@@ -3243,7 +3258,9 @@ sudo cp -r ./geoind_app ./cesaer/
    d’euros et le budget de l’INAO 32 millions d’euros, c’est un
    millième du chiffre d’affaires.  
 
-   Information pour les consommateurs.
+   Information pour les consommateurs, l'appli peut permettre de
+   passer d'une information discrète à continue, ce qui permet
+   d'accroître la qualité de 80 à 95 (cf WP). 
 
    Développements à venir.
 
@@ -3566,35 +3583,26 @@ trans_pedo <- data.frame(
 #+begin_src R :tangle ./Application/ui.R
 ui <- dashboardPage(
   dashboardHeader(
-    titleWidth= 550, 
-    title= "Classification statistique des vignobles de la Côte d'Or"),
+    titleWidth= 400, 
+    title= "Classification des vignobles de la Côte d'Or"),
   dashboardSidebar(disable = TRUE),
   dashboardBody(
     fluidRow(
-      box(width= 5, height= 670,
-          column(width= 4,
-                 selectInput(
-                   "niveau", label= "Niveau de l'appellation",
-                   choices=
-                     c(as.character(unique(Poly.Ras$NIVEAU))),
-                   selected= 1)),
-          column(width= 4,
-                 selectInput(
-                   "commune", 
-                   label= "Commune de la parcelle",
-                   choices= c(
-                     as.character(unique(Poly.Ras$LIBCOM)),
-                     "TOUTES"), selected= 1)),
-          column(width= 4,
-                 selectInput(
-                     "nom",
-                     label= "Lieu dit de la parcelle",
-                     choices= c(
-                         as.character(unique(Poly.Ras$NOM)),
-                         "TOUS"), selected = 1)),
-          plotOutput("miplot", width='100%')
-          ),
-      box(width= 7, 
+      box(width= 2, height= 375,
+          selectInput("niveau", label= "Niveau de l'appellation",
+                      choices=
+                          c(as.character(unique(Poly.Ras$NIVEAU))),
+                      selected= 1),
+          selectInput("commune", label= "Commune de la parcelle",
+                      choices= c(
+                          as.character(unique(Poly.Ras$LIBCOM)),
+                          "TOUTES"), selected= 1),
+          selectInput("nom", label= "Lieu dit de la parcelle",
+                      choices= c(
+                          as.character(unique(Poly.Ras$NOM)),
+                          "TOUS"), selected = 1)),
+      box(width= 3, height= 645, plotOutput("miplot")),
+      box(width= 3, 
           column(width = 12, 
                  leafletOutput("mymap", height= 645),
                  fluidRow(verbatimTextOutput("mymap_shape_click"))
@@ -3603,6 +3611,40 @@ ui <- dashboardPage(
     )
   )
 )
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle ./Application2/ui.R
+ui <- function(request){
+    fluidPage(sidebarLayout(
+        sidebarPanel(
+            width= 2,
+            selectInput("niveau",label= "Niveau de l'appellation",
+                        choices=
+                            c(as.character(unique(Poly.Ras$NIVEAU))),
+                        selected= 1),
+            selectInput("commune", label= "Commune de la parcelle",
+                        choices= c(
+                            as.character(unique(Poly.Ras$LIBCOM)),
+                            "TOUTES"), selected= 1),
+            selectInput("nom", label= "Lieu dit de la parcelle",
+                        choices= c(
+                            as.character(unique(Poly.Ras$NOM)),
+                            "TOUS"), selected = 1),
+            bookmarkButton()
+        ),
+        mainPanel(
+            width= 3,
+            tabsetPanel(id = "inTabset",
+                        tabPanel(title = "Carte",
+                                 leafletOutput("mymap", height= 645)),
+                        tabPanel(title = "Figure", plotOutput("miplot")),
+                        tabPanel(title = "Détails",
+                                 includeMarkdown("README.md"))
+                        )
+        )
+    ))}
 #+end_src
 
 #+RESULTS:
@@ -3716,13 +3758,116 @@ server <- function(input, output, session) {
             geom_hline(yintercept= yop, lty= 2, col= "red")+
             annotate("text", x= 0.35, y= yop+ 2,
                      label= round(yop, 2), col= "red", size= 8)
-    }, height = 575, width = 700)
-    ## Pour debugguer, ca permet de voir la valeur des input en direct
-    output$table <- renderTable({
-        data.frame(inp= names(unlist(reactiveValuesToList(values))),
-                   val= unlist(reactiveValuesToList(values)))
-  })
-}
+    }, height = 575, width = 400)}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle ./Application2/server.R
+
+server <- function(input, output, session) {
+    ## Reactive values 
+    values <- reactiveValues(niveau= NULL, commune= NULL, nom= NULL)  
+    ## Initialisation reactive values
+    observe({
+        if (is.null(values$niveau))  values$niveau  <- input$niveau
+        if (is.null(values$commune)) values$commune <- input$commune
+        if (is.null(values$nom))     values$nom     <- input$nom
+    })
+    ## MAJ des reactive values apres un click sur un polygone
+    observeEvent(input$mymap_shape_click,{
+        values$niveau  <- Pts.Crd$NIVEAU[Pts.Crd$Concat==
+                                         input$mymap_shape_click$id]
+        values$nom     <- Pts.Crd$NOM[Pts.Crd$Concat==
+                                      input$mymap_shape_click$id]
+        values$commune <-Pts.Crd$LIBCOM[Pts.Crd$Concat==
+                                        input$mymap_shape_click$id]
+    })
+    ## MAJ des reactive values apres un choix dans menus deroulants
+    observeEvent(c(input$commune, input$niveau, input$nom),{
+        if (values$niveau  != input$niveau) {
+            values$niveau  <- input$niveau
+            values$commune <- Pts.Crd$LIBCOM[Pts.Crd$NIVEAU==
+                                             values$niveau][ 1]
+            values$nom     <- Pts.Crd$NOM[Pts.Crd$LIBCOM==
+                                          values$commune][ 1]
+        }
+        else if (values$commune != input$commune) {
+            values$commune <- input$commune
+            values$nom <- Pts.Crd$NOM[Pts.Crd$LIBCOM== values$commune][ 1]
+        }           
+        else if (values$nom!=input$nom){
+            values$nom<-input$nom
+        }})
+    ## MAJ menus deroulants
+    observeEvent(c(values$commune, values$niveau, values$nom),{
+        updateSelectInput(session, "niveau",
+                          choices= c(as.character(
+                              unique(Poly.Ras$NIVEAU))),
+                          selected=values$niveau)
+        updateSelectInput(session, "commune",
+                          choices= c(as.character(
+                              unique(Poly.Ras$LIBCOM[Poly.Ras$NIVEAU %in%
+                                                     values$niveau]))),
+                          selected=values$commune)
+        updateSelectInput(session, "nom",
+                          choices= c(as.character(
+                              unique(Poly.Ras$NOM[Poly.Ras$LIBCOM %in%
+                                                  values$commune &
+                                                  Poly.Ras$NIVEAU %in%
+                                                  values$niveau]))),
+                          selected=values$nom)
+    })
+    ## Subset donnees
+    getPts <- reactive({
+        Pts.Crd[Pts.Crd$NIVEAU %in% values$niveau &
+                Pts.Crd$LIBCOM %in% values$commune &
+                Pts.Crd$NOM    %in% values$nom, ]})
+    ## Carte de base
+    output$mymap <- renderLeaflet({
+        map@map
+    })
+    ## Rafraichissement carte
+    observe({
+        gg <- getPts()
+        if (nrow(gg)== 0) return(NULL)
+        else {
+            bound_box <- as.numeric(st_bbox(Poly.Ras[Poly.Ras$Concat %in%
+                                                     gg$Concat,]))
+            leafletProxy("mymap") %>%
+                clearMarkers() %>%
+                fitBounds(lng1= bound_box[ 3], lng2= bound_box[ 1],
+                          lat1= bound_box[ 4], lat2= bound_box[ 2]) %>%
+                addCircleMarkers(data= (getPts()))}
+    })
+    ## Violon Plot de base
+    output$miplot <- renderPlot({
+        yop <- getPts()$SCORE_corrigé
+        if (length(yop)==0) return(NULL)
+        top <- round(100-
+                     aggregate(I(Poly.Ras$SCORE_corrigé< yop)* 100,
+                               by= list(Poly.Ras$NIVEAU), mean)[, 2])
+        ggplot(Poly.Ras, aes(x= factor(NIVEAU),
+                             y= SCORE_corrigé, fill= factor(NIVEAU)))+
+            geom_violin(trim= FALSE)+ theme_minimal()+ ylim(40, 100)+
+            geom_boxplot(width=0.1, fill= "white")+
+            annotate("text", x= 1: 5, y= 100,
+                     label= paste("", top, "%"), col= "red", size= 5)+
+            labs(title= "Comparaison avec les autres parcelles",
+                 x= "",
+                 y = "Niveau sur une échelle de 1 à 100")+ 
+            scale_fill_manual(values= AocPal)+ 
+            theme(legend.position= "none",
+                  plot.title = element_text(hjust = 0, size = 16),
+                  axis.text.x = element_text(size= 12),
+                  axis.title.x = element_text(hjust= 0, size= 14),
+                  axis.title.y = element_text(size= 14))+
+            scale_x_discrete(expand= expand_scale(mult= 0, add= 1),
+                             drop= T)+
+            geom_hline(yintercept= yop, lty= 2, col= "red")+
+            annotate("text", x= 0.35, y= yop+ 2,
+                     label= round(yop, 2), col= "red", size= 5)
+    }, height = 500, width = 400)}
 #+end_src
 
 #+RESULTS:
@@ -7062,7 +7207,7 @@ model.
     sites, and estimate it by the variance of a latent quality index
     according to the principle that more informative signals lead to
     greater variability citep:GPen10.  We propose disentangling
-    tangible information from intangible information from ordered
+    tangible information from intangible information through ordered
     logit models explaining the GI hierarchy by the natural and
     administrative attributes of vineyard plots.  The first set of
     variables relates to the tangible attributes of vineyard plots
@@ -7255,6 +7400,12 @@ model.
   :PROPERTIES:
   :CUSTOM_ID: Sec:1
   :END:
+
+  First, we present the vineyards from the /Côte d'Or/ region under
+  study.  Next, we present the historical evolution of GIs in this
+  region, followed by a precise description of current GIs.  Finally,
+  we provide some summary statistics on the data used here.
+
 *** The /Côte d'Or/ region
    :PROPERTIES:
    :CUSTOM_ID: Sec:11
@@ -7490,27 +7641,28 @@ model.
 
 **** Variable description                    :noheading:
 
-     \autoref{Tab:SD} in the Appendix presents the summary statistics
-     about the exhaustive plot-level data that we use on the 31
-     /communes/ of the region.  For approximately $60\,000$ vineyard
-     plots of a tiny average size of 0.2 ha ($\sim$ 0.5 acres), the
-     elevation is distributed between 200 and 500 m, with an average
-     of 286 m.  Slopes are an average 5.73 degrees wit high standard
-     deviation (the coefficient of variation is $\sim$ 100%).  The
-     solar radiation is distributed from 0.58 to 1.23 million Joules,
-     with an average of 1.05 million J.  To add flexibility to the
-     econometric estimations, the exposition variable is discretized
-     in eight dummy variables for different semi-quadrants, which
-     shows that more than 50% of vineyard plots have a south-eastern
-     exposition, between 90 and 180 degrees.  \autoref{Tab:SD} also
-     shows the current distribution of the vertical dimensions of GIs
-     and the distribution in 1936 when the INAO was created.  We also
-     use additional geological and pedological variables as fixed
-     effects to control for sub-soil and soil characteristics.
-     Because such variables are not central in the empirical strategy
-     that we propose, we do not report them here.  Interested readers
-     can access these variables through the Replication Material (RM)
-     from the link on the title page of this article.
+     \autoref{Tab:SD} in the Appendix presents the summary
+     statistics about the exhaustive plot-level data that we use on
+     the 31 /communes/ of the region.  For approximately $60\,000$
+     vineyard plots of a tiny average size of 0.2 ha ($\sim$ 0.5
+     acres), the elevation is distributed between 200 and 500 m, with
+     an average of 286 m.  Slopes are an average 5.73 degrees wit high
+     standard deviation (the coefficient of variation is $\sim$ 100%).
+     The solar radiation is distributed from 0.58 to 1.23 million
+     Joules, with an average of 1.05 million J.  To add flexibility to
+     the econometric estimations, the exposition variable is
+     discretized in eight dummy variables for different
+     semi-quadrants, which shows that more than 50% of vineyard plots
+     have a south-eastern exposition, between 90 and 180 degrees.
+     \autoref{Tab:SD} also shows the current distribution of the
+     vertical dimensions of GIs and the distribution in 1936 when the
+     INAO was created.  We also use additional geological and
+     pedological variables as fixed effects to control for sub-soil
+     and soil characteristics.  Because such variables are not central
+     in the empirical strategy that we propose, we do not report them
+     here.  Interested readers can access these variables through the
+     Replication Material (RM) from the link on the title page of this
+     article.
 
 ** Model of GI designation
    :PROPERTIES:
@@ -8457,7 +8609,7 @@ y= j \;\;\;\mbox{ $\Leftrightarrow$ }\;\;\; \alpha^{c}_{j-1}< y^*< \alpha^{c}_{j
 
 #+LATEX: \clearpage\appendix
 
-** Appendix
+** Appendices
 *** About causal inference
 
     We consider that the causal /commune/ effects are identified once
@@ -8879,6 +9031,17 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
     predicts current quality in markets in which current quality is
     imperfectly observable (Shapiro, 1982, Landon and Smith 1998). The
     second is about the value of GIs.
+
+* Title Page
+  :PROPERTIES:
+  :EXPORT_FILE_NAME:    TitlePage.pdf
+  :EXPORT_LATEX_CLASS:  WorkinPap
+  :EXPORT_LANGUAGE:     en
+  :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
+  :EXPORT_TITLE:        @@latex: Title: The informational content of geographical indications@@
+  :EXPORT_AUTHOR:       @@latex: Author name: Jean-Sauveur Ay \\ Contact person: Jean-Sauveur Ay \\ Address: 25 boulevard Docteur Petitjean, 21000 Dijon (France).\\ Phone number: 00.333.80.77.23.19 @@
+  :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage[doublespacing]{setspace} \usepackage{tabularx, rotating, booktabs, pdflscape, amssymb, amsmath, amsthm, bbm, eurosym, pdflscape, txfonts, rotfloat, caption}\makeatletter\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}\@title \begin{flushleft} \@author\end{flushleft}\egroup}\makeatother
+  :END:
 
 * Presentation
   :PROPERTIES:
@@ -9463,14 +9626,15 @@ MapCom <- readOGR("Carto/", "MapCom")
 Bord.Area <- unionSpatialPolygons(MapCom, rep(1, nrow(MapCom)))
 Geol.Map <- readOGR("./Carto/", "GeolMap")
 
-library(raster)
-pi <- intersect(Bord.Area, Geol.Map)
-mycol <- sample(col_vector, length(unique(pi$DESCR)))
 
 library(RColorBrewer)
 qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
 col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
                            rownames(qual_col_pals)))
+
+library(raster)
+pi <- intersect(Bord.Area, Geol.Map)
+mycol <- sample(col_vector, length(unique(pi$DESCR)))
 
 pdf("Figures/MapGeol.pdf", width= 7, height= 9)
 par(mar = c(0, 0, 0, 0))
@@ -13946,10 +14110,30 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 
 * Letter to the editor
 
-  Full reproductible, does not allow anonymity, so recently as a
-  working paper.
+  Dear AJAE editors,
 
-  Reread by a professional economic-oriented firm.
+  please find enclosed a research paper about "The informational
+  content of geographical indications".  It describes an econometric
+  analysis of the links between natural characteristics of vineyard
+  plots, administrative boundaries, and geographical indications for
+  the Côte d'Or region of Bourgogne (France).  Controling for
+  fine-scale terroir effects, we find persistent lobbying effects from
+  administrative subdivisions on GI designations that bias in the GI
+  quality signal.  Nevertheless, these lobbying effects are decreasing
+  since 1936, which means that the informational content of GIs has
+  increased.
 
-  Truly believe that the journal as is appropriate, as the first
-  submission choice.
+  The analysis presented in this article is fully reproducible.  Data
+  and models are available from a server at
+  https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN.
+  R codes, tables, and figures are reported in a replication file
+  available at
+  https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf.  Note
+  that providing these links to the referees will break the anonymity.
+  
+  Thank you for considering this article for publication in the AJAE,
+  which I believe to be the most appropriate journal for this
+  research.  I have not submitted this article to another journal
+  before.
+
+  Best regards, Jean-Sauveur Ay.

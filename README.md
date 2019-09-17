@@ -17,10 +17,10 @@ Les détails de la construction des données et de l'estimation sont disponibles
 
 # Credits
 
-Bug reports, comments and suggestions by opening an issue (preferred) or [sending an email](mailto:jsay@inra.fr).
+Bug reports, comments and suggestions by opening an issue on [GitHub](https://github.com/jsay/geoInd) (preferred) or [sending an email](mailto:jsay@inra.fr).
 
 Made on `emacs` with `org-mode` to juggle with `R`, `LaTex` and `Markdown`.
 
-Special thanks to Pauline Mialhe, Vincent Larmet, and Guillaume Royer for their help with the application.
+Special thanks to [Pauline Mialhe](https://fr.linkedin.com/in/pauline-mialhe), [Vincent Larmet](https://fr.linkedin.com/in/vincent-larmet-bba997144), and [Guillaume Royer](https://www2.dijon.inra.fr/cesaer/membres/guillaume-royer/) for their help with the application.
 
 Licence GNU GPL V3, copyright and licence notices must be preserved (see <https://www.gnu.org/licenses/gpl-3.0.en.html>)

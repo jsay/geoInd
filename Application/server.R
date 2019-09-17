@@ -100,10 +100,4 @@ server <- function(input, output, session) {
             geom_hline(yintercept= yop, lty= 2, col= "red")+
             annotate("text", x= 0.35, y= yop+ 2,
                      label= round(yop, 2), col= "red", size= 8)
-    }, height = 575, width = 700)
-    ## Pour debugguer, ca permet de voir la valeur des input en direct
-    output$table <- renderTable({
-        data.frame(inp= names(unlist(reactiveValuesToList(values))),
-                   val= unlist(reactiveValuesToList(values)))
-  })
-}
+    }, height = 575, width = 400)}

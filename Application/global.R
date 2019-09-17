@@ -20,7 +20,11 @@ map <- mapview(Poly.Ras, zcol= "NIVEAU", label= Poly.Ras$NOM,
 
 library(shiny) ; library(shinydashboard) ; library(shinyjs)
 library(leaflet) ; library(maptools) ; library(ggplot2)
+library(markdown)
 Pts.Crd <- st_centroid(Poly.Ras)
 
 source("ui.R") ; source("server.R")
+## source("Application/ui.R") ; source("Application/server.R")
+## source("Application2/ui.R") ; source("Application2/server.R")
+
 shinyApp(ui,server)
