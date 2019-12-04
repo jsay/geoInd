@@ -80,7 +80,8 @@
     Made on =emacs= with =org-mode= to juggle with =R=, =LaTex= and
     =Markdown=.
 
-    Special thanks to [[https://fr.linkedin.com/in/pauline-mialhe][Pauline Mialhe]], [[https://fr.linkedin.com/in/vincent-larmet-bba997144][Vincent Larmet]], and [[https://www2.dijon.inra.fr/cesaer/membres/guillaume-royer/][Guillaume
+    Special thanks to [[https://fr.linkedin.com/in/pauline-mialhe][Pauline Mialhe]], [[https://fr.linkedin.com/in/vincent-larmet-bba997144][Vincent Larmet]], and
+    [[https://www2.dijon.inra.fr/cesaer/membres/guillaume-royer/][Guillaume
     Royer]] for their help with the application.
 
     Licence GNU GPL V3, copyright and licence notices must be
@@ -90,9 +91,9 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME:    DataPaper
   :EXPORT_LATEX_CLASS:  ManueStat
-  :EXPORT_TITLE:        @@latex: \vspace{-2cm} \huge\textbf{Données, modèles et application \emph{Shiny}\\ pour une classification statistique \\des vignobles de Côte-d'Or }@@
-  :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textbf{Jean-Sauveur AY} && \textbf{Mohamed HILAL} \\ < \url{jean-sauveur.ay@inra.fr} > && < \url{mohamed.hilal@inra.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup / INRA / Univ. Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard du docteur Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
-  :EXPORT_DATE:         /Data paper/ version 1.0 du Vendredi 12 juillet 2019 \vspace*{-.5cm}
+  :EXPORT_TITLE:        @@latex: \vspace{-1cm} \huge\textbf{Données et Modèles pour une Classification Statistique des Vignobles de Côte-d'Or }@@
+  :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textbf{Jean-Sauveur AY} && \textbf{Mohamed HILAL} \\ < \url{jean-sauveur.ay@inra.fr} > && < \url{mohamed.hilal@inra.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup Dijon / INRA / Univ. Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard Docteur Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
+  :EXPORT_DATE:         /Data paper/ version 1.2 du Mercredi 4 décembre 2019
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat} \usepackage{tocloft} \renewcommand{\abstractname}{Résumé} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm} \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} \renewcommand*\contentsname{Table des Matières}
   :END:
@@ -109,188 +110,186 @@ author: |
 #+end_export
 #+BEGIN_abstract
 Cet article présente la construction d'une base de données au niveau
-des parcelles cadastrales pour étudier les relations entre les
+des parcelles cadastrales pour étudier les relations entre leurs
 caractéristiques biophysiques (topographie, géologie, pédologie) et
-les appellations d'origine contrôlée (AOC) viticoles.  Sur les 31
+leurs appellations d'origine contrôlée (AOC) viticoles.  Sur les 31
 communes de la Côte-d'Or qui forment la côte de Beaune et la côte de
-Nuits, nous proposons une modélisation statistique qui permet de
-classifier l'ensemble des parcelles sur une échelle de qualité
-continue exclusivement à partir de leurs caractéristiques
-biophysiques.  Nous montrons en particulier la persistance d'effets
-communaux significatifs issus d'éléments historiques non reliés aux
-caractéristiques biophysiques des parcelles.  Les données, méthodes et
-prédictions du modèle sont disponibles sous licence GNU GPL V3 sur
+Nuits, ces données permettent d'estimer un modèle statistique
+expliquant la position des parcelles dans la hiérarchie des AOC à
+partir des caractéristiques naturelles et humaines.  Les prédictions
+issues du modèle permettent de préciser la hiérarchie des AOC en
+positionnant chaque parcelle sur une échelle de qualité continue
+uniquement selon ses attributs biophysiques.  Les données, modèles et
+prédictions sont disponibles sous licence GNU GPL V3 sur le serveur
 [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]] et sont consultables par le biais d'une
-application /Shiny/ sur [[http://github.com/jsay/geoInd/][http://github.com/jsay/geoInd/]].\\
+application hébergée à l'url [[https://cesaer-datas.inra.fr/geoind][https://cesaer-datas.inra.fr/geoind/]].
+Les\nbsp{}codes =R= permettant de reproduire l'intégralité des
+résultats sont également fournis.\\
 
 *Mots-clés*: Économie viti-vinicole ; signes de qualité ; recherche
 reproductible ; système d'information géographique ; modélisation
 économétrique.
 #+END_abstract
-#+Latex: \vspace{-.25cm}
 #+TOC: headlines 3
 ** Introduction
 *** Généralités sur les AOC                  :noheading:
 
-    Les appellations d'origine contrôlée (AOC) viticoles en Bourgogne
+    Les appellations d'origine contrôlée (AOC) viticoles de Bourgogne
     résultent de processus historiques complexes au cours desquels les
     parcelles ont été classifiées selon leurs caractéristiques
-    biophysiques au grès des rapports économiques, politiques et
-    sociaux en vigueur citep:Garc11,WJac11.  La classification
+    biophysiques et selon les rapports économiques, politiques et
+    sociaux en vigueur citep:Garc11,WJac11.  Ainsi, la classification
     actuelle est issue de plusieurs siècles de culture de la vigne, de
     production de vin et de négociation sur les dénominations.  Ces
     trois ensembles de pratiques forment les usages loyaux et
     constants selon la doctrine de l'institut national de l'origine et
     de la qualité (INAO) pour définir, reconnaître et gérer les AOC
     citep:Capu47,Humb11.  La complexité des informations contenues
-    dans la référence au lieu de production et leurs évolutions dans
-    le temps sont à la fois des forces et des faiblesses pour les AOC.
-    Elles permettent de simplifier les nombreux déterminants
-    biophysiques de la qualité des vins au risque d'une faible
-    pertinence et d'une opacité croissante pour les acteurs du marché
-    du vin.
+    dans la référence au lieu de production et la complexité de leurs
+    évolutions dans le temps sont à la fois des forces et des
+    faiblesses pour les AOC.  Elles permettent de simplifier les
+    nombreux déterminants biophysiques de la qualité des vins au prix
+    d'une perte d'information et d'une certaine opacité pour les
+    acteurs des marchés du vin.
     
 *** Économie des AOC                         :noheading:
 
-    La question de la transmission de l'information entre les
-    producteurs et les consommateurs sur la qualité des biens échangés
-    fait l'objet d'une littérature économique abondante citep:CMar04.
-    L'asymétrie d'information y est typiquement décrite comme une
-    défaillance de marché qui porte préjudice aux parties prenantes de
-    la relation commerciale.  Par contre, le recours aux indications
-    géographiques apparaît comme une solution partielle qui peut
-    segmenter artificiellement la production et générer des rentes non
-    justifiées pour les producteurs au détriment des consommateurs.
-    Nous nous concentrons dans cet article sur la capacité des AOC à
-    simplifier l'information sur les caractéristiques des lieux de
-    production, en laissant de côté la question de la pertinence de
-    cette information pour le marché.  Il s'agit de quantifier dans
-    quelle mesure la hiérarchie des AOC bourguignonnes en 5
-    catégories, Coteaux bourguignons < Bourgogne régional < Bourgogne
-    village < Premier cru < Grand cru, permet de résumer les nombreux
-    déterminants biophysiques de la qualité des vins (topographie,
-    géologie, pédologie).  Cette analyse statistique permet de mettre
-    en évidence des déterminants historiques de la hiérarchie des AOC
-    non reliés aux caractéristiques individuelles des parcelles mais
-    reliés à la commune à laquelle elles appartiennent.  Nous
-    interprétons ce résultat comme la manifestation de pouvoir de
-    négociation de certaines communes (selon l'influence de leurs
-    résidents, leur notoriété, ou leur proximité aux lieux de
-    décision) lors de la mise en place des AOC.
+    La référence au lieu de production permet de donner une certaine
+    indication composite sur la qualité des vins lors des échanges.
+    Une abondante littérature économique (synthétisée par
+    citealp:CMar04) montre qu'en diminuant l'asymétrie d'information
+    entre les vendeurs et les acheteurs, les AOC peuvent limiter cette
+    défaillance de marché préjudiciable aux deux parties prenantes.
+    La question de la nature de l'information contenue dans les AOC se
+    pose alors, en particulier la distinction de la part relative aux
+    processus naturels de la part relative aux processus humains.
+    Cette séparation est déterminante pour identifier les facteurs
+    naturels, immobiles et non-reproductibles, qui justifient
+    réellement la référence au lieu de production citep:Ay19.  Nous
+    présentons dans cet article la constitution de données et
+    l'estimation de modèles qui permettent d'opérer statistiquement
+    cette distinction.  Nous montrons la présence d'une hiérarchie
+    implicite entre les communes de la zone qui biaise l'information
+    transmise par les AOC sur les caractéristiques biophysiques des
+    parcelles.  Nous utilisons les prédictions de cette modélisation
+    pour classifier l'ensemble des parcelles sur une échelle continue
+    de qualité (entre 0 et 100) tout en corrigeant les effets
+    communaux issus de l'histoire.  Nous présentons cette information
+    par le biais d'une application cartographique libre.
 
 *** Sources de données                       :noheading:
 
-    Le travail sur les données consiste à apparier les informations
-    biophysiques des parcelles cadastrales aux AOC par l'utilisation
-    d'un système d'information géographique.  La Section [[#Sec:1]]
-    présente en détail la construction des données, avec en
-    particulier les références aux fichiers sources et le dictionnaire
-    des variables produites.  Ce premier travail aboutit à la
-    construction d'une base de données spatialisée librement
-    disponible sous licence GNU GPL V3 sur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]].  La
-    parcelle cadastrale est l'unité géographique de base qui permet
-    l'appariement de variables altimétriques du RGE
-    ALTI\textsuperscript{\textregistered} 5m (IGN),
-    @@latex:\textcolor{green}{d'un modèle d'occupation du sol (Hilal
-    et al., 2018)??}@@, de variables géologiques de Charm-50 (BRGM),
-    de variables pédologiques du Référentiel Pédologique de Bourgogne
-    (Gis Sol), de variables historiques sur les AOC en 1936 (MSH
-    Dijon) et de variables sur les lieux dits issus du Plan Cadastral
-    Informatisé (DGFiP).  Les données construites concernent
-    actuellement les 31 communes qui constituent la côte de Beaune et
-    la côte de Nuits, soient l'ensemble des vignobles du département
-    de la Côte-d'Or à l'exception des hautes côtes et du Châtillonnais
-    (voir \autoref{Fig:1}).  Cette base de données permet de relier
-    finement les AOC aux caractéristiques des parcelles dont les vins
-    sont issus, et peut ainsi être utilisée pour d'autres questions de
-    recherche.  Par contre, les versions brutes des données compilées
-    ne sont pas diffusables en l'état.  C'est ainsi que la Section
-    [[#Sec:1]] présente les traitements effectués, avec les codes R
-    reportés en Annexe, sans que les données qui servent à les
-    alimenter soient disponibles.  La partie reproductible de
-    l'article commence réellement dans la Section [[#Sec:2]] qui suit,
-    avec la présentation des principales statistiques descriptives
-    relatives aux données produites.
+    La Section [[#Sec:1]] présente la construction de la base de données
+    géographique disponible sous licence GNU GPL V3 sur le serveur
+    [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]].  La parcelle cadastrale est l'unité
+    élémentaire d'observation qui permet l'appariement des variables
+    sur les AOC actuelles (produites par l'INAO), sur les AOC de 1936
+    (produites par la MSH de Dijon), sur les lieux dits par le Plan
+    Cadastral Informatisé (produit par la DGFiP), sur l'altimétrie par
+    le RGE ALTI\textsuperscript{\textregistered} à 5 mètres (produit
+    par l'IGN), sur l'occupation du sol (produite par citealp:HJRV18),
+    sur la géologie par Charm-50 (produit par le BRGM) et sur la
+    pédologie par le Référentiel Pédologique de Bourgogne (produit par
+    le Gis Sol).  Les données ainsi constituées concernent l'ensemble
+    des parcelles des 31 communes inclues dans la côte de Beaune et la
+    côte de Nuits, soient l'ensemble des vignobles du département de
+    la Côte-d'Or à l'exception des hautes côtes et du Châtillonnais
+    (\autoref{Fig:1}).  Cette base de données permet de relier
+    finement les AOC aux caractéristiques biophysiques des parcelles
+    dont les vins sont issus, et possède ainsi une utilisation plus
+    large que celle présentée ici.
 
 *** Modèle économétrique                     :noheading:
     
-    La Section [[#Sec:3]] contient ensuite le détails de l'estimation du
-    modèle statistique dont la spécification est décrite plus
-    extensivement dans un article associé citep:Ay19.  Le principe de
-    la modélisation est d'utiliser la structure hiérarchique qui
-    existe entre les différents niveaux des AOC pour simplifier le
-    rôle des caractéristiques biophysiques au travers d'une variable
-    latente de qualité des vignes.  Cette variable continue représente
-    un niveau ordinal de qualité des vignes tel que révélé par la
-    hiérarchie des AOC actuelles.  Nous présentons l'estimation d'un
-    modèle ordonné additivement semi-paramétrique (OGAM,
-    citealp:WPSa16) qui permet de prédire correctement près de 90% des
-    niveaux d'AOC par un lissage spatial fin.  Ce modèle permet
-    d'estimer non-paramétriquement l'effet de chaque variable
-    biophysique sur la hiérarchie des AOC.  Il permet également
-    d'identifier des effets communaux indépendants des variables
-    biophysiques, potentiellement issus de facteurs humains tels que
-    la réputation de la commune, la proximité à la ville centre
-    (Dijon) ou l'antériorité des syndicats de producteurs
-    citep:Jacq09.  L'estimation d'effets communaux significatifs
-    permet de hiérarchiser chaque commune de la zone en fonction de la
-    probabilité qu'une de ses parcelles soit plus haute dans la
-    hiérarchie qu'une parcelle similaire prise au hasard sur la zone
-    citep:AKat17.  Cela nous permet également de corriger ces effets
-    communaux dans la variable latente de qualité des vignes déduite
-    des AOC, ces effets étant /a priori/ non reliés à la qualité des
-    vins produits.
+    La Section [[#Sec:3]] présente l'estimation des modèles statistiques
+    dont les spécifications sont décrites plus extensivement dans un
+    article associé citep:Ay19.  Le principe est d'utiliser la
+    structure hiérarchique des AOC (Coteaux bourguignons < Bourgogne
+    régional < Villages < Premiers crus < Grands crus) pour les relier
+    aux caractéristiques biophysiques des parcelles par une variable
+    latente de qualité des vignes.  Nous montrons que cette variable
+    continue non observable peut être déduite des AOC actuelles de
+    manière flexible.  Les estimations s'effectuent par des modèles
+    ordonnés additifs généralisés (OGAM pour /ordered generalized
+    additive model/, citealp:WPSa16) qui prédisent correctement près
+    de 90 % des niveaux AOC actuels. Ils permettent également
+    d'estimer semi-paramétriquement l'effet de chaque variable
+    biophysique sur la hiérarchie, ainsi que des effets communaux
+    issues de l'histoire.  Ces estimations permettent de corriger les
+    effets communaux pour prédire la qualité des vignes uniquement à
+    partir des caractéristiques biophysiques.
 
 *** L'application                            :noheading:
 
-    Les prédictions issues du modèle statistique sont reportées
-    (corrigées et non corrigées des effets communaux) dans la base de
-    donnée issue de cette recherche.  Ces données alimentent également
-    une application /Shiny/ dont le code et le manuel d'utilisation
-    sont présentés dans la Section [[#Sec:4]].  Cette application peut
-    être utilisée localement (moyennant la présence du [[https://cran.r-project.org/][logiciel R]] sur
-    l'ordinateur de l'utilisateur) ou consultable sur internet à
-    l'[[https://geoind.shinyapps.io/application/][adresse dédiée]].  Par le biais de cette application,
-    l'utilisateur peut saisir une référence de vin à partir
-    d'informations typiquement disponibles sur l'étiquette de la
-    bouteille afin d'identifier géographiquement le lieu de production
-    du raisin et son niveau de qualité (avec ou sans correction) sur
-    une échelle normalisée de 0 à 100.  Cette information permet une
-    évaluation plus précise que la hiérarchie actuelle des AOC en 5
-    niveaux, et permet en outre de situer ce vin par rapport aux
-    autres vins du même niveau hiérarchique.  Elle permet ainsi
-    d'augmenter l'information disponible au niveau du consommateur
-    pour effecteur ses choix de vin.  Il est important de mentionner
-    que la classification obtenue se base exclusivement sur les AOC
-    actuelles et à ce titre ne contient aucune appréciation subjective
-    sur l'importance des différents facteurs biophysiques ou olfactif
-    censés influer sur la qualité d'un vin.  La classification obtenue
-    est déduite de la hiérarchie actuelle des AOC qui, au regard de la
-    hiérarchie de prix qu'elle produit, semble crédible pour les
-    acteurs du marché.
+    La Section [[#Sec:4]] présente le codage et l'utilisation de
+    l'application /Shiny/ citep:CCAX19 qui permet de consulter la
+    classification continue des parcelles de vignes, telle que prédite
+    par la modélisation statistique.  L'utilisateur peut ainsi saisir
+    les informations typiquement disponibles sur les étiquettes des
+    bouteilles de vin de Bourgogne (niveau de l'AOC dans la
+    hiérarchie, commune de production, et lieux dit de la parcelle)
+    pour identifier géographiquement l'ensemble des parcelles et leur
+    niveau de qualité sur une échelle de 0 à 100 (avec ou sans
+    correction des effets communaux).  Cette information permet une
+    évaluation plus précise de la qualité des vins que la hiérarchie
+    actuelle des AOC en 5 niveaux, sans introduire de facteurs
+    subjectifs exogènes.  Cela permet en outre d'améliorer
+    l'information disponible pour les consommateurs à partir
+    d'informations déjà présentes sur les étiquettes.  Chaque vin
+    identifié peut alors être comparé aux autres vins du même niveau
+    hiérarchique ou aux vins d'autres niveaux hiérarchiques afin
+    d'évaluer sa qualité relative.
 
-*** Détails techniques                       :noheading:
+*** Structure                                :noheading:
 
-    Une part de subjectivité persiste toutefois dans la classification
-    proposée.  Elle est relative à la spécification du modèle
-    statistique, et le fait d'avoir favorisé des variables
-    biophysiques pour décrire la relation entre les lieux de
-    production et la qualité des vins.  Le débat sur l'articulation
-    des facteurs humains et des facteurs naturels de la qualité vin
-    existe depuis plus d'un demi-siècle et produit des discussions
-    toujours d'actualité citep:Dion52,DChe15.  C'est pour alimenter ce
-    débat que les analyses présentées dans cet article sont totalement
-    reproductibles à partir de la base de donnée produite.  Les codes
-    pour l'estimation du modèle sont reportés dans l'article, afin de
-    permettre l'estimation de modèles alternatifs.  L'appariement de
-    données supplémentaires pour relier les AOC aux caractéristiques
-    des lieux est également possible par la géolocalisation des
-    parcelles cadastrales.  La transparence des analyses permet aux
-    résultats d'être discutés et contestés afin de faire l'objet d'une
-    appropriation par les chercheurs, les décideurs, les
-    professionnels du secteur, ou les amateurs de vin.
+    Ce document contient les codes =R= citep:Core19 qui permettent de
+    reproduire l'ensemble des tables et des figures à partir des
+    données disponibles sur le serveur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]]. La
+    version du logiciel et des packages utilisés au moment de la
+    rédaction de ce document sont reportés en Annexe 1.  L'intégralité
+    du code relatif à l'application /Shiny/ est également reportée en
+    Annexes 4, 5 et 6, afin qu'elle puisse être lancée localement,
+    voire modifiée, par les utilisateurs.  La version la plus récente
+    des différents codes reportés dans ce document est accessible sur
+    un répertoire distant à [[https://github.com/jsay/geoInd][https://github.com/jsay/geoInd]].
 
-** Construction des données
+*** Figure                                   :noheading:
+
+#+begin_export latex
+\vspace{.5cm}
+\begin{figure}[!h]
+  \centering\hspace{-2cm}
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .35]{./Figures/MapCom1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .35]{./Figures/MapCom2}
+\end{minipage}\vspace*{.5cm}
+\caption{\textbf{La zone de la \emph{Côte d'Or} étudiée, sa
+    topographie
+    et ses appellations d'origine contrôlées}\\[.25cm]
+  {\footnotesize
+    Source : INRA / INAO / MSH / DGFiP / IGN / BRGM / Gis Sol.\\
+    Lecture : La carte de gauche représente l'altitude des parcelles,
+    catégorisée en 8 classes de 50 mètres d'amplitude.  Situant la
+    ville de Dijon au Nord de la zone, elle permet de faire apparaître
+    la topographie de la Côte viticole majoritairement orientée à
+    l'Est mais dont la présence de vallées sèches (appelées combes)
+    produit des variations localisées.  La carte de droite présente
+    les 31 communes de la zone, qui constituent la dimension
+    horizontale des AOC viticoles (il n'y a pas de hiérarchie
+    explicite entre les communes).  La dimension verticale est
+    représentée par la hiérarchie en 5 niveaux reportée sur cette même
+    carte.  Ces deux cartes sont reproductibles à partir des
+    données présentées dans cet article, les codes utilisés sont
+    consultables à
+    \href{https://github.com/jsay/geoInd}{https://github.com/jsay/geoInd}.}}\label{Fig:1}
+\end{figure}
+#+end_export
+
+** Présentation des données
   :PROPERTIES:
   :CUSTOM_ID: Sec:1
   :END:
@@ -667,32 +666,106 @@ LieuDit <- merge(MapLieuDits[, c(2, 4, 6)], DatCom, by= "CODECOM")
 writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
 #+end_src
 
-*** Les AOC à la parcelle cadastrale
+*** Les AOC actuelles
+**** Chargement                              :noheading:
 
-    L'unité géographique de base est la parcelle cadastrale dont la
-    géométrie est issue de la BD parcellaire de l'IGN version 2014
-    pour la Côte-d'Or téléchargée le XX/XX/2018.  Ces données sont
-    disponibles gratuitement pour la recherche, elle ne peuvent pas
-    faire l'objet d'une diffusion à l'état brut.  Trois traitements
-    ont été effectués au préalable et ne sont pas reportés en détail
-    ici.  Nous avons calculé avec un système d'information
-    géographique les caractéristiques géométriques (surface,
-    périmètre, et distance maximale entre deux sommets).  Nous avons
-    ensuite créé un identifiant pour apparier les parcelles avec les
-    données du modèle numérique de terrain présenté dans la
-    sous-section suivante.  Nous avons enfin apparié les délimitations
-    parcellaire des AOC Viticoles de l'INAO disponible à l'adresse
-    \url{https://www.data.gouv.fr/fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao}
-    sous licence ouverte.  Les codes R correspondants à ces opérations
-    sont reportés en Annexe A.1.1.
+    Pour la construction des données, l'unité géographique de base est
+    la parcelle cadastrale des 31 communes viticoles de la zone
+    présentée dans la \autoref{Fig:1}.  La géométrie des parcelles est
+    issue de la BD parcellaire de l'IGN dans sa version 2014 pour la
+    Côte-d'Or (téléchargement le 09/10/2015).  Nous l'avons enrichie
+    d'attributs décrivant la géométrie des parcelles avec l'ajout de
+    la surface, du périmètre et de la distance maximale entre deux
+    sommets pour chaque polygone cadastral citep:CBBD15.  Les
+    polygones cadastraux ont ensuite été appariés par jointure aux
+    délimitations parcellaires des AOC viticoles produites par l'INAO
+    disponibles à l'adresse
+    [[https://www.data.gouv.fr/fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao][https://www.data.gouv.fr/fr/datasets/delimitation-parcellaire-des-aoc-viticoles-de-linao]]
+    sous licence ouverte (téléchargement le 21/08/18).
+
+    Le résultat de cette étape et des autres étapes ci-dessous
+    relatives à la construction des données sont disponibles sur le
+    serveur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]].  Le code ci-dessous permet aux
+    utilisateurs de =R= de charger directement la version la plus
+    récente des données par l'utilisation du package =dataverse=
+    disponible sur le CRAN citep:Leep17.  Nous constatons que la
+    version actuelle de la base compte $110\,350$ parcelles et 63
+    variables.  Les variables issues de cette première étape sont
+    présentes dans les colonnes 2 à 16.
+
+#+begin_src R :wrap example
+library(dataverse) ; library(sp)
+Sys.setenv("DATAVERSE_SERVER" = "data.inra.fr")
+GeoRasRaw <- get_file("GeoRas.Rda", "https://doi.org/10.15454/ZZWQMN")
+writeBin(GeoRasRaw, "GeoRas.Rda") ; load("GeoRas.Rda")
+dim(Geo.Ras) ; names(Geo.Ras)[ 2: 16]
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 110350     67
+
+ [1] "IDU"     "CODECOM" "AREA"    "PERIM"   "MAXDIST" "PAOC"   
+ [7] "BGOR"    "BOUR"    "VILL"    "COMM"    "PCRU"    "GCRU"   
+[13] "AOC"     "AOCtp"   "AOClb"
+#+end_example
+
+    L'objet =Geo.Ras= téléchargé est un objet de la classe
+    =SpatialPolygonsDataFrame=, définie par le package =sp=
+    citep:BPGR13 que l'on charge au préalable.  Le dictionnaire de ces
+    15 variables relatives aux parcelles cadastrales est reporté dans
+    la Table [[Tab:1]] ci-dessous.  L'information brute issue de la
+    superposition de la couche cadastrale avec la couche INAO sur les
+    AOC actuelles est présente dans les variables =PAOC= à =GCRU=.
+    Ces variables contiennent la valeur $1$ lorsque que le niveau AOC
+    est revendicable sur la parcelle correspondante et $0$ sinon.  Les
+    $49\,718$ observations manquantes qui apparaissent pour chacune de
+    ces 7 variables correspondent aux parcelles cadastrales hors du
+    périmètre des AOC.
+
+**** Dictionnaire                            :noheading:
+
+    Nous avons ensuite recodé cette information dans les trois
+    dernières variables =AOC=, =AOCtp= et =AOClb= qui sont plus
+    opérationnelles pour l'analyse statistique.  Selon le principe des
+    replis (issu de la doctrine de l'INAO), les parcelles d'un niveau
+    hiérarchique supérieur peuvent toujours être revendiquées dans un
+    niveau inférieur.  La superposition des couches de l'INAO conduit
+    donc à la présence de plusieurs niveaux d'AOC sur une même
+    parcelle, ce qui entre en contradiction avec une autre doctrine de
+    l'INAO, à savoir qu'il est interdit de revendiquer des AOC
+    différentes pour un même produit.  Dans les faits, les producteurs
+    revendiquent très souvent l'AOC maximale à laquelle ils peuvent
+    prétendre.  La variable =AOC= que nous avons créée représente
+    cette valeur pour chacune des parcelles, elle est codée =0= pour
+    les parcelles hors AOC, =1= pour les Coteaux bourguignons, =2=
+    pour les Bourgognes régionaux et jusqu'à =5= pour les Grands crus.
+    De plus, les informations présentes sur les étiquettes des vins
+    peuvent correspondre soit à des AOC soit à des dénominations au
+    sein du système (le plus souvent sans que cette distinction soit
+    claire pour le consommateur).  Les modalités prises par la
+    variable =AOClb= est une combinaison du nom des appellations et
+    des dénominations (la variable =AOCtp= code cette combinaison).
+    Les modalités correspondent souvent au nom de l'AOC maximale
+    revendicable.  Pour les Bourgognes régionaux, nous n'utilisons pas
+    la dénomination "Bourgogne Côte d'Or" plus haute dans la
+    hiérarchie que l'AOC Bourgogne mais peu connue du fait de sa
+    faible antériorité (la dénomination a été crée en 2015).
+    D'ailleurs, l'analyse se limite à la Côte d'Or où les
+    délimitations "Bourgogne Côte d'Or" et "Bourgognes régionaux" sont
+    très proches.  C'est principalement pour les Premiers Crus que la
+    variable =AOClb= contient les dénominations géographiques, car
+    l'AOC ne fait référence qu'au niveau village alors que les
+    dénominations permettent d'identifier plus précisément les lieux
+    dits des parcelles.
 
 #+begin_src R :exports results :results value :colnames yes :rownames no
 (labs <- data.frame(NOM= paste0("=", c("IDU", "CODECOM", "AREA", "PERIM",
-                                       "MAXDIST", "PAR2RAS","PAOC", "BGOR",
+                                       "MAXDIST", "PAOC", "BGOR",
                                        "BOUR", "VILL", "COMM", "PCRU",
                                        "GCRU", "AOC","AOCtp", "AOClb"),
                                 "="), "",
-                    TYPE= c(rep("/Caractère/", 2), rep("/Numérique/", 4),
+                    TYPE= c(rep("/Caractère/", 2), rep("/Numérique/", 3),
                             rep("/Indicatrice/", 7), "/Numérique/",
                             rep("/Caractère/", 2)), "",
                     DESCRIPTION=
@@ -701,14 +774,13 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
                           "Surface calculée de la parcelle cadastrale (en mètres carrés)",
                           "Périmètre calculé de la parcelle cadastrale (en mètres)",
                           "Distance maximale calculée entre deux sommets (en mètres)",
-                          "Identifiant pour appariement avec le modèle numérique de terrain",
                           "1 si la parcelle est dans au moins une AOC",
-                          "1 si la parcelle est dans le niveau Coteaux Bourguignon",
-                          "1 si la parcelle est dans le niveau Bourgogne Régional",
-                          "1 si la parcelle est dans le niveau Bourgogne Village",
-                          "1 si la parcelle est dans le niveau Bourgogne Communal",
-                          "1 si la parcelle est dans le niveau Premier Cru",
-                          "1 si la parcelle est dans le niveau Grand Cru",
+                          "1 si la parcelle est dans le niveau Coteaux bourguignon",
+                          "1 si la parcelle est dans le niveau Bourgogne régional",
+                          "1 si la parcelle est dans le niveau Bourgogne village",
+                          "1 si la parcelle est dans le niveau Bourgogne communal",
+                          "1 si la parcelle est dans le niveau Premier cru",
+                          "1 si la parcelle est dans le niveau Grand cru",
                           "Rang de la parcelle dans la hiérarchie des AOC (entre 0 et 5)",
                           "=Appel= si le libellé est une appellation, =Denom= pour dénomination",
                           "Libellé de l'appellation ou de la dénomination selon la variable =AOCtp=")))
@@ -725,81 +797,280 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
 | =AREA=    |   | /Numérique/   |   | Surface calculée de la parcelle cadastrale (en mètres carrés)            |
 | =PERIM=   |   | /Numérique/   |   | Périmètre calculé de la parcelle cadastrale (en mètres)                  |
 | =MAXDIST= |   | /Numérique/   |   | Distance maximale calculée entre deux sommets (en mètres)                |
-| =PAR2RAS= |   | /Numérique/   |   | Identifiant pour appariement avec le modèle numérique de terrain         |
 | =PAOC=    |   | /Indicatrice/ |   | 1 si la parcelle est dans au moins une AOC                               |
-| =BGOR=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Coteaux Bourguignon                  |
-| =BOUR=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne Régional                   |
-| =VILL=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne Village                    |
-| =COMM=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne Communal                   |
-| =PCRU=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Premier Cru                          |
-| =GCRU=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Grand Cru                            |
+| =BGOR=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Coteaux bourguignon                  |
+| =BOUR=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne régional                   |
+| =VILL=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne village                    |
+| =COMM=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Bourgogne communal                   |
+| =PCRU=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Premier cru                          |
+| =GCRU=    |   | /Indicatrice/ |   | 1 si la parcelle est dans le niveau Grand cru                            |
 | =AOC=     |   | /Numérique/   |   | Rang de la parcelle dans la hiérarchie des AOC (entre 0 et 5)            |
 | =AOCtp=   |   | /Caractère/   |   | =Appel= si le libellé est une appellation, =Denom= pour dénomination     |
 | =AOClb=   |   | /Caractère/   |   | Libellé de l'appellation ou de la dénomination selon la variable =AOCtp= |
 
-    L'objet =Geo.Cad=, de la classe =SpatialPolygonsDataFrame=
-    associée au package =sp=, contient $110\,350$ parcelles et 16
-    variables que la Table [[Tab:1]] suivante présente plus en détails.
-    L'information issue de la superposition avec la couche INAO sur
-    les AOC est présente dans les variables =PAOC= à =GCRU=.  Les
-    $49\,718$ valeurs manquantes qui apparaissent correspondent aux
-    parcelles hors périmètres AOC.  Nous avons retravaillé
-    l'information brute des données INAO dans les trois variables
-    =AOC=, =AOCtp= et =AOClb= qui sont plus opérationnelles pour
-    l'analyse statistique.  Selon le principe des replis de la
-    doctrine de l'INAO, les parcelles d'un niveau hiérarchique
-    supérieur peuvent toujours être revendiquées dans un niveau
-    inférieur.  La superposition des couches de l'INAO conduit à la
-    présence de plusieurs AOC sur une même parcelle, ce qui entre en
-    contradiction avec une autre partie de la doctrine de l'INAO, à
-    savoir qu'il est interdit de revendiquer des AOC différentes pour
-    un même produit.  Dans les faits, les producteurs revendiquent
-    très souvent l'AOC maximale à laquelle ils peuvent prétendre.  La
-    variable =AOC= représente cette valeur pour chacune des parcelles,
-    elle est codée =0= pour les parcelles hors AOC, =1= pour les
-    Coteaux bourguignons, =2= pour les Bourgognes régionaux, jusqu'à
-    =5= pour les Grands crus.  Par contre, les informations présentes
-    sur l'étiquette des vins peuvent être des appellations ou des
-    dénominations au sein du système des AOC (même si cette
-    distinction n'est pas toujours claires pour les consommateurs,
-    nous utilisons AOC comme le terme générique qui englobe les deux
-    dimensions en précisant lorsque c'est nécessaire).  Le libellé
-    =AOClb= contient donc généralement le nom de l'appellation
-    maximale de la parcelle, sauf pour les Bourgognes régionaux (ou la
-    dénomination Bourgogne côte d'or est plus haute dans la hiérarchie
-    mais peu utilisée du fait de sa faible antériorité, l'appellation
-    a été crée en 2015) et les Premiers Crus (dont l'appellation ne
-    fait référence qu'au village alors que les dénominations
-    permettent d'identifier les parcelles).
+**** Figure                                  :noheading:
+
+     La distribution de l'ensemble des parcelles de la zone entre la
+     dimension horizontale (entre les communes) et verticale des AOC
+     (entre les niveaux hiérarchiques) est présentée dans la
+     \autoref{Fig:2} suivante, dont le code est reporté ci-dessous.
+     Pour la clarté du code, les objets et fonctions de configuration
+     graphique =my.lab=, =my.pal=, =my.par=, =my.key= et =my.pan= sont
+     reportés dans l'Annexe 2.  Ces objets doivent être chargés en
+     préalable pour le fonctionnement du code en local, en plus des
+     packages =lattice= et =RColorBrewer=.
+
+#+begin_src R :results graphics :exports code :height 9 :width 13 :file "./Figures/InterGIs.pdf"
+tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
+Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
+Geo.Fig <- subset(Geo.Ras, !is.na(AOClb))
+fig.dat <- aggregate(model.matrix(~ 0+ factor(Geo.Fig$AOC))*
+                     Geo.Fig$AREA/ 1000, by= list(Geo.Fig$LIBCOM), sum)
+names(fig.dat) <- c("LIBCOM", "BGOR", "BOUR", "VILL", "PCRU", "GCRU")
+fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, lev= rev(levels(fig.dat$LIBCOM)))
+fig.crd <- t(apply(fig.dat[, -1], 1, function(t) cumsum(t)- t/2))
+fig.lab <- round(t(apply(fig.dat[, -1], 1, function(t) t/ sum(t)))* 100)
+barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10500),
+         xlab="Surfaces sous appellation d'origine contrôlée (hectare)",
+         data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
+         par.settings= my.par, auto.key= my.key, panel= my.pan)
+#+end_src
+
+#+CAPTION: *Croisement entre les niveaux AOC (différentiation verticale) et les communes (différentiation horizontale)*
+#+ATTR_LATEX: :options scale= .5
+#+NAME: Fig:2
+#+RESULTS:
+[[file:./Figures/InterGIs.pdf]]
+
+#+begin_export latex
+\begin{figure}[!h]
+  \centering\vspace*{-.5cm}
+ \includegraphics[scale= .5]{./Figures/InterGIs}
+ \caption{\textbf{Croisement entre les communes (dimension
+     horizontale) et les niveaux (dimension verticale).}\\[.25cm]
+   {\footnotesize
+     Source : INRA / INAO / MSH / DGFiP / IGN / BRGM / GisSol.\\
+     Lecture : Pour chacune des 31 communes reportées en ordonnées, le
+     graphique présente les surfaces de chacun des 5 niveaux
+     hiérarchiques en absisses.  Les pourcentages intra-communaux sont
+     reportés à l'intérieur du graphique.  Le niveau d'AOC de chaque
+     parcelle est sélectionnée par la méthode du maximum revendicable
+     telle que codée dans la variable \texttt{AOC} de l'objet
+     \texttt{Geo.Ras}.}}\label{Fig:2}
+\end{figure}
+#+end_export
+
+*** Enrichissement des AOC historiques
+**** Dictionnaire                            :noheading:
+
+     Nous enrichissons ensuite ces données parcellaires de variables
+     sur des classifications historiques obtenues auprès de la Maison
+     des Sciences de l'Homme de Dijon.  Alors que l'INAO a été créé en
+     1936, la première délimitation officielle des parcelles viticoles
+     s'est opérée entre 1936 et 1940 sur la zone d'intérêt.  Elle fut
+     basée sur deux classements antérieurs non officiels: celui de
+     Jules Lavalle de 1855 citep:Lava55 et le Classement du Comité
+     d’Agriculture et de Viticulture de l'Arrondissement de Beaune de
+     1860 citep:WJac11.  Nous compilons ces différentes
+     classifications pour obtenir une hiérarchie des parcelles en 3
+     niveaux: Régional < Village < Grand Cru que nous considérons
+     comme les niveaux d'AOC en 1936.  Cette classification historique
+     est moins détaillée que l'actuelle (3 niveaux au lieu de 5) car
+     l'AOC Coteaux bourguignons n'existait pas encore (les niveaux
+     ordinaires et grands ordinaires qui la précédèrent n'étaient pas
+     délimités) tout comme les Premiers Crus qui ont été instaurés par
+     décret en 1943 citep:Luca17.  L'appariement s'effectue par le
+     centroïde des parcelles cadastrales car la géométrie des
+     polygones ne correspond pas parfaitement (à la fois par la
+     numérisation des cartes historiques et parce que le cadastre a
+     changé).  La faible taille des parcelles (0.2 ha en moyenne)
+     permet de faire confiance en cette procédure d'appariement,
+     confirmée par de nombreuses vérifications manuelles.  La base
+     parcellaire est ainsi enrichie des 2 variables =AOC1936lab= et
+     =AOC36lvl= présentées dans la Table [[Tab:5]].
+
+#+begin_src R :exports results :results value :colnames yes :rownames no
+(laba <- data.frame(
+     NOM= paste0("=", c("AOC36lab", "AOC36lvl"), "="), "",
+     TYPE= rep("/Caractère/", 2), "",     
+     DESCRIPTION=
+         c("Libellé de l'appellation en 1936 (56 modalités)",
+           "Rang de la parcelle dans la hiérarchie des AOC de 1936 (0, 3 ou 5)")))
+#+end_src
+
+#+ATTR_LATEX: :environment tabularx :width \textwidth :align llllX
+#+CAPTION: *Nom, type et description des variables issues des AOC historiques*
+#+NAME: Tab:5
+#+RESULTS:
+| NOM        |   | TYPE        |   | DESCRIPTION                                                |
+|------------+---+-------------+---+------------------------------------------------------------|
+| =AOC36lab= |   | /Caractère/ |   | Libellé de l'appellation en 1936 (56 modalités)            |
+| =AOC36lvl= |   | /Caractère/ |   | Rang de la parcelle dans la hiérarchie des AOC de 1936 (0, 3 ou 5) |
+
+**** Code                                    :noheading:
+    
+    Ces deux nouvelles variables correspondent aux colonnes 56 et 57
+    de la base =Geo.Ras= téléchargée sur le serveur.  Le croisement de
+    la hiérarchie des AOC de 1936 avec la hiérarchie des AOC actuelles
+    dans le code ci-dessous montre que les surfaces sous AOC étaient
+    sensiblement plus réduites.  Elles représentaient 27% des
+    parcelles de la zone au lieu de 55% actuellement.  Près de
+    $165\,000$ parcelles hors AOC en 1936 le sont actuellement (tous
+    niveaux confondus) alors que seulement $2\,610$ sont dans le cas
+    inverse.  La majorité des parcelles en niveaux Village et Grand
+    cru actuellement l'étaient déjà en 1936, les Premiers Crus actuels
+    étaient principalement en Village, et les Coteaux bourguignons et
+    les Bourgogne niveau régional étaient hors AOC.
+
+#+begin_src R :wrap example
+names(Geo.Ras)[ 56: 57]
+table(Geo.Ras$AOC36lvl, Geo.Ras$AOC)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "AOC36lab" "AOC36lvl"
+   
+        0     1     2     3     4     5
+  0 47056  9832 13337 10554   593    44
+  3  2586    15   565 15529  8226   266
+  5    24     0     1    14     3  1635
+#+end_example
+
+*** Enrichissement des lieux dits
+**** Dictionnaire                            :noheading:
+
+     Nous utilisons également le Plan Cadastral Informatisé vecteur
+     présent sur le site officiel =data.gouv.fr= à l'adresse
+     https://cadastre.data.gouv.fr/datasets/plan-cadastral-informatise
+     téléchargé pour la Côte-d'Or (21) le 13/01/2019.  Ces données
+     sont en licence ouverte Etalab, elles nous permettent d'obtenir
+     les lieux dits pour les parcelles viticoles de la zone, en plus
+     de certaines variables communales agrégées présentées dans la
+     Table [[Tab:6]].  Une attention particulière est portée sur les lieux
+     dits dont les intitulés doivent être croisés avec le nom des
+     communes pour être uniques (un même nom de lieu dit peut être
+     présent sur plusieurs communes).  Comme la géométrie des lieux
+     dits et des parcelles de l'IGN colle parfaitement, nous pouvons
+     enrichir les données parcellaires directement par la jointure des
+     polygones.
+
+#+begin_src R :exports results :results value :colnames yes :rownames no
+(labd <- data.frame(
+     NOM= paste0("=", c("LIEUDIT", "CLDVIN", "LIBCOM", "XCHF", "YCHF",
+                        "ALTCOM", "SUPCOM", "POPCOM", "CODECANT",
+                        "REGION"), "="), "",
+     TYPE= c(rep("/Caractère/", 3), rep("/Numérique/", 3),
+             "/Caractère/", "/Numérique/", "/Caractère/", "/Caractère/"),
+     "",     
+     DESCRIPTION=
+         c("Libellé du lieu dit de la parcelle (2691 modalités)",
+           "Identifiant du lieu dit de la parcelle (2691 modalités)",
+           "Libellé de la commune de la parcelle (31 modalités)",
+           "Latitude du chef-lieu de la commune (système Lambert 93)",
+           "Longitude du chef-lieu de la commune (système Lambert 93)",
+           "Altitude du point culminant de la commune (mètre)",
+           "Superficie de la commune de la parcelle (hectare)",
+           "Population de la commune de la parcelle en 2015 (millier d'hab)",
+           "Identifiant du canton d'appartenance (2 caractères)",
+           "Region viticole (=CDB= pour côte de Beaune, =CDN= pour côte de Nuits)")))
+#+end_src
+
+#+ATTR_LATEX: :environment tabularx :width \textwidth :align llllX
+#+NAME: Tab:6
+#+CAPTION: *Nom, type et description des variables issues des lieux dits*
+#+RESULTS:
+| NOM        |   | TYPE        |   | DESCRIPTION                                                           |
+|------------+---+-------------+---+-----------------------------------------------------------------------|
+| =LIEUDIT=  |   | /Caractère/ |   | Libellé du lieu dit de la parcelle (2691 modalités)                   |
+| =CLDVIN=   |   | /Caractère/ |   | Identifiant du lieu dit de la parcelle (2691 modalités)               |
+| =LIBCOM=   |   | /Caractère/ |   | Libellé de la commune de la parcelle (31 modalités)                   |
+| =XCHF=     |   | /Numérique/ |   | Latitude du chef-lieu de la commune (système Lambert 93)              |
+| =YCHF=     |   | /Numérique/ |   | Longitude du chef-lieu de la commune (système Lambert 93)             |
+| =ALTCOM=   |   | /Numérique/ |   | Altitude du point culminant de la commune (mètre)                     |
+| =SUPCOM=   |   | /Caractère/ |   | Superficie de la commune de la parcelle (hectare)                     |
+| =POPCOM=   |   | /Numérique/ |   | Population de la commune de la parcelle en 2015 (millier d'hab)       |
+| =CODECANT= |   | /Caractère/ |   | Identifiant du canton d'appartenance (2 caractères)                   |
+| =REGION=   |   | /Caractère/ |   | Region viticole (=CDB= pour côte de Beaune, =CDN= pour côte de Nuits) |
+**** Code                                    :noheading:
+
+     Les variables issues de cette étape se retrouvent dans les
+     colonnes 58 à 66 de l'objet =Geo.Ras= téléchargé sur le serveur.
+     Comme reporté dans le code ci-dessous, nous pouvons calculer la
+     distance euclidienne (à vol d'oiseau) entre les centroïdes de
+     chaque parcelle et le centroïde du chef lieu de la commune
+     d'appartenance.  Nous obtenons une distance moyenne de 1 km 200,
+     en cohérence avec la taille des communes de la zone (environ 2.5
+     km$^2$).  Notons que $6\,426$ parcelles de la BD parcellaire sont
+     absentes du Plan Cadastral Informatisé.  Elles correspondent à
+     environ 4 % de la base initiale et n'ont donc pas été appariées
+     (des valeurs omises sont reportées pour ces variables).  Ces
+     parcelles sont pour la plupart hors AOC et se concentrent sur les
+     communes les plus urbanisées, telles que Chenôve,
+     Marsannay-la-Côte et Beaune.  Ces valeurs manquantes semblent
+     correspondre à des espaces bâtis qui ne peuvent pas être classés
+     en AOC, mais des vérifications manuelles n'ont pas suffit pour
+     statuer définitivement sur ce point.  Ces valeurs manquantes sont
+     exclues de l'analyse statistique, elles ne sont pas décisives
+     pour les estimations présentées par la suite.
+
+#+begin_src R :wrap example
+Geo.Ras$DISTCHF <- sqrt(((Geo.Ras$XL93- Geo.Ras$XCHF* 100))^2
+                        + ((Geo.Ras$YL93- Geo.Ras$YCHF* 100))^2)
+names(Geo.Ras)[ 58: 66] ; summary(Geo.Ras$DISTCHF)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "LIEUDIT"  "CLDVIN"   "LIBCOM"   "XCHF"     "YCHF"     "ALTCOM"  
+[7] "SUPCOM"   "POPCOM"   "CODECANT"
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+      0     595    1049    1230    1679    6314    6425
+#+end_example
 
 *** Enrichissement de la topographie
+**** Dictionnaire                            :noheading:
 
-    Les données sur l'altimétrie sont issues du modèle numérique de
-    terrain RGE ALTI\textsuperscript{\textregistered} 5m (IGN), sous
-    licence XX.  Un premier traitement non reporté a été l'attribution
-    de l'identifiant =PAR2RAS= aux cellules du raster par
-    superposition avec le fond vectoriel présenté précédemment.
-    @@latex:\textcolor{green}{Nous avons ensuite enrichi les données
-    raster d'un mode d'occupation des sol (Hilal et al., 2018)}@@.
-    Nous avons enfin calculé les variables que sont l'altitude, la
-    pente, l'exposition et les radiations solaires
-    @@latex:\textcolor{green}{ plus détails sur les calculs }@@.  À
-    partir des plus de 14 millions de cellules pour 13 variables, le
-    code en Annexe permet l'agrégation des variables raster au niveau
-    des parcelles.  Pour le passage des variables altimétriques
-    initialement disponibles au format raster vers les parcelles au
-    format vectoriel, nous calculons des moyennes à l'échelle des
-    parcelles, sachant que d'autres méthodes d'agrégation ont été
-    utilisées sans différences notables sur les résultats.
+    L'enrichissement des variables biophysiques sur les parcelles
+    cadastrales commence avec l'appariement d'informations raster
+    issues d'un modèle numérique de terrain (MNT) et d'une couche
+    d'occupation du sol, opéré par la rastérisation à 5 mètres de la
+    couche vectorielle du parcellaire cadastral.  Les données raster
+    sur l'altimétrie sont issues du MNT RGE
+    ALTI\textsuperscript{\textregistered} 5 m, sous licence IGN
+    "Recherche", les données d'occupation du sol proviennent du modèle
+    développé par cite:HJRV18 à partir de la BD
+    TOPO\textsuperscript{\textregistered}, du registre parcellaire
+    graphique et de Corine Land Cover.  De la couche altimétrique du
+    MNT ont été dérivées 3 autres couches raster supplémentaires,
+    toujours à 5 m de résolution: la pente, l'exposition et les
+    radiations solaires.  Ces attributs ont été calculés en utilisant
+    le logiciel ArcGis citep:RFu00.  Les 5 couches raster (altitude,
+    pente, exposition, radiation solaire et occupation du sol) ont été
+    alors converties en tables au format XYZ, avec X et Y les
+    coordonnées Lambert 93 du centre de chaque pixel et Z la variable
+    d'intérêt de chacune des couches.  Ces tables sont regroupées dans
+    une même table qui contient un seul XY et les 5 attributs Z issus
+    chacun des tables de départ.  Cette table est ensuite appariée
+    avec la table XYZ issue de la rastérisation des parcelles
+    cadastrales pour récupérer l'identifiant =PAR2RAS= qui servira à
+    l'appariement avec la topographie.  Nous obtenons ainsi une base
+    contenant plus de 14 millions de lignes, une pour chaque pixel de
+    5 m.  Pour les 8 variables issues de cette procédure, nous
+    calculons des moyennes à l'échelle des parcelles cadastrales,
+    sachant que d'autres méthodes d'agrégation ont été utilisées sans
+    différences notables sur les résultats présentés.  Le dictionnaire
+    de ces variables est reporté dans la Table [[Tab:2]].
 
 #+begin_src R :exports results :results value :colnames yes :rownames no
 (labt <- data.frame(
-     NOM= paste0("=", c("XL93", "YL93", "NOMOS", "URBAN",
+     NOM= paste0("=", c("PAR2RAS", "XL93", "YL93", "NOMOS", "URBAN",
                         "FOREST", "WATER", "DEM", "SLOPE",
                         "ASPECT", "SOLAR"), "="),
-     "", TYPE= rep("/Numérique/", 10), "",
+     "", TYPE= rep("/Numérique/", 11), "",
      DESCRIPTION=
-         c("Latitude du centroïde de la parcelle (système Lambert 93)",
+         c("Identifiant pour appariement entre vecteurs et raster",
+	   "Latitude du centroïde de la parcelle (système Lambert 93)",
            "Longitude du centroïde de la parcelle (système Lambert 93)",
            "Part de la parcelle hors du mode d'occupation des sol (entre 0 et 1)",
            "Part de la parcelle en usage urbain selon le MOS (entre 0 et 1)",
@@ -815,48 +1086,78 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
 #+CAPTION: *Nom, type et description des variables topographiques à la parcelle*
 #+NAME: Tab:2
 #+RESULTS:
-| NOM      |   | TYPE        |   | DESCRIPTION                                                          |
-|----------+---+-------------+---+----------------------------------------------------------------------|
-| =XL93=   |   | /Numérique/ |   | Latitude du centroïde de la parcelle (système Lambert 93)            |
-| =YL93=   |   | /Numérique/ |   | Longitude du centroïde de la parcelle (système Lambert 93)           |
-| =NOMOS=  |   | /Numérique/ |   | Part de la parcelle hors du mode d'occupation des sol (entre 0 et 1) |
-| =URBAN=  |   | /Numérique/ |   | Part de la parcelle en usage urbain selon le MOS (entre 0 et 1)      |
-| =FOREST= |   | /Numérique/ |   | Part de la parcelle en usage forestier selon le MOS (entre 0 et 1)   |
-| =WATER=  |   | /Numérique/ |   | Part de la parcelle en eau selon le MOS (entre 0 et 1)               |
-| =DEM=    |   | /Numérique/ |   | Altitude moyenne de la parcelle selon le MNT (en mètres)             |
-| =SLOPE=  |   | /Numérique/ |   | Pente moyenne de la parcelle selon le MNT (en degrés)                |
-| =ASPECT= |   | /Numérique/ |   | Exposition moyenne de la parcelle selon le MNT (en degrés)           |
-| =SOLAR=  |   | /Numérique/ |   | Radiation solaire moyenne sur la parcelle (en Joules)                |
+| NOM       |     | TYPE        |       | DESCRIPTION                                                          |
+|-----------+-----+-------------+-------+----------------------------------------------------------------------|
+| =PAR2RAS= |     | /Numérique/ |       | Identifiant pour appariement entre vecteurs et raster                |
+| =XL93=    |     | /Numérique/ |       | Latitude du centroïde de la parcelle (système Lambert 93)            |
+| =YL93=    |     | /Numérique/ |       | Longitude du centroïde de la parcelle (système Lambert 93)           |
+| =NOMOS=   |     | /Numérique/ |       | Part de la parcelle hors du mode d'occupation des sol (entre 0 et 1) |
+| =URBAN=   |     | /Numérique/ |       | Part de la parcelle en usage urbain selon le MOS (entre 0 et 1)      |
+| =FOREST=  |     | /Numérique/ |       | Part de la parcelle en usage forestier selon le MOS (entre 0 et 1)   |
+| =WATER=   |     | /Numérique/ |       | Part de la parcelle en eau selon le MOS (entre 0 et 1)               |
+| =DEM=     |     | /Numérique/ |       | Altitude moyenne de la parcelle selon le MNT (en mètres)             |
+| =SLOPE=   |     | /Numérique/ |       | Pente moyenne de la parcelle selon le MNT (en degrés)                |
+| =ASPECT=  |     | /Numérique/ |       | Exposition moyenne de la parcelle selon le MNT (en degrés)           |
+| =SOLAR=   |     | /Numérique/ |       | Radiation solaire moyenne sur la parcelle (en Joules)                |
 
-    Les codes qui permettent l'appariement sont reportés en Annexe
-    A.1.2, le dictionnaire des variables topographiques est reporté
-    dans la Table [[Tab:2]].  Nous obtenons $2\,096$ valeurs manquantes
-    pour lesquelles le code =PAR2RAS= des parcelles ne s'apparie à
-    aucune cellule raster (résultat reporté en Annexe A.1.2).  Ces
-    parcelles qui présentent des valeurs manquantes sont conservées
-    dans la base, bien que ce soient de très petites parcelles avec
-    des géométrie particulières et font penser à des "erreurs" du
-    cadastre.  Nous les enlèverons au moment de l'analyse statistique
-    sachant que cela revient à enlever 2.7 ha, moins de 0.01 % de la
-    surface totale de la zone.  Nous n'utilisons qu'un sous ensemble
-    du MOS lié aux modes d'occupation non agricoles, principalement
-    afin de pouvoir les exclure si nécessaire.
+**** Code                                    :noheading:
+
+     Ces variables parcellaires sont disponible dans les colonnes 17 à
+     26 de l'objet =Geo.Ras=, comme présenté dans le code ci-dessous.
+     Pour des raisons d'unité de mesure qui se poseront lors de
+     l'analyse statistique, nous centrons et réduisons la variable
+     =SOLAR= sur les rayonnements solaires.  Toujours pour des raisons
+     de spécification statistique, nous discrétisons la variable
+     =ASPECT= sur l'exposition moyenne des parcelles en 8 classes de
+     45 degrés d'amplitude.  Nous obtenons $2\,096$ valeurs manquantes
+     pour lesquelles le code =PAR2RAS= des parcelles ne s'apparie à
+     aucune cellule raster.  Ces parcelles sont de faible taille avec
+     des géométries particulières et font penser à des "erreurs" du
+     cadastre.  Nous les enlèverons au moment de l'analyse statistique
+     sachant que cela revient à enlever 2.7 ha, soit moins de 0.01 %
+     de la surface totale de la zone.  Sur les variables issues du
+     MOS, nous de conservons que les catégories relatives aux modes
+     d'occupation non agricoles (urbain, forêt, eau), afin de pouvoir
+     les exclure si besoin (non utilisé actuellement).
+    
+#+begin_src R :wrap example
+names(Geo.Ras)[ c(1, 17: 26)]
+Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
+    sd(Geo.Ras$SOLAR, na.rm= TRUE)
+Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT,
+                    breaks= c(-2, 45, 90, 135, 180, 225, 270, 315, 360))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ [1] "PAR2RAS" "XL93"    "YL93"    "NOMOS"   "URBAN"   "FOREST" 
+ [7] "WATER"   "DEM"     "SLOPE"   "ASPECT"  "SOLAR"
+#+end_example
 
 *** Enrichissement de la géologie
+**** Dictionnaire                            :noheading:
 
-    Les données géologiques sont issues de la Bd Charm-50 du BRGM à
-    l'échelle $1/50\,000$ disponible sur le site
-    http://infoterre.brgm.fr sous licence Ouverte.  Nous utilisons ici
-    une extraction du fichier =GEO050K_HARM_021_S_FGEOL_CGH_2154=
-    effectuée en avril 2019 pour le département de la Côte-d'Or.  Le
-    seul travail non reporté sur ces données est une sélection des
-    variables qui contiennent moins de 5% de valeurs manquantes et qui
-    présentent des variations (c'est-à-dire une variance non nulle)
-    sur la zone considérée.  L'appariement des polygones géologiques
-    avec le parcellaire cadastral est effectué par les centroïdes des
-    parcelles (voir code en Annexe A.1.3), la faible taille moyenne
-    des parcelles sous AOC (moins de 0.2 ha de moyenne) permet de
-    s'assurer de la validité de cette procédure.
+     Les données géologiques utilisées dans ce travail sont issues de
+     la BD harmonisée Charm-50 produite par le BRGM à l'échelle du
+     $1/50\,000$.  Cette base est disponible sur le site
+     [[http://infoterre.brgm.fr][http://infoterre.brgm.fr]] sous licence Ouverte.  Nous utilisons
+     une extraction des formations géologiques, nommée
+     =GEO050K_HARM_021_S_FGEOL_CGH_2154=, dont le téléchargement a été
+     effectué le 25/04/2019 pour le département de la Côte-d'Or.
+     L'appariement des polygones géologiques avec le parcellaire
+     cadastral enrichi s'effectue par le centroïde des parcelles, la
+     faible taille des parcelles permet de s'assurer de la validité de
+     cette procédure, vérifiée manuellement par ailleurs.  Le
+     dictionnaire associé aux 16 variables sur la géologie est
+     disponible dans la Table [[Tab:3]].  La description des variables est
+     peu précise actuellement car les données du BRGM sont disponibles
+     depuis peu et ne possèdent pas encore, à notre connaissance, de
+     dictionnaire exploitable.  Ce manque de précision n'est pas
+     limitant pour l'analyse statistique que nous présentons ici car
+     les variables géologiques sont utilisées de manière discrètes,
+     par le biais d'indicatrices qui ne nécessitent pas de
+     spécification explicite.  Cela peut néanmoins être différent pour
+     d'autres utilisations de la base de données.
 
 #+begin_src R :exports results :results value :colnames yes :rownames no
 (labu <-
@@ -907,52 +1208,72 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
 | =ENVIRONMT=  |   | /Caractère/ |   | Environnement (9 modalités)              |
 | =GEOCHIMIE=  |   | /Caractère/ |   | Géochimie (5 modalités)                  |
 | =LITHOCOM=   |   | /Caractère/ |   | Litho détaillée (30 modalités)           |
+
+**** Code                                    :noheading:
+
+     Nous nous concentrons donc sur la variable =NOTATION= qui découpe
+     la zone d'intérêt en 31 formations géologiques homogènes.  Sa
+     distribution spatiale et ses intitulés sont présentés dans la
+     \autoref{Fig:3} en Annexe\nbsp{}3.  Les parcelles non appariées
+     produisant des valeurs manquantes sont peu nombreuses (entre 31
+     et 862 parcelles selon les variables), elles seront enlevées au
+     moment de l'analyse statistique sans conséquence sur les
+     résultats.  Pour diminuer la multi-colinéarité lors de
+     l'utilisation de ces indicatrices qui codent la géologie des
+     parcelles et pour s'assurer d'estimations précises, nous
+     regroupons les unités géologiques qui comptent moins de $1\,000$
+     parcelles dans une modalité de référence codée =0AREF=.  Il reste
+     ainsi 17 unités géologiques qui pourront être utilisées dans la
+     modélisation statistique de la hiérarchie des AOC.
+   
+#+begin_src R :wrap example
+names(Geo.Ras)[27: 42]
+Geo.Ras$NOTATION <- factor(Geo.Ras$NOTATION)
+tmp <- table(Geo.Ras$NOTATION)< 1000
+table(Geo.Ras$GEOL <- factor(
+          ifelse(Geo.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
+                 as.character(Geo.Ras$NOTATION))))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ [1] "CODE"       "NOTATION"   "DESCR"      "TYPEGEOL"   "APLOCALE"  
+ [6] "TYPEAP"     "GEOLNAT"    "ISOPIQUE"   "AGEDEB"     "ERADEB"    
+[11] "SYSDEB"     "LITHOLOGIE" "DURETE"     "ENVIRONMT"  "GEOCHIMIE" 
+[16] "LITHOCOM"
+
+0AREF     C     E    Fu    Fx    Fy    Fz    GP  j1-2    j3   j3a 
+ 5487 29040  2683  1653  9321 10006  7951 11181  1359  1848  3785 
+  j3b   j4a   j5a   j5b   j6a  p-IV 
+ 2887  2934  5201  5301  4827  4855
+#+end_example
     
-    Le détail des 16 variables géologiques issues de la procédure est
-    disponible dans la Table [[Tab:3]].  La description des variables
-    manque de précision car les données géologiques ne possèdent pas
-    encore, à notre connaissance, de dictionnaire exploitable.  Ce
-    manque de précision n'est pas décisif pour l'analyse statistique
-    que nous effectuons (il peut l'être pour d'autres usages) car les
-    variables géologiques sont utilisées par le biais d'effets fixes
-    (c'est-à-dire de variables indicatrices) qui permettent de
-    s'affranchir de la nécessité de spécifier les relations entre les
-    variables géologiques et les AOC.  Cette méthode est par ailleurs
-    la plus générale pour contrôler l'hétérogénéité associée à la
-    géologie, car elle permet de s'affranchir d'hypothèses sur la
-    spécification des effets.  Comme nous le voyons an Annexe A.1.3,
-    les parcelles non appariées qui produisent des valeurs manquantes
-    sont peut nombreuses (entre 31 et 862 selon les variables) et
-    seront négligées au moment de l'analyse statistique sans
-    conséquences.  
-
 *** Enrichissement de la pédologie
+**** Dictionnaire                            :noheading:
 
-    Les données pédologiques sont extraites du Référentiel Pédologique
-    de Bourgogne : Régions naturelles, pédopaysage et sols de
-    Côte-d'Or (étude 25021, Gis Sol) à l'échelle $1/250\,000$,
-    compatible avec la base de données nationale DoneSol, sous licence
-    XX (Chrétien, 1998).  La localisation des types de sol et
-    l'appariement avec le cadastre s'opèrent par les 194 Unités
-    Cartographiques de Sols de la zone, qui sont des polygones plutôt
-    homogènes en termes de pédo-paysages, bien qu'ils contiennent
+    Les données pédologiques utilisées sont extraites du Référentiel
+    Pédologique de Bourgogne : Régions naturelles, pédopaysage et sols
+    de Côte-d'Or à l'échelle $1/250\,000$ (étude 25021 dans le
+    référentiel Gis Sol).  Ces données sont compatibles avec la
+    référence nationale DoneSol.  La localisation des types de sol et
+    l'appariement avec le parcellaire cadastral s'opèrent par le biais
+    des 194 Unités Cartographiques de Sols qui composent la zone.  Les
+    UCS sont des polygones construits pour être homogènes en termes de
+    pédo-paysages (topographie, climat, géologie).  Elles sont
+    typiquement utilisées pour représenter cartographiquement les
+    caractéristiques des sols, elles peuvent néanmoins contenir
     différents types de sols.  Ces derniers, regroupés en unités
-    typologiques, ne peuvent pas être localisés plus précisément, ce
-    qui est un limite importante pour leur usage à l'échelle
-    parcellaire citep:Ay11.  En l'absence de données plus fines
-    spatialement, les données parcellaires seront enrichies du code
-    des unités cartographiques et des valeurs de l'unité typologique
-    dominante, c'est-à-dire celle qui est la plus étendue au sein de
-    chaque unité cartographique.  Comme pour la géologie, les données
-    pédologiques seront utilisées par des effets fixes au niveau des
-    unités cartographiques, ce qui fait que cette procédure de
-    traitement de l'information n'est pas limitante (elle peut
-    cependant l'être pour d'autres usages).  Les libellés des unités
-    cartographiques reportés dans la variable =DESCRp= sont obtenus
-    par un travail manuel à partir du site
-    https://bourgogne.websol.fr/carto, les codes utilisés pour
-    l'appariement des données pédologiques à partir des centroïdes des
-    parcelles sont présentés en Annexe A.1.4.
+    typologiques, ne peuvent pas être localisés plus précisément que
+    les unités cartographiques.  Cette imprécision dans la
+    localisation des données est une limite importante pour leur usage
+    statistique à l'échelle parcellaire citep:Ay11.  En l'absence de
+    données plus fines spatialement, les données parcellaires du
+    cadastre sont enrichies du libellé de l'UCS et des 11 variables
+    correspondantes à l'unité typologique de sol dominante,
+    c'est-à-dire celle qui est la plus étendue au sein de chaque UCS.
+    Ce choix ne change pas les résultats obtenus.  Le dictionnaire des
+    13 variables pédologiques issues de cette procédure est disponible
+    dans la Table [[Tab:4]].
 
 #+begin_src R :exports results :results value :colnames yes :rownames no
 (labv <- data.frame(
@@ -997,177 +1318,120 @@ writeOGR(Lieu.Dit, "./Carto/", "LieuDit", "ESRI Shapefile")
 | =OCCUP=  |   | /Numérique/ |   | Part de l'unité typologique dominante dans l'unité carto (entre 0 et 1)  |
 | =DESCRp= |   | /Caractère/ |   | Libellé de la classe pédologique en 33 modalités                         |
 
-    Le détails des 13 variables pédologiques issues de la procédure
-    sont disponibles dans la Table [[Tab:4]].  Les valeurs manquantes
-    associées aux parcelles non couvertes par la pédologie sont assez
-    importantes : $14\,645$ parcelles cadastrales, soient environ
-    4.25% des surfaces de la zone.  Ces parcelles non couvertes sont
-    en revanche peu désignées en AOC (moins de 1% des AOC ont des
-    variables pédologiques manquantes), il s'agit donc très peu de
-    vignes.  Une explication intuitive de ces valeur manquantes est
-    l'absence de données pédologiques sur les sols artificialisés,
-    cette interprétation étant corroborée par la cartographie de ces
-    zones.  Par contre, ce résultat ne se retrouve pas réellement à
-    partir des usages urbains du MOS.  La question de l'échelle des
-    données est ainsi déterminante car les unités cartographiques pour
-    lesquelles les variables pédologiques manques peuvent regrouper
-    des modes d'occupation du sol très différents.
+**** Code                                    :noheading:
 
-*** Enrichissement des AOC historiques
+     Comme pour les variables sur la géologie, les variables
+     pédologiques sont intégrées dans le modèle par des indicatrices
+     qui correspondent aux UCS.  Le détails des 11 variables
+     pédologiques est maintenu dans les données constituées pour ne
+     pas limiter les autres usages qui peuvent en être faits.  Les
+     libellés des unités cartographiques reportés dans la variable
+     =DESCRp= sont obtenus par une saisie manuelle à partir du site
+     [[https://bourgogne.websol.fr/carto][https://bourgogne.websol.fr/carto]].  Les valeurs manquantes
+     associées aux parcelles non couvertes par la couche pédologique
+     sont assez nombreuses : $14\,645$ parcelles cadastrales, soient
+     environ 4.25% des surfaces de la zone.  Ces parcelles non
+     couvertes sont en revanche peu désignées en AOC (moins de 1% des
+     AOC ont des variables pédologiques manquantes), il s'agit donc
+     dans de rares cas de vignes et principalement de parcelles
+     construites au coeur des villages.  Une explication intuitive de
+     ces valeur manquantes est l'absence de données pédologiques sur
+     les sols artificialisés, cette interprétation étant corroborée
+     manuellement.  La faible précision spatiale de ces données
+     pédologiques peut s'illustrer par comparaison avec les variables
+     du MOS sur l'artificialisation.  Les UCS pour lesquelles les
+     variables pédologiques manquent peuvent regrouper des modes
+     d'occupation du sol très différents.  D'une série initiale de 33
+     modalités (présentées dans la \autoref{Fig:4} en Annexe 3), le
+     code ci-dessous opère le regroupement des modalités peu présentes
+     (moins de $1\,000$ parcelles) et reporte la distribution des 19
+     modalités restantes.
 
-    Les AOC en vigueur à la création de l'INAO en 1936 nous ont été
-    transmises par la Maison des Sciences de l'Homme de Dijon avec
-    l'aide de Florian Humbert.  Un travail préalable a été effectué
-    pour obtenir les AOC que nous référons à 1936 alors qu'il s'agit
-    d'une compilation des différentes années de 1936 à 1940.  La
-    localisation est toujours effectuée par le centroïde des parcelles
-    cadastrales car la géométrie des polygones ne correspond pas
-    parfaitement (à la fois par la numérisation des cartes historiques
-    et parce que le cadastre a changé).  Encore une fois, la faible
-    taille des parcelle permet d'avoir confiance en cette procédure
-    d'appariement qui a été confirmée visuellement dans le détails.
-    Le code pour cette procédure d'appariement est reporté en Annexe
-    A.1.5.
-
-#+begin_src R :exports results :results value :colnames yes :rownames no
-(laba <- data.frame(
-     NOM= paste0("=", c("AOC36lab", "AOC36lvl"), "="), "",
-     TYPE= rep("/Caractère/", 2), "",     
-     DESCRIPTION=
-         c("Libellé de l'appellation en 1936 (56 modalités)",
-           "Rang de la parcelle dans la hiérarchie des AOC (0, 3 ou 5)")))
+#+begin_src R :wrap example
+names(Geo.Ras)[43: 55]
+Geo.Ras$NOUC <- factor(Geo.Ras$NOUC)
+tmp <- table(Geo.Ras$NOUC)< 1000
+table(Geo.Ras$PEDO <- factor(
+          ifelse(Geo.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
+                 as.character(Geo.Ras$NOUC))))
 #+end_src
 
-#+ATTR_LATEX: :environment tabularx :width \textwidth :align llllX
-#+CAPTION: *Nom, type et description des variables issues des AOC historiques*
-#+NAME: Tab:5
 #+RESULTS:
-| NOM        |   | TYPE        |   | DESCRIPTION                                                |
-|------------+---+-------------+---+------------------------------------------------------------|
-| =AOC36lab= |   | /Caractère/ |   | Libellé de l'appellation en 1936 (56 modalités)            |
-| =AOC36lvl= |   | /Caractère/ |   | Rang de la parcelle dans la hiérarchie des AOC (0, 3 ou 5) |
-    
-    Nous obtenons des aires sous AOC sensiblement plus réduites que
-    pour les AOC actuelles, elles représentent 27% au lieu de 55% des
-    parcelles.  Hormis un creux en 1938, entre 10 et 15% des parcelles
-    sont classées chaque années, sachant toutefois qu'il y a du double
-    compte avec des parcelles qui changent d'AOC.  Les dénominations
-    géographiques complémentaires, les Premiers crus en particulier,
-    n'apparaissent pas dans ce données car ils n'existaient tout
-    simplement pas.  Le décret instaurant les Premiers crus fut adopté
-    en 1943.  Notons que ces AOC historiques sont issus de deux
-    classements préalables (bien que non officiels): celui de Jules
-    Lavalle de 1855 et le Classement du Comité d’Agriculture et de
-    Viticulture de l'Arrondissement de Beaune de 1860.  Ces données
-    sur les AOC de 1936 ne sont pas spécifiquement utilisées dans la
-    suite du présent article, mais le sont dans cite:Ay19, et
-    pourraient l'être dans toute utilisation alternative des données
-    issues de cette recherche.
+#+begin_example
+ [1] "NOUC"   "SURFUC" "TARG"   "TSAB"   "TLIM"   "TEXTAG" "EPAIS" 
+ [8] "TEG"    "TMO"    "RUE"    "RUD"    "OCCUP"  "DESCRp"
 
-*** Enrichissement des lieux dits
+0AREF    10    13    14    26    27    28    29    30    32    34 
+ 3265  2074  3770 23472  4750  1348 11641  7636  6983  3072  2469 
+   35    36    38     5    61    69     7     8 
+ 8356  1602  2198  4767  1605  2116  1445  3136
+#+end_example
 
-    Un dernier enrichissement de la base des parcelles cadastrales
-    provient de l'information cadastrale d'une source alternative
-    disponible sur =data.gouv.fr=.  Nous utilisons en effet le Plan
-    Cadastral Informatisé Vecteur
-    https://cadastre.data.gouv.fr/datasets/plan-cadastral-informatise
-    téléchargé pour la Côte-d'Or (21) en janvier 2019.  C'est données
-    sont en License ouverte Etalab, elles nous permettent d'obtenir
-    les lieux dits pour les parcelles qui sont en niveau Village,
-    Bourgogne, et Coteaux bourguignons.  Une difficulté avec les lieux
-    dit est que leur intitulés doivent être croisés avec ceux des
-    communes car un même nom de lieu dit peut être présent sur
-    plusieurs communes.  Comme la géométrie des lieux dits et des
-    parcelles colle parfaitement, nous pouvons enrichir les données
-    parcellaires directement par le centroïde.  Nous profitons de la
-    procédure pour inclure des données communales, en particulier, les
-    coordonnées des chefs-lieux pour calculer une distance à vol
-    d'oiseaux, la population et la distinction côte de Beaune / côte
-    de Nuits qui peut se révéler pertinente.  Nous enregistrons
-    également un shapefile =MapCom= qui permet de cartographier les
-    contours communaux dans les figures de l'article.  Le détails des
-    codes est reporté en Annexe A.1.6.
+*** Statistiques descriptives
 
-#+begin_src R :exports results :results value :colnames yes :rownames no
-(labd <- data.frame(
-     NOM= paste0("=", c("LIEUDIT", "CLDVIN", "LIBCOM", "XCHF", "YCHF",
-                        "ALTCOM", "SUPCOM", "POPCOM", "CODECANT",
-                        "REGION"), "="), "",
-     TYPE= c(rep("/Caractère/", 3), rep("/Numérique/", 3),
-             "/Caractère/", "/Numérique/", "/Caractère/", "/Caractère/"),
-     "",     
-     DESCRIPTION=
-         c("Libellé du lieu dit de la parcelle (2691 modalités)",
-           "Identifiant du lieu dit de la parcelle (2691 modalités)",
-           "Libellé de la commune de la parcelle (31 modalités)",
-           "Latitude du chef-lieu de la commune (système Lambert 93)",
-           "Longitude du chef-lieu de la commune (système Lambert 93)",
-           "Altitude du point culminant de la commune (mètre)",
-           "Superficie de la commune de la parcelle (hectare)",
-           "Population de la commune de la parcelle en 2015 (millier d'hab)",
-           "Identifiant du canton d'appartenance (2 caractères)",
-           "Region viticole (=CDB= pour côte de Beaune, =CDN= pour côte de Nuits)")))
+    Nous avons donc compilé les variables de 7 sources différentes, le
+    code suivant effectue les derniers traitements, à savoir la
+    re-projection des coordonnées des centroïdes dans le système WGS84
+    utilisé pour l'application /Shiny/, la suppression des valeurs
+    manquantes sur certaines variables, le codage des indicatrices
+    (pour les AOC et l'exposition), et la normalisation des unités de
+    mesure.  L'objet =tb.lab= qui contient l'intitulé des variables,
+    nécessaire dans le code ci-dessous, est défini en Annexe 2.  Le
+    package =stargazer= doit être chargé en préalable pour construire
+    la Table \ref{Tab:7}.
+
+#+begin_src R :exports code :results raw :file "Tables/StDesDP.tex"
+GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
+dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
+Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
+                  & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION))
+Stat.Ras <- data.frame(Reg.Ras@data, model.matrix(~0+ factor(Reg.Ras$AOC)),
+                       model.matrix(~ 0+ factor(Reg.Ras$EXPO)))
+names(Stat.Ras)[75: 79] <- paste0("AOC", 1: 5)
+names(Stat.Ras)[80: 87] <- paste0("EXPO", 1: 8)
+Stat.Ras$AREA  <- Reg.Ras$AREA/ 1000 ; Stat.Ras$DEM   <- Reg.Ras$DEM/ 1000
+Stat.Ras$SOLAR <- Reg.Ras$SOLAR/ 1000000
+stargazer(Stat.Ras[, names(tb.lab)], covariate.labels=tb.lab, float= F, 
+          font.size= "small", column.sep.width= "0pt", digit.separate= c(0, 3))
 #+end_src
 
-#+ATTR_LATEX: :environment tabularx :width \textwidth :align llllX
-#+CAPTION: *Nom, type et description des variables issues des lieux dits*
-#+NAME: Tab:6
 #+RESULTS:
-| NOM        |   | TYPE        |   | DESCRIPTION                                                           |
-|------------+---+-------------+---+-----------------------------------------------------------------------|
-| =LIEUDIT=  |   | /Caractère/ |   | Libellé du lieu dit de la parcelle (2691 modalités)                   |
-| =CLDVIN=   |   | /Caractère/ |   | Identifiant du lieu dit de la parcelle (2691 modalités)               |
-| =LIBCOM=   |   | /Caractère/ |   | Libellé de la commune de la parcelle (31 modalités)                   |
-| =XCHF=     |   | /Numérique/ |   | Latitude du chef-lieu de la commune (système Lambert 93)              |
-| =YCHF=     |   | /Numérique/ |   | Longitude du chef-lieu de la commune (système Lambert 93)             |
-| =ALTCOM=   |   | /Numérique/ |   | Altitude du point culminant de la commune (mètre)                     |
-| =SUPCOM=   |   | /Caractère/ |   | Superficie de la commune de la parcelle (hectare)                     |
-| =POPCOM=   |   | /Numérique/ |   | Population de la commune de la parcelle en 2015 (millier d'hab)       |
-| =CODECANT= |   | /Caractère/ |   | Identifiant du canton d'appartenance (2 caractères)                   |
-| =REGION=   |   | /Caractère/ |   | Region viticole (=CDB= pour côte de Beaune, =CDN= pour côte de Nuits) |
-
-    Nous observons en Annexe qu'aucun lieu dit n'a été apparié 4% des
-    parcelles.  Ces parcelles se concentrent sur les communes de
-    Chenôve, Marsannay-la-Côte et Beaune (Corgoloin dans une moindre
-    mesure).  Ces valeurs manquantes apparaissent déjà dans le fichier
-    source et ne sont donc pas un résultat de l'appariement.  Ils
-    semblent être des espaces bâtis visuellement, mais ce n'est
-    toujours pas confirmé par le MOS à cause de la question de
-    l'échelle.  @@latex:\textcolor{green}{Il peut sembler que ce sont
-    les parcelles qui ont été modifiées (à confirmer dans PPL) ou il
-    faut attendre la nouvelle actualisation du PCI}@@.  Dasn tous les
-    cas, ces valeurs manquantes ne sont pas décisives pour l'analyse
-    statistique présentée dans cet article.
-
-*** Enregistrement de la base
-
-    Ces différentes opérations aboutissent à la constitution d'une
-    base de données géographiques disponibles sur le serveur de
-    données de l'INRA [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]].  Ces données sont
-    illustrées dans les deux cartes de la \autoref{Fig:1}, qui
-    présentent l'altimétrie à une échelle fine et les AOC, dans leur
-    dimension verticale (niveau hiérarchique) et leur dimension
-    horizontale (commune d'appartenance).  Le téléchargement de ces
-    données permet au lecteur d'exécuter les codes R reportés dans la
-    suite de l'article, afin de reproduire nos résultats et de faire
-    tourner l'application /Shiny/ localement.
+[[file:Tables/StDesDP.tex]]
 
 #+begin_export latex
-\vspace{.5cm}
-\begin{figure}[!h]
-  \caption{\textbf{Vignobles de la \emph{Côte d'Or}, topographie
-      et appellations d'origine contrôlées}}\label{Fig:1}
-  \centering\hspace{-2cm}
-\begin{minipage}{.5\textwidth}
-  \centering
- \includegraphics[scale= .4]{./Figures/MapCom1}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-  \centering
- \includegraphics[scale= .4]{./Figures/MapCom2}
-\end{minipage}
-\end{figure}\clearpage
+\begin{table}[!htb]
+\caption{\textbf{Statistiques descriptives des variables utilisées.}}\label{Tab:7}
+\begin{threeparttable}
+\input{Tables/StDesDP.tex}
+\begin{tablenotes}\footnotesize
+\item Notes: L'échantillon est composé de $59\,113$ parcelles (pas
+  nécessairement en vignes) sous AOC dans la zone considérée.  Le
+  tableau reporte la moyenne, l'écart-type, le minimum, les quartiles
+  et le maximum pour les principales variables biophysiques issues du
+  processus d'appariement présenté.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
 #+end_export
+
+    Nous obtenons une base de données qui contient $59\,113$
+    observations utilisables pour estimer le modèle statistique.  Le
+    principal critère de sélection des parcelles provient de la
+    limitation aux parcelles ayant au moins une AOC.  Sur la zone,
+    nous avons $60\,632$ ($=110\,350-49\,718$) parcelles dans ce cas,
+    ce qui signifie que le retrait des valeurs manquantes cause la
+    perte de seulement $1\,519$ parcelles ($=60\,632-59\,113$).  Nous
+    observons des surfaces parcellaires faibles (0.2 ha de moyenne),
+    des altitudes comprises entre 200 et 500 m (286 m de moyenne), des
+    pentes entre 0 et 37 degrés (5.75 degrés de moyenne) et des
+    radiations solaires comprises entre $581\,000$ et 1.2 millions de
+    Joules (1 millions de Joules en moyenne).  Le niveau village de la
+    hiérarchie des AOC regroupe 42% des parcelles, les niveau
+    régionaux et coteaux bourguignons respectivement 23% et 16.5%,
+    alors que les niveaux premier et grand cru respectivement 15% et
+    3%.  Les vignobles sous AOC sont globalement orientés à l'Est,
+    avec 55% des observations qui ont une orientation comprise entre
+    45 et 135 degrés.
 
 *** Vérif 1 : anciens AOC INAO               :noexport:
 
@@ -1329,101 +1593,7 @@ yop <- over(Geo.CDem, map)
 table(yop$tex)
 #+end_src
 
-** Statistiques descriptives
-  :PROPERTIES:
-  :CUSTOM_ID: Sec:2
-  :END:
-*** Sélection des données
-
-    Nous commençons l'analyse par le chargement du fichier
-    =GeoRas.Rda= issue du serveur data de l'INRA que l'utilisateur
-    doit télécharger puis placer dans un répertoire =Inter/= à la
-    racine utilisée par =R= (soit le répertoire renvoyé par la
-    commande =getwd()=).  Les données peuvent également être
-    consultées à partir des fichiers shapefile sur le serveur qui sont
-    utilisables dans un système d'information géographique.  La
-    première procédure à exécuter est présentée ci-dessous, elle
-    consiste à :
-    - Recoder les codes communaux selon le gradient Nord-Sud
-    - Calculer la distance de chaque parcelle au chef lieu de sa commune
-    - Centrer et réduire la variable sur les rayonnements solaires
-    - Recoder la variable exposition en 8 catégories
-    - Re-projeter les coordonnées dans le système WGS84
-    - Enlever les valeurs manquantes de la base de données 
-
-#+begin_src R :wrap example
-library(sp) ; load("Inter/GeoRas.Rda")
-tmp <- unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= TRUE)])
-Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels= tmp)
-Geo.Ras$DISTCHF <- sqrt((Geo.Ras$XL93- Geo.Ras$XCHF* 100)^2
-                        + (Geo.Ras$YL93- Geo.Ras$YCHF* 100)^2)
-Geo.Ras$RAYAT <- (Geo.Ras$SOLAR- mean(Geo.Ras$SOLAR, na.rm= TRUE))/
-    sd(Geo.Ras$SOLAR, na.rm= TRUE)
-Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT,
-                    breaks= c(-2, 45, 90, 135, 180, 225, 270, 315, 360))
-GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
-dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
-dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
-                      & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION)))
-#+end_src
-
-#+RESULTS:
-#+begin_example
-
-[1] 59113    72
-#+end_example
-
-     Nous obtenons une base de données qui contient $59\,113$
-     observations utilisables pour estimer le modèle statistique.  Le
-     principal critère de sélection des parcelles provient de la
-     limitation aux parcelles ayant au moins une AOC.  Sur la zone,
-     nous avons $60\,632$ ($=110\,350-49\,718$) parcelles dans ce cas,
-     ce qui signifie que le retrait des valeurs manquantes cause la
-     perte de seulement $1\,519$ parcelles ($=60\,632-59\,113$).
-
-*** Distribution des AOC
-
-    Nous pouvons désormais présenter plus en détails la distribution
-    des AOC sur les parcelles, en particulier à partir des 2
-    informations typiquement reportées sur les étiquettes des
-    bouteilles de vins.  Une première information est de type
-    verticale, elle consiste à mentionner le niveau de l'AOC dans la
-    hiérarchie.  Cette information est contenue dans la variable
-    =AOC=.  La deuxième information est de type horizontale, avec la
-    mention de la commune d'appartenance de la parcelle, sans qu'il
-    n'y ai de hiérarchie entre les communes.  Cette information est
-    contenue dans la variable =LIBCOM=.  Le code ci-dessous permet de
-    reproduire la Figure A.1 de cite:Ay19 avec les pourcentages de
-    chaque niveau d'AOC au sein de chaque commune.
-
-#+begin_src R :results graphics :height 9 :width 13 :file "./Figures/InterGIs.pdf"
-library(lattice) ; library(RColorBrewer)
-fig.dat <- aggregate(model.matrix(~0+ factor(Reg.Ras$AOC))*
-                     Reg.Ras$AREA/ 1000, by= list(Reg.Ras$LIBCOM), sum)
-names(fig.dat) <- c("LIBCOM", "BGOR", "BOUR", "VILL", "PCRU", "GCRU")
-fig.dat$LIBCOM <- factor(fig.dat$LIBCOM, lev= rev(levels(fig.dat$LIBCOM)))
-fig.crd <- t(apply(fig.dat[, -1], 1, function(t) cumsum(t)- t/2))
-fig.lab <- round(t(apply(fig.dat[, -1], 1, function(t) t/ sum(t)))* 100)
-my.pal  <- brewer.pal(n= 9, name = "BuPu")[ 2: 8]
-barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
-         xlab="Surfaces sous appellation d'origine contrôlée (hectare)",
-         data= fig.dat, horiz= T, stack= T, col= my.pal, border= "black",
-         par.settings= list(superpose.polygon= list(col= my.pal)),
-         auto.key= list(space= "top", points= F, rectangles= T, columns= 5,
-                        text=c("Coteaux b.", "Bourgogne",
-                               "Village", "Premier cru", "Grand cru")),
-         panel=function(x, y, ...) {
-             panel.grid(h= 0, v = -11, col= "grey60")
-             panel.barchart(x, y, ...)
-             ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))})
-#+end_src
-
-#+CAPTION: *Distribution des niveaux des AOC entre les communes*
-#+ATTR_LATEX: :options scale= .5
-#+RESULTS:
-[[file:./Figures/InterGIs.pdf]]
-
-*** La pyramide des AOC
+*** La pyramide des AOC                      :noexport:
 
     Les AOC en Bourgogne sont souvent représentées sous forme
     pyramidale (voir par exemple
@@ -1467,149 +1637,86 @@ ggplot(ddd, aes(x= AOC, y= SURFACES, fill= REGION))+
 
 #+Latex: \clearpage
 
-*** Tableau des variables utilisées
-
-    La distribution des variables utilisées dans l'analyse statistique
-    est détaillé dans le \autoref{Tab:1}.  Nous observons des surfaces
-    parcellaires faibles (moyenne de 0.2 ha), des altitudes comprises
-    entre 200 et 500 m (moyenne à 286), des pentes entre 0 et 37
-    (moyenne à 5.75) et des radiations solaires entre $581\,000$ et
-    1.2 millions de Joules.  Les vignobles sous AOC sont globalement
-    orientés à l'Est.
-
-#+begin_src R :wrap "export latex"
-Stat.Ras <- data.frame(Reg.Ras@data, model.matrix(~0+ factor(Reg.Ras$AOC)),
-                       model.matrix(~ 0+ factor(Reg.Ras$EXPO)))
-names(Stat.Ras)[73: 77] <- paste0("AOC", 1: 5)
-names(Stat.Ras)[78: 85] <- paste0("EXPO", 1: 8)
-Stat.Ras$AREA  <- Reg.Ras$AREA/ 1000
-Stat.Ras$DEM   <- Reg.Ras$DEM/ 1000
-Stat.Ras$SOLAR <- Reg.Ras$SOLAR/ 1000000
-lab <- c(AREA= "Surface [1000 m$^2$]", DEM= "Altitude [1000 m]",
-         SLOPE= "Pente [degrés]", SOLAR=  "Radiation solaire [millions J]",
-         X= "Longitude [degrés]", Y= "Latitude [degrés]",
-         AOC1= "Niveau AOC Coteaux", AOC2= "Niveau AOC Régional",
-         AOC3= "Niveau AOC Village", AOC4= "Niveau AOC Premier Cru",
-         AOC5= "Niveau AOC Grand Cru",
-         EXPO1= "Exposition [$0-45$]"   , EXPO2= "Exposition [$45-90$]",
-         EXPO3= "Exposition [$90-135$]" , EXPO4= "Exposition [$135-180$]",
-         EXPO5= "Exposition [$180-225$]", EXPO6= "Exposition [$225-270$]",
-         EXPO7= "Exposition [$270-315$]", EXPO8= "Exposition [$315-360$]") 
-library(stargazer)          
-stargazer(Stat.Ras[, names(lab)], covariate.labels=lab, font.size= "small",
-          column.sep.width= "0pt", float= T, digit.separate= c(0, 3),
-          title= "\\textbf{Statistiques descriptives des variables utilisées}")
-#+end_src
-
-#+RESULTS:
-#+begin_export latex
-% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: jeu., juin 27, 2019 - 09:53:09
-\begin{table}[!htbp] \centering 
-  \caption{\textbf{Statistiques descriptives des variables utilisées}} 
-  \label{Tab:1} 
-\small 
-\begin{tabular}{@{\extracolsep{0pt}}lccccccc} 
-                                                                                                                                                                                                                                   \\[-1.8ex]\hline 
-\hline                                                                                                                                                                                                                             \\[-1.8ex] 
-Statistic                      & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{St. Dev.} & \multicolumn{1}{c}{Min} & \multicolumn{1}{c}{Pctl(25)} & \multicolumn{1}{c}{Pctl(75)} & \multicolumn{1}{c}{Max} \\ 
-\hline                                                                                                                                                                                                                             \\[-1.8ex] 
-Surface [1000 m$^2$]           & 59113                 & 1.908                    & 3.399                        & 0.000                   & 0.517                        & 2.178                        & 177.200                 \\ 
-Altitude [1000 m]              & 59113                 & 0.286                    & 0.056                        & 0.210                   & 0.241                        & 0.319                        & 0.505                   \\ 
-Pente [degrés]                 & 59113                 & 5.772                    & 5.478                        & 0.000                   & 1.556                        & 8.747                        & 36.970                  \\ 
-Radiation solaire [millions J] & 59113                 & 1.060                    & 0.049                        & 0.581                   & 1.048                        & 1.076                        & 1.230                   \\ 
-Longitude [degrés]             & 59113                 & 4.837                    & 0.104                        & 4.665                   & 4.740                        & 4.955                        & 5.003                   \\ 
-Latitude [degrés]              & 59113                 & 47.060                   & 0.110                        & 46.900                  & 46.980                       & 47.170                       & 47.300                  \\ 
-Niveau AOC Coteaux             & 59113                 & 0.164                    & 0.370                        & 0                       & 0                            & 0                            & 1                       \\ 
-Niveau AOC Régional            & 59113                 & 0.229                    & 0.420                        & 0                       & 0                            & 0                            & 1                       \\ 
-Niveau AOC Village             & 59113                 & 0.428                    & 0.495                        & 0                       & 0                            & 1                            & 1                       \\ 
-Niveau AOC Premier Cru         & 59113                 & 0.147                    & 0.354                        & 0                       & 0                            & 0                            & 1                       \\ 
-Niveau AOC Grand Cru           & 59113                 & 0.032                    & 0.177                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$0-45$]            & 59113                 & 0.046                    & 0.210                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$45-90$]           & 59113                 & 0.186                    & 0.389                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$90-135$]          & 59113                 & 0.362                    & 0.481                        & 0                       & 0                            & 1                            & 1                       \\ 
-Exposition [$135-180$]         & 59113                 & 0.212                    & 0.409                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$180-225$]         & 59113                 & 0.100                    & 0.300                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$225-270$]         & 59113                 & 0.044                    & 0.206                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$270-315$]         & 59113                 & 0.030                    & 0.170                        & 0                       & 0                            & 0                            & 1                       \\ 
-Exposition [$315-360$]         & 59113                 & 0.021                    & 0.142                        & 0                       & 0                            & 0                            & 1                       \\ 
-\hline                                                                                                                                                                                                                             \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-#+end_export
-
-#+Latex: \clearpage
-
 ** Modèle statistique
   :PROPERTIES:
   :CUSTOM_ID: Sec:3
   :END:
 *** Estimation du modèle
+**** Présentation                            :noheading:
 
     Nous abordons désormais l'estimation du modèle statistique, dont
     le processus de spécification est présenté plus extensivement dans
-    cite:Ay19.  Il s'agit d'estimer un modèle ordonné additivement
-    semi-paramétrique (OGAM) qui prend en compte la structure
-    hiérarchique des AOC de la zone, notée $y \in \{1, 2, 3, 4, 5\}$
-    par ordre croissant.  Nous supposons que les désignations des AOC
-    suivent une règle de décision basée sur une variable latente de
-    qualité des vignes qui franchit des seuils différentiés selon la
-    commune d'appartenance des parcelles.  Ainsi, en notant $X_i$ les
-    variables biophysiques d'une vigne $i$ donnée $i= 1, \dots, N$, et
-    $C_i$ le vecteur ligne de dimension 31, avec pour élément
-    générique $c_{ih}$ égal à 1 si la vigne $i$ se situe dans la
-    /commune/ $h$ et 0 sinon.  L'hypothèse d'une distribution
-    logistique de la partie aléatoire des désignations AOC permet de
-    déboucher sur un modèle de logit ordonné classique :
+    un article associé citep:Ay19.  Il s'agit d'estimer un modèle
+    ordonné additivement semi-paramétrique (OGAM) qui prend en compte
+    la structure hiérarchique des AOC de la zone, notée $y \in \{1, 2,
+    3, 4, 5\}$ par ordre croissant de qualité.  Nous supposons que les
+    désignations des AOC suivent une règle de décision basée sur une
+    variable latente non observable de qualité des vignes qui franchit
+    des seuils différents selon la commune à laquelle elle appartient.
+    Notons $X_i$ le vecteur des caractéristiques biophysiques de la
+    parcelle de vigne $i$ (avec $i= 1, \dots, N$) et $C_i$ le vecteur
+    de dimension 31 qui a pour élément générique $c_{ih}$ égal à 1 si
+    $i$ se situe dans la /commune/ $h$ et 0 sinon.  L'hypothèse d'une
+    distribution logistique de la partie aléatoire de la variable
+    latente produit un modèle de logit ordonné classique citep:AKat17 :
 #+begin_export latex
 \begin{equation}
 \mbox{Prob}(y_{i}> j\mid X_i, C_i)= \Lambda\big[ B(X_i)^\top\beta+ C_i^\top\mu- \alpha_{j}\big],\label{Eq:Mod}
 \end{equation}
 #+end_export
     où $\Lambda$ est la fonction cumulative de la loi logistique.  Les
-    déterminants humain qui impactent la classification AOC à partir
-    des seuils de désignation sont pris en compte par des effets fixes
+    déterminants humains qui ont impacté la classification AOC au
+    cours de l'histoire sont pris en compte par les effets fixes
     communaux notés $\mu$.  En l'absence d'/a priori/ théoriques sur
-    les effets des variables biophysiques $X_i$, nous les spécifions
-    au travers d'une série de transformations /B-splines/ que nous
-    notons $B(\cdot)$ avec $\beta$ leurs coefficients associés.  Le
-    modèle est estimé avec la fonction =gam= du package =mgcv= comme
-    décrit récemment par cite:WPSa16.  Le manuel d'utilisation de
-    l'auteur du package cite:Wood17 contient de nombreux détails
-    méthodologiques.
+    l'effet de chaque variable biophysique $X_i$, nous les spécifions
+    au travers d'une série de transformations additives /B-splines/
+    que nous notons $B(\cdot)$ avec $\beta$ le vecteur des
+    coefficients associés.  Ce modèle de désignation peut alors être
+    estimé avec la fonction =gam= du package =mgcv= comme décrit
+    récemment par cite:WPSa16.  Le manuel d'utilisation de l'auteur du
+    package citep:Wood17 contient de nombreux détails méthodologiques
+    sur le processus de pénalisation semi-paramétrique des effets des
+    variables continues.
 
-    Notons qu'en préalable à l'estimation, nous opérons un
-    regroupement des unités géologiques et pédologiques afin de
-    pouvoir les inclure comme des variables binaires dans le modèle.
-    En effet, un nombre trop faible d'observation au sein d'une unité
-    géologique ou pédologique diminue sensiblement la précision de
-    l'estimation et peut poser des problèmes de convergence de
-    l'algorithme de régression pénalisée.  Nous choisissons de ne
-    retenir que les unités qui contiennent plus de $1\,000$ parcelles,
-    d'autres valeurs ont été testées sans que cela change les
-    résultats.  Notons également que le modèle que nous estimons opère
-    un lissage spatial fin (avec un nombre maximal de degré de liberté
-    effectifs de 900 sur les termes spatiaux) ce qui implique une
-    procédure estimation assez longue (environ 9 heures avec un
-    processeur Intel Core i7-7820HQ CPU 2.90 GHz x8 et 64 Go of RAM).
-    D'autres modèles plus parcimonieux sont également présents dans
-    l'objet =gamod.Rda= téléchargeable sur le [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][serveur data de l'INRA]].
-    Nous conseillons au lecteur de télécharger =gamod.Rda= plutôt que
-    d'effectuer l'estimation en local du modèle, bien que les deux
-    procédures peuvent être effectuées avec le code ci-dessous.
- 
+**** Code                                    :noheading:
+
+     Afin de contrôler les effets du terroir qui ne seraient pas pris
+     en compte par les variables biophysiques présentées précédemment
+     (par des effets de variables omises ou d'erreurs de mesure), nous
+     incluons également les coordonnées géographiques des centroïdes
+     des parcelles comme variables explicatives.  Cela permet
+     d'améliorer sensiblement les capacités prédictives du modèle et
+     de proposer une estimation non biaisée des effets communaux
+     citep:Ay19.  Nous estimons des modèles à des degrés divers de
+     lissage spatial au travers du lissage des coordonnées
+     géographiques.  L'objet =gamod.Rda= téléchargeable sur
+     [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]] contient 10 modèles de désignation des AOC
+     actuelles qui vont du moins lissé =gam50= au plus lissé =gam900=.
+
 #+begin_src R :wrap example
-Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
-tmp <- table(Reg.Ras$NOTATION)< 1000
-Reg.Ras$GEOL <- factor(
-    ifelse(Reg.Ras$NOTATION %in% names(tmp[ tmp]), "0AREF",
-           as.character(Reg.Ras$NOTATION)))
-Reg.Ras$NOUC <- factor(Reg.Ras$NOUC)
-tmp <- table(Reg.Ras$NOUC)< 1000
-Reg.Ras$PEDO <- factor(
-    ifelse(Reg.Ras$NOUC %in% names(tmp[tmp]), "0AREF",
-           as.character(Reg.Ras$NOUC)))
-library(mgcv) ; load("Inter/gamod.Rda")
+GamModRaw <- get_file("gamod.Rda", "https://doi.org/10.15454/ZZWQMN")
+writeBin(GamModRaw, "gamod.Rda") ; load("gamod.Rda") ; names(gamod)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ [1] "gam50"  "gam100" "gam200" "gam300" "gam400" "gam500" "gam600"
+ [8] "gam700" "gam800" "gam900"
+#+end_example
+ 
+     Pour la reproductibilité des analyses, nous reportons ci-dessous
+     le code pour l'estimation du modèle qui sera utilisé dans
+     l'application, qui est celui avec le lissage le plus fin et qui
+     présente les meilleures prédictions.  Les coordonnées spatiales
+     sont lissées avec un nombre maximal de degré de liberté effectifs
+     de $k= 900$, ce qui est très flexible et implique une longue
+     procédure estimation (environ 9 heures avec un processeur Intel
+     Core i7-7820HQ CPU 2.90 GHz x8 et 64 Go de RAM).  Le lecteur peut
+     accéder directement au résultat de cette estimation avec l'objet
+     =gamod$gam900= téléchargé précédemment sur le serveur.
+
+#+begin_src R :wrap example
+library(mgcv)
 ## system.time(
 ##     gam900 <- gam(AOC~ 0+ LIBCOM+ EXPO+ GEOL+ PEDO 
 ##                   + s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= 900)
@@ -1617,7 +1724,6 @@ library(mgcv) ; load("Inter/gamod.Rda")
 ## )
 ## utilisateur     système      écoulé 
 ##    32271.43       93.78    32366.00 
-## save(gam900, file= "Inter/gam900.Rda")
 anova(gamod$gam900)
 #+end_src
 
@@ -1645,16 +1751,31 @@ s(RAYAT)   7.33   8.38    531  <2e-16
 s(X,Y)   841.42 870.01  86597  <2e-16
 #+end_example
 
-    Nous observons en sortie la significativité statistique des
-    différentes variables au regard des statistiques de $\chi^2$.  Les
-    coordonnées géographiques sont les variables explicatives les plus
-    importantes, suivies des indicatrices communales, de l'altitude,
-    du rayonnement solaire, de la géologie, de la pédologie, de la
-    pente et enfin de l'exposition.  Ce modèle produit près de 90% de
-    bonnes prédictions pour un pseudo R$^2$ (au sens de Mc Fadden)
-    égal à 0.76.  Les mêmes statistiques peuvent être obtenues pour
-    les autres modèles présents dans l'objet =gamod=, moins lissés
-    spatialement, mais ne sont pas reportées ici.
+**** Interprétations                         :noheading:
+
+    Nous obtenons avec la fonction =anova= la significativité
+    statistique des différentes variables inclues dans le modèle au
+    regard des statistiques de $\chi^2$.  Les variables indicatrices
+    et les effets fixes sont dans la partie paramétrique (=Parametric
+    Terms=, reportée en premier) alors que les variables continues
+    sont dans la partie lissée (=Approximate significance of smooth
+    terms=, reportée en second).  Toutes les variables introduites
+    dans le modèle sont significative aux seuils habituellement
+    utilisés, ce qui conforte notre hypothèse d'un modèle de
+    désignation des AOC basé sur une variable latente de qualité des
+    vignes.  Dans ce modèle avec un lissage spatial très flexible, les
+    coordonnées géographiques apparaissent les variables explicatives
+    les plus importantes au sens du $\chi^2$, suivies des indicatrices
+    communales, de l'altitude, du rayonnement solaire, de la géologie,
+    de la pédologie, de la pente et enfin de l'exposition.  Ce modèle
+    avec un lissage spatial fort produit près de 90% de bonnes
+    prédictions des niveaux d'AOC pour un pseudo R$^2$ (au sens de
+    McFadden) égal à 0.76.  Les mêmes statistiques peuvent être
+    obtenues localement pour les autres modèles présents dans l'objet
+    =gamod=, moins lissés spatialement, mais ne sont pas reportées
+    ici.  Les résultats sur la significativité des variables et la
+    forme des effets sont globalement robustes au degré de lissage des
+    coordonnées géographiques.
 
 #+begin_src R :wrap example
 sum(diag(table(cut(gamod$gam900$line,
@@ -1669,18 +1790,16 @@ sum(diag(table(cut(gamod$gam900$line,
 'log Lik.' 0.7565 (df=964)
 #+end_example
 
-*** Variables biophysiques
+*** Effets des variables biophysiques
 
-    Nous pouvons alors représenter les effets marginaux des variables
-    biophysiques sur la variable latente de qualité continue des
-    parcelles de vigne.  La fonction =plot= par défaut du package
-    =mgcv= permet de représenter graphiquement ces effets en fixant
-    toutes les autres variables explicatives du modèle à leurs
-    moyennes.  Notons également dans le graphique ci-dessous que les
-    effets ont une moyenne normalisée à 0 car le niveau des effets
-    n'est pas identifiable semi-paramétriquement.
+    Nous pouvons alors représenter les effets marginaux de chaque
+    variable biophysique sur la variable latente de qualité des
+    vignes, soient les fonctions $B(\cdot)$ dans l'équation (1).  La
+    fonction =plot= définie par le package =mgcv= permet de
+    représenter graphiquement chacun de ces effets additivement
+    séparables.
 
-#+begin_src R :results graphics :file "./Figures/GamPlot.pdf"
+#+begin_src R :exports code :results graphics :file "./Figures/GamPlot.pdf"
 plot(gamod$gam700, page= 1, scale= 0)
 #+end_src
 
@@ -1689,65 +1808,108 @@ plot(gamod$gam700, page= 1, scale= 0)
 #+RESULTS:
 [[file:./Figures/GamPlot.pdf]]
 
-    Des Figures plus détaillées, qui contiennent en particulier les
-    effets associés aux autres modèles moins lissés, sont reportées
-    dans l'article associé citep:Ay19.  La structure des effets reste
-    cependant robuste à la spécification, elle reste proche de ce qui
-    est observé dans la Figure A.3 du papier.  L'altitude et la pente
-    ont des effets en U inversé, le rayonnement solaire a un effet
-    linéaire à proximité de sa moyenne égale à 0 (la présence de
-    valeurs extrêmes entraîne de forte non linéarité qui concernent
-    que très peu d'observations).  Enfin, les effets spatiaux en bas à
-    droite semblent se structurer dans une relation de centre/
-    périphérie.
+#+begin_export latex
+\begin{figure}[!h]
+  \centering\vspace*{-.5cm}
+ \includegraphics[scale= .65]{./Figures/GamPlot}
+ \caption{\textbf{Effets de la topographie et de la localisation sur la qualité des vignobles.}\\[.25cm]
+   {\footnotesize
+     Source : INRA / INAO / MSH / DGFiP / IGN / BRGM / GisSol.\\
+     Lecture : Les trois premières fenêtres représentent les effets de
+     l'altitude, de la pente, et du rayonnement solaire en fixant
+     toutes les autres variables explicatives du modèle à leurs
+     moyennes de l'échantillon.  Les effets ont une moyenne normalisée
+     à 0 car leurs niveaux moyens n'est pas identifiable
+     semi-paramétriquement \citep{Wood17}.  La dernière fenêtre en bas
+     à droite représente l'effet joint de la longitude et de la
+     latitude par le biais de lignes de niveau et de leurs intervalles
+     de confiance.}}\label{Fig:4}
+\end{figure}
+#+end_export
+
+    La \autoref{Fig:4} présente des effets en U inversés pour
+    l'altitude et la pente, avec les vignes les mieux classées en
+    termes d'AOC qui sont à environ 300 mètres d'altitude et 10 degrés
+    de pente.  L'effet du rayonnement solaire est plus linéaire,
+    contrairement à ce que le troisième quadrant de la Figure peut le
+    laisser apparaître.  En effet, la plupart des parcelles sous AOC
+    ont un rayonnement solaire centré-réduit compris entre $-2$ et
+    $2$, soit la partie linéaire de la courbe représentée.  Enfin, les
+    effets spatiaux en bas à droite semblent se structurer dans une
+    relation de centre/ périphérie par rapport aux altitudes
+    intermédiaires.  Des figures plus détaillées, qui contiennent en
+    particulier les effets associés aux autres modèles moins lissés
+    spatialement, sont reportées dans l'article associé citep:Ay19.
+    Le lecteur peut aussi reproduire ces effets pour d'autres modèles
+    avec la fonction =plot= du package =mgcv=.  La structure des
+    effets reste cependant robuste à la spécification des effets et au
+    lissage spatial, elle reste proche de ce qui est observé ici pour
+    le modèle le plus lissé.
 
 *** Effets communaux
+**** Littérature                             :noheading:
 
-    Les coefficients associés aux effets fixes communaux sont d'un
-    intérêt particulier car ils correspondent à la partie historique
-    des désignations AOC, ils représentent la partie de la variable
-    latente de qualité qui n'est pas expliquée par les
-    caractéristiques biophysiques des vignes.  Comme présenté dans
-    cite:Ay19, la finesse du lissage spatial permet de contrôler les
-    effets de /terroir/ potentiellement non captés par les variables
-    topographiques, géologiques et pédologiques.  Cette interprétation
-    des effets fixes communaux fait écho à certains travaux
-    historiques pour lesquels nos résultats offre une sorte de
-    confirmation statistique.  En effet, Christophe Lucand dans
-    cite:WJac11 évoque l'existence d'une hiérarchie implicite des
-    communes "qui ne détermine cependant en rien la réalité des zones
-    d'approvisionnement concernées. Il s'agit plutôt d'identifications
-    commerciales communes, investies d'un plus ou moins grand capital
-    symbolique hérité. Ce capital symbolique hérité attribut un
-    prestige plus ou moins grand à certaines communes ou propriétaires
-    particulier."  Les effets fixes que nous estimons peuvent alors
-    être vus comme des mesures de ce capital symbolique.  De manière
-    complémentaire, cite:Jacq09 étudie la structuration des syndicats
-    de viticulteurs qui s'opère quasi-exclusivement à l'échelle
-    communale et mentionne le fait que (p.193) "plus l'appellation
-    requise se calque sur le syndicat qui la défend, plus elle a de
-    chance d'émerger et d'être délimitée strictement".  Les effets
-    fixes communaux peuvent donc également mesurer l'action des
-    syndicats, qui apparaît ainsi avoir une forte inertie historique
-    puisqu'ils se retrouvent dans les AOC actuelles.
+     Les coefficients associés aux effets fixes communaux sont d'un
+     intérêt particulier, ils correspondent à la partie historique des
+     désignations AOC actuellement en vigueur, soit la partie de la
+     variable latente de qualité des vignes qui n'est pas expliquée
+     par les caractéristiques biophysiques des vignes.  Cette
+     interprétation des effets fixes communaux fait écho à certains
+     travaux d'historiens pour lesquels nos résultats offre une
+     confirmation statistique.  En effet, Christophe Lucand dans
+     cite:WJac11 évoque l'existence d'une hiérarchie implicite des
+     communes comme des "identifications commerciales communes,
+     investies d'un plus ou moins grand capital symbolique hérité. Ce
+     capital symbolique hérité attribut un prestige plus ou moins
+     grand à certaines communes ou propriétaires particulier" (p. 68).
+     Les effets fixes que nous estimons peuvent alors être vus comme
+     des mesures de ce capital symbolique.  De manière complémentaire,
+     cite:Jacq09 étudie la structuration des syndicats de viticulteurs
+     aux XIXe et XXe siècles, qui s'opère quasi-exclusivement à
+     l'échelle communale et mentionne le fait que (p.193) "plus
+     l'appellation requise se calque sur le syndicat qui la défend,
+     plus elle a de chance d'émerger et d'être délimitée strictement".
+     Les effets fixes communaux peuvent donc également mesurer
+     l'action des syndicats, qui apparaît ainsi avoir une forte
+     inertie historique.
 
-#+begin_src R :results graphics :height 7 :width 11 :file "./Figures/ComGam.pdf"
-library(latticeExtra) ; yop <- summary(gamod$gam900)
-plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
-cf <- yop$p.coeff[ 4: 31]- mean(yop$p.coeff[ 4: 31]) ; se <- yop$se[ 4: 31]
-zz <- data.frame(LIBCOM= substr(names(gamod$gam900$coef[ 4: 31]), 7, 30),
-                 REGION= c(rep("tomato", 12), rep("chartreuse", 16)),
-                 OS= 2* plogi(cf)- 1,
-                 OSi= 2* plogi(cf- 1.5* se)- 1,
-                 OSa= 2* plogi(cf+ 1.5* se)- 1)
-foo_key <- list(x = .35, y = .95, corner = c(1, 1),
-            text = list(c("Côte de Beaune", "Côte de Nuits")),
-            rectangle = list(col = c("chartreuse", "tomato")))
+**** Code                                    :noheading:
+     
+     Pour faciliter l'interprétation des effets fixes communaux, nous
+     traduisons les coefficients estimés en mesures de supériorités
+     ordinales $\gamma_{A}$ pour la commune $A$ par rapport à la
+     commune moyenne de la zone citep:AKat17.  Par définition,
+#+begin_export latex
+\begin{equation}
+\gamma_A= \Lambda\left[(\mu_A- \overline{\mu})/ \sqrt{2}\right]
+\end{equation}
+#+end_export
+     où $\mu_A$ représente l'effet fixe de la commune $A$ et
+     $\overline{\mu}$ la moyenne des effets fixes sur la zone
+     d'intérêt.  Ainsi, cette mesure de supériorité ordinale comprise
+     entre $-1$ et 1 représente l'écart de probabilité qu'une parcelle
+     de la commune $A$ soit mieux classée qu'une parcelle aux
+     caractéristiques biophysiques identiques mais localisée dans une
+     commune au hasard.  Des valeurs positives indiquent des communes
+     avantagées et des valeurs négatives des communes désavantagées
+     par les désignations AOC.  Le code suivant calcule ces mesures
+     pour l'ensemble des communes de la zone et les représente
+     graphiquement dans la \autoref{Fig:3}.  Les objets =plogi= et
+     =mso.key= requis pour l'évaluation du code sont définis en
+     Annexe 2.
+
+#+begin_src R :exports code :results graphics :height 7 :width 11 :file "./Figures/ComGam.pdf"
+library(latticeExtra) ; resum900 <- summary(gamod$gam900)
+cf <- resum900$p.coeff[ 4: 31]- mean(resum900$p.coeff[ 4: 31])
+dat.fig <- data.frame(LIBCOM=substr(names(gamod$gam900$coef[ 4: 31]),7,30),
+                      REGION= c(rep("tomato", 12), rep("chartreuse", 16)),
+                      OS= 2* plogi(cf)- 1,
+                      OSi= 2* plogi(cf- 1.5* resum900$se[ 4: 31])- 1,
+                      OSa= 2* plogi(cf+ 1.5* resum900$se[ 4: 31])- 1)
 segplot(reorder(factor(LIBCOM), OS)~ OSi+ OSa,
-        length= 5, draw.bands= T,
-        key= foo_key,
-        data= zz[order(zz$OS), ], center= OS, type= "o",
-        col= as.character(zz$REGION[order(zz$OS)]),
+        length= 5, draw.bands= T, key= mso.key,
+        data= dat.fig[order(dat.fig$OS), ], center= OS, type= "o",
+        col= as.character(dat.fig$REGION[order(dat.fig$OS)]),
         unit = "mm", axis = axis.grid, col.symbol= "black", cex= 1, 
         xlab= "Mesure de supériorité ordinale et intervalles à 10 %")
 #+end_src
@@ -1758,51 +1920,74 @@ segplot(reorder(factor(LIBCOM), OS)~ OSi+ OSa,
 #+RESULTS:
 [[file:./Figures/ComGam.pdf]]
 
-    Nous traduisons les coefficients estimés en mesures de supériorité
-    ordinale comme cela est présenté dans cite:AKat17.  Les valeurs
-    obtenues pour les effets fixes communaux s'interprètent alors plus
-    intuitivement. Les valeurs en abscisses correspondent aux
-    probabilités qu'une parcelle de la commune reportée en ordonnées
-    soit mieux classée qu'une parcelle aux caractéristiques
-    biophysiques identiques mais localisée dans une commune au hasard.
-    Le communes relativement favorisées par les AOC apparaissent en
-    haut de la Figure et les communes relativement défavorisées en
-    bas.  Les intervalles de confiance qui encadrent les valeurs
-    moyennes sont différents de ceux reportés dans cite:Ay19.  Au lieu
-    de représenter l'incertitude quand à la spécification des effets
-    spatiaux, ils représentent ici l'incertitude associée à
-    l'estimation des effets fixes par la procédure statistique.
-    L'ordre de grandeur pour l'incertitude associée à ces estimations
-    reste toutefois similaire.
+#+begin_export latex
+\begin{figure}[!h]
+  \centering\vspace*{-.5cm}
+ \includegraphics[scale= .425]{./Figures/ComGam}
+ \caption{\textbf{Classification des communes selon les mesures de supériorité ordinale.}\\[.25cm]
+   {\footnotesize
+     Source : INRA / INAO / MSH / DGFiP / IGN / BRGM / Gis Sol.\\
+     Lecture : Pour chacune des communes de la zone (en ordonnées), la
+     figure reporte la mesure de supériorité ordinale de la
+     désignation des AOC par rapport à la commune moyenne,
+     c'est-à-dire l'écart de probabilité qu'une même parcelle soit
+     mieux classée dans la commune considérée que dans une commune de
+     la zone prise au hasard.  Les intervalles de confiance
+     représentent l'incertitude associée à l'estimation des effets
+     fixes communaux dans la modélisation statistique (à
+     90\%).}}\label{Fig:3}
+\end{figure}
+#+end_export
 
-*** Prédiction continue
-**** Calculs                                 :noheading:
+    Le communes relativement favorisées par la classification des AOC
+    apparaissent en haut de la \autoref{Fig:3} et les communes
+    relativement défavorisées en bas.  Les intervalles de confiance
+    qui encadrent les valeurs moyennes sont différents de ceux
+    reportés dans cite:Ay19.  Ils représentent ici l'incertitude
+    associée à l'estimation des effets fixes communaux plutôt que
+    l'incertitude associée à la spécification du lissage spatial.  Les
+    ordres de grandeur obtenus pour ces deux sources d'incertitude
+    sont toutefois similaires.  Nous observons que certaines mesures
+    de supériorité ordinale suivent la hiérarchie des dotations brutes
+    en AOC telles que présentées dans la \autoref{Fig:2} de la Section
+    2.1, où les communes privilégiées sont celles qui possèdent les
+    plus grosses proportions d'AOC en haut de la hiérarchie.  Mais
+    cette relation n'est pas systématique, certaines communes peu
+    dotées en hauts niveaux d'AOC apparaissent également privilégiées.
+    Parmi les 5 communes les plus privilégiées par la classification
+    AOC, les communes de Vougeot et d'Aloxe-Corton sont relativement
+    bien dotées en Premiers et Grands Crus, alors que ce n'est pas le
+    cas pour les communes de Pernand-Vergelesses et de
+    Chorey-les-Beaunes.  À l'inverse, Chassagne-Montrachet ou
+    Vosnes-Romanée possèdent de fortes proportions de Premiers et
+    Grands Crus, sans que cela semble venir d'un traitement
+    préférentiel dans la classification.
 
-     Nous pouvons désormais utiliser ce modèle de désignation pour
-     prédire les valeurs de la variable latente de qualité des vignes
-     pour chacune des parcelles de la base de données.  Nous obtenons
-     ainsi un score continue pour chaque parcelle selon ses
-     caractéristiques biophysiques, avec les effets communaux
-     potentiellement corrigés.  Notons que cette classification
-     continue des parcelles est directement issue des AOC qui existent
-     aujourd'hui et ne se base donc pas sur des appréciations
-     subjectives sur ce qui fait la qualité d'une vigne ou d'un vin.
-     Nous discutons ici deux sorties principales du modèle
-     statistique : la valeur latente de la qualité avec les effets
-     fixes communaux (ce qui signifie que les prédictions ne sont pas
-     corrigées) et la valeur latente de la qualité sans les effets
-     fixes communaux (car prendre la moyenne permet de corriger les
-     prédictions de ces effets).  Le code suivant présente le calcul
-     des prédictions et leur normalisation pour qu'ils soient
-     distribués entre 0 et 100.  Nous les appellerons alors des
-     scores, respectivement bruts ou corrigés.  Attention la ligne sur
-     les prédictions est longue (5 minutes) à tourner.
+*** Prédiction de la qualité continue
+**** Code                                    :noheading:
 
-#+begin_src R 
+     Les prédictions issues du modèle OGAM de désignation vont
+     représenter les valeurs estimées de la variable latente de
+     qualité des vignes pour chacune des parcelles de la zone.  Nous
+     obtenons ainsi un score continue pour chaque parcelle uniquement
+     selon ses caractéristiques biophysiques et, selon que l'on prenne
+     ou pas en compte sa commune d'appartenance, le traitement
+     préférentiel dont elle a fait l'objet au cours de l'histoire.
+     Notons que cette classification statistique des parcelles est
+     directement issue des AOC qui existent aujourd'hui et ne se base
+     pas sur des appréciations subjectives exogènes sur ce qui fait la
+     qualité d'une vigne ou d'un vin.  Le code suivant présente le
+     calcul des prédictions et leur normalisation pour qu'ils soient
+     distribués entre 0 et 100 (avec la fonction =unini=), pour
+     l'ensemble des parcelles dans la base =Prd.Ras=.  Notons que la
+     ligne sur les prédictions, commentée, est assez longue (5
+     minutes) à évaluer dans =R=.
+
+#+begin_src R :wrap example
 Prd.Ras <- subset(Geo.Ras, !is.na(AOClb))
-Prd.Ras$GEOL <- ifelse(Prd.Ras$NOTATION %in% levels(Reg.Ras$GEOL),
+Prd.Ras$GEOL <- ifelse(Prd.Ras$NOTATION%in%levels(gamod$gam900$model$GEOL),
                        as.character(Prd.Ras$NOTATION), "0AREF")
-Prd.Ras$PEDO <- ifelse(Prd.Ras$NOUC %in% levels(Reg.Ras$PEDO),
+Prd.Ras$PEDO <- ifelse(Prd.Ras$NOUC %in% levels(gamod$gam900$model$PEDO),
                        as.character(Prd.Ras$NOUC), "0AREF")
 ## prd <- predict(gamod$gam900, newdata= Prd.Ras@data, type= "terms")
 Prd.Ras$LTraw <- rowSums(prd, na.rm= TRUE)
@@ -1810,7 +1995,29 @@ Prd.Ras$LTcor <- mean(prd[, 1], na.rm= T)+ rowSums(prd[, -1], na.rm= T)
 unini <- function(x) (x- min(x))/ (max(x)- min(x))
 Prd.Ras$UFraw <- round(unini(Prd.Ras$LTraw)* 100, 2)
 Prd.Ras$UFcor <- round(unini(Prd.Ras$LTcor)* 100, 2)
+lapply(Prd.Ras@data[, c("UFraw", "UFcor")], summary)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+$UFraw
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    0.0    67.0    72.5    70.6    75.6   100.0 
+
+$UFcor
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    0.0    67.4    71.7    70.8    76.6   100.0
+#+end_example
+
+     Les prédictions sont donc disponibles avec (=UFcor=) et sans
+     (=UFraw=) correction des effets communaux afin que, en plus de
+     pouvoir consulter le classement corrigé des effets communaux,
+     l'utilisateur puisse apprécier le niveau du biais dans la
+     classification actuelle des AOC.  Nous avons normalisé ces deux
+     variables pour produire un score de classification des parcelles
+     selon des valeurs comprises entre 0 et 100, avec des
+     distributions qui apparaissent aplaties à gauche (les médianes
+     sont supérieures aux moyennes).
 
 **** Figure                                  :noexport:
 
@@ -1870,14 +2077,18 @@ ggplot(cc, aes(factor(AOC), Score, fill= Pr))+
 **** Recodage des dénominations              :noheading:
 
      Pour faciliter la consultation des résultats de la modélisation
-     dans l'application, nous agrégeons les scores prédits sur la base
-     d'un recodage des dénominations et la référence aux lieux dits.
-     Nous utilisons pour cela les lieux dits qui permettent en outre
-     de localiser plus précisément les parcelles en niveaux Coteaux
-     bourguignons, Bourgogne régional et Village pour lesquels la
-     mention de la parcelle n'est pas reporté sur l'étiquette.  Il
-     s'agit également ici de renommer les premiers crus pour qu'ils
-     soient plus lisibles dans l'application.
+     dans l'application /Shiny/, nous agrégeons les scores prédits sur
+     la base d'un recodage des dénominations et des références aux
+     lieux dits.  Nous utilisons pour cela les lieux dits
+     administratifs qui permettent en outre de localiser plus
+     précisément les parcelles en niveaux Coteaux bourguignons,
+     Bourgogne régional et Village pour lesquels la mention de la
+     parcelle n'est pas reportée systématiquement sur l'étiquette des
+     bouteilles de vin (cette pratique est néanmoins de plus en plus
+     fréquente).  Il s'agit également ici de renommer les
+     dénominations géographiques complémentaires associées aux
+     premiers crus pour qu'ils soient plus lisibles dans
+     l'application.
 
 #+begin_src R :wrap example
 Prd.Ras$NIVEAU <- as.character(revalue(factor(Prd.Ras$AOC), NVA))
@@ -1900,27 +2111,28 @@ length(unique(Prd.Ras$Concat))
 [1] 2391
 #+end_example
 
-     Ainsi, des quelques $60\,000$ parcelles cadastrales utilisées
-     dans la modélisation, nous obtenons environ $2\,400$ localités,
-     qui correspondent aux lieux dits pour les niveaux Coteaux
-     Bourguignons, Bourgogne régional, et Village; ils correspondent
-     aux dénominations retravaillées pour les Premiers crus; et aux
-     appellations pour les Grands Crus.
+     Ainsi, à partir des $60\,000$ parcelles cadastrales utilisées
+     pour estimer le modèle statistique de classification, nous
+     obtenons environ $2\,400$ localités, qui correspondent aux lieux
+     dits pour les niveaux Coteaux Bourguignons, Bourgogne régional,
+     et Village; ils correspondent aux dénominations retravaillées
+     pour les Premiers crus; et aux appellations pour les Grands
+     Crus. Cela fait une moyenne de 25 parcelles par localité.
 
 **** Agrégation cartographique               :noheading:
 
      Nous allons désormais regrouper la géographie des parcelles selon
-     la variable =Contat= tout juste créée.  Les scores sont reportés
-     au niveau des nouvelles localités par moyenne pondérée par la
-     surface de chaque parcelle qui la compose.  Nous calculons
-     également la position de chaque localité dans la hiérarchie
-     continue issue de la modélisation, ce qui permet de présenter en
-     sortie du code ci-dessous les 10 localités les mieux notées sur
-     la base des scores corrigés.
+     la variable =Contat= tout juste créée pour agréger les scores
+     prédits.  Les scores alors reportés au niveau des nouvelles
+     localités seront calculés par moyennes pondérées par la surface
+     de chaque parcelle qui les compose.  Nous calculons également la
+     position de chaque localité dans la hiérarchie continue issue de
+     la modélisation par rapport à l'ensemble des localités de la
+     zone, ce qui permet de présenter en sortie du code ci-dessous les
+     10 localités les mieux notées sur la base des scores corrigés.
 
 #+begin_src R :wrap example
 library(data.table) ; Prd.Dtb <- data.table(Prd.Ras@data)
-summary(Prd.Dtb$AREA)
 Dat.Ldt <- Prd.Dtb[, .(LIBCOM= LIBCOM[ 1], NOM= NAME[ 1],
                        NIVEAU= NIVEAU[ 1],
                        SURFACE_ha= round(sum(AREA)/ 1e4, 2),
@@ -1953,74 +2165,84 @@ Poly.Ras$NIVEAU <- factor(Poly.Ras$NIVEAU, levels= NVA)
 2010      La Combe d'Orveau Premier cru      91.01         87.83
 #+end_example
 
-      Sans trop de surprise, les Grands Crus arrivent en haut de la
-      hiérarchie autant issus de la côte de Nuits (Chambertin,
-      Grands-Echezeaux) que de la côte de Beaune (Montrachet,
-      Bâtard-Montrachet).  Notons tout de même qu'un Premier cru
-      arrive en dixième position, ce qu'il veut dire qu'il dépasse les
-      2/3 des Grands crus.  Ce Premier cru "La Combe d'Orveau" se
-      trouve sur la commune de Chambolle Musigny qui n'apparaît pas
-      pourtant si désavantagée selon la Figure 2.  Cela indique que la
-      haute classification de ce Premier cru (en particulier au-dessus
-      du Grand cru "Musigny" situé sur la même commune) provient des
-      caractéristiques biophysiques et non de la correction communale.
-      Plus étonnant, la Romanée-conti qui apparaît souvent parmi les
-      vins les plus chers du monde
+      Comme on pouvait s'y attendre avec les pourcentage de bonnes
+      prédictions obtenues, les Grands Crus arrivent en haut de la
+      classification statistique, qu'ils appartiennent à la côte de
+      Nuits (comme Chambertin et Grands-Echezeaux) ou à la côte de
+      Beaune (comme Montrachet et Bâtard-Montrachet).  Notons tout de
+      même qu'un Premier cru arrive en dixième position, ce qui
+      signifie qu'il dépasse les 2/3 des Grands crus de la zone.  Ce
+      Premier cru qui a pour dénomination "La Combe d'Orveau" se
+      trouve sur la commune de Chambolle-Musigny, qui n'apparaît par
+      ailleurs pas relativement désavantagée selon la \autoref{Fig:3}.
+      Cela indique que la haute classification de ce Premier cru (en
+      particulier au-dessus du Grand cru "Musigny" situé sur la même
+      commune) provient des caractéristiques biophysiques et non de la
+      correction communale.  Également étonnant, le Grand cru la
+      "Romanée-conti" qui apparaît souvent parmi les vins les plus
+      chers du monde
       (https://www.wine-searcher.com/most-expensive-wines) n'apparaît
-      qu'en 26ième position (elle est tout de même dans les 2 %
-      meilleurs).  On peut penser que la situation de monopole peut
-      expliquer la fort prix indépendamment des caractéristiques
-      biophysiques.
+      qu'en 26ième position. Le lieu dit est tout de même dans les 2 %
+      meilleures localités de la zone.  Les résultats amènent à penser
+      que la situation de monopole du domaine de la Romanée-Conti qui
+      exploite ce climat peut expliquer le fort prix observé des
+      bouteilles, indépendamment des caractéristiques biophysiques.
 
 **** Sauvegarde pour l'appli                 :noheading:
 
-     Nous enregistrons ensuite les résultats dans une base
-     de données géographique de type =sf= qui pourra directement être
-     utilisée dans l'application /Shiny/.  Ces résultats sont
-     accessibles sur le serveur data de l'INRA à l'adresse XX.
+     Nous enregistrons ensuite les résultats agrégés de la prédiction
+     dans un objet de type =sf= défini par le package du même nom
+     citep:Pebe18. Cette objet nommé =Poly.Ras= pourra directement
+     être utilisée dans l'application /Shiny/ pour consulter, lancer,
+     ou modifier le classement statistique.  Les résultats issus du
+     recodage des dénominations et de l'agrégation des scores prédits
+     sont accessibles sur le serveur data de l'INRA à l'adresse
+     [[https://data.inra.fr/][https://data.inra.fr/]].
      
 #+begin_src R
-library(sf)
-Poly.Ras <- st_as_sf(Poly.Ras)
-Poly.Ras <- st_transform(Poly.Ras,crs= 4326)
+library(sf) ; Poly.Ras <- st_as_sf(Poly.Ras)
+Poly.Ras <- st_transform(Poly.Ras, crs= 4326)
 save(Poly.Ras, file= "Inter/PolyRas.Rda")
+st_write(Poly.Ras, "/home/jsay/geoInd/Application2/Inter/PolyRas.shp",
+         delete_layer= TRUE)
 #+end_src
 
-    Sauvegarde disponible sur le serveur de l'INRA.
-
-#+Latex: \clearpage
+    Sauvegarde disponible sur le serveur de l'INRA, qui peut être
+    aussi chargée comme précédemment avec le package =dataverse=.
 
 ** Application /Shiny/
   :PROPERTIES:
   :CUSTOM_ID: Sec:4
   :END:
 
-  Les résultats issus de la modélisation statistiques des AOC de
-  Côte-d'Or sont consultables par le biais d'une application /Shiny/
-  dédiée.  Il y a deux manière de faire tourner l'application, par le
-  biais d'un explorateur internet à l'adresse
-  https://cesaer-datas.inra.fr/geoind/ ou en local sur la base d'une
-  version récente de =R= et des packages spécifiés ci-dessous.
+  Il y a deux manières d'utiliser l'application /Shiny/ citep:CCAX19
+  pour consulter les résultats de cette recherche.  Le lecteur peut
+  simplement consulter l'application par le biais d'un explorateur
+  internet à l'adresse [[https://cesaer-datas.inra.fr/geoind/][https://cesaer-datas.inra.fr/geoind/]], ou alors
+  il est possible de lancer l'application en local sur la base d'une
+  version récente de =R=, des packages spécifiés ci-dessous et des
+  données et codes téléchargés sur le serveur [[https://data.inra.fr/][https://data.inra.fr/]].
+  Pour la première solution, le lecteur peut se reporter directement à
+  l'exemple d'utilisation à la sous-section 4.3 suivante.  Nous
+  présentons dans les deux sous-sections suivantes le détails de la
+  construction de l'application pour un exécution en local.
 
 *** Cartographie dynamique
 **** Codes                                   :noheading:
 
-     Pour faire tourner l'application en local, il est nécessaire de
-     télécharger le fichier =PolyRas.Rda= sur le serveur data de
-     l'INRA pour le placer dans le dossier =Inter/= à la racine de =R=
-     (obtenue avec =getwd()=).  Les codes ci-dessous permettent de
-     créer la cartographie dynamique de type =Leaflet= qui sera
-     intégrée ensuite à l'application.  Elle permet de naviguer entre
-     les différentes parcelles viticoles de la zone, pour faire
-     apparaître le score ou le score corrigé suite à un simple clic.
-     La position de la parcelle sélectionnée dans la hiérarchie
-     générale de la région apparaît également par les variables
-     =rang_brut= et =rang_cor= crées précédemment.
+     Une première étape pour générer l'application localement consiste
+     à définir la cartographie dynamique de type =Leaflet= par le
+     package =mapview= citep:ADRW18 qui sera intégrée ensuite à
+     l'application.  Cela nécessite la présence de l'objet =Poly.Ras=
+     issu des traitements précédents, il peut être directement
+     télécharger du serveur avec le package =dataverse=.
 
 #+begin_src R :tangle ./Application2/global.R
 library(RColorBrewer) ; library(mapview) ; library(sf)
-load("Inter/PolyRas.Rda")
-
+Poly.Ras <- st_read("Inter/PolyRas.shp")
+Poly.Ras$NIVEAU <- factor(Poly.Ras$NIVEAU,
+                          levels= c("Coteaux b.", "Bourgogne", "Village",
+                                    "Premier cru", "Grand cru"))
 AocPal <- brewer.pal(5, "BuPu")
 mapviewOptions(basemaps= c("Esri.WorldImagery", "OpenStreetMap",
                            "OpenTopoMap", "CartoDB.Positron"),
@@ -2032,6 +2254,23 @@ map <- mapview(Poly.Ras, zcol= "NIVEAU", label= Poly.Ras$NOM,
                col.regions = AocPal, color= "white", legend.opacity= .5,
                popup = popupTable(Poly.Ras, feature.id= FALSE,
                                   zcol= names(Poly.Ras)[ -1]))
+#+end_src
+
+     L'objet =map= créé permet de faire apparaître sur un navigateur
+     internet une cartographie dynamique pour visualiser les
+     différentes parcelles viticoles de la zone et faire apparaître le
+     score (corrigé des effets communaux ou pas) suite à un clic sur
+     la parcelle.  Il apparaît alors le nom de la commune
+     d'appartenance (=LIBCOM=), le nom du lieu-dit (=NOM=), le niveau
+     dans la hiérarchie des AOC (=NIVEAU=), la surface du lieu-dit
+     (=SURFACE=), le score brut (=SCORE_b=) et corrigé (=SCORE_c=),
+     ainsi que la position du lieu dit dans la hiérarchie générale de
+     la région (=RANG_br= pour la version brute et =RANG_cr= pour la
+     version corrigée).
+
+**** Avec le logo de l'INRA                  :noexport:
+
+#+begin_src R
 ## mapshot(addLogo(map, "http://www7.inra.fr/fournisseurs/images/logo.jpg",
 ##                 width = 200, height = 100),
 ##         url = paste0(getwd(), "/Application/CotePrd.html"),
@@ -3142,13 +3381,18 @@ server <- function(input, output, session) {
 
 *** Lancer l'application localement
 
-    Une fois la cartographie dynamique effectuée, l'application
-    /Shiny/ peut être déployée localement, suite au chargement des
-    packages associés.  L'intégralité du code de l'application est
-    reporté en Annexe 4 et 5, qui produises les fichiers =ui.R= et
-    =server.R= qui sont également disponibles sur [[https://github.com/jsay/geoInd/tree/master/Application][github]].  
+    Une fois la cartographie dynamique effectuée, le code précédent et
+    le code suivant doivent être enregistrés dans un fichier
+    =global.R= en accord avec la structuration des applications
+    /Shiny/.  Les deux autres objets =ui.R= et =server.R= nécessaire
+    pour lancer localement l'application /Shiny/ sont reportés en
+    Annexes 4 et 5.  Ils contiennent respectivement le paramétrage de
+    l'interface utilisateur et les calculs qui sont effectués sur le
+    serveur pour l'interactivité de l'application.  Le code ci-dessous
+    =source= ces deux fichiers qui sont également disponibles sur un
+    répertoire distant de la plateforme [[https://github.com/jsay/geoInd/tree/master/Application][github]].
 
-#+begin_src R :tangle ./Application2/global.R
+#+begin_src R :results none :tangle ./Application2/global.R
 library(shiny) ; library(shinydashboard) ; library(shinyjs)
 library(leaflet) ; library(maptools) ; library(ggplot2)
 library(markdown)
@@ -3162,57 +3406,58 @@ enableBookmarking(store = "url")
 shinyApp(ui,server)
 #+end_src
 
-#+RESULTS:
+    La commande =shinyApp(ui,server)= lance l'application dans le
+    navigateur internet par défaut, et permet d'obtenir localement le
+    même résultat que la version en ligne de l'application.
 
-*** Manuel d'utilisation
+*** Exemple d'utilisation
 
-    L'application est structurée en 3 parties, avec en haut à gauche
-    des zones de saisie pour renseigner directement une localité (à
-    partir des informations disponibles sur les étiquettes d'un vin ou
-    à partir de ses connaissances personnelles); en bas à gauche un
-    graphique qui positionne la qualité de la localité sélectionnée
-    dans la distribution générale des qualité (où les niveaux
-    d'appellation sont différentiés); et à droite la cartographie
-    dynamique qui permet de faire apparaître la localité sélectionnée,
-    amis permet aussi de se déplacer librement sur la zone d'étude.
-    Les fonctions de la cartographie dynamique sont maintenues, ainsi
-    un clic sur une zone permet de faire apparaître ses
-    caractéristiques, et les prévisions du modèle en particulier.
+    L'application est structurée en trois parties, avec en haut à
+    gauche trois zones de saisie pour renseigner directement une
+    localité (à partir des informations disponibles sur les étiquettes
+    d'un vin ou à partir des connaissances personnelles de
+    l'utilisateur); en bas à gauche un graphique qui positionne la
+    qualité de la localité sélectionnée dans la distribution générale
+    des qualité (où les niveaux d'appellation sont différentiés); et à
+    droite la cartographie dynamique qui permet de faire apparaître la
+    localité sélectionnée.  L'utilisateur peut sélectionner un vin par
+    une référence mais peut aussi se déplacer librement sur la zone
+    d'étude, dans les parcelles voisines d'une référence par exemple.
+    Les fonctions de la cartographie dynamique précédente sont
+    maintenues, ainsi un clic sur une parcelle permet de faire
+    apparaître ses caractéristiques, et les prévisions du modèle
+    corrigées et non corrigées en particulier.
 
     Prenons l'exemple d'un vin d'un niveau Premier cru, sur la commune
-    de Flagey-Echezeaux, qui a pour lieu dit (dénomination en
-    l'occurrence) Les Rouges.  Suite à la saisie de ces
-    caractéristiques dans les zones dédiées, le score corrigé prédit
-    pour ce vin égal à 83.82 apparaît dans le graphique en bas à
-    gauche de l'application, et nous observons que ce score est
-    supérieur à l'ensemble des Coteaux bourguignons, des Bourgognes
-    régionaux et des villages de la zone.  Ce Premier cru est parmi
-    les 10% de Premiers crus qui ont les plus hauts scores et il
-    dépasse même 30% des Grands crus de la zone.  La partie à droite
-    de l'application a zoomé sur cette zone, un clic sur le lieu dit
-    en question permet de faire apparaître la différence entre les
-    prédictions brutes et corrigées.  Ainsi, le score non corrigé de
-    la localité est sensiblement plus bas (80.92), ce qui implique que
-    suite à la correction des effets communaux, le vin passe du top 7%
-    au top 3% sur l'ensemble de la zone étudiée.  Ce résultat est
-    consistant avec les effets communaux reportés dans la Figure 5, où
-    la commune de Flagey-Echezeaux apparaît comme relativement
-    défavorisée dans la hiérarchie.  Nous pouvons également que ce
-    Premier est mitoyen du Grand cru Echezeaux qui se trouve tout
-    juste à l'Est.
+    de Flagey-Echezeaux, qui a pour nom de lieu dit (dénomination
+    géographique complémentaire en l'occurrence) "Les Rouges".  Suite
+    à la saisie de ces caractéristiques dans les zones dédiées en haut
+    à gauche, le score corrigé prédit pour ce vin égal à 83.82
+    apparaît dans le graphique en bas à gauche de l'application, et
+    nous observons que ce score est supérieur à l'ensemble des Coteaux
+    bourguignons, des Bourgognes régionaux et des villages de la zone.
+    Ce vin de niveau Premier cru est parmi les 10% de Premiers crus
+    qui ont les plus hauts scores et il dépasse même 30% des Grands
+    crus de la zone.  La partie à droite de l'application a zoomé sur
+    cette zone, un clic sur le lieu dit en question permet de faire
+    apparaître la différence entre les prédictions brutes et
+    corrigées.  Ainsi, le score non corrigé de la localité est
+    sensiblement plus bas (80.92), ce qui implique que suite à la
+    correction des effets communaux, le vin passe du top 7% au top 3%
+    sur l'ensemble de la zone étudiée.  Ce résultat est consistant
+    avec les effets communaux reportés dans la Figure 5, où la commune
+    de Flagey-Echezeaux apparaît comme relativement défavorisée dans
+    la hiérarchie.  Nous pouvons également que ce Premier est mitoyen
+    du Grand cru Echezeaux qui se trouve tout juste à l'Est.
 
 *** Développements à venir                   :noexport:
-
-    - Corriger les surfaces
 
     - Régler le LIBCOM = NA sur la commune de Marsannay (pres des
       echzeaux), il y a SAVIGNY-LES-BEAUNE 1ER CRU "Aux Guettes" qui
       fait planté l'appli
 
-    - Diminuer la taille du graphique pour fitter le smart phone
-
-    - Faire un onglet pour des croisements exhaustifs, réfléchir à
-    l'interaction avec la carte et le graphique
+    - Régler les requêtes sur la commune pernand vergeless et sur
+      Savigny les beaune qui plantent.
 
     - Pour le rank, mettre la position plutôt que la part, corriger
       les valeurs qui sont reporter dans les box.
@@ -3235,8 +3480,8 @@ shinyApp(ui,server)
 #+begin_src R
 library(rsconnect)
 rsconnect::setAccountInfo(name='geoind',
-			  token='82F46B13B55046680E20FD09364E805A',
-			  secret='XXQkLNx5bGEOAIiAsuBcv9Sz5dYjoj1o/KIiag1G')
+			  token='9B9912471254ABD812EBC2F815282E6B',
+			  secret='uy4r0fyuChon7qrddbs97yo7ucNXk+pWohwiqlVv')
 rsconnect::deployApp('./Application')
 
 rsconnect::deployApp('./Application2')
@@ -3253,21 +3498,72 @@ sudo cp -r ./geoind_app ./cesaer/
   :PROPERTIES:
   :CUSTOM_ID: Sec:5
   :END:
+  
+  Nous avons présenté la construction de données exhaustives sur les
+  parcelles de 31 communes viticoles de la Côte-d'Or et l'utilisation
+  de ces données pour une modélisation statistique des classifications
+  AOC de la zone.  Nous avons alors présenter une application
+  cartographique de type /Shiny/ qui permet de consulter ces résultats
+  de manière interactive.  Il est important de mentionner que la
+  classification statistique obtenue, qui permet de préciser la
+  hiérarchie des AOC, se base exclusivement des relations entre les
+  caractéristiques biophysiques des parcelles et ne contient aucune
+  appréciation subjective exogène sur l'importance des différents
+  facteurs biophysiques ou olfactif censés influer sur la qualité d'un
+  vin.  L'approche statistique permet en outre de corriger les effets
+  communaux qui sont montré comme ayant une influence sur les
+  classement sans que ce soit justifié du point de vue des
+  caractéristiques biophysiques des parcelles.  La classification
+  obtenue est donc directement déduite de la hiérarchie actuelle des
+  AOC qui, au regard de la hiérarchie de prix qu'elle produit, semble
+  crédible pour les acteurs du marché.
 
-   Le chiffres d’affaire des signes de qualité c’est 32 milliards
-   d’euros et le budget de l’INAO 32 millions d’euros, c’est un
-   millième du chiffre d’affaires.  
-
-   Information pour les consommateurs, l'appli peut permettre de
-   passer d'une information discrète à continue, ce qui permet
-   d'accroître la qualité de 80 à 95 (cf WP). 
-
-   Développements à venir.
+  Par contre, le modèle proposé n'est pas déterministe, et une
+  incertitude persiste toutefois dans la classification obtenue.  La
+  hiérarchie des parcelle dépend de la spécification du modèle
+  statistique, et le fait d'avoir favorisé des variables biophysiques
+  pour décrire la relation entre les lieux de production et la qualité
+  des vins peut faire débat, par opposition aux facteurs humains qui
+  ont un effet indéniable sur la qualité des vins.  Le débat sur
+  l'articulation des facteurs humains et des facteurs naturels de la
+  qualité vin existe depuis plus d'un demi-siècle et produit des
+  discussions toujours d'actualité citep:Dion52,DChe15.  C'est pour
+  alimenter ce débat que les analyses présentées dans cet article sont
+  totalement reproductibles à partir de la base de donnée produite.
+  Les codes pour l'estimation du modèle sont reportés dans l'article,
+  afin de permettre l'estimation de modèles alternatifs.
+  L'appariement de données supplémentaires pour relier les AOC aux
+  caractéristiques des lieux est également possible par la
+  géolocalisation des parcelles cadastrales.  La transparence des
+  analyses permet aux résultats d'être discutés et contestés afin de
+  faire l'objet d'une appropriation par les chercheurs, les décideurs,
+  les professionnels du secteur, ou les amateurs de vin.
 
 *** Remerciements
 
-   Nous tenons à remercier Pauline, Vincent, Guillaume.
+   Nous tenons à remercier Pauline Mialhe, Vincent Larmet, et
+    Guillaume Royer pour leur aide sur le développement de
+    l'application.
 
+#+Latex: \clearpage
+
+** Bibliographie                             :noheading:
+  :PROPERTIES:
+  :CUSTOM_ID: Sec:6
+  :END:
+
+   bibliographystyle:../Softwares/latex/erae
+   bibliography:Biblio.bib
+
+#+LATEX: \clearpage\appendix
+
+** Annexes
+  :PROPERTIES:
+  :CUSTOM_ID: Sec:A
+  :END:
+*** Annexe 1 : Configuration logicielle      :noheading:
+
+    *Annexe 1 : Configuration logicielle*
 
 #+begin_src R :wrap example
 sessionInfo()
@@ -3317,268 +3613,100 @@ loaded via a namespace (and not attached):
 
 #+Latex: \clearpage
 
-** Bibliographie
-  :PROPERTIES:
-  :CUSTOM_ID: Sec:6
-  :END:
+*** Annexe 2 : Configuration graphique       :noheading:
 
-   bibliographystyle:../Softwares/latex/erae
-   bibliography:Biblio.bib
+    *Annexe 2 : Configuration graphique*
 
-#+LATEX: \clearpage\appendix
-
-** Annexes
-  :PROPERTIES:
-  :CUSTOM_ID: Sec:A
-  :END:
-*** Annexe 1 : Construction des données      :noheading:
-
-    *Annexe 1 : Construction des données*
-
-    Cette annexe reporte les codes =R= utilisés pour constituer la
-    base de données principale associée à l'article.  Les références
-    des données sources sont mentionnées dans le corps de l'article.
-
-***** /Données parcellaires/
-
-    Le résultat de ces traitements se trouve dans le fichier
-    =/Carto/GeoCad.shp= (disponible auprès des auteurs sur demande)
-    utilisé dans le code suivant :
-
-#+begin_src R :wrap example
-library(sp) ; library(rgdal)
-Geo.Cad <- readOGR("./Carto", "GeoCad")
-sapply(Geo.Cad@data, function(x) sum(is.na(x)))
+#+begin_src R
+## Pour Figure 2
+my.lab= c(BGOR= "Coteaux b.", BOUR= "Bourgogne", VILL= "Village",
+          PCRU= "Premier cru", GCRU= "Grand cru")
+library(RColorBrewer)
+my.pal= brewer.pal(n= 9, name = "BuPu")[ 2: 8]
+library(lattice)
+my.key= list(space= "top", points= F, rectangles= T, columns= 5, text= my.lab)
+my.par= list(superpose.polygon= list(col= my.pal))
+my.pan= function(x, y, ...) {
+             panel.grid(h= 0, v = -11, col= "grey60")
+             panel.barchart(x, y, ...)
+             ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))}
+## Pour Tableau 7
+library(stargazer)          
+tb.lab <-
+    c(AREA= "Surface [1000 m$^2$]", DEM= "Altitude [1000 m]",
+      SLOPE= "Pente [degrés]", SOLAR=  "Radiation solaire [millions J]",
+      X= "Longitude [degrés]", Y= "Latitude [degrés]",
+      AOC1= "Niveau AOC Coteaux", AOC2= "Niveau AOC Régional",
+      AOC3= "Niveau AOC Village", AOC4= "Niveau AOC Premier Cru",
+      AOC5= "Niveau AOC Grand Cru",
+      EXPO1= "Exposition [$0-45$]"   , EXPO2= "Exposition [$45-90$]",
+      EXPO3= "Exposition [$90-135$]" , EXPO4= "Exposition [$135-180$]",
+      EXPO5= "Exposition [$180-225$]", EXPO6= "Exposition [$225-270$]",
+      EXPO7= "Exposition [$270-315$]", EXPO8= "Exposition [$315-360$]")
+## Pour Figure 4
+plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
+mso.key <- list(x = .35, y = .95, corner = c(1, 1),
+            text = list(c("Côte de Beaune", "Côte de Nuits")),
+            rectangle = list(col = c("chartreuse", "tomato"))) 
 #+end_src
-
-#+RESULTS:
-#+begin_example
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoInd/Carto", layer: "GeoCad"
-with 110350 features
-It has 16 fields
-    IDU CODECOM    AREA   PERIM MAXDIST PAR2RAS    PAOC    BGOR 
-      0       0       0       0       0       0   49718   49718 
-   BOUR    VILL    COMM    PCRU    GCRU     AOC   AOCtp   AOClb 
-  49718   49718   49718   49718   49718       0   49718   49718
-#+end_example
-
-***** /Données raster/
-
-    Le fichier =Data/DatRas= appariés aux données du cadastre peut
-    être obtenu auprès des auteurs.
-
-#+begin_src R :wrap example
-library(data.table)
-dim(Dat.Ras <- fread("./Data/DatRas.csv"))
-Cad.Ras <- Dat.Ras[, lapply(.SD, mean), 
-                   by= list(PAR2RAS),.SDcols= names(Dat.Ras)[-c(1, 4, 13)]]
-Geo.Ras <- merge(Geo.Cad, Cad.Ras, by= "PAR2RAS")
-sapply(Geo.Ras@data[, 17: 26], function(x) sum(is.na(x))); rm(Dat.Ras)
-#+end_src
-
-#+RESULTS:
-#+begin_example
-[1] 14253070       13
-  XL93   YL93  NOMOS  URBAN FOREST  WATER    DEM  SLOPE ASPECT  SOLAR 
-  2096   2096   2096   2096   2096   2096   2096   2096   2096   2096
-#+end_example
-
-***** /Données géologiques (polygone)/
-
-    Nous apparions les $13\,960$ polygones géologiques présent dans
-    =/Carto/GeolMap= (disponible sur demande) sur la base du centroïde
-    des parcelles cadastrales, comme présenté dans le code suivant.
-
-#+begin_src R :wrap example
-Geol.Map <- readOGR("./Carto/", "GeolMap")
-Pts.Cad <- SpatialPoints(Geo.Ras, proj4string= CRS(proj4string(Geol.Map)))
-Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Geol.Map))
-sapply(Geo.Ras@data[, 27: 42], function(x) sum(is.na(x)))
-#+end_src
-
-#+RESULTS:
-#+begin_example
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoInd/Carto", layer: "GeolMap"
-with 13960 features
-It has 16 fields
-      CODE   NOTATION      DESCR   TYPEGEOL   APLOCALE     TYPEAP 
-        31         31         31         31        862        862 
-   GEOLNAT   ISOPIQUE     AGEDEB     ERADEB     SYSDEB LITHOLOGIE 
-        31         31         31         31         31         31 
-    DURETE  ENVIRONMT  GEOCHIMIE   LITHOCOM 
-        69         31         31         69
-#+end_example
-
-***** /Données pédologiques (polygone)/
-
-#+begin_src R :wrap example
-Pedo.Map <- readOGR("./Carto", "PedoMap")
-Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Pedo.Map))
-Geo.Ras@data[, c(44: 47, 49: 54)] <-
-    apply(Geo.Ras@data[, c(44: 47, 49: 54)], 2, as.numeric)
-sapply(Geo.Ras@data[, 43: 55], function(x) sum(is.na(x)))
-#+end_src
-
-#+RESULTS:
-#+begin_example
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoInd/Carto", layer: "PedoMap"
-with 194 features
-It has 13 fields
-
-  NOUC SURFUC   TARG   TSAB   TLIM TEXTAG  EPAIS    TEG    TMO    RUE 
- 14645  14645  14645  14645  14645  14645  14645  14645  14645  14645 
-   RUD  OCCUP DESCRp 
- 14645  14645  14645
-#+end_example
-
-***** /Données AOC historiques (polygones)/ 
-
-#+begin_src R :wrap example
-Hist.Aoc <- readOGR("Carto/", "Aoc1936")
-Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Hist.Aoc))
-sapply(Geo.Ras@data[, 56: 57], function(x) sum(is.na(x)))
-#+end_src
-
-#+RESULTS:
-#+begin_example
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoInd/Carto", layer: "Aoc1936"
-with 56 features
-It has 2 fields
-AOC36lab AOC36lvl 
-      70       70
-#+end_example
-
-***** /Données Lieux dits (polygones)/
-
-#+begin_src R :wrap example
-Lieu.Dit <- readOGR("./Carto/", "LieuDit")
-Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Lieu.Dit[, -1]))
-sapply(Geo.Ras@data[, 58: 67], function(x) sum(is.na(x)))
-#+end_src
-
-#+RESULTS:
-#+begin_example
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/jsay/geoInd/Carto", layer: "LieuDit"
-with 3285 features
-It has 11 fields
- LIEUDIT   CLDVIN   LIBCOM     XCHF     YCHF   ALTCOM   SUPCOM 
-    4494     4494     4494     4494     4494     4494     4494 
-  POPCOM CODECANT   REGION 
-    4494     4494     4494
-#+end_example
-
-***** /Enregistrement de la base/
-
-#+begin_src R :wrap example
-dim(Geo.Ras)
-save(Geo.Ras, file= "Inter/GeoRas.Rda")
-writeOGR(Geo.Ras, "Carto/", "GeoRas", driver= "ESRI Shapefile")
-#+end_src
-
-#+RESULTS:
-#+begin_example
-[1] 110350     67
-#+end_example
 
 #+Latex: \clearpage
 
-*** Annexe 2 : Intitulés géologiques         :noheading:
+*** Annexe 3 : Géologie et pédologie         :noheading:
 
-    *Annexe 2 : Intitulés géologiques*
+    *Annexe 3 : Unités géologiques et pédologiques*
 
-#+begin_src R :tangle ./myFcts.R
-trans_geol <- data.frame(
-    GEOL= Reg.Ras$GEOL[!duplicated(Reg.Ras$GEOL)],
-    GEOf= c(
-        "Calcaires massifs de \"Comblanchien\" (Bathonien sup.)",
-        "Marnes et calcaires divers (Callovien inférieur)",
-        "Marnes et calcaires argileux (Oxfordien moyen)",
-        "Eboulis ordonnés cryoclastiques et colluvions diverses",
-        "Oolithe ferrugineuse (Oxfordien moyen-sup)",
-        "Calcaires hydrauliques de Molesmes et Noiron (Oxfordien sup.)",
-        "Colluvions diverses",
-        "Dépôts argilo-limoneux, sables et graviers du Villafranchien",
-        "Calcaires de Tonnerre, Oisellemont et calcaires à Astartes",
-        "Eboulis et glissements de terrains",
-        "Calcaires grenus bicolores (Bathonien terminal)",
-        "Terrasse argilo-limoneuse de Saint-Usage",
-        "Formation de Saint-Cosme (marnes fluvio-lacustres varvées)",
-        "Alluvions anciennes indifférenciées, argilo-limoneuses",
-        "Calcaires bioclastiques, graveleux, à oolithes (Bathonien inf.)"
-    ),
-    GEOe= c(
-        "Massive limestones from \"Comblanchien\" (upper Bathonian)",
-        "Various marls and limestones (lower Callovian)",
-        "Marls and argillaceous limestones (middle Oxfordian)",
-        "Ordered cryoclastic scree and various colluviums",
-        "Ferruginous Oolite (middle-upper Oxfordian)",
-        "Hydraulic limestones of Molesmes and Noiron (upper Oxfordian)",
-        "Various colluviums",
-        "Clay-silt deposits, sand and gravel from Villafranchien",
-        "Limestones of Thunder, Oisellemont and limestones in Astartes",
-        "Screes and landslides",
-        "Two-tone gray limestones (terminal Bathonian)",
-        "Clay-silty terrace of Saint-Usage",
-        "Formation of Saint-Cosme (varnished fluvio-lacustrine marls)",
-        "Undifferentiated ancient alluvium, clay-silty",
-        "Bioclastic limestones, gravelly, with oolites (lower Bathonian)")
-)
-#+end_src
+#+begin_export latex
+\vspace{.5cm}
+\begin{figure}[!h]
+  \centering\hspace{-2cm}
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .3, page= 1]{./Figures/MapGeol}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .3, page= 2]{./Figures/MapGeol}
+\end{minipage}\vspace*{.5cm}
+\caption{\textbf{Distribution des 31 formations géologiques de la
+    zone. }\\[.25cm]
+  {\footnotesize
+    Source : INRA / BRGM.\\
+    Lecture : La carte représente les 31 unités géologiques qui
+    regroupent des sous-sols homogènes selon la formation géologique
+    renseignée dans la base de données.  Ces unités seront simplifiées
+  avant l'inclusion dans le modèle statistique.}}\label{Fig:3}
+\end{figure}
+#+end_export
 
-#+LATEX: \clearpage
+#+begin_export latex
+\vspace{.5cm}
+\begin{figure}[!h]
+  \centering\hspace{-2cm}
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .3, page= 1]{./Figures/MapPedo}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+ \includegraphics[scale= .3, page= 2]{./Figures/MapPedo}
+\end{minipage}\vspace*{.5cm}
+\caption{\textbf{Distribution des unités cartographiques de sols et
+    leurs intitulés. }\\[.25cm]
+  {\footnotesize
+    Source : INRA / Gis Sol.\\
+    Lecture : La carte représente les 33 unités cartographiques de
+    sols qui correspondent à des pédo-paysages homogènes en termes de
+    climat, topographie et géologie.  Ces unités seront simplifiées
+    avant l’inclusion dans le modèle statistique.}}\label{Fig:4}
+\end{figure}
+#+end_export
 
-*** Annexe 3 : Intitulés pédologiques        :noheading:
-
-    *Annexe 3 : Intitulés pédologiques*
-
-#+begin_src R  :tangle ./myFcts.R
-trans_pedo <- data.frame(
-    PEDO= Reg.Ras$PEDO[!duplicated(Reg.Ras$PEDO)],
-    PEDf= c(
-        "Vignoble de la Côte de de Beaune",
-        "Cônes de déjection du pied de Côte",
-        "Côteaux viticoles des Hautes Côtes de Nuits",
-        "Courtes pentes marneuses des plateaux plio-pléistocène",
-        "Piedmont de la côte viticole",
-        "Versants pentus des Hautes Côtes de Beaune",
-        "Sommets des collines des Hautes Côtes de Beaune",
-        "Alluvions récentes calcaires des vallées (Ouche, Tille, Meuzin)",
-        "Pentes liasiques du Haut-Auxois",
-        "Basses terrasses gravelo-caillouteuses des plaines alluviales",
-        "Basses terrasses argileuses des plaines alluviales",
-        "Terrasse argilo-limoneuse de Saint-Usage",
-        "Vignoble de la Côte de Nuits",
-        "Rebord oriental des plateaux calcaires dominant la Côte viticole"
-    ),
-    PEDe= c(
-        "Vineyard of the Côte de Beaune",
-        "Coot footing cones",
-        "Wine hills of Hautes Côtes de Nuits",
-        "Oxfordian limestone-marly trays of the Hautes Côtes",
-        "Short marly slopes of Plio-Pleistocene plateaus",
-        "Piedmont of the vineyard of the Côte",
-        "Sloping slopes of the Hautes Côtes de Beaune",
-        "Summits of the hills of the Hautes Côtes de Beaune",
-        "Recent alluvial limestone valleys (Ouche, Tille, Meuzin)",
-        "Liastic slopes of Haut-Auxois",
-        "Gravelo-stony low terraces of alluvial plains",
-        "Low clay terraces of alluvial plains",
-        "Vineyard of the Côte de Nuits",
-        "Eastern edge of the limestone plateaus overlooking the Côte"
-    )
-)
-#+end_src
-
-#+LATEX: \clearpage
+#+Latex: \clearpage
 
 *** Annexe 4 : Interface utilisateur         :noheading:
 
-    *Annexe 5 : Interface utilisateur de l'application*
+    *Annexe 4 : Interface utilisateur de l'application*
 
 #+begin_src R :tangle ./Application/ui.R
 ui <- dashboardPage(
@@ -3653,7 +3781,7 @@ ui <- function(request){
 
 *** Annexe 5 : Partie serveur                :noheading:
 
-    *Annexe 6 : Partie serveur de l'application*
+    *Annexe 5 : Partie serveur de l'application*
 
 #+begin_src R :tangle ./Application/server.R
 server <- function(input, output, session) {
@@ -3842,13 +3970,13 @@ server <- function(input, output, session) {
     })
     ## Violon Plot de base
     output$miplot <- renderPlot({
-        yop <- getPts()$SCORE_corrigé
+        yop <- getPts()$SCORE_c
         if (length(yop)==0) return(NULL)
         top <- round(100-
-                     aggregate(I(Poly.Ras$SCORE_corrigé< yop)* 100,
+                     aggregate(I(Poly.Ras$SCORE_c< yop)* 100,
                                by= list(Poly.Ras$NIVEAU), mean)[, 2])
         ggplot(Poly.Ras, aes(x= factor(NIVEAU),
-                             y= SCORE_corrigé, fill= factor(NIVEAU)))+
+                             y= SCORE_c, fill= factor(NIVEAU)))+
             geom_violin(trim= FALSE)+ theme_minimal()+ ylim(40, 100)+
             geom_boxplot(width=0.1, fill= "white")+
             annotate("text", x= 1: 5, y= 100,
@@ -4063,6 +4191,251 @@ GrandCru <- data.frame("Gevrey-Chambertin", "Chambertin",
                        "Chassagne-Montrachet", "Bâtard-Montrachet",
                        "Chassagne-Montrachet", "Criots-Bâtard-Montrachet")
 #+end_src
+
+*** Annexe XX : Construction des données     :noexport:
+
+    *Annexe 1 : Construction des données*
+
+    Cette annexe reporte les codes =R= utilisés pour constituer la
+    base de données principale associée à l'article.  Les références
+    des données sources sont mentionnées dans le corps de l'article.
+
+***** /Données parcellaires/
+
+    Le résultat de ces traitements se trouve dans le fichier
+    =/Carto/GeoCad.shp= (disponible auprès des auteurs sur demande)
+    utilisé dans le code suivant :
+
+#+begin_src R :wrap example
+library(sp) ; library(rgdal)
+Geo.Cad <- readOGR("./Carto", "GeoCad")
+sapply(Geo.Cad@data, function(x) sum(is.na(x)))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/jsay/geoInd/Carto", layer: "GeoCad"
+with 110350 features
+It has 16 fields
+    IDU CODECOM    AREA   PERIM MAXDIST PAR2RAS    PAOC    BGOR 
+      0       0       0       0       0       0   49718   49718 
+   BOUR    VILL    COMM    PCRU    GCRU     AOC   AOCtp   AOClb 
+  49718   49718   49718   49718   49718       0   49718   49718
+#+end_example
+
+***** /Données raster/
+
+    Le fichier =Data/DatRas= appariés aux données du cadastre peut
+    être obtenu auprès des auteurs.
+
+#+begin_src R :wrap example
+library(data.table)
+dim(Dat.Ras <- fread("./Data/DatRas.csv"))
+Cad.Ras <- Dat.Ras[, lapply(.SD, mean), 
+                   by= list(PAR2RAS),.SDcols= names(Dat.Ras)[-c(1, 4, 13)]]
+Geo.Ras <- merge(Geo.Cad, Cad.Ras, by= "PAR2RAS")
+sapply(Geo.Ras@data[, 17: 26], function(x) sum(is.na(x))); rm(Dat.Ras)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 14253070       13
+  XL93   YL93  NOMOS  URBAN FOREST  WATER    DEM  SLOPE ASPECT  SOLAR 
+  2096   2096   2096   2096   2096   2096   2096   2096   2096   2096
+#+end_example
+
+***** /Données géologiques (polygone)/
+
+    Nous apparions les $13\,960$ polygones géologiques présent dans
+    =/Carto/GeolMap= (disponible sur demande) sur la base du centroïde
+    des parcelles cadastrales, comme présenté dans le code suivant.
+
+#+begin_src R :wrap example
+Geol.Map <- readOGR("./Carto/", "GeolMap")
+Pts.Cad <- SpatialPoints(Geo.Ras, proj4string= CRS(proj4string(Geol.Map)))
+Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Geol.Map))
+sapply(Geo.Ras@data[, 27: 42], function(x) sum(is.na(x)))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/jsay/geoInd/Carto", layer: "GeolMap"
+with 13960 features
+It has 16 fields
+      CODE   NOTATION      DESCR   TYPEGEOL   APLOCALE     TYPEAP 
+        31         31         31         31        862        862 
+   GEOLNAT   ISOPIQUE     AGEDEB     ERADEB     SYSDEB LITHOLOGIE 
+        31         31         31         31         31         31 
+    DURETE  ENVIRONMT  GEOCHIMIE   LITHOCOM 
+        69         31         31         69
+#+end_example
+
+***** /Données pédologiques (polygone)/
+
+#+begin_src R :wrap example
+Pedo.Map <- readOGR("./Carto", "PedoMap")
+Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Pedo.Map))
+Geo.Ras@data[, c(44: 47, 49: 54)] <-
+    apply(Geo.Ras@data[, c(44: 47, 49: 54)], 2, as.numeric)
+sapply(Geo.Ras@data[, 43: 55], function(x) sum(is.na(x)))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/jsay/geoInd/Carto", layer: "PedoMap"
+with 194 features
+It has 13 fields
+
+  NOUC SURFUC   TARG   TSAB   TLIM TEXTAG  EPAIS    TEG    TMO    RUE 
+ 14645  14645  14645  14645  14645  14645  14645  14645  14645  14645 
+   RUD  OCCUP DESCRp 
+ 14645  14645  14645
+#+end_example
+
+***** /Données AOC historiques (polygones)/ 
+
+#+begin_src R :wrap example
+Hist.Aoc <- readOGR("Carto/", "Aoc1936")
+Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Hist.Aoc))
+sapply(Geo.Ras@data[, 56: 57], function(x) sum(is.na(x)))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/jsay/geoInd/Carto", layer: "Aoc1936"
+with 56 features
+It has 2 fields
+AOC36lab AOC36lvl 
+      70       70
+#+end_example
+
+***** /Données Lieux dits (polygones)/
+
+#+begin_src R :wrap example
+Lieu.Dit <- readOGR("./Carto/", "LieuDit")
+Geo.Ras@data <- cbind(Geo.Ras@data, over(Pts.Cad, Lieu.Dit[, -1]))
+sapply(Geo.Ras@data[, 58: 67], function(x) sum(is.na(x)))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/jsay/geoInd/Carto", layer: "LieuDit"
+with 3285 features
+It has 11 fields
+ LIEUDIT   CLDVIN   LIBCOM     XCHF     YCHF   ALTCOM   SUPCOM 
+    4494     4494     4494     4494     4494     4494     4494 
+  POPCOM CODECANT   REGION 
+    4494     4494     4494
+#+end_example
+
+***** /Enregistrement de la base/
+
+#+begin_src R :wrap example
+dim(Geo.Ras)
+save(Geo.Ras, file= "Inter/GeoRas.Rda")
+writeOGR(Geo.Ras, "Carto/", "GeoRas", driver= "ESRI Shapefile")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 110350     67
+#+end_example
+
+#+Latex: \clearpage
+
+*** Annexe XX : Intitulés géologiques        :noexport:
+
+    *Annexe 2 : Intitulés géologiques*
+
+#+begin_src R :tangle ./myFcts.R
+trans_geol <- data.frame(
+    GEOL= Reg.Ras$GEOL[!duplicated(Reg.Ras$GEOL)],
+    GEOf= c(
+        "Calcaires massifs de \"Comblanchien\" (Bathonien sup.)",
+        "Marnes et calcaires divers (Callovien inférieur)",
+        "Marnes et calcaires argileux (Oxfordien moyen)",
+        "Eboulis ordonnés cryoclastiques et colluvions diverses",
+        "Oolithe ferrugineuse (Oxfordien moyen-sup)",
+        "Calcaires hydrauliques de Molesmes et Noiron (Oxfordien sup.)",
+        "Colluvions diverses",
+        "Dépôts argilo-limoneux, sables et graviers du Villafranchien",
+        "Calcaires de Tonnerre, Oisellemont et calcaires à Astartes",
+        "Eboulis et glissements de terrains",
+        "Calcaires grenus bicolores (Bathonien terminal)",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Formation de Saint-Cosme (marnes fluvio-lacustres varvées)",
+        "Alluvions anciennes indifférenciées, argilo-limoneuses",
+        "Calcaires bioclastiques, graveleux, à oolithes (Bathonien inf.)"
+    ),
+    GEOe= c(
+        "Massive limestones from \"Comblanchien\" (upper Bathonian)",
+        "Various marls and limestones (lower Callovian)",
+        "Marls and argillaceous limestones (middle Oxfordian)",
+        "Ordered cryoclastic scree and various colluviums",
+        "Ferruginous Oolite (middle-upper Oxfordian)",
+        "Hydraulic limestones of Molesmes and Noiron (upper Oxfordian)",
+        "Various colluviums",
+        "Clay-silt deposits, sand and gravel from Villafranchien",
+        "Limestones of Thunder, Oisellemont and limestones in Astartes",
+        "Screes and landslides",
+        "Two-tone gray limestones (terminal Bathonian)",
+        "Clay-silty terrace of Saint-Usage",
+        "Formation of Saint-Cosme (varnished fluvio-lacustrine marls)",
+        "Undifferentiated ancient alluvium, clay-silty",
+        "Bioclastic limestones, gravelly, with oolites (lower Bathonian)")
+)
+#+end_src
+
+#+LATEX: \clearpage
+
+*** Annexe XX : Intitulés pédologiques       :noexport:
+
+    *Annexe 3 : Intitulés pédologiques*
+
+#+begin_src R  :tangle ./myFcts.R
+trans_pedo <- data.frame(
+    PEDO= Reg.Ras$PEDO[!duplicated(Reg.Ras$PEDO)],
+    PEDf= c(
+        "Vignoble de la Côte de de Beaune",
+        "Cônes de déjection du pied de Côte",
+        "Côteaux viticoles des Hautes Côtes de Nuits",
+        "Courtes pentes marneuses des plateaux plio-pléistocène",
+        "Piedmont de la côte viticole",
+        "Versants pentus des Hautes Côtes de Beaune",
+        "Sommets des collines des Hautes Côtes de Beaune",
+        "Alluvions récentes calcaires des vallées (Ouche, Tille, Meuzin)",
+        "Pentes liasiques du Haut-Auxois",
+        "Basses terrasses gravelo-caillouteuses des plaines alluviales",
+        "Basses terrasses argileuses des plaines alluviales",
+        "Terrasse argilo-limoneuse de Saint-Usage",
+        "Vignoble de la Côte de Nuits",
+        "Rebord oriental des plateaux calcaires dominant la Côte viticole"
+    ),
+    PEDe= c(
+        "Vineyard of the Côte de Beaune",
+        "Coot footing cones",
+        "Wine hills of Hautes Côtes de Nuits",
+        "Oxfordian limestone-marly trays of the Hautes Côtes",
+        "Short marly slopes of Plio-Pleistocene plateaus",
+        "Piedmont of the vineyard of the Côte",
+        "Sloping slopes of the Hautes Côtes de Beaune",
+        "Summits of the hills of the Hautes Côtes de Beaune",
+        "Recent alluvial limestone valleys (Ouche, Tille, Meuzin)",
+        "Liastic slopes of Haut-Auxois",
+        "Gravelo-stony low terraces of alluvial plains",
+        "Low clay terraces of alluvial plains",
+        "Vineyard of the Côte de Nuits",
+        "Eastern edge of the limestone plateaus overlooking the Côte"
+    )
+)
+#+end_src
+
+#+LATEX: \clearpage
 
 * Reprod Paper
   :PROPERTIES:
@@ -10883,11 +11256,23 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{DChe15,
-  title={Roger Dion, toujours vivant!},
+  title={Roger {D}ion, toujours vivant!},
   author={Delay, Etienne and Chevallier, Marius},
   journal={Cybergeo: European Journal of Geography},
   year={2015},
   publisher={CNRS-UMR G{\'e}ographie-cit{\'e}s 8504}
+}
+#+end_src
+
+*** cite:Luca17 [[file:Biblio/Trie/XXXX.pdf][Book: Vin et la guerre]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@book{Luca17,
+  title={Le vin et la guerre: Comment les nazis ont fait main basse
+                  sur le vignoble fran{\c{c}}ais},
+  author={Lucand, Christophe},
+  year={2017},
+  publisher={Armand Colin}
 }
 #+end_src
 
@@ -10927,6 +11312,20 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
 }
 #+end_src
 
+*** cite:HJRV18 [[file:Biblio/Trie/HJRV18.pdf][UFUG : Mos cote d'or]] 
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{HJRV18,
+  title={Visual structure of landscapes seen from built environment},
+  author={Hilal, Mohamed and Joly, Daniel and Roy, Damien and Vuidel, Gilles},
+  journal={Urban Forestry \& Urban Greening},
+  volume={32},
+  pages={71--80},
+  year={2018},
+  publisher={Elsevier}
+}
+#+end_src
+
 *** cite:LPBR19 [[file:Biblio/Trie/LPBR19.pdf][CPD: Longues séries climat]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -10953,9 +11352,8 @@ DOI = {10.5194/cp-2018-179}
 @article{Ay19,
   title={The informational content of geographical indications},
   author={Ay, Jean-Sauveur},
-  journal={AAWE Working Paper n XXX},
-  year={2019},
-  publisher={http://journals.openedition.org/acrh/5979}
+  journal={en révision},
+  year={2019}
 }
 #+end_src
 
@@ -12638,13 +13036,13 @@ url = {http://www.R-project.org/},
 *** sp, spdep  :: cite:BPGR13 [[file:Biblio/Trie/BPGR13.pdf][Book: Spatial data with R]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
-@book{BPGR13,
-  title={Applied spatial data: analysis with R},
-  author={Bivand, Roger S and Pebesma, Edzer J and Rubio, Virgilio
-                  G{\'o}mez},
-  year={2008},
-  publisher={Springer}
-}
+@Book{BPGR13,
+    author = {Roger S. Bivand and Edzer Pebesma and Virgilio Gomez-Rubio},
+    title = {Applied spatial data analysis with {R}, Second edition},
+    year = {2013},
+    publisher = {Springer, NY},
+    url = {http://www.asdar-book.org/},
+  }
 #+end_src
 
 - Pour les fonctions spatiales
@@ -12841,6 +13239,19 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 
     [[file:Biblio/Trie/WRHa17.pdf][Vignette]] 
 
+*** shiny      :: cite:CCAX19 [[file:Biblio/Trie/CCAX19.pdf][Book: Shiny]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@Manual{CCAX19,
+    title = {shiny: Web Application Framework for {R}},
+    author = {Winston Chang and Joe Cheng and JJ Allaire and Yihui Xie
+                  and Jonathan McPherson},
+    year = {2019},
+    note = {R package version 1.4.0},
+    url = {https://CRAN.R-project.org/package=shiny},
+  }
+#+end_src
+
 *** sure       :: cite:LZha18 [[file:Biblio/Trie/LZha18.pdf][JASA: Surrogate residuals]] [[file:Biblio/Trie/LZha18a.pdf][Sup Mat]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12940,6 +13351,82 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 - The second paper [[file:Biblio/Trie/AKat17.pdf][AKat17]] provides a measure of the proba of ordinal
   dominance that can be interesting for communes effects once the
   terroir is fully controlled.
+
+*** DEM        :: cite:CBBD15 rien
+
+    SIG tools for DEM
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{CBBD15,
+  title={System for automated geoscientific analyses (SAGA) v. 2.1. 4},
+  author={Conrad, Olaf and Bechtel, Benjamin and Bock, Michael and
+                  Dietrich, Helge and Fischer, Elke and Gerlitz, Lars
+                  and Wehberg, Jan and Wichmann, Volker and
+                  B{\"o}hner, J{\"u}rgen},
+  journal={Geoscientific Model Development},
+  volume={8},
+  number={7},
+  pages={1991--2007},
+  year={2015},
+  publisher={Copernicus GmbH}
+}
+#+end_src
+
+*** dataverse  :: cite:Leep17 rien
+
+    dataverse tools
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+  @Manual{Leep17,
+    title = {dataverse: R Client for Dataverse 4},
+    author = {Thomas J. Leeper},
+    year = {2017},
+    note = {R package version 0.2.0},
+  }
+#+end_src
+
+*** SOLAR      :: cite:RFu00  rien
+
+    SIG tools for Solar
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{RFu00,
+  title={Topoclimatic Habitat Models},
+  author={Rich, P. M. and P. Fu},
+  journal={Proceedings of the Fourth International Conference on
+                  Integrating GIS and Environmental Modeling},
+  year={2000}
+}
+#+end_src
+
+*** sf         :: cite:Pebe18 rien
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@Article{Pebe18,
+    author = {Edzer Pebesma},
+    title = {{Simple Features for R: Standardized Support for Spatial Vector Data}},
+    year = {2018},
+    journal = {{The R Journal}},
+    doi = {10.32614/RJ-2018-009},
+    url = {https://doi.org/10.32614/RJ-2018-009},
+    pages = {439--446},
+    volume = {10},
+    number = {1},
+  }
+#+end_src
+
+*** mapview    :: cite:ADRW18 rien
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@Manual{ADRW18,
+    title = {mapview: Interactive Viewing of Spatial Data in R},
+    author = {Tim Appelhans and Florian Detsch and Christoph
+                  Reudenbach and Stefan Woellauer},
+    year = {2018},
+    note = {R package version 2.6.3},
+    url = {https://CRAN.R-project.org/package=mapview},
+  }
+#+end_src
 
 *** PRes
 
@@ -14137,3 +14624,19 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
   before.
 
   Best regards, Jean-Sauveur Ay.
+
+* Response to editor
+
+  Dear Editor,
+
+  Thank you for your quick and very constructive response to my
+  article proposal.  I accept the roadmap that you propose, I will
+  going to work on revising the manuscript in order to improve the
+  motivations and policy implications of my results.
+
+  I hope that I can submit the revised version in the course of
+  January 2020.
+
+  Sincerely, jean-sauveur.
+
+  
