@@ -75,29 +75,29 @@ server <- function(input, output, session) {
     })
     ## Violon Plot de base
     output$miplot <- renderPlot({
-        yop <- getPts()$SCORE_corrigé
+        yop <- getPts()$SCORE_c
         if (length(yop)==0) return(NULL)
         top <- round(100-
-                     aggregate(I(Poly.Ras$SCORE_corrigé< yop)* 100,
+                     aggregate(I(Poly.Ras$SCORE_c< yop)* 100,
                                by= list(Poly.Ras$NIVEAU), mean)[, 2])
         ggplot(Poly.Ras, aes(x= factor(NIVEAU),
-                             y= SCORE_corrigé, fill= factor(NIVEAU)))+
+                             y= SCORE_c, fill= factor(NIVEAU)))+
             geom_violin(trim= FALSE)+ theme_minimal()+ ylim(40, 100)+
             geom_boxplot(width=0.1, fill= "white")+
             annotate("text", x= 1: 5, y= 100,
-                     label= paste("Top", top, "%"), col= "red", size= 7)+
+                     label= paste("", top, "%"), col= "red", size= 5)+
             labs(title= "Comparaison avec les autres parcelles",
-                 x= "\n source: jean-sauveur ay @ inra cesaer, voir https://github.com/jsay/geoInd/",
+                 x= "",
                  y = "Niveau sur une échelle de 1 à 100")+ 
             scale_fill_manual(values= AocPal)+ 
             theme(legend.position= "none",
                   plot.title = element_text(hjust = 0, size = 16),
-                  axis.text.x = element_text(size= 14),
+                  axis.text.x = element_text(size= 12),
                   axis.title.x = element_text(hjust= 0, size= 14),
                   axis.title.y = element_text(size= 14))+
             scale_x_discrete(expand= expand_scale(mult= 0, add= 1),
                              drop= T)+
             geom_hline(yintercept= yop, lty= 2, col= "red")+
             annotate("text", x= 0.35, y= yop+ 2,
-                     label= round(yop, 2), col= "red", size= 8)
-    }, height = 575, width = 400)}
+                     label= round(yop, 2), col= "red", size= 5)
+    }, height = 500, width = 400)}
