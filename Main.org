@@ -93,7 +93,7 @@
   :EXPORT_LATEX_CLASS:  ManueStat
   :EXPORT_TITLE:        @@latex: \vspace{-1cm} \huge\textbf{Données et Modèles pour une Classification Statistique des Vignobles de Côte-d'Or }@@
   :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textbf{Jean-Sauveur AY} && \textbf{Mohamed HILAL} \\ < \url{jean-sauveur.ay@inrae.fr} > && < \url{mohamed.hilal@inrae.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup Dijon / INRAE / Université Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard Docteur-Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
-  :EXPORT_DATE:         /Model paper/ version 1.3 du Vendredi 17 janvier 2020
+  :EXPORT_DATE:         /Model paper/ version 1.3 du Lundi 3 février 2020
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat} \usepackage{tocloft} \renewcommand{\abstractname}{Résumé} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm} \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} \renewcommand*\contentsname{Table des Matières}
   :END:
@@ -109,20 +109,22 @@ author: |
 # Résumé
 #+end_export
 #+BEGIN_abstract
-Cet article présente la construction d'une base de données
-parcellaires et analyse les relations entre les caractéristiques
-biophysiques (topographie, géologie, pédologie) des parcelles
-cadastrales et leurs appellations d'origine contrôlée (AOC) viticoles.
-Élaborées sur le périmètre des 31 communes de Côte-d'Or qui forment la
-côte de Beaune et la côte de Nuits, les données permettent d'estimer
-statistiquement les déterminants naturels et humains de la position
-des parcelles dans la hiérarchie des AOC.  Les prédictions issues de
-la modélisation permettent de préciser la hiérarchie des AOC en
-positionnant chaque parcelle sur une échelle continue de qualité,
-entre 0 et 100, déterminée par les seuls attributs biophysiques.  Les
-données, modèles et prédictions sont disponibles sous licence GNU GPL
-V3 sur le serveur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]] et sont consultables par une
-application hébergée à l'url [[https://cesaer-datas.inra.fr/geoind][https://cesaer-datas.inra.fr/geoind/]].
+Cet article présente la construction d'une base de données parcellaire
+pour analyser les relations entre les caractéristiques biophysiques
+(topographie, géologie, pédologie), les caractéristiques
+administratives (commune d'appartenance) et les appellations d'origine
+contrôlée (AOC) viticoles.  Pour les 31 communes qui forment la côte
+de Beaune et la côte de Nuits, les données mettent en évidence une
+relation forte entre les caractéristiques biophysiques des parcelles
+et leur position dans la hiérarchie des AOC.  La relation apparaît
+toutefois différenciée selon l'appartenance administrative des
+parcelles, ce qui révèle des traitements hétérogènes dans les AOC.
+Les prédictions issues de l'analyse permettent également de
+positionner chaque parcelle sur une échelle continue de qualité à
+partir des seuls attributs biophysiques.  Les données, modèles et
+prédictions sont disponibles sous licence GNU GPL V3 sur le serveur
+[[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inra.fr/]] et sont consultables par une application
+hébergée à l'url [[https://cesaer-datas.inra.fr/geoind][https://cesaer-datas.inra.fr/geoind/]].
 Les\nbsp{}codes =R= sont également fournis pour reproduire
 l'intégralité des résultats de cette recherche.\\
 
@@ -15021,32 +15023,31 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
     individual responses to the three referees.  I hope that these
     improvements correspond to what you expect for this revision.
 
-   1. About the policy relevance of my results, I have added a
-      paragraph in the introduction that presents the importance of
+   1. About the policy relevance of my results, I add a paragraph in
+      the introduction that presents the policy importance of
       increasing the informational content of GIs.  A new paragraph in
       section 5 provides a concrete illustration with the
-      modifications of GIs that have been done since 1936 on the area.
-   2. About the value of GI information for consumers, I now cite the
-      related economic literature in the introduction.  This allows to
-      present the comparative advantage of studying the informational
-      content of GIs.  A new paragraph in the conclusion proposes a
-      synthesis for future researches.
-   3. About the context of my research, I have added 3 footnotes in
-      the manuscript in order to precise my adopted definitions of
-      vineyard quality, /terroir/, and the institutional features of
-      the GIs in the area under consideration.
-   4. About the structure of the paper, I have made a deep reshaping
-      of the paragraphs, by decreasing their size (in the revised
-      version, all paragraphs count less than 15 rows). This greatly
-      improves the readability of the paper, and makes it better
-      aligned with the recommendations of the journal.
-   5. About the motivations for my contribution, I have added a
-      paragraph in the introduction that presents more clearly the
-      links between the theoretical literature about strategic quality
-      disclosure and my empirical results.  I have also added another
-      paragraph that contains a more extensive interpretation of the
-      finding that the bias of the GI signal decreases throughout
-      history.
+      modifications of GIs that have been done since 1936.
+   2. About the value of GIs for consumers, I cite the related
+      literature in a new paragraph of the introduction.  I present
+      the comparative advantage of studying the informational content
+      of GIs instead of the value of GIs.  A new paragraph in the
+      conclusion proposes a synthesis for future research.
+   3. About the context of my research, I add 3 footnotes in the
+      manuscript in order to clarify the definitions of vineyard
+      quality, /terroir/, and the institutional features of the GIs in
+      the area under consideration.
+   4. About the structure of the paper, I make a deep reshaping of the
+      paragraphs, by decreasing their size and increasing their number
+      (in the revised version, all paragraphs count less than 15
+      rows). The paper is now more readable and better aligned with
+      the recommendations of the journal.
+   5. About the motivations for my contribution, I add a paragraph in
+      the introduction that presents more clearly the links between
+      the theoretical literature about strategic quality disclosure
+      and my empirical results.  I also add another paragraph that
+      contains a more extensive interpretation of the finding that the
+      bias of the GI signal decreases throughout history.
 
 **** Policy relevance of the findings
 
@@ -15058,20 +15059,20 @@ in this regard would be more clear if you made a stronger statement of
 the fundamental research problem at the outset. 
 #+end_QUOTE
 
-The fundamental research problem is to study the informational content
+My fundamental research problem is to study the informational content
 of GIs according to both a precision and a bias criteria.  This is now
-precised in the second paragraph of the introduction [p.2] "The
-informational content of a GI signal is formally defined by its
+more clearly stated in the second paragraph of the introduction [p.2]
+``Formally, we define the informational content of a GI signal by its
 precision and its bias in describing the tangible characteristics of
 vineyards. The precision criterion stems from the principle that more
 informative signals lead to greater variability of conditional
 expectations citep:GPen10.  Intuitively, more precise signal allows
-higher Bayesian updating and, hence, more dispersed posterior
-expectations once the GI is known citep:BSwa12.  The bias of the
-signal is defined as the probability that two identical vineyard plots
-have a different GI citep:DNab91.  This measures the systematic
-deviation of GI designations from objective criteria citep:Li17 that
-could strategically distorts the GI signal citep:BLar92."
+higher Bayesian updating and more dispersed posterior expectations
+once the GI is known citep:BSwa12.  The bias of the signal is defined
+as the probability that two identical vineyard plots have a different
+GI citep:DNab91,Guer01.  This measures the systematic deviation of GI
+designations from objective criteria citep:Li17 that could
+strategically distorts the GI signal.''
 
 #+begin_quote
 Namely, we have always assumed GIs represent an informative signal of
@@ -15082,29 +15083,39 @@ itself. Buy, what can policy makers, or perhaps members of the wine
 industry, do about it?
 #+end_quote
 
-The interest of increasing the informational content of GIs appears in
-the fourth paragraph of the introduction [p.3] "Hence, we could argue
-that disclosing a reliable signal about these long-run /terroir/
+The policy interest of increasing the informational content of GIs
+(i.e., increasing the precision and decreasing the bias) now appears
+in the fourth paragraph of the introduction [p.3] ``we consider that
+the /terroir/ is a credence attribute of wines that GIs aim to
+transform into a searchable attribute citep:CMoj96,MCKa17.  Among
+numerous other determinants of utility derived from wine consumption
+(vintage, producer, variety, or contextual effects), the lack of
+knowledge or technical expertise by the typical consumer precludes the
+ascertainment of the taste of /terroir/. Hence, we could argue that
+disclosing a reliable signal about these long-run /terroir/
 determinants of wine quality is a relevant objective for GI
-management, regardless of how this information is judged by
-consumers."
+management, regardless of how this information is currently judged by
+consumers.''
 
-Our simulations about the informational content of GIs lead to clear
-policy recommendations, now stated explicitly in the sixth paragraph
-in the introduction [p.3].  About the precision criteria: "The
-simulation of certain increases in the number of GI levels reveals
-moderate potential improvements in terms of precision"; about the bias
-criteria: "We show that decreasing this bias with more balanced
-designation schemes would increase significantly the information of
-GIs."
+Our simulations of alternative GI designation schemes lead to clear
+policy recommendations, which are now explicitly stated in the sixth
+paragraph in the introduction [p.3].  About the precision criteria:
+``The simulation of certain increases in the number of GI levels
+reveals moderate potential improvements in terms of precision''; about
+the bias criteria: ``We show that decreasing this bias with more
+balanced designation schemes would increase significantly the
+information of GIs.''
 
-For members of the wine industry, the importance of an independent
-management by INAO (illustrated by the decrease of the bias of the GI
-signal on the long run of history) is moved from the conclusion of the
-initial manuscript to the last paragraph of the introduction in the
-revised version [p.4] "The long history of GIs in Burgundy and their
-independent management appear as two important determinants of their
-high current informational content."
+The importance of a long-run, independent management by INAO,
+illustrated by the decrease of the bias of the GI signal along
+history, is moved from the conclusion of the initial manuscript to the
+last paragraph of the introduction in the revised version [p.4] ``The
+long history of GIs in Burgundy and their independent management
+appear as two important determinants of their high current
+informational content.  This result is of particular importance to
+explain the differential performance of GIs on wine markets between
+the regions of the "old world" and those of the "new world" in a
+quality-driven international competition citep:DGre08.''
 
 #+begin_quote
 Your findings suggest how the system can be revised, but perhaps you
@@ -15113,14 +15124,15 @@ order to convince your reviewers of the importance of your results.
 #+end_quote
 
 The modifications that have been implemented since 1936 provide a
-clear illustration of the ways the GI system have been revised to
-provide more precise information.  We describe more specifically these
-modifications in the subsection "Models of the 1936 GIs" [p.21-22]
-"These improvements in the informational content of GIs in the last
-century provide an illustration of the ways some other GI schemes
-could be revised.  Because the /commune/ delineations have not changed
-since 1936, this evolution is exclusively attributable to the increase
-of the number of vertical levels and the reallocation of plots between
+concrete illustration of the ways the GI system have been revised to
+provide more precise information.  I now describe more specifically
+these modifications in an additional paragraph of the subsection
+labeled ``Models of the 1936 GIs'' [p.21-22] ``These improvements in
+the informational content of GIs in the last century provide a
+concrete illustration of the ways some other GI schemes could be
+revised.  Because the /commune/ delineations have not changed since
+1936, this evolution is exclusively attributable to the increase of
+the number of vertical levels and the reallocation of plots between
 these levels.  Since 1936, about 57% of current vineyard plots have
 had the same level.  The two new levels /Coteaux bourguignons/ and
 /Premiers crus/ are composed of respectively 98% and 93.5% of vineyard
@@ -15131,7 +15143,7 @@ the hierarchy are more frequent for vineyards from disadvantaged
 than for advantaged /communes/ (27% for the 15 most advantaged
 /communes/ in Figure 2).  Following the management by INAO, more
 balanced GI designation schemes between administrative units have
-increased significantly their informational content."
+increased significantly their informational content.''
 
 #+begin_quote
 As R2 suggests, the labeling system in France is already hard to
@@ -15143,13 +15155,13 @@ bring it more carefully into your Introduction.
 
 The informational content that we study does not take into account the
 confusion that could appear with more precise GI signals.  This is a
-limitation relatively to a "value of information" approach now
+limitation relatively to a ``value of information'' approach now
 discussed in the second paragraph in the conclusion [p.23]
-"Nevertheless, some important aspects of the value of the GI
+``Nevertheless, some important aspects of the value of the GI
 information are not taken into account.  Firstly, the informational
 content of GIs is generally increasing with the complexity of the
 signal, while a complex signal could be too difficult (so, less
-valuable) to interpret for consumers."
+valuable) to interpret for consumers.''
 
 **** Value of information for consumers
 
@@ -15165,22 +15177,22 @@ method, and cite the relevant literature.
 #+end_quote
 
 The footnote 4 at the end of the fourth paragraph of the introduction
-[p.3] compares our approach in terms of informational content to the
-more classical alternative in terms of information value: "Another
-pivotal concept to judge a GI is the value of information
-citep:FJus89,RMTL14.  In an auction framework, cite:GPen10 found that
-a more precise signal always yields a more efficient allocation, and
-may or may not be more valuable, but will never be less valuable.  We
-consider both approaches as complementary, while the value of
-information that depends on perception, fashion, preference, choice
-set, and cognitive bias could appears as a less robust objective for
-GIs on the long run citep:KLTS14,LSKa15"
+[p.3] compares our approach in terms of the informational content of
+GIs to the more classical alternative in terms of information value of
+GIs: ``Another pivotal concept to judge a GI is the value of
+information citep:FJus89,RMTL14.  In an auction framework, cite:GPen10
+found that a more precise signal always yields a more efficient
+allocation, and may or may not be more valuable, but will never be
+less valuable.  We consider both approaches as complementary, while
+the value of information that depends on perception, fashion,
+preference, choice set, and cognitive bias could appears as a less
+robust objective for GIs on the long run citep:KLTS14,LSKa15.''
 
-The third paragraph of the introduction [p.2] cites some empirical
-works that found a high impact of GIs in Burgundy on the price of wine
-bottles: "This completes the numerous studies that have found GIs as
-are a major determinant of wine prices, in particular for the region
-under study citep:CLVi00,CFlo10,SNCS13."
+The third paragraph of the introduction [p.2] now cites the empirical
+studies that found a high impact of GIs in Burgundy on the price of
+wine bottles: ``This completes the numerous studies that have found
+GIs as are a major determinant of wine prices, in particular for the
+region under study citep:CLVi00,CFlo10,SNCS13.''
 
 #+begin_quote
 You then need to explain the inherent weaknesses of this approach in
@@ -15192,18 +15204,25 @@ ways, and that your approach is either better, or a valuable
 alternative.
 #+end_quote
 
-In addition to the robustness previously mentioned in footnote 4, the
-empirical advantage of studying the informational content in terms of
-natural characteristics of vineyards is stated in the fifth paragraph
-of the introduction [p.3] "The GIs under study provide an empirically
-tractable case study about the economics of strategic quality
-disclosure cite:DJin10. In contrast with typical frameworks in which
-quality is strategically determined by producers
+In addition to the robustness argument of footnote 4 previously
+mentioned, the empirical advantage of studying the informational
+content in terms of tangible vineyard characteristics is stated in the
+fifth paragraph of the introduction [p.3] ``The GIs under study
+provide an empirically tractable case study about the economics of
+strategic quality disclosure citep:DJin10.  In contrast with typical
+frameworks in which quality is strategically determined by producers
 citep:Shap82,ALiz01,JLes03, vineyard quality depends on predetermined
-terroir that facilitates the identification of the informational
+/terroir/ that facilitates the identification of the informational
 content of GIs. This allows a more comprehensive analysis of the role
 of private information and lobbying in the quality signal conveyed by
-GI designations."
+GI designations.''
+
+The same kind of arguments is repeated in the second paragraph of the
+conclusion [p.23] ``The informational content of GIs that we studied
+is complementary to the value of this information for
+consumers. Because it does not depend on taste, knowledge, perception,
+or context, increasing the informational content could appear as a
+more robust policy objective on the long run.''
 
 **** Context of the research
 
@@ -15221,28 +15240,28 @@ indications, so the reviewer provides a good perspective on what this
 type of reader is likely to want to understand more clearly.
 #+end_quote
 
-Footnote 1 in the second paragraph of the introduction [p.2] precises
-some institutional features of GIs in France: "The GIs that we
+Footnote 1 in the second paragraph of the introduction [p.2] clarifies
+some institutional features of GIs in France: ``The GIs that we
 consider combines a spatial delineation of vineyard plots and a set of
 production constrains about maximum yields, authorized plant
 varieties, and minimum alcohol content from the official /cahier des
 charges/.  In this article, we focus on the informational content of
 the spatial delineations, the most common attribute of GIs around the
-world."
+world.''
 
-The footnote 2 in the third paragraph of the introduction [p.2]
-precises our definition of the vineyard quality: "We use the term
-vineyard quality in reference to a hierarchical structure that is
-modeled from a continuous latent variable crossing ordered thresholds
-citep:Stor05,ASto10."
+The footnote 2 in the third paragraph of the introduction [p.2] states
+our definition of the vineyard quality: ``We use the term vineyard
+quality in reference to a hierarchical structure that is modeled from
+a continuous latent variable crossing ordered thresholds
+citep:Stor05,ASto10.''
 
-The footnote 3 in the same third paragraph [p.2] precises our
-definition of /terroir/: "We group in /terroir/ the immobile and
+The footnote 3 in the same third paragraph [p.2] explains our
+definition of /terroir/: ``We group in /terroir/ the immobile and
 non-reproducible characteristics of vineyards, i.e., those that best
 justify the reference to the production sites by GIs.  This focus on
 natural determinants is usual in economics citep:GGin08,CPSt11, while
 it is narrower than others definitions that include human determinants
-(know-how, cultural heritage, cite:Barh03)"
+(know-how, cultural heritage, cite:Barh03).''
 
 **** General writing
 
@@ -15267,15 +15286,15 @@ work to figure out what that story really is.
 The seventh paragraph of the introduction (partially moved from the
 conclusion of the initial manuscript) and the footnote 6 provide a
 clearer statement of the links between my results and the model of
-cite:BLar92: "This is consistent with the theory developed by
+cite:BLar92: ``This is consistent with the theory developed by
 cite:BLar92 regarding strategic information transmission.  When
-information is not fully reliable (because of bias), the possibility
-of honest mistakes (because of noise) produces some confusion for
-consumers.  Market incentives keep the consumers' learning process
-incomplete, and allow manipulation of the information, which only
-cancels on the long run. (footnote: This analysis is particularly
-relevant knowing the credence characteristic of /terroir/, which
-worsens the problem of consumer verification.)"
+information is not fully reliable (because of signal bias), the
+possibility of honest mistakes (because of signal noise) produces some
+confusion for consumers.  Market incentives keep the consumers'
+learning process incomplete, and allow manipulation of the
+information, which only fades out on the long run. (footnote: This
+analysis is particularly relevant given the credence characteristic of
+/terroir/, which worsens the problem of consumer verification.)"
 
 #+begin_quote
 This is a more general comment on the writing throughout. Even in the
@@ -15290,10 +15309,10 @@ see this in the revision.
 #+end_quote
 
 I have made a deep reshaping of the paragraphs all along the revised
-version of the manuscript, and make a great deal of work about the
-transitions.  Paragraphs of the revised version of the manuscript
-count less than 15 rows and I have significantly increased the number
-of paragraphs by subsections.
+version of the manuscript, and have improved the transitions.
+Paragraphs of the revised version of the manuscript count less than 15
+rows and I have significantly increased the number of paragraphs by
+subsections.
 
 **** Motivation of our contribution
 
@@ -15307,24 +15326,25 @@ region in France as an example.
 #+end_quote
 
 In addition to the main conceptual contribution of studying the
-informational content of GIs instead of the value of this information,
-I highlight my empirical contribution in the fifth paragraph of the
-introduction [p.3] "The GIs under study provide an empirically
-tractable case study about the economics of strategic quality
-disclosure citep:DJin10. In contrast with typical frameworks in which
-quality is strategically determined by producers
-citep:Shap82,ALiz01,JLes03, vineyard quality depends on predetermined
-/terroir/ that facilitates the identification of the informational
-content of GIs.  This allows a more comprehensive analysis of the role
-of private information and lobbying in the quality signal conveyed by
-GI designations.  We exploit the precise location of exhaustive data
-from about $60\,000$ vineyard plots to control for the unobserved
-spatial heterogeneity through an identification strategy based on the
-structural difference between the spatial continuity of /terroir/ and
-the discontinuity from administrative borders. (footnote: In addition,
-vineyard quality relies exclusively on the unchangeable location of
-production sites, which precludes spurious correlations from the
-assortative matching between quality and name as in cite:Tade99.)"
+informational content of GIs instead of the value of this information
+(second paragraph of the introduction [p.2]), I highlight my empirical
+contribution in the fifth paragraph of the introduction [p.3] ``The
+GIs under study provide an empirically tractable case study about the
+economics of strategic quality disclosure citep:DJin10. In contrast
+with typical frameworks in which quality is strategically determined
+by producers citep:Shap82,ALiz01,JLes03, vineyard quality depends on
+predetermined /terroir/ that facilitates the identification of the
+informational content of GIs.  This allows a more comprehensive
+analysis of the role of private information and lobbying in the
+quality signal conveyed by GI designations.  We exploit the precise
+location of exhaustive data from about $60\,000$ vineyard plots to
+control for the unobserved spatial heterogeneity through an
+identification strategy based on the structural difference between the
+spatial continuity of /terroir/ and the discontinuity from
+administrative borders. (footnote: In addition, vineyard quality
+relies exclusively on the unchangeable location of production sites,
+which precludes spurious correlations from the assortative matching
+between quality and name as in cite:Tade99.)''
 
 #+begin_quote
 Yes, you cite some of the relevant literature in the preceding
@@ -15337,17 +15357,24 @@ of GIs, so I would like to see an explanation of this contribution as
 well.
 #+end_quote
 
-In addition to the new fifth paragraph of the introduction [p.3]
-presented above with cite:Shap82,ALiz01,JLes03,Tade99, the new seventh
-paragraph in the introduction [p.4] provides some theoretical elements
-from the literature, more precisely in relation to cite:BLar92 and
-cite:DGre08.
+About the methodological literature, this study is (to my knowledge)
+the first that uses the dispersion of conditional expectations to
+evaluate a GI signal, as proposed theoretically by cite:GPen10.  I use
+this definition in combination with variance decomposition formula
+from cite:BSwa12.  This is now clearly stated in the second paragraph
+[p.2] of the introduction.
+
+About the real economic effects of GIs, in addition to the new fifth
+paragraph of the introduction [p.3] presented above with the reference
+to cite:Shap82,ALiz01,JLes03,Tade99, the new seventh paragraph in the
+introduction [p.4] provides some elements from the literature, with
+references to cite:BLar92 and cite:DGre08.
 
 #+Latex: \clearpage
 
 *** To Referee 1
 
-    We thank the reviewer for the interested taken in our work and for
+    We thank the reviewer for the interest taken in our work and for
     the constructive comments on the manuscript.
 
 **** General conclusions of the paper
@@ -15360,20 +15387,22 @@ or the characteristics of the wine growers, but from reading the
 paper, the best way to accomplish this is not obvious.
 #+end_QUOTE
 
-We agree that the policy recommendations from our research were not
+We agree that the general conclusions from our research were not
 sufficiently clear in the previous version of the manuscript.  We have
-made a deep rewriting of the introduction focused on the general
-conclusions of our results.
+made a deep rewriting of the introduction [p.2-4] and the conclusion
+[p.23-25] particularly focused on the context and the policy
+implications of our results.
 
-The modifications that have been implemented since 1936 provide a
-clear illustration of the ways the GI system have been revised to
-provide more precise information.  We describe more specifically these
-modifications in the subsection "Models of the 1936 GIs" [p.21-22]
-"These improvements in the informational content of GIs in the last
-century provide an illustration of the ways some other GI schemes
-could be revised.  Because the /commune/ delineations have not changed
-since 1936, this evolution is exclusively attributable to the increase
-of the number of vertical levels and the reallocation of plots between
+In addition, the modifications that have been implemented since 1936
+also provide a concrete illustration of the ways the GI system have
+been revised to provide more precise information to consumers.  We
+describe more specifically these modifications in a new paragraph of
+the subsection labeled ``Models of the 1936 GIs'' [p.21-22] ``These
+improvements in the informational content of GIs in the last century
+provide an illustration of the ways some other GI schemes could be
+revised.  Because the /commune/ delineations have not changed since
+1936, this evolution is exclusively attributable to the increase of
+the number of vertical levels and the reallocation of plots between
 these levels.  Since 1936, about 57% of current vineyard plots have
 had the same level.  The two new levels /Coteaux bourguignons/ and
 /Premiers crus/ are composed of respectively 98% and 93.5% of vineyard
@@ -15384,13 +15413,13 @@ the hierarchy are more frequent for vineyards from disadvantaged
 than for advantaged /communes/ (27% for the 15 most advantaged
 /communes/ in Figure 2).  Following the management by INAO, more
 balanced GI designation schemes between administrative units have
-increased significantly their informational content."
+increased significantly their informational content.''
 
 Nevertheless, our definition of informational content of GIs does not
 consider the characteristics of wine growers as a relevant information
-[footnote 1, p.2] "In this article, we focus on the informational
+[footnote 1, p.2] ``In this article, we focus on the informational
 content of the spatial delineations, the most common attribute of GIs
-around the world".
+around the world.''
 
 **** General writing
 
@@ -15401,12 +15430,11 @@ exception is the “Context and data” section. I found that to be well
 written and informative.
 #+end_quote
 
-We thank the reviewer for this indication, we have made a deep
-reshaping of the paragraphs all along the revised version of the
-manuscript, and make a great deal of work about the transitions.
-Paragraphs of the revised version of the manuscript count less than 15
-rows and we have significantly increased the number of paragraphs by
-subsections.
+Thank you for this indication, we have made a deep reshaping of the
+paragraphs all along the revised version of the manuscript, and have
+improved the transitions.  Paragraphs of the revised version of the
+manuscript count less than 15 rows and we have significantly increased
+the number of paragraphs by subsections.
 
 **** Minor Points
 
@@ -15414,7 +15442,7 @@ subsections.
 On page 10, the article references a link, but I could not find the link. 
 #+end_quote
 
-This references was a residual from previous version of the
+This references was a residual from a previous version of the
 manuscript, it is now dropped in the revised version.
 
 #+Latex: \clearpage
@@ -15423,8 +15451,7 @@ manuscript, it is now dropped in the revised version.
 
     We appreciate the time and the effort that you spent on our
     manuscript. We have taken into account your comments and we think
-    that the manuscript has improved significantly due to these
-    changes.
+    that these changes have significantly improved the manuscript.
 
 **** Labeling literature
 
@@ -15439,19 +15466,40 @@ acknowledge some noise, but that is fully random.
 #+end_quote
 
 We agree that our definition of quality is objective, as coming from
-the long-run classification of tangible /terroir/ characteristics.
+the long-run classification of tangible /terroir/ characteristics.  We
+clarify this point in the third paragraph of the introduction [p.2]
+``in Burgundy, there is a long history of ranking vineyards according
+to their quality for wine production, which dates back to the Middle
+Ages (Jullien, 1816; Lavalle, 1855; Wolikow and Jacquet, 2018). Hence,
+we question the ability of GIs to signal this accumulated empirical
+knowledge about the vineyard quality associated to /terroir/
+characteristics.'' and in footnote 2 in the introduction [p.2] ``We
+use the term vineyard quality in reference to a hierarchical structure
+that is modeled from a continuous latent variable crossing ordered
+thresholds citep:Stor05,ASto10.''
 
-The footnote 2 in the third paragraph of the introduction [p.2]
-precises our definition of the vineyard quality: "We use the term
-vineyard quality in reference to a hierarchical structure that is
-modeled from a continuous latent variable crossing ordered thresholds
-citep:Stor05,ASto10."
+In fact, our fundamental research problem is to study the
+informational content of GIs according to both a precision and a bias
+criteria.  This is now more clearly stated in the second paragraph of
+the introduction [p.2] ``Formally, we define the informational content
+of a GI signal by its precision and its bias in describing the
+tangible characteristics of vineyards. The precision criterion stems
+from the principle that more informative signals lead to greater
+variability of conditional expectations citep:GPen10.  Intuitively,
+more precise signal allows higher Bayesian updating and more dispersed
+posterior expectations once the GI is known citep:BSwa12.  The bias of
+the signal is defined as the probability that two identical vineyard
+plots have a different GI citep:DNab91,Guer01.  This measures the
+systematic deviation of GI designations from objective criteria
+citep:Li17 that could strategically distorts the GI signal.''
 
-We argue that giving an information about tangible (i.e., objective)
-vineyard characteristics is a more robust objective for GI management
-[p.3] "the value of information that depends on perception, fashion,
+
+Consequently, we argue that giving an information about tangible
+(i.e., objective) vineyard characteristics is a more robust policy
+objective for GI management in the third paragraph of the introduction
+[p.3] ``the value of information that depends on perception, fashion,
 preference, choice set, and cognitive ability could appear as a less
-robust objective for GIs on the long run."
+robust objective for GIs on the long run.''
 
 #+begin_quote
 Be that as it may, if feels like a contradiction that the accuracy of
@@ -15464,24 +15512,24 @@ the data used for the terroir characteristics.
 
 We think that the accuracy of the classification system is not assumed
 by our model.  At the extreme, a random classification (i.e., constant
-$q(X^*)$ in eq. 1) would provide an informational content equals to
-zero (i.e., $\mathbb{V}(y*)= \mathbb{V}(\xi)$ in eq. 6).
+$q(X^*)$ in eq. 1) would provide an informational content of GIs
+equals to zero (i.e., $\mathbb{V}(y*)= \mathbb{V}(\xi)$ in eq. 6).
 
-We agree that our definition of vineyard quality is restrictive, as we
-estimate it from the current classification system.  This is a working
-assumption, that is not required to correspond to the quality
-perceived by consumers.  This is now stated clearly in the fourth
-paragraph of the introduction [p.3] "In this respect, we consider that
-the /terroir/ is a credence attribute of wines that GIs aim to
-transform into a searchable attribute citep:CMoj96,MCKa17.  Among
-numerous other determinants of utility derived from wine consumption
-(vintage, producer, variety, or contextual effects), the lack of
-knowledge or technical expertise by the typical consumer precludes the
-ascertainment of the taste of /terroir/.  Hence, we could argue that
-disclosing a reliable signal about these long-run /terroir/
-determinants of wine quality is a relevant objective for GI
-management, regardless of how this information is judged by
-consumers."
+We agree that our definition of vineyard quality is restrictive (see
+footnote 2), as we estimate it from the current classification system.
+This is a working assumption, that is not required to correspond to
+the quality perceived by consumers.  This is now stated clearly in the
+fourth paragraph of the introduction [p.3] ``In this respect, we
+consider that the /terroir/ is a credence attribute of wines that GIs
+aim to transform into a searchable attribute citep:CMoj96,MCKa17.
+Among numerous other determinants of utility derived from wine
+consumption (vintage, producer, variety, or contextual effects), the
+lack of knowledge or technical expertise by the typical consumer
+precludes the ascertainment of the taste of /terroir/.  Hence, we
+could argue that disclosing a reliable signal about these long-run
+/terroir/ determinants of wine quality is a relevant objective for GI
+management, regardless of how this information is currently judged by
+consumers.''
 
 #+begin_quote
 One would like to see some attempt at measuring productivity of the
@@ -15494,15 +15542,17 @@ description has a bit of an esoteric feel to it, as if we are supposed
 to trust what the expert say because they are the experts.
 #+end_quote
 
-Thank you for this suggestion, we cite some researches about the
+Thank you for this suggestion, we now cite some researches about the
 /terroir/ effects on the region of interest in the third paragraph of
-the introduction [p.2], while we highlight their limitations: "These
-/terroir/ characteristics are widely considered to impact the taste of
-wines, while the underlying process are not yet well known
-scientifically citep:BTRM14,RBGS14,VLRR18".  Note than the first
-paragraph of [p.5] in the revised version contains some more precise
-elements: "Temperatures during the growing season and harvest are
-major determinants of the grape maturity cycle, sugar content, and the
+the introduction [p.2], while we also highlight their limitations:
+``These /terroir/ characteristics are widely considered to impact the
+taste of wines, while the underlying process are not yet well known
+scientifically citep:BTRM14,RBGS14,VLRR18''.  
+
+The second paragraph of the subsection labeled ``The Côte d'Or
+region'' [p.5] contains more precise elements about /terroir/ effects:
+"Temperatures during the growing season and harvest are major
+determinants of the grape maturity cycle, sugar content, and the
 structure of aromas citep:VLFC04" ; "the exposition is expected to
 have a direct effect through sunshine cycles and an indirect effect
 through its correlation with the wind, which is known to have strong
@@ -15516,16 +15566,16 @@ afterthought. There is an information signal, but the recipient of the
 information, and how the information is used, is never mentioned. 
 #+end_quote
 
-Thank you for this point, we mention in the fourth paragraph of the
-introduction [p.3] the role of consumers in relation to the credence
-attribute of /terroir/: "Among numerous other determinants of utility
-derived from wine consumption (vintage, producer, variety, or
-contextual effects), the lack of knowledge or technical expertise by
-the typical consumer precludes the ascertainment of the taste of
+Thank you for this point, we now mention in the fourth paragraph of
+the introduction [p.3] the role of consumers in relation to the
+credence attribute of /terroir/: ``Among numerous other determinants
+of utility derived from wine consumption (vintage, producer, variety,
+or contextual effects), the lack of knowledge or technical expertise
+by the typical consumer precludes the ascertainment of the taste of
 /terroir/.  Hence, we could argue that disclosing a reliable signal
 about these long-run /terroir/ determinants of wine quality is a
 relevant objective for GI management, regardless of how this
-information is judged by consumers."
+information is currently judged by consumers.''
 
 #+begin_quote
 All considerations regarding how the complexity of the labeling system
@@ -15541,36 +15591,39 @@ in quality space are negligible and one starts considering search
 costs.
 #+end_quote
 
-We compare our approach in terms of informational content of GIs to
-the more classical approach in terms of value of GI information in the
-footnote 4 in the fourth paragraph of the introduction [p.3] "Another
-pivotal concept to judge a GI is the value of information
-citep:FJus89,RMTL14.  In an auction framework, cite:GPen10 found that
-a more precise signal always yields a more efficient allocation, and
-may or may not be more valuable, but will never be less valuable.  We
-consider both approaches as complementary, while the value of
-information that depends on perception, fashion, preference, choice
-set, and cognitive ability could appear as a less robust objective for
-GIs on the long run citep:KLTS14,LSKa15"
+We agree that estimating information values using consumer-derived,
+market outcomes is a common method to study GIs.  Our study differs
+from the usual approach in important and substantive ways, while some
+bridges exist.  We compare our approach in terms of informational
+content of GIs to the more classical approach in terms of value of GI
+information in the footnote 4 in the fourth paragraph of the
+introduction [p.3] ``Another pivotal concept to judge a GI is the
+value of information citep:FJus89,RMTL14.  In an auction framework,
+cite:GPen10 found that a more precise signal always yields a more
+efficient allocation, and may or may not be more valuable, but will
+never be less valuable.  We consider both approaches as complementary,
+while the value of information that depends on perception, fashion,
+preference, choice set, and cognitive ability could appear as a less
+robust objective for GIs on the long run citep:KLTS14,LSKa15''
 
-In addition, we cite three papers on Burgundy wines that found that GIs
-were a major determinant of wine prices, so they matter economically
-[p.2] "This completes the numerous studies that have found GIs as are
-a major determinant of wine prices for the region under study
-citep:CLVi00,CFlo10,SNCS13"
+In addition, we cite three papers on Burgundy wines that found that
+GIs were a major determinant of wine prices, which means that they
+matter economically [p.2] ``This completes the numerous studies that
+have found GIs as are a major determinant of wine prices for the
+region under study citep:CLVi00,CFlo10,SNCS13''
 
-It is true that the complexity of GIs' perception is not taken into
-account by the informational content framework, as it is now discussed
-in the conclusion [p.23] "The informational content of GIs that we
-studied is complementary to the value of this information for
-consumers.  Because it does not depend on taste, knowledge,
-perception, or context, increasing the informational content could
-appear as a more robust policy objective on the long run.
-Nevertheless, some important aspects of the value of the GI
-information are not taken into account.  Firstly, the informational
-content of GIs is generally increasing with the complexity of the
-signal, while a complex signal could be too difficult (so, less
-valuable) to interpret for consumers."
+It is equally true that the complexity of GIs' perception is not taken
+into account by the informational content framework that we use.  It
+is now discussed in the conclusion [p.23] as an extension: ``The
+informational content of GIs that we studied is complementary to the
+value of this information for consumers.  Because it does not depend
+on taste, knowledge, perception, or context, increasing the
+informational content could appear as a more robust policy objective
+on the long run.  Nevertheless, some important aspects of the value of
+the GI information are not taken into account.  Firstly, the
+informational content of GIs is generally increasing with the
+complexity of the signal, while a complex signal could be too
+difficult (so, less valuable) to interpret for consumers.''
 
 #+begin_quote
 It is telling that, based on the simulations, the authors end up
@@ -15580,24 +15633,27 @@ the most informative signal would be a continuous terroir quality
 index, with an infinite amount of levels. 
 #+end_quote
 
-We totally agree that the most precise signal would be a continuous
-terroir quality index, with an infinite amount of levels (from 0 to
-100 for example).  Again, the informational content framework do not
-integrate the cognitive limitations of consumers that could appear
-with too complex signals.  Nevertheless we can note that the
-complexity of the signal is not necessarily increasing with the number
-of levels.  For example, a vertical differentiation in six numeric
-items (1 star, 2 stars, 3 stars, etc.) would be more easily
-understandable by consumer than the actual five vertical levels
-(/Coteaux/, /Régional/, /Village/, /Premier cru/, /Grand cru/).  This
-question of perception is nevertheless outside the scope of our paper.
+We totally agree that the most precise signal (but not necessary the
+less biased) would be a continuous terroir quality index, with an
+infinite amount of levels.  Again, the informational content framework
+does not integrate the cognitive limitations of consumers that could
+appear with too complex signals.  Nevertheless, the values of two
+strictly identical spatial delineations could be different if the
+levels are named differently.  For example, a vertical differentiation
+in five numeric items (1 star, 2 stars, 3 stars, etc.) would be more
+easily understandable by consumer than the five french names that
+describe vertical levels (/Coteaux/, /Régional/, /Village/, /Premier
+cru/, /Grand cru/).  Hence, we argue that informational content is a
+more robust criteria, as it does not depend on the words that are used
+to mention GIs.
 
 Contrariwise, our simulations do not recommend to increase of the
 number of vertical labels from five to six.  They show little
 improvements in terms of precision by increasing the number of levels.
-This is now stated in the sixth paragraph of the introduction [p.3]
-"The simulation of certain increases in the number of GI levels
-reveals moderate potential improvements in terms of precision."
+This is now more clearly stated in the sixth paragraph of the
+introduction [p.3] ``The simulation of certain increases in the number
+of GI levels reveals moderate potential improvements in terms of
+precision.''
 
 #+begin_quote
 In the labeling literature, the pivotal concept to judge a label is
@@ -15616,44 +15672,39 @@ reader to prescribe the wrong policies. How can we really use these
 results?
 #+end_quote
 
-We totally agree about the focus that your present: the two dimensions
-of the informational content of GIs are now stated more clearly in the
-second paragraph of the introduction [p.2] "The informational content
-of a GI signal is formally defined by its precision and its bias in
-describing the tangible characteristics of vineyards. The precision
-criterion stems from the principle that more informative signals lead
-to greater variability of conditional expectations citep:GPen10.
-Intuitively, more precise signal allows higher Bayesian updating and,
-hence, more dispersed posterior expectations once the GI is known
-citep:BSwa12.  The bias of the signal is defined as the probability
-that two identical vineyard plots have a different GI citep:DNab91.
-This measures the systematic deviation of GI designations from
-objective criteria citep:Li17 that could strategically distorts the GI
-signal citep:BLar92."
+You are right about the focus of our paper.  These two dimensions of
+the informational content of GIs are now stated more clearly in the
+second paragraph of the introduction [p.2].  We also move to the
+fourth paragraph of the introduction [p.3] the claim that ``Evaluating
+the ability of the GI signal to convey information about the
+underlying vineyard caracteristics differs from evaluating the
+relevance of these caracteristics from consumers’ perceptions of
+quality.''
 
-The informational content is different that the value of information,
-while it is also policy relevant, as stated in the fourth paragraph of
-the introduction [p.3] "Hence, we could argue that disclosing a
-reliable signal about these long-run /terroir/ determinants of wine
-quality is a relevant objective for GI management, regardless of how
-this information is judged by consumers. (footnote: Another pivotal
-concept to judge a GI is the value of information citep:FJus89,RMTL14.
-In an auction framework, cite:GPen10 found that a more precise signal
-always yields a more efficient allocation, and may or may not be more
-valuable, but will never be less valuable.  We consider both
-approaches as complementary, while the value of information that
-depends on perception, fashion, preference, choice set, and cognitive
-ability could appear as a less robust objective for GIs on the long
-run citep:KLTS14,LSKa15."
+As we answered previously, the informational content framework is
+different that the value of information framework, while it is also
+policy relevant.  This is stated in the fourth paragraph of the
+introduction [p.3] ``Hence, we could argue that disclosing a reliable
+signal about these long-run /terroir/ determinants of wine quality is
+a relevant objective for GI management, regardless of how this
+information is currently judged by consumers. (footnote: Another
+pivotal concept to judge a GI is the value of information
+citep:FJus89,RMTL14.  In an auction framework, cite:GPen10 found that
+a more precise signal always yields a more efficient allocation, and
+may or may not be more valuable, but will never be less valuable.  We
+consider both approaches as complementary, while the value of
+information that depends on perception, fashion, preference, choice
+set, and cognitive ability could appear as a less robust objective for
+GIs on the long run citep:KLTS14,LSKa15.''
 
 Our simulations about the informational content of GIs lead to clear
 policy recommendations, now stated explicitly in the sixth paragraph
-in the introduction [p.3].  About the precision criteria: "The
+in the introduction [p.3].  About the precision criteria: ``The
 simulation of certain increases in the number of GI levels reveals
-moderate potential improvements in terms of precision"; about the bias
-criteria: "We show that decreasing this bias with more balanced
+moderate potential improvements in terms of precision''; about the
+bias criteria: ``We show that decreasing this bias with more balanced
 designation schemes would increase significantly the information of
-GIs."
+GIs.''
 
 **** Market outcomes
 
@@ -15669,12 +15720,12 @@ be also quite interesting to introduce in the analysis, but I suspect
 the plots are not transacted very often.
 #+end_quote
 
-The alternative approaches in terms of market outcomes are
-complementary to our approach in terms of informational content, as
-stated in the third paragraph of the introduction [p.3] "This
-completes the numerous studies that have found GIs as are a major
-determinant of wine prices, in particular for the region under study
-citep:CLVi00,CFlo10,SNCS13."
+The more usual approaches in terms of market outcomes are
+complementary to our approach, as it is now more clearly stated in the
+third paragraph of the introduction [p.3] ``This completes the
+numerous studies that have found GIs as are a major determinant of
+wine prices, in particular for the region under study
+citep:CLVi00,CFlo10,SNCS13.''
 
 We also add a paragraph in the conclusion [p.23] to put some
 perspectives from our approach: "The informational content of GIs that
@@ -15718,43 +15769,28 @@ locations.
 
 Thank you for that remark, it is clear that the institutional context
 was not clearly described in the previous version of the manuscript.
-In France and in Côte d'Or, GIs also contain production parameters to
-meet.  This is now recognized in footnote 1 [p.2] "The GIs that we
-consider combines a spatial delineation of vineyard plots and a set of
-production constrains about maximum yields, authorized plant
-varieties, and minimum alcohol content from the official /cahier des
-charges/.  In this article, we focus on the informational content of
-the spatial delineations, the most common attribute of GIs around the
-world."
+In France, and in /Côte d'Or/ in particular, GIs also contain
+production parameters to be met.  This is now recognized in footnote 1
+[p.2] "The GIs that we consider combines a spatial delineation of
+vineyard plots and a set of production constrains about maximum
+yields, authorized plant varieties, and minimum alcohol content from
+the official /cahier des charges/.  In this article, we focus on the
+informational content of the spatial delineations, the most common
+attribute of GIs around the world."
 
-Nevertheless, one can argue that any GI is a vertical sorting, as it
-distinguishes itself from other products.  In the US case, GIs are a
-vertical sorting between wines from AVAs and other classical wines.
-An informational content approach, as proposed in our paper, could
-equally be performed by comparing the tangible vineyard
+In addition, one can argue that any GI scheme is a vertical sorting,
+as it distinguishes itself from other regular products.  In the US
+case, GIs are a vertical sorting between wines from AVAs and other
+wines.  An informational content approach, as proposed in our paper,
+could equally be performed by comparing the tangible vineyard
 characteristics within and outside AVAs.
-
-**** Minor points
-
-#+begin_quote
-•	First row, page 1. “Consensual” does not seem the right word. Controversial?
-
-•	Page 4, second paragraph. “noised” does not seem the right term. Stochastic?
-
-•	Page 6. Unappropriated is not the right term. 
-
-•	Page 15. The most sensible point Sensitive?
-#+end_quote
-
-Thank you for these suggestions, these minor points are taken into
-account in the revised version of the manuscript.
 
 #+Latex: \clearpage
 
 *** To Referee 3
 
-  Thank you for your constructive feedback on our manuscript, we hope
-  that the revised version address all of your comments.
+  Thank you for your feedback on our manuscript, we hope that the
+  revised version satisfactorily addresses all your comments.
 
 **** Motivation of the contribution
 
@@ -15766,18 +15802,18 @@ is so important.
 
 The fundamental research problem is to study the informational content
 of GIs according to both a precision and a bias criteria.  This is now
-precised in the second paragraph of the introduction [p.2] "The
-informational content of a GI signal is formally defined by its
+better explained in the second paragraph of the introduction [p.2]
+``Formally, we define the informational content of a GI signal by its
 precision and its bias in describing the tangible characteristics of
 vineyards. The precision criterion stems from the principle that more
 informative signals lead to greater variability of conditional
 expectations citep:GPen10.  Intuitively, more precise signal allows
-higher Bayesian updating and, hence, more dispersed posterior
-expectations once the GI is known citep:BSwa12.  The bias of the
-signal is defined as the probability that two identical vineyard plots
-have a different GI citep:DNab91.  This measures the systematic
-deviation of GI designations from objective criteria citep:Li17 that
-could strategically distorts the GI signal citep:BLar92."
+higher Bayesian updating and more dispersed posterior expectations
+once the GI is known citep:BSwa12.  The bias of the signal is defined
+as the probability that two identical vineyard plots have a different
+GI citep:DNab91,Guer01.  This measures the systematic deviation of GI
+designations from objective criteria citep:Li17 that could
+strategically distorts the GI signal citep:BLar92.''
 
 #+begin_quote
 It was not until I did my own web searches about French wine that I
@@ -15792,36 +15828,37 @@ horizontal dimension complements the vertical dimension? Whether it
 improves it?  What exactly?
 #+end_quote
 
-Thank you for your interest in our paper.  The interest of studying
-the informational content of GIs appears in the fourth paragraph of
-the introduction [p.3] "Hence, we could argue that disclosing a
+Thank you for your precise understanding of our paper.  The interest
+of studying the informational content of GIs instead of the more
+classical value of GI information now appears in the fourth paragraph
+of the introduction [p.3] ``Hence, we could argue that disclosing a
 reliable signal about these long-run /terroir/ determinants of wine
 quality is a relevant objective for GI management, regardless of how
-this information is judged by consumers. (footnote: Another pivotal
-concept to judge a GI is the value of information citep:FJus89,RMTL14.
-In an auction framework, cite:GPen10 found that a more precise signal
-always yields a more efficient allocation, and may or may not be more
-valuable, but will never be less valuable.  We consider both
-approaches as complementary, while the value of information that
-depends on perception, fashion, preference, choice set, and cognitive
-ability could appear as a less robust objective for GIs on the long
-run citep:KLTS14,LSKa15.)"
+this information is currently judged by consumers. (footnote: Another
+pivotal concept to judge a GI is the value of information
+citep:FJus89,RMTL14.  In an auction framework, cite:GPen10 found that
+a more precise signal always yields a more efficient allocation, and
+may or may not be more valuable, but will never be less valuable.  We
+consider both approaches as complementary, while the value of
+information that depends on perception, fashion, preference, choice
+set, and cognitive ability could appear as a less robust objective for
+GIs on the long run citep:KLTS14,LSKa15).''
 
 The decomposition formulas that we propose in equations 6 to 9 [p.15]
 allow to estimate both the joint, the marginal, and the residual
-contributions of horizontal and vertical dimensions.  It allows to
-estimate whether the horizontal dimension informs vertical dimension
-(Horizontal Signal in Table 2), whether the horizontal dimension
-complements the vertical dimension (Vertical Residual in Table 2),
-which is (in our framework) equivalent to the improvement of the
-horizontal dimension to the vertical dimension.  We add a sentence
-about these interpretations in the section about results [p.20] in the
-revised version: "We find that the marginal and residual contributions
-of the horizontal dimension are quite low to inform the vertical
-dimension of current GIs.".  Nevertheless, we chose to put more
-emphasis on (i) using an "informational content" framework instead of
-the value of information and (ii) on the effect of the long-run
-history in the outset.
+contributions of horizontal and vertical GI dimensions to the
+informational content.  It allows to estimate whether the horizontal
+dimension informs vertical dimension (Horizontal Signal in Table 2),
+whether the horizontal dimension complements the vertical dimension
+(Vertical Residual in Table 2), which is (in our framework) equivalent
+to the improvement of the horizontal dimension to the vertical
+dimension.  We add a sentence about these additional interpretations
+in the results section [p.20] ``We find that the marginal and residual
+contributions of the horizontal dimension are quite low to inform the
+vertical dimension of current GIs.''  Nevertheless, we chose to put
+more emphasis in the outset on (i) using an "informational content"
+framework instead of the value of information and (ii) on the effect
+of the long-run history.
 
 **** Policy implications
 
@@ -15838,60 +15875,64 @@ does Figure 8 tell me, by the way?) So terroir matters but not much?
 
 We agree that the policy implications were not enough clear in the
 previous version.  Our simulations about the informational content of
-GIs lead to some policy recommendations, now stated explicitly in the
+GIs lead to clear policy recommendations, now stated explicitly in the
 sixth paragraph in the introduction [p.3].  About the precision
-criteria: "The simulation of certain increases in the number of GI
-levels reveals moderate potential improvements in terms of precision";
-about the bias criteria: "We show that decreasing this bias with more
-balanced designation schemes would increase significantly the
-information of GIs."
+criteria: ``The simulation of certain increases in the number of GI
+levels reveals moderate potential improvements in terms of
+precision''; about the bias criteria: ``We show that decreasing this
+bias with more balanced designation schemes would increase
+significantly the information of GIs.''
 
-For members of the wine industry, the importance of an independent
-management by INAO (illustrated by the decrease of the bias of the GI
-signal on the long run of history) is moved from the conclusion of the
-initial manuscript to the last paragraph of the introduction in the
-revised version [p.4] "The long history of GIs in Burgundy and their
-independent management appear as two important determinants of their
-high current informational content."
+More globally, the importance of an independent management by INAO
+(illustrated by the decrease of the bias of the GI signal on the long
+run of history) is moved from the conclusion of the initial manuscript
+to the last paragraph of the introduction in the revised version [p.4]
+"The long history of GIs in Burgundy and their independent management
+appear as two important determinants of their high current
+informational content."
 
-The modifications that have been implemented since 1936 provide a
+The modifications that have been implemented since 1936 also provide a
 clear illustration of the ways the GI system have been revised to
-provide more precise information.  We describe more specifically these
-modifications in the subsection "Models of the 1936 GIs" [p.21-22]
-"These improvements in the informational content of GIs in the last
-century provide an illustration of the ways some other GI schemes
-could be revised.  Because the /commune/ delineations have not changed
-since 1936, this evolution is exclusively attributable to the increase
-of the number of vertical levels and the reallocation of plots between
-these levels.  Since 1936, about 57% of current vineyard plots have
-had the same level.  The two new levels /Coteaux bourguignons/ and
-/Premiers crus/ are composed of respectively 98% and 93.5% of vineyard
-plots that were on the closest current levels (i.e., respectively
-/Bourgogne régional/ and /Village/).  Importantly, the increases in
-the hierarchy are more frequent for vineyards from disadvantaged
-/communes/ (39% for the 15 most disadvantaged /communes/ of Figure 2)
-than for advantaged /communes/ (27% for the 15 most advantaged
-/communes/ in Figure 2).  Following the management by INAO, more
-balanced GI designation schemes between administrative units have
-increased significantly their informational content."
+provide more reliable information.  We describe more specifically
+these modifications in an additional paragraph of the subsection
+"Models of the 1936 GIs" [p.21-22] "These improvements in the
+informational content of GIs in the last century provide an
+illustration of the ways some other GI schemes could be revised.
+Because the /commune/ delineations have not changed since 1936, this
+evolution is exclusively attributable to the increase of the number of
+vertical levels and the reallocation of plots between these levels.
+Since 1936, about 57% of current vineyard plots have had the same
+level.  The two new levels /Coteaux bourguignons/ and /Premiers crus/
+are composed of respectively 98% and 93.5% of vineyard plots that were
+on the closest current levels (i.e., respectively /Bourgogne régional/
+and /Village/).  Importantly, the increases in the hierarchy are more
+frequent for vineyards from disadvantaged /communes/ (39% for the 15
+most disadvantaged /communes/ of Figure 2) than for advantaged
+/communes/ (27% for the 15 most advantaged /communes/ in Figure 2).
+Following the management by INAO, more balanced GI designation schemes
+between administrative units have increased significantly their
+informational content."
 
-We report a key message in the first paragraph of the conclusion
-[p.23] toward decision makers "This means that improving the
-informational content of GIs is more a political (by decreasing the
-bias) than a technical matter (by increasing the precision)."  For
-wine drinkers, our general results are that [p.3] "Through the
+We also report a key message in the first paragraph of the conclusion
+[p.23] toward decision makers: ``This means that improving the
+informational content of GIs is more a political than a technical
+matter (i.e., decreasing the bias matters more than increasing the
+precision)."  
+
+For wine drinkers, our general results are that [p.3] "Through the
 reputation of previous landowners, their influence with
 decision-makers or their collective actions, some administrative units
 have had privileged treatment that made their vineyard plots higher in
 the hierarchy than similar plots from another administrative units."
-an that [p.20] "the superiority of the vertical dimension to convey
-quality information, though the dimension of the signal is lower."
+and that [p.20] "the superiority of the vertical dimension to convey
+quality information, though the dimension of the signal is lower.''
 
-Figure 8 shows in the Appendix shows that the /communes/ privileged by
-current GIs are not necessary those that have the higher GI levels.
-This reveals some non-intuitive results for wine drinkers, for example
-the fact that /Chorey-les-Beaune/ is privileged, even if this
-/commune/ does not have any /Premier/ or /Grand crus/.
+Figure 8 in the Appendix shows shows that the /communes/ privileged by
+current GIs are not necessary those that have the higher GI vertical
+levels on average.  This reveals some non-intuitive results for wine
+drinkers, for example the fact that /Chorey-les-Beaune/ is privileged
+by the GI classification, even if this /commune/ does not have any
+/Premier/ or /Grand crus/ (i.e., high vertical GI levels).
 
 **** General writing
 
@@ -15905,7 +15946,7 @@ credit for trying to educate me, especially on pages 5-8, and I
 actually found that part of the paper enjoyable reading.
 #+end_quote
 
-Footnote 1 in the second paragraph of the introduction [p.2] precises
+Footnote 1 in the second paragraph of the introduction [p.2] now gives
 some institutional features of GIs in France: "The GIs that we
 consider combines a spatial delineation of vineyard plots and a set of
 production constrains about maximum yields, authorized plant
@@ -15915,24 +15956,24 @@ the spatial delineations, the most common attribute of GIs around the
 world."
 
 The footnote 2 in the third paragraph of the introduction [p.2]
-precises our definition of the vineyard quality index: "We use the
+explains our definition of the vineyard quality index: "We use the
 term vineyard quality in reference to a hierarchical structure that is
 modeled from a continuous latent variable crossing ordered thresholds
 citep:Stor05,ASto10."
 
-The footnote 3 in the same third paragraph [p.2] precises our
+The footnote 3 in the same third paragraph [p.2] clarifies our
 definition of /terroir/: "We group in /terroir/ the immobile and
 non-reproducible characteristics of vineyards, i.e., those that best
 justify the reference to the production sites by GIs.  This focus on
 natural determinants is usual in economics citep:GGin08,CPSt11, while
 it is narrower than others definitions that include human determinants
-(know-how, cultural heritage, cite:Barh03)"
+(know-how, cultural heritage, cite:Barh03)."
 
-I have made a deep reshaping of the paragraphs all along the revised
-version of the manuscript, and make a great deal of work about the
-transitions.  Paragraphs of the revised version of the manuscript
-count less than 15 rows and I have significantly increased the number
-of paragraphs by subsections.
+We have also made a deep reshaping of the paragraphs all along the
+revised version of the manuscript, and have improved the transitions.
+Paragraphs of the revised version of the manuscript count less than 15
+rows and I have significantly increased the number of paragraphs by
+subsections.
 
 **** Minor points
 
@@ -15941,9 +15982,9 @@ of paragraphs by subsections.
    the following: terroir, GI, lobbying effect.
 #+end_quote
 
-Thank you, please see our answers to previous question, the seventh
-paragraph of the introduction [p.4] provides more details about the
-lobbying effects.
+Thank you, footnotes 1 to 3 provide some discussions about /terroir/
+and GIs, the seventh paragraph of the introduction [p.4] provides more
+details about the lobbying effects.
 
 #+begin_quote
 2- Relatedly, the author takes for granted that the reader understands
@@ -15953,9 +15994,10 @@ lobbying effects.
 #+end_quote
 
 The horizontal dimension corresponds to the administrative /commune/
-delineations.  It is now more clearly stated in [p.6]: "This
+delineations, from the north to the south, without explicit hierarchy
+between them.  It is now more clearly stated in [p.6]: "This
 administrative subdivision represents the current horizontal dimension
-of GIs, typically reported by producers on wine labels."
+of GIs, as they are not explictely ordered in term of wine quality."
 
 #+begin_quote
 3- P. 2. “Through the reputation of landowners...administrative
@@ -15995,17 +16037,16 @@ matters.
 
 Thank you, we have added [p.8] "From this long-run history of GIs, we
 exploit the precise location of about current $60\,000$ vineyard plots
-to estimate the informational content of GIs, while controlling for
-the unobserved spatial heterogeneity from /terroir/."
+to estimate the informational content of these GIs, while controlling
+for the unobserved spatial heterogeneity from /terroir/."
 
 #+begin_quote
 8- P. 11. “change “exponent c” to “superscript c”
 #+end_quote
 
-Thank you for the suggestion, while we think that putting $c$ in
-superscript would produce some confusion in the notations that follow.
-In effect, we will have to put a double superscript terms such as
-$\alpha_{c_1,3}$.
+Thank you for this suggestion.
+
+#+Latex: \clearpage
 
 *** Bibliography                             :noheading:
    
