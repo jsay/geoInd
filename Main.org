@@ -1,5 +1,5 @@
 #+TITLE:    Informational Content of Geographical Indications
-#+AUTHOR:   Jean-Sauveur Ay\\ INRA UMR CESAER \\
+#+AUTHOR:   \null
 #+OPTIONS:  LaTeX:t tags:nil toc:nil H:5
 #+STARTUP:  hideblocks
 #+DRAWERS:  PROPERTIES BABEL BIND LATEX MACRO
@@ -90,13 +90,14 @@
 * Data Papier
   :PROPERTIES:
   :EXPORT_FILE_NAME:    DataPaper
+  :header-args:         :tangle "./codePaper.R"
   :EXPORT_LATEX_CLASS:  ManueStat
   :EXPORT_TITLE:        @@latex: \vspace{-1cm} \huge\textbf{Données et Modèles pour une Classification Statistique des Vignobles de Côte-d'Or }@@
-  :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textbf{Jean-Sauveur AY} && \textbf{Mohamed HILAL} \\ < \url{jean-sauveur.ay@inrae.fr} > && < \url{mohamed.hilal@inrae.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup Dijon / INRAE / Université Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard Docteur-Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
-  :EXPORT_DATE:         /Model paper/ version 1.3 du Lundi 3 février 2020
+  :EXPORT_DATE:         Version 1.4 du Lundi 3 février 2020
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat} \usepackage{tocloft} \renewcommand{\abstractname}{Résumé} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm} \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} \renewcommand*\contentsname{Table des Matières}
   :END:
+# :EXPORT_AUTHOR:       @@latex: \begin{tabular}{ccc} \textbf{Jean-Sauveur AY} && \textbf{Mohamed HILAL} \\ < \url{jean-sauveur.ay@inrae.fr} > && < \url{mohamed.hilal@inrae.fr} > \\[.5cm] \multicolumn{3}{c}{Unité Mixte de Recherche CESAER} \\ \multicolumn{3}{c}{AgroSup Dijon / INRAE / Université Bourgogne Franche-Comté} \\ \multicolumn{3}{c}{26 boulevard Docteur-Petitjean 21000 DIJON}\\[.25cm] \end{tabular} @@
 ** Résumé                                    :noheading:
 #+begin_export html
 ---
@@ -132,7 +133,8 @@ l'intégralité des résultats de cette recherche.\\
 d'origine contrôlée ; signes de qualité ; recherche reproductible ;
 système d'information géographique ; modélisation économétrique.
 #+END_abstract
-#+TOC: headlines 3
+# TOC: headlines 3
+#+Latex: \clearpage
 ** Introduction
 *** Généralités sur les AOC                  :noheading:
 
@@ -1180,7 +1182,9 @@ names(Stat.Ras)[80: 87] <- paste0("EXPO", 1: 8)
 Stat.Ras$AREA  <- Reg.Ras$AREA/ 1000 ; Stat.Ras$DEM   <- Reg.Ras$DEM/ 1000
 Stat.Ras$SOLAR <- Reg.Ras$SOLAR/ 1000000
 stargazer(Stat.Ras[, names(tb.lab)], covariate.labels=tb.lab, float= F, 
-          font.size= "small", column.sep.width= "0pt", digit.separate= c(0, 3))
+          font.size= "small", column.sep.width= "0pt",
+          digit.separate= c(0, 3))
+#stargazer(Stat.Ras[, names(tb.lab)], type= "html", out= "Tables/SD.html")
 #+end_src
 
 #+RESULTS:
@@ -1601,7 +1605,9 @@ sum(diag(table(cut(gamod$gam900$line,
     effets additivement séparables.
 
 #+begin_src R :exports code :results graphics :file "./Figures/GamPlot.pdf"
+#png("Figures/Fig3.png")
 plot(gamod$gam700, page= 1, scale= 0)
+#dev.off()
 #+end_src
 
 #+CAPTION: *Effets semi-paramétriques de la topographie et de la localisation*
@@ -1705,12 +1711,14 @@ dat.fig <- data.frame(LIBCOM=substr(names(gamod$gam900$coef[ 4: 31]),7,30),
                       OS= 2* plogi(cf)- 1,
                       OSi= 2* plogi(cf- 1.5* resum900$se[ 4: 31])- 1,
                       OSa= 2* plogi(cf+ 1.5* resum900$se[ 4: 31])- 1)
+#png("Figures/Fig4.png", width = 900, height = 500)
 segplot(reorder(factor(LIBCOM), OS)~ OSi+ OSa,
         length= 5, draw.bands= T, key= mso.key,
         data= dat.fig[order(dat.fig$OS), ], center= OS, type= "o",
         col= as.character(dat.fig$REGION[order(dat.fig$OS)]),
         unit = "mm", axis = axis.grid, col.symbol= "black", cex= 1, 
         xlab= "Mesure de supériorité ordinale et intervalles à 10 %")
+#dev.off()
 #+end_src
 
 #+CAPTION: *Effets communaux sur la classification AOC des parcelles*
@@ -3539,7 +3547,7 @@ loaded via a namespace (and not attached):
 #+Latex: \clearpage
 
 *** Annexe 2 : Configuration graphique       :noheading:
-
+    
     *Annexe 2 : Configuration graphique*
 
 #+begin_src R
@@ -9578,7 +9586,7 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage[doublespacing]{setspace} \usepackage{tabularx, rotating, booktabs, pdflscape, amssymb, amsmath, amsthm, bbm, eurosym, pdflscape, txfonts, rotfloat, caption}\makeatletter\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}\@title \begin{flushleft} \@author\end{flushleft}\egroup}\makeatother
   :END:
 
-* Presentation
+* Pres GTI
   :PROPERTIES:
   :EXPORT_FILE_NAME:     Presentation
   :EXPORT_LATEX_CLASS:   PresSemin
@@ -9986,6 +9994,285 @@ y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\
 
 #+LATEX: \vspace{-.75cm}\includegraphics[scale=.425]{Figures/SmoothMap.pdf}
 
+* Pres GTVV
+  :PROPERTIES:
+  :EXPORT_FILE_NAME:     PresVVSHS
+  :EXPORT_LATEX_CLASS:   PresSemin
+  :EXPORT_LATEX_HEADER:  \renewcommand{\texttt}{\textcolor{beamer@blendedblue}} \renewcommand{\footnotesize}{\scriptsize} \addbibresource{Perso.bib} \renewcommand*{\bibfont}{\scriptsize}
+  :EXPORT_BEAMER_HEADER: \usepackage{libertine}\setbeamerfont{frametitle}{family=\sffamily}\setbeamerfont{framesubtitle}{family=\sffamily}\setbeamerfont{title}{family=\sffamily}\setbeamerfont{date}{family=\sffamily}\usepackage{bm, adjustbox, amsmath, dcolumn, import, rotfloat} \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+  :EXPORT_OPTIONS:       TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:2 author:t
+  :EXPORT_TITLE:         @@latex: The Informational Content of\\ Geographical Indications @@
+  :EXPORT_AUTHOR:        @@latex: Jean-Sauveur Ay \\ INRAE, UMR CESAER  @@  
+  :EXPORT_DATE:          @@latex: \texttt{Mercredi 4 mars 2020} \\ Groupe Thématique Vigne et Vin @@
+  :END:
+** 1 -- Introduction
+*** The signal of quality
+
+#+BEGIN_CENTER
+\vspace{-.5cm}
+\includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale= .9]{./Figures/labelDRC}
+#+END_CENTER
+
+*** Quality of the signal
+
+#+BEGIN_CENTER
+\vspace{-.5cm}
+\includegraphics[trim= 2.5cm 1.5cm 2.5cm 2cm, clip=true, scale= .55]{./Figures/labelVDP}
+#+END_CENTER
+
+*** Estimating the informational content of GIs
+
+    - =Precision= : How GIs are related to vineyard characteristics ?
+
+#+Latex: \vspace{.5cm}
+
+    - =Relevance= : How GIs are related to administrative zonings ?
+
+#+Latex: \vspace{.5cm}
+
+    $\Rightarrow$ Answers based on a =statistical analysis= of GIs'
+    designations
+
+#+begin_center
+Administrative /vs/ bio-physical determinants of GIs 
+#+end_center
+
+** 2 -- Context
+*** Côte d'Or, Bourgogne, France
+
+# je vais travailler sur le vignoble de la Côte
+
+# qui est une sorte de talu avec la plaine à l'est et les hautes côtes
+# à l'ouest, moins de 100 km de long entre 180 et 600 mètres
+# d'altitude
+
+# les vignes et les appellations sont une bande de 1 à 2 km sur les
+# coteaux à pentes maximales, sur 31 communes séprarées en Côte de
+# Nuits et Côte de Beaune
+
+# Au sein des chaque commune il y a une classification verticale en 5
+# catégories en ordre croissant dans la hiérarchie
+
+**** Image 2                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3]{./Figures/MapCom1}
+#+END_CENTER     
+
+**** Image 1                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3]{./Figures/MapCom2}
+#+END_CENTER     
+
+*** Interaction between GIs and /communes/
+
+#+begin_quote 
+
+<< I have studied the wines of each of the /communes/ as if the other
+/communes/ had not existed and the classification that I give is true
+only for each /commune/ taken in isolation. >>
+
+#+end_quote
+
+#+Latex: {\small
+    Jules Lavalle 1855 (p.78)
+
+ Histoire et statistique de la vigne et des grands vins de la Côte
+ d'Or.
+#+Latex:}
+
+*** Interaction between GIs and /communes/
+
+#+begin_quote
+
+    << More the GI is aligned with the /syndicat/ that defend it, more
+    the probability that the /commune/ have well rated vineyards on
+    the hierarchy is high. >>
+
+#+end_quote
+
+#+Latex: {\small
+    Olivier Jacquet 2009 (p.193)
+
+    Un siècle de construction du vignoble bourguignon.
+#+Latex: }
+
+** 3 -- Model
+*** Latent structure of GI designations
+
+#+begin_export latex
+\begin{flalign*}
+y^*= q\left(X^*\right)+ \xi \;\;\mbox{ with }\;\; \mathbb{E}(\xi \mid X^*)= 0&&\nonumber
+\end{flalign*}\pause
+#+end_export
+
+# Composante non observée, note de qualité SELON LE DESIGNATEUR Il ne
+# s'agit pas de savoir si c'est pertinent pour le consommateur
+
+# Il s'agit de décomposer entre ce qui est tangible X de ce qui est
+# idiosyncratique (hypothèse les deux sont indépendants)
+
+#+begin_export latex
+\vspace{-1.5cm}
+\begin{flalign*}
+ y= j &\;\;\mbox{ if }\;\; \alpha_{j-1}^c< y^* \leqslant \alpha_{j}^c & \nonumber\\
+&\mbox{ for }\;\; j \in \big\{\mbox{\small Côteaux b., Bourgogne, Village, Premier Cru, Grand Cru}\big\}&\nonumber
+\end{flalign*}\pause
+#+end_export
+
+# Cette simplification hiérarchisée de l'information permet de réduire
+# en 5 niveaux une information continue.
+
+# La structure ordinale (verticale) s'éloigne d'une mesure cardinal
+# (un score de 40 c'est 2 fois mieux qu'un score de 20), ça permet de
+# s'afranchir d'une échelle qui est souvent problématique sur les
+# notes (école des fans, Parker). Et ça permet une certaine
+# horizontalité, ça laisse une place aux goûts
+
+#+begin_export latex
+\vspace{-1.5cm}
+\begin{flalign*}
+ \alpha_{j}^c =&\; \alpha_j- \mu_c  \;\;\mbox{ with }\;\; \mu_c \;\;\mbox{ an ordinal superiority measure }&\nonumber\\
+& \mbox{ for }\;\; c \in \big\{\mbox{\small Gevrey-Chambertin, Pommard, Meursault, Vougeot, \dots}\big\}&\nonumber
+\end{flalign*}
+#+end_export
+
+# La structure horizontale est également présente dans l'information
+# transmise aux consommateurs à travers la commune
+# d'appartenance. L'information communale est un découpage
+# administratif qui préexiste aux appellations d'origine. 1789 en
+# fonction des paroisses, localisation des églises (IXe-XIIe
+# siècles). Le but n'était de signaler la qualité des vignes
+
+# Par contre, les communes ont joué un rôle important, à travers les
+# regroupements de producteurs dans la mise en oeuvre des AOC, ils ont
+# fait preuve d'influence et leur réputation a joué: Olivier Jacquet,
+# Gilles. On a donc un double effet des communes qui sont unité
+# spatialement contigu mais dont l'histoire est une source
+# additionnelle de brouillage de l'information qualité contenu dans les
+# AOC.
+
+# quand aux vignerons d'aujourd'hui ont peu dire qu'ils n'ont peu
+# d'effet à moins de supposer des déterminismes génétiques sur 2
+# siècles.
+
+# Ordinal superiority as an objective mesure of reputation
+
+** 4 -- Data
+*** \null
+
+# Pour cela nous avons compiler les cractéristiques...
+
+#+LATEX: \vspace*{-1cm}\small \input{Tables/StatDesP1.tex}
+
+*** Geology
+**** Image                                   :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3, page= 1]{./Figures/MapGeol}
+#+END_CENTER     
+
+**** Legend                                  :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-1.8cm}
+\includegraphics[scale= .4, page= 2]{./Figures/MapGeol}
+#+END_CENTER     
+
+*** Pedology
+**** Image                                   :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+     
+#+BEGIN_CENTER
+\vspace*{-1cm}
+\includegraphics[scale= .3, page= 1]{./Figures/MapPedo}
+#+END_CENTER     
+
+**** Legend                                  :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+
+#+BEGIN_CENTER
+\vspace*{-1.6cm}
+\includegraphics[scale= .38, page= 2]{./Figures/MapPedo}
+#+END_CENTER     
+
+*** Geographical Indications
+
+#+LATEX: \input{Tables/StatDesP2.tex}
+
+** 5 -- Results
+*** Ordered models of GI designations
+
+#+LATEX: \footnotesize\input{Tables/VarSignPres.tex}
+
+*** Marginal effect of elevation
+
+#+LATEX: \vspace*{.2cm}\hspace*{-1cm}\includegraphics[scale= 1.05]{Figures/PltEff.pdf}
+
+*** Marginal effect of slope
+
+#+LATEX: \vspace*{.2cm}\hspace*{-1cm}\includegraphics[trim=0cm 0cm 0cm 6.75cm, clip=true, scale= 1.05]{Figures/PltEff.pdf}
+
+*** Marginal effects of solar radiation
+
+#+LATEX: \vspace*{.2cm}\hspace*{-1cm}\includegraphics[trim=0cm 0cm 0cm 13.65cm, clip=true, scale= 1.05]{Figures/PltEff.pdf}
+
+*** \null
+
+#+LATEX: \vspace*{-2cm}\hspace{1cm}\includegraphics[scale= .625]{./Figures/ComEff.pdf}
+
+*** \null
+
+#+LATEX: \vspace*{-1cm}\hspace{1cm}\includegraphics[scale= .55]{./Figures/ComCor.pdf}
+
+*** Ordinal superiority in 1936
+
+#+LATEX: \includegraphics[scale= .5]{./Figures/ComEffOld.pdf}
+
+*** Variations between 1936 and now
+
+#+LATEX: \includegraphics[scale= .5]{./Figures/ComDyn.pdf}
+
+** 6 -- Conclusion
+*** Summary
+
+    =High precision= of GIs ($R^2\sim 75$ %)
+
+#+LATEX: \vspace{.5cm}
+
+    =Still unrelevant= information (/communes/ effects)
+
+#+LATEX: \vspace{.5cm}
+
+    =Predicted ranking= to improve GI information 
+
+*** \null
+#+LaTeX: \large
+
+    Open data, R codes and Shiny app : @@latex:
+    {\fontfamily{pcr}\selectfont https://github.com/jsay/geoInd/ \\
+    https://cesaer-datas.inra.fr/geoind}@@
+
 * Figures
 ** Commune descriptive map
 *** Elevation file
@@ -10178,6 +10465,17 @@ par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
 plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
 dev.off()
+
+png("Figures/Fig5.png", width= 700, height= 700)
+par(mar = c(0, 0, 0, 0))
+plot(pi, col= mycol)
+dev.off()
+
+png("Figures/Fig5leg.png", width= 700, height= 620)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCR), 1, 60), fill= mycol)
+dev.off()
 #+end_src
 
 ** Pedology descriptive map
@@ -10200,6 +10498,18 @@ col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors,
 pdf("Figures/MapPedo.pdf", width= 7, height= 9)
 par(mar = c(0, 0, 0, 0))
 plot(pi, col= mycol)
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCRp), 1, 60), fill= mycol)
+dev.off()
+
+
+png("Figures/Fig6.png", width= 700, height= 700)
+par(mar = c(0, 0, 0, 0))
+plot(pi, col= mycol)
+dev.off()
+
+png("Figures/Fig6leg.png", width= 700, height= 650)
 par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0))
 plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 legend("bottom", cex= 1.3, legend= substr(unique(pi$DESCRp), 1, 60), fill= mycol)
