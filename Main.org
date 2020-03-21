@@ -34,10 +34,6 @@
 # non retenu ; La partie de vigne qu'il manque à Chassagne c'est
 # Remigny en Saone et Loire
 
-# On a 30 GCRU au de 32 à cause de Charlemagne, sous ensemble de
-# corton-charlemagne peu utilisé et Charmes-Chambertin sous-ensemble
-# de Mazoyere Chambertin.
-
 # 1930s leading growers chose not to petition for them, for a range of
 # reasons, including a reluctance to pay the higher taxes levied on
 # grand cru wines.  Read more at
@@ -47,30 +43,26 @@
   :PROPERTIES:
   :EXPORT_FILE_NAME: README
   :END:
-*** Classification statistique des vignobles de Côte d'Or
 *** English version
 
-    Modeling statistically the link between natural attributes of
-    vineyards and the hierarchical scheme of /appellations d'origine
-    contrôlée/ (AOC) allows to correct /commune/ effects and to
-    estimate a continuous quality score for each vineyard plot.
+    This repo contains the material associated to the paper "The
+    Informational Content of Geographical Indications" published in
+    the /American Journal of Agricultural Economics/.  Raw data and
+    econometric estimations are on the [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][Inrae dataverse server]].
 
-    This research is described in the [[file:WorkingPaper.pdf][AAWE Working Paper XX]] and the
-    Reproducibility Material in [[file:ReproPaper.pdf][PDF]] or [[file:ReproPaper.md][Markdown]].  Raw data are on the
-    [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][INRA dataverse server]] and the results are accessible by a [[https://geoind.shinyapps.io/application/][Shiny
-    application]] or only the [[https://geoind-wine.firebaseapp.com][map]].
+    You will find here:
+    - The last working paper with online appendix [[file:WorkingPaper.pdf][here]]
+    - The replication material in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]]
+    - The Shiny apps for [[https://cesaer-datas.inra.fr/geoind][computer]] and [[https://cesaer-datas.inra.fr/geoind_phone][smartphone]]
 
 *** Version Française
 
-    La modélisation statistique des liens entre les attributs naturels
-    des vignobles et la hiérarchie des appellations d'origine
-    contrôlée permet d'estimer un score de qualité pour chaque
-    parcelle et de corriger les effets communaux.
-
-    Les détails de la construction des données et de l'estimation sont
-    disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les données sont
-    accessibles sur [[https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][le serveur data de l'INRA]] et les résultats sont
-    consultables par une [[https://geoind.shinyapps.io/application/][application]] ou une [[https://geoind-wine.firebaseapp.com][carte]].
+    La partie interactive de ce travail est en cours d'évaluation
+    académique.  Les détails de la construction des données et des
+    estimations sont disponibles en versions [[file:DataPaper.pdf][PDF]] et [[file:DataPaper.md][Markdown]].  Les
+    données sont accessibles sur [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][le serveur data de l'Inrae]] et les
+    résultats sont consultables par des applications Shiny pour
+    [[https://cesaer-datas.inra.fr/geoind][ordinateurs]] ou [[https://cesaer-datas.inra.fr/geoind_phone][portables]].
 
 *** Credits
 
@@ -4404,7 +4396,7 @@ trans_pedo <- data.frame(
 
 #+LATEX: \clearpage
 
-* Version smartphone de l'appli
+* Smart App
 ** README
   :PROPERTIES:
   :EXPORT_FILE_NAME: App_phone/README
@@ -4613,9 +4605,9 @@ server <- function(input, output, session) {
   :EXPORT_LATEX_CLASS:  ManueStat
   :EXPORT_LANGUAGE:     en
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
-  :EXPORT_TITLE:        @@latex: \vspace{-1cm} The informational content of geographical indications@@
-  :EXPORT_AUTHOR:       @@latex: Jean-Sauveur AY\footnote{\url{jsay@inra.fr}, UMR CESAER, AgroSup, INRA, Univ. Bourgogne Franche-Comté, 26 bd Dr Petitjean, 21000 Dijon (FR).} \\[.15cm] INRA UMR CESAER @@
-  :EXPORT_DATE:         @@latex: Replication Material Version 1.1 : \today @@
+  :EXPORT_TITLE:        @@latex: \vspace{-1.5cm} Replication material for the AJAE paper\\ The Informational Content of Geographical Indications@@
+  :EXPORT_AUTHOR:       @@latex: \Large Jean-Sauveur Ay\footnote{\url{jean-sauveur.ay@inrae.fr}, UMR CESAER, Agrosup, Inrae, Université Bourgogne Franche-Comté, 21000 Dijon (France).} @@
+  :EXPORT_DATE:         @@latex: Version 2.1 : \today \\[-2cm]@@
   :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc}\usepackage{tabularx, rotating, booktabs, lscape, tikz, dcolumn, amssymb, amsmath, amsthm, bbm, eurosym, threeparttable, pdflscape, txfonts, rotfloat}  \usepackage{tocloft} \usepackage[toc]{multitoc}\renewcommand*{\multicolumntoc}{2}\setlength{\columnseprule}{.5pt}\setlength{\columnsep}{1cm}
   :END:
 ** Abstract                                  :noheading:
@@ -4631,15 +4623,15 @@ author: |
 #+end_export
 #+BEGIN_abstract
 This file contents the Replication Material (RM) associated to the
-AAWE Working Paper No XXX entitled /The informational content of
-geographical indications/.  Data, code and prediction materials are
+article named in the title and published in the /American Journal of
+Agricultural Economics/.  Data, code and prediction materials are
 under the copyright license GNU GPL V3, which means that license
-notices must be preserved.  Raw data are available from the INRA
-dataverse server [[https://doi.org/10.15454/ZZWQMN][https://data.inra.fr]].  Some R functions are reported
+notices must be preserved.  Raw data are available from the Inrae
+dataverse server [[https://doi.org/10.15454/ZZWQMN][https://data.inrae.fr]].  Some R functions are reported
 in the Appendix to preserve the readability of codes in the main text.
-The most recent version of this document and a Shiny application about
-the econometric classification of vineyards in the /Côte d'Or/
-(Burgundy, France) are available from the remote repository
+The most recent version of this document and a Shiny App about the
+econometric classification of vineyards in the /Côte d'Or/ (Burgundy,
+France) are available from the remote repository
 [[https://github.com/jsay/geoInd/blob/master/ReproPaper.pdf][https://github.com/jsay/geoInd]].
 #+END_abstract
 #+TOC: headlines 3
@@ -4738,46 +4730,59 @@ lines(x= 2: 10, y= rep(mean(yop$y[yap$x< 2]), 9), col= "red")
 
 ** Descriptive Statistics
 *** Data shaping
-
-    The full detail of data construction is presented in a data paper
-    available at [[https://github.com/jsay/geoInd/blob/master/DataPaper.pdf][https://github.com/jsay/geoInd/]].  The data paper also
-    contains the dictionary of the variables used here.  The result of
-    these preliminary treatments can be directly downloaded from the
-    INRA dataverse server at [[https://doi.org/10.15454/ZZWQMN/][https://data.inra.fr]].
     
-    The following R code allows to load the data once downloaded and
-    located in the =/Inter/= folder at the root of the working
-    directory of the R session.  It loads a =SpatialPolygonDataFrame=
-    object from the =sp= package that contains the characteristics of
-    the vineyard plots under consideration (session information used
-    for this article is reported at Section 8).  It also reshapes some
-    variables of particular interest:
+    The data to reproduce the results of the paper are on the
+    dataverse server [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][https://data.inrae.fr/]], with the results of the
+    econometric estimations, and the predictions.  The =R= code below
+    allows to download the most recent version of the data with the
+    =dataverse= package citep:Leep17, and to load them in a =R=
+    session.
+
+#+begin_src R :wrap example
+library(dataverse) ; library(sp)
+Sys.setenv("DATAVERSE_SERVER" = "data.inrae.fr")
+GeoRasRaw <- get_file("GeoRas.Rda", "https://doi.org/10.15454/ZZWQMN")
+writeBin(GeoRasRaw, "Data/GeoRas.Rda")
+load("Data/GeoRas.Rda") ; dim(Geo.Ras)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 110350     67
+#+end_example
+
+    The resulting object =Geo.Ras= is a =SpatialPolygonsDataFrame=
+    from the =sp= package citep:BPGR13.  The current version of data
+    counts $110\,350$ vineyard plots and 67 variables.  A detailed
+    dictionary about these variables is available (in French) in the
+    [[https://github.com/jsay/geoInd][GitHub repo]].  The additional =R= code reshapes some variables of
+    particular interest:
     - It reorders the /commune/ levels along the North-South gradient
     - It standardizes the variable about solar radiation
-    - It recodes the variable about exposition in 8 quadrants
+    - It codes the variable about exposition in 8 quadrants
     - It projects the geographical coordinates inside the WGS84 system
     - It selects the parcels with GIs and drop omitted values 
 
 #+begin_src R :wrap example
-library(sp) ; load("Inter/GeoRas.Rda")
 Geo.Ras$LIBCOM <- factor(Geo.Ras$LIBCOM, levels=
               unique(Geo.Ras$LIBCOM[order(Geo.Ras$YCHF, decreasing= T)]))
 Geo.Ras$RAYAT <- as.numeric(scale(Geo.Ras$SOLAR))
 Geo.Ras$EXPO <- cut(Geo.Ras$ASPECT, breaks= c(-2, 1: 8* 45))
-#GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
-#dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
+GR84 <- spTransform(Geo.Ras, CRS("+proj=longlat +ellps=WGS84"))
+dd <- coordinates(GR84) ; Geo.Ras$X= dd[, 1] ; Geo.Ras$Y= dd[, 2]
 dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
                       & !is.na(RUD) & !is.na(AOC36lab) & !is.na(REGION)))
 #+end_src
 
 #+RESULTS:
 #+begin_example
-[1] 59113    69
+[1] 59113    71
 #+end_example
 
     The resulting object is a =SpatialPolygonDataFrame= that contains
     $59\,113$ observations of vineyard plots with $72$ variables
-    without omitted values.
+    without omitted values.  These data are used in the econometric
+    analysis.
 
 #+Latex: \clearpage
 
@@ -4790,8 +4795,7 @@ dim(Reg.Ras <- subset(Geo.Ras, !is.na(AOClb) & !is.na(DEM) & !is.na(DESCR)
     fixed effect can be a problem for the precision and convergence of
     the estimation, hence we choose to include a fixed effects only
     for geological and pedological polygons with more than $1\,000$
-    vineyard plots.  The details and robustness of this arbitrary
-    choice are presented in the data paper mentioned above.
+    vineyard plots.
 
 #+begin_src R :wrap example
 Reg.Ras$NOTATION <- factor(Reg.Ras$NOTATION)
@@ -4837,11 +4841,11 @@ $PEDO
 *** Crossing GIs dimensions
 **** Current GIs                             :noheading:
 
-     The data are now ready for the econometric analysis.  The GIs on
-     the area of interest contains both an horizontal (/commune/) and
-     a vertical (/hierarchical level/) dimension as detailed in the
-     Working Paper.  The balance of the two distributions can be
-     assessed with the following Figure 3 (p.37) in the Working Paper.
+     As mentioned in the main paper, the GIs on the area of interest
+     contains both an horizontal level (/commune/) and a vertical
+     level of geographical indication.  The balance of the two
+     dimensions can be assessed with the following code that produces
+     Figure OA1 of the Online Supplementary Appendix.
 
 #+begin_src R :results graphics :height 9 :width 13 :file "./Figures/CrossGIs.pdf"
 library(lattice) ; library(RColorBrewer)
@@ -4865,10 +4869,11 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
              ltext(fig.crd, y, lab= ifelse(fig.lab> 0, fig.lab, ""))})
 #+end_src
 
-#+CAPTION: *Cross-distribution of current GI levels among communes*
 #+ATTR_LATEX: :options scale= .45
 #+RESULTS:
 [[file:./Figures/CrossGIs.pdf]]
+
+#+Latex: \clearpage
 
 **** 1936 GIs                                :noheading:
 
@@ -4876,8 +4881,8 @@ barchart(LIBCOM~ BGOR+ BOUR+ VILL+ PCRU+ GCRU, xlim= c(-100, 10200),
      of creation of the French national institute in charge of
      geographical indications (INAO).  At his time, the vertical
      dimension counted only three levels, whereas the horizontal
-     dimension was identical.  The balance of the distribution can be
-     assessed by the following Figure.
+     dimension was identical.  The balance of the distribution is as
+     follows.
 
 #+begin_src R :results graphics :height 9 :width 13 :file "./Figures/CrossOldGIs.pdf"
 library(lattice) ; library(RColorBrewer)
@@ -4900,7 +4905,6 @@ barchart(LIBCOM~ BOUR+ VILL+ GCRU, xlim= c(-100, 10200),
              ltext(old.crd, y, lab= ifelse(old.lab> 0, old.lab, ""))})
 #+end_src
 
-#+CAPTION: *Cross-distribution of 1936 GI levels among communes*
 #+ATTR_LATEX: :options scale= .45
 #+RESULTS:
 [[file:./Figures/CrossOldGIs.pdf]]
@@ -5084,14 +5088,14 @@ table(RegRank$Cp10)
 *** Parametric ordered logit models
 
    We first estimate the benchmark parametric ordered logistic model
-   =polm1= that corresponds to model ( 0 ) of Table 1 (p.22) in the
-   Working Paper.  Model =polm1a= is the auxiliary regression without
-   /commune/ fixed effects used to test the presence of omitted
-   /terroir/ effect as detailed in the Working Paper.  Model =polm1b=
-   is also an auxiliary regression without smoothing of spatial
-   coordinates to compute the Fisher statistics associated to these
-   terms in Table 1.  We use for this the standard =polr= function
-   from =MASS= package. 
+   =polm1= that corresponds to model ( 0 ) of Table 1 of the main
+   article.  Model =polm1a= is the auxiliary regression without
+   /commune/ fixed effects used to evaluate the causal inference as
+   detailed in the beginning of the online supplementary material.
+   Model =polm1b= is a secondary auxiliary regression without
+   smoothing of spatial coordinates to compute the Fisher statistics
+   associated to these terms in Table 1.  We use the =polr= function
+   from the =MASS= package.
 
 #+begin_src R :wrap example
 library(MASS)
@@ -5125,17 +5129,15 @@ Warning messages:
 
 *** Ordered generalized additive models
 
-   We estimate the series of ordered generalized additive models
-   (OGAMs) of GIs designations within a loop.  Models ( I ) to ( V )
-   reported in Table 1 (p.22) of the Working Paper are only a subset
-   of all models of the =gamod= object that can be downloaded directly
-   from the INRA server, https://data.inra.fr/geoInd/gamod.Rda.
-   Models with high complexities for the spatial effects (more than
-   600 edf) are long to run. They require about 8 hours each, with the
-   full loop requires about 2 days to run with Intel Core i7-7820HQ
-   CPU 2.90 GHz x 8 and 64 Go of RAM.  We advise the reader to not run
-   the full loop, but instead to select values of =listk= and estimate
-   each model separately.
+    We estimate here the series of ordered generalized additive models
+    (OGAMs) of GIs designations with a loop.  Models ( I ) to ( V )
+    reported in Table 1 of the main are only a subset of all models of
+    the =gamod= object.  Models with high complexities for the spatial
+    effects (more than 600 edf) are long to run.  They require about 8
+    hours each, with the full loop requires about 2 days to run with
+    Intel Core i7-7820HQ CPU 2.90 GHz x 8 and 64 Go of RAM.  We advise
+    the reader to not run the full loop, but instead to select values
+    of =k= in =listk= and estimate each model separately.
    
 #+begin_src R :wrap example
 library(mgcv)
@@ -5157,28 +5159,21 @@ utilisateur     système      écoulé
      113038         384      109562 
 #+end_example
 
-   The second loop below produces the =gammod= object that contains
-   the auxiliary regressions to test the omitted /terroir/ effects as
-   presented in the Working Paper, Section 4.2.  The reader is not
-   expected to run the loop entirely but pick some value of =k= in
-   =listk= between 0 and $1\,000$ to estimate each model individually.
+    Conversely, the results can be downloaded directly from the
+    dataverse server of Inrae according to the following code.
+    Econometric results cad be assessed directly.
 
 #+begin_src R :wrap example
-gammod <- vector("list", length(listk))
-system.time(
-for (i in 1: length(listk)){
-    gammod[[ i]] <- gam(AOC~ 0+ EXPO+ GEOL+ PEDO
-                        + s(DEM)+ s(SLOPE)+ s(RAYAT)+ s(X, Y, k= listk[ i])
-                      , data= Reg.Ras, family= ocat(R= 5))
-})
-names(gammod) <- paste0("gam", listk)
-save(gammod, file= "Inter/gammod.Rda")
+library(dataverse)
+GamModRaw <- get_file("gamod.Rda", "https://doi.org/10.15454/ZZWQMN")
+writeBin(GamModRaw, "Data/gamod.Rda")
+load("Data/gamod.Rda") ; names(gamod)
 #+end_src
 
 #+RESULTS:
 #+begin_example
-utilisateur     système      écoulé 
-     103037         262      102775
+ [1] "gam50"  "gam100" "gam200" "gam300" "gam400" "gam500" "gam600"
+ [8] "gam700" "gam800" "gam900"
 #+end_example
 
 #+Latex: \clearpage
@@ -5189,8 +5184,7 @@ utilisateur     système      écoulé
 
      We first reports the Chi-square statistics for the joint
      significance of the parametric ordered logit model =polm1= that
-     corresponds to model ( 0 ) of Table 1 (p.22) in the Working
-     Paper.
+     corresponds to model ( 0 ) of Table 1 in the main text.
 
 #+begin_src R :wrap example
 library(car)
@@ -5231,9 +5225,8 @@ Warning messages:
 **** OGAM                                    :noheading:
 
      Then, we compute the same Chi-square statistics for all the OGAMs
-     with the function =resume=.  They are also reported in Table 1
-     (p.22) in the Working Paper.  Recall that the estimated models
-     can be downloaded from https://data.inra.fr/geoInd/gamod.Rda.
+     with the function =resume=.  They are reported in the next
+     columns of Table 1 in the main paper.
 
 #+begin_src R :wrap example
 load("Inter/gamod.Rda")
@@ -5275,7 +5268,7 @@ PEDO      2447.2   713.1   450.4   408.6   387.9
 **** POL                                     :noheading:
 
      We report below the code used to compute the goodness-of-fit
-     measures for model ( 0 ) reported in Table 1 (p.22):
+     measures for model ( 0 ) reported in Table 1 of the main paper:
      Pseudo-R$^2$, Akaike information criteria (AIC), and percent of
      good predictions.
 
@@ -5320,18 +5313,16 @@ Pcgp 74.8600 80.387 84.376 87.2566 89.4778
 
 #+Latex: \clearpage
 
-*** Omitted variable bias
+*** Causal inference
 **** POL                                     :noheading:
 
-     As indicated in the Working Paper (Appendix A.1), we evaluate the
-     potential omitted /terroir/ variables through the joint
-     significance of /commune/ fixed effects on the residuals from
-     auxiliary regressions without such fixed effects.  Code below
-     allows to compute the bootstrapped Fisher statistics with 100
-     replications from parametric ordered logistic model.  The absence
-     of correlated effects is strongly rejected.  Note that we use the
-     =sure= package to compute the surrogate residuals from this
-     parametric model.
+     As indicated at the beginning of the online supplementary
+     material, we evaluate the joint significance of /commune/ fixed
+     effects on the residuals from auxiliary regressions without such
+     fixed effects.  Code below allows to compute the bootstrapped
+     Fisher statistics with 100 replications from parametric ordered
+     logistic model.  Note that we use the =sure= package to compute
+     the surrogate residuals from this parametric model.
 
 #+begin_src R :wrap example
 library(lmtest) ; library(sandwich) ; library(sure)
@@ -5350,7 +5341,7 @@ quantile(wal1, c(.05, .5, .95))
 #+end_example
 
     Note that the values obtained are not exactly equal to those
-    reported in the Working Paper because of the bootstrap procedure.
+    reported in the paper because of the bootstrap procedure.
 
 **** OGAM                                    :noheading:
 
@@ -5359,10 +5350,10 @@ quantile(wal1, c(.05, .5, .95))
      is also consistent for OGAMs, we write the function =sureOGAM=
      presented and tested in Appendix [[#Sec:rOGAM]] to adapt the
      framework.  This function is also available in the file of custom
-     function =./myFcts.R= that is sourced in the following code.
-     Hence, we compute the bootstrapped F-statistics for the full set
-     of OGAM belows.  The estimation of auxiliary models is presented
-     above, they can be directly downloaded from [[https://doi.org/10.15454/ZZWQMN][https://data.inra.fr]].
+     function =./myFcts.R= available from the [[https://github.com/jsay/geoInd][GitHub repo]].  Hence, we
+     compute the bootstrapped F-statistics for the full set of OGAM
+     belows.  The estimation of auxiliary models can be downloaded
+     from [[https://doi.org/10.15454/ZZWQMN][https://data.inrae.fr]].
 
 #+begin_src R :wrap example
 load("Inter/gammod.Rda") ; library(ggplot2) ; source("myFcts.R")
@@ -5397,7 +5388,8 @@ apply(wal2[, -1], 2, function(x) quantile(x, c(.05, .5, .95)))
 
      The following plot resumes the specification diagnostics and
      shows the relevance of OGAMs to control for omitted spatial
-     effects.  It corresponds to Figure 7 (p.42) in the Working Paper.
+     effects.  It corresponds to Figure OA4 of online supplementary
+     appendix.
 
 #+begin_src R :results graphics :height 7 :width 10 :file "./Figures/SignifPlot.pdf"
 library(lattice)
@@ -5421,14 +5413,13 @@ bwplot(log(values)~ ind, data= pltdat, type=c("l","g"), horizontal= FALSE,
                       paste0("F= ", Fstat, " : critical value at .01%"))})
 #+end_src
 
-#+Caption: *F-statistics for the diagnostic of correlated residual effects*
 #+ATTR_LATEX: :options scale= .5
 #+RESULTS:
 [[file:./Figures/SignifPlot.pdf]]
 
 #+Latex: \clearpage
 
-*** Specification
+*** Specification                            :noexport:
 
      The estimation of surrogate residuals from the full models can be
      used to test the specification of the effects of explanatory
@@ -5464,8 +5455,8 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Ras@data[, i], i)
 
     The marginal effects from parametric model =polm1= can be directly
     plotted with the package =effect=.  The following plots
-    corresponds to the dotted lines in Figure 5 (p.40) in the Appendix
-    of the Working Paper.
+    corresponds to the dotted lines in Figure OA2 in the online
+    supplementary appendix.
 
 #+begin_src R :results graphics :height 7 :width 12 :file "./Figures/Effects1.pdf"
 library(effects)
@@ -5474,7 +5465,6 @@ plot(predictorEffects(polm1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
                                    SLOPE= 0: 400/ 10, RAYAT= -60: 30/ 10)))
 #+end_src
 
-#+CAPTION: *Marginal effects of topographic variables from ordered logit*
 #+ATTR_LATEX: :options scale= .5
 #+RESULTS:
 [[file:./Figures/Effects1.pdf]]
@@ -5486,14 +5476,13 @@ plot(predictorEffects(polm1, ~ DEM+ SLOPE+ RAYAT+ EXPO, latent= TRUE,
     The same effect plots can be drawn for the OGAMs models.  We
     report below the effects from the OGAM =gam900= which corresponds
     to a maximum effective degrees of freedom of 900.  For all models
-    of =gamod=, we obtain the gray curves of Figure 5 (p.40) in the
-    Appendix of the Working Paper.
+    of =gamod=, we obtain the gray curves of Figure OA2 in the online
+    supplementary appendix.
 
 #+begin_src R :results graphics :height 9 :width 15 :file "./Figures/Effects2.pdf"
 plot(gamod[[ 10]], pages= 1, scale= 0)
 #+end_src
 
-#+CAPTION: *Marginal effects of topographic variables from OGAM with edf= 900*
 #+ATTR_LATEX: :options scale= .4
 #+RESULTS:
 [[file:./Figures/Effects2.pdf]]
@@ -5502,14 +5491,12 @@ plot(gamod[[ 10]], pages= 1, scale= 0)
 
 *** Ordinal superiority figure
 
-    From the equation (4) of the Working Paper (p.14), we can compute
-    ordinal superiority measures for each /communes/ relatively to the
-    average.  The code below reproduces the Figure 2 (p. 23) of the
-    Working Paper.  Note that we drop the isolated Northern /communes/
-    of /Chenôve/, /Marsannay-la-Côte/ and /Couchey/ which do not have
-    comparable neighbors.  The effect of the proximity to Dijon is too
-    high for these /communes/ and they present high ordinal
-    superiority measures without high rated vineyards.
+    We can now compute ordinal superiority measures for each
+    /communes/ relatively to the average.  The code below reproduces
+    the Figure 2 of the main paper.  Note that we drop the isolated
+    Northern /communes/ of /Chenôve/, /Marsannay-la-Côte/ and
+    /Couchey/ which do not have comparable neighbors.  The effect of
+    the proximity to Dijon is too high for these /communes/.
 
 #+begin_src R :results graphics :height 6 :width 9 :file "./Figures/ComEff.pdf"
 library(latticeExtra)
@@ -5532,7 +5519,6 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
         xlab= "Min, Mean and Max of Ordinal Superiorty Measures")
 #+end_src
 
-#+CAPTION: *Ordinal superiorty measures for the /communes/ of the region*
 #+ATTR_LATEX: :options scale= .6
 #+RESULTS:
 [[file:./Figures/ComEff.pdf]]
@@ -5541,10 +5527,10 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 
 *** Correlation between /Communes/
 
-    Below the code to produce the Figure 8 in Appendix p.42 of the
-    Working Paper.  It shows the correlation between the average
-    vertical GI score and the mean ordinal superiority measures
-    estimated from OGAMs with high effective degrees of freedom.
+    Below the code to produce the Figure OA5 in online supplementary
+    appendix.  It shows the correlation between the average vertical
+    GI score and the mean ordinal superiority measures estimated from
+    OGAMs with highest effective degrees of freedom (=gam900=).
 
 #+begin_src R :results graphics :height 6 :width 9 :file "./Figures/ComCor.pdf"
 library(plyr) ; library(ggrepel)
@@ -5564,7 +5550,6 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
     ylab("Average GI grade (between 0 and 5)")
 #+end_src
 
-#+CAPTION: *Correlation between ranking and ordinal superiority*
 #+ATTR_LATEX: :options scale= .6
 #+RESULTS:
 [[file:./Figures/ComCor.pdf]]
@@ -5574,16 +5559,14 @@ ggplot(zz, aes(MEAN, V1, label= LIBCOM)) +
 ** Informational content
 *** Decomposition tables
 
-    We proceed now to the decomposition of variance of the latent
-    quality index from the GI designations.  The mathematical formula
-    and codes used in the decomposition are presented and tested in
+    We proceed to the decomposition of variance of the latent quality
+    index from the GI designations.  The mathematical formula and
+    codes used in the decomposition are presented and tested in
     Appendix [[#Sec:rDCMP]].  These functions are also available in the
-    file of custom function =./myFcts.R= that can be directly sourced.
-    The following codes perform the decomposition for the subset of
-    models reported in Table 2 (p.25) of the Working Paper.  The
-    predictions of the latent quality index in the first rows need
-    some time to run, the decomposition that follow are computed
-    rapidly.
+    file of custom function =./myFcts.R= of the [[https://github.com/jsay/geoInd][GitHub repo]].  The
+    following codes perform the decomposition for the subset of models
+    reported in Table 2 of the main paper.  The predictions of the
+    latent quality index in the first rows need some time to run.
 
 #+begin_src R :wrap example
 ddtt <- data.frame(AOC= Reg.Ras$AOC, LIBCOM= Reg.Ras$LIBCOM,
@@ -5925,9 +5908,9 @@ gam4lp <- gam2$linear.predictors
 ** Models for GIs of 1936
 *** Descriptive statistics
 
-    We turn now to the detail of the analysis with past 1936 GIs.  We
-    make the same analysis than for actual GIs, first with some
-    descriptive statistics.
+    We turn now to the detail of the analysis with historical GIs
+    of 1936.  We make the same econometric analysis than for actual
+    GIs, first with some descriptive statistics.
 
 #+begin_src R :wrap example
 Reg.Old <- subset(Reg.Ras, !Reg.Ras$LIBCOM %in%
@@ -5940,7 +5923,7 @@ table(Reg.Old$AOCo, Reg.Old$AOC)
 #+end_src
 
 #+RESULTS:
-#+begin_example   
+#+begin_example
         1     2     3     4     5
   1  7124 11452  5111   575    39
   2     5   536 15175  8101   261
@@ -6005,8 +5988,8 @@ utilisateur     système      écoulé
 *** Significance
 
     We first assess the joint significance of variables in all OGAMs
-    of GIs designation.  The following results are reported in Table 5
-    in Appendix p.43 of the Working Paper.
+    of GIs designation.  The following results are reported in Table
+    OA2 in the online supplemental appendix.
 
 #+begin_src R :wrap example
 load("Inter/gamold.Rda")
@@ -6038,8 +6021,8 @@ PEDO     3335.3 2820.6   898.8   660.3   599.4   537.0   539.3
 
 *** Goodness of fit
 
-    Goodness of fit measures from the same Table 5 in Appendix p.43 of
-    the Working Paper.
+    Goodness of fit measures from the same Table OA2 in the online
+    supplementary appendix.
 
 #+begin_src R :wrap example
 round(c(McFaddenR2= psR2(polm2), AIC= AIC(polm2)/ 1000,
@@ -6061,7 +6044,7 @@ psR2  0.4629  0.4968  0.6132  0.636  0.6606  0.6982  0.7236
 
 #+Latex: \clearpage
 
-*** Omitted variable
+*** Causal inference                         :noexport:
 **** Bootstrap                               :noheading:
 
      Bootstrapped statistics for omitted variables, reported in Table
@@ -6124,7 +6107,7 @@ bwplot(log(values)~ ind, data= poldat, type=c("l","g"), horizontal= FALSE,
 
 #+Latex: \clearpage
 
-*** Specification
+*** Specification                            :noexport:
 
     The use of surrogate residuals to test the specification process
     for models of 1936 GI designations.  As before, the results are
@@ -6152,7 +6135,7 @@ par(mfrow= c(3, 3)) ; for (i in var) pltSURE(restmp, Reg.Old@data[, i], i)
 
     Marginal effect can be assessed as for current GIs, the code
     belows can be used on the models from the =gamold= object to
-    produce Figure 9 in the Appendix p.44 in the Working Paper.
+    produce Figure OA6 in the online supplementary appendix.
 
 #+begin_src R :results graphics :height 7 :width 12 :file "./Figures/Effectsold.pdf"
 library(effects)
@@ -6172,7 +6155,7 @@ plot(predictorEffects(polm2, ~ DEM+ SLOPE+ RAYAT+ EXPO+ GEOL+ PEDO,
 *** Ordinal superiority measures
     
     Ordinal superiority for the GIs of 1936, that corresponds to
-    Figure 11 in the Appendix p. 46 of the Working Paper.
+    Figure AO7 in the online supplementary appendix.
 
 #+begin_src R :results graphics :height 6 :width 9 :file "./Figures/ComEffOld.pdf"
 plogi <- function(x) exp(x/ sqrt(2))/ (1+ exp(x/ sqrt(2)))
@@ -6201,7 +6184,8 @@ segplot(reorder(factor(LIBCOM), MEAN)~ MIN+ MAX, length= 5, draw.bands= T,
 
 *** Temporal variations
 
-    An additional Figure 3 (p.26) of the Working Paper.
+    The differences between current ordinal superiority measures and
+    those of 1936, this corresponds to the Figure 3 of the main paper.
 
 #+begin_src R :results graphics :height 6 :width 11 :file "./Figures/ComDyn.pdf"
 zzz <- merge(ww, www, by= "LIBCOM")
@@ -6212,7 +6196,6 @@ segplot(reorder(factor(LIBCOM), MEAN.x)~ MEAN.y+ MEAN.x, data= zzz,
         xlab= "Variation of ordinal superiority measure from 1936 to now")
 #+end_src
 
-#+CAPTION: *Evolution of superiority measures between 1936 and now*
 #+ATTR_LATEX: :options scale= .6
 #+RESULTS:
 [[file:./Figures/ComDyn.pdf]]
@@ -6407,6 +6390,15 @@ Horizontal Noise    73.7 73.7 73.7 73.7 73.7 73.7 73.7 73.7
 #+end_example
 
 #+LATEX: \clearpage
+
+** Bibliography                              :noheading:
+   
+#+LATEX: \singlespacing
+
+   bibliographystyle:../Softwares/latex/erae
+   bibliography:Biblio.bib
+
+#+LATEX: \clearpage\appendix
 
 ** Robustness Checks                         :noexport:
 *** Parallel assumption
@@ -6846,8 +6838,6 @@ loaded via a namespace (and not attached):
 [43] minqa_1.2.4       assertthat_0.2.1  R6_2.4.0         
 [46] nnet_7.3-12       compiler_3.6.0
 #+end_example
-
-#+LATEX: \clearpage\appendix
 
 ** Custom R functions
 *** Translation of geology
@@ -9575,17 +9565,6 @@ q(X_i^*)= \delta [B(X_i)^\top\beta_{LP}]+ \theta [C_i^\top\mu]+ \epsilon_i\label
     imperfectly observable (Shapiro, 1982, Landon and Smith 1998). The
     second is about the value of GIs.
 
-* Title Page
-  :PROPERTIES:
-  :EXPORT_FILE_NAME:    TitlePage.pdf
-  :EXPORT_LATEX_CLASS:  WorkinPap
-  :EXPORT_LANGUAGE:     en
-  :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:3
-  :EXPORT_TITLE:        @@latex: Title: The informational content of geographical indications@@
-  :EXPORT_AUTHOR:       @@latex: Author name: Jean-Sauveur Ay \\ Contact person: Jean-Sauveur Ay \\ Address: 25 boulevard Docteur Petitjean, 21000 Dijon (France).\\ Phone number: 00.333.80.77.23.19 @@
-  :EXPORT_LATEX_HEADER: \usepackage[T1]{fontenc} \usepackage[doublespacing]{setspace} \usepackage{tabularx, rotating, booktabs, pdflscape, amssymb, amsmath, amsthm, bbm, eurosym, pdflscape, txfonts, rotfloat, caption}\makeatletter\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}\@title \begin{flushleft} \@author\end{flushleft}\egroup}\makeatother
-  :END:
-
 * Pres GTI
   :PROPERTIES:
   :EXPORT_FILE_NAME:     Presentation
@@ -11350,8 +11329,9 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
   :EXPORT_LATEX_CLASS:  ManueBibt
   :EXPORT_OPTIONS:      TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc toc:nil H:2
   :EXPORT_LATEX_HEADER: \usepackage{hyperref, xcolor} \hypersetup{colorlinks=true, linkcolor=red, urlcolor=blue, citecolor=gray} \usepackage[utf8]{inputenc} \usepackage[T1]{fontenc} 
-  :EXPORT_AUTHOR:       \textsc{Bibliography}
+  :EXPORT_AUTHOR:       The informational content of geographical indications
   :END:
+#+Latex: \tableofcontents\clearpage
 ** Bourgogne specific
 *** cite:Jull16 [[file:Biblio/Trie/Jull16.pdf][Book: Jullien 1816]]
 
@@ -11390,11 +11370,12 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
 - Des statistiques sur les surfaces et les productions communales et
   les revenus imposables
 
-*** cite:Dion52 [[file:Biblio/Trie/Dion52.pdf][Annales: Dion qualité]] 
+*** cite:Dion52 [[file:Biblio/Trie/Dion52.pdf][Annales: Dion qualité]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Dion52,
-  title={Querelle des anciens et des modernes sur les facteurs de la qualit{\'e} du vin},
+  title={Querelle des anciens et des modernes sur les facteurs de la
+                  qualit{\'e} du vin},
   author={Dion, Roger},
   journal={Annales de g{\'e}ographie},
   volume={61},
@@ -11630,7 +11611,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
 - Livre de référence sur les vins en Francais
 - pas de pdf
 
-*** cite:Garc10 [[file:Biblio/Trie/Garc10.pdf][lien avec Dion]] 
+*** cite:Garc10 [[file:Biblio/Trie/Garc10.pdf][lien avec Dion]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @book{Garc10,
@@ -11652,7 +11633,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
     déplacement du vignoble. Même graphique qu'Olivier sur les
     organisations vini-viticoles en meilleure résolution.
 
-*** cite:Humb11 [[file:Biblio/Trie/Humb11.pdf][Thèse Florian]] 
+*** cite:Humb11 [[file:Biblio/Trie/Humb11.pdf][Thèse Florian]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @phdthesis{Humb11,
@@ -11671,7 +11652,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
     
     Publication un peu plus sérieuse que les autres.
 
-*** cite:Ay11   [[file:Biblio/Trie/Ay11.pdf][Thèse jsay]] 
+*** cite:Ay11   [[file:Biblio/Trie/Ay11.pdf][Thèse jsay]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @phdthesis{Ay11,
@@ -11703,7 +11684,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
     Les mêmes figures que précédemment. Diapos pour le dossier de
     classement: [[file:Biblio/Trie/diapo1.pdf][Diapo 1]] ; [[file:Biblio/Trie/diapo2.pdf][Diapo 2]] ; [[file:Biblio/Trie/diapo3.pdf][Diapo 3]] ; [[file:Biblio/Trie/diapo4.pdf][Diapo 4]].
 
-*** cite:Garc14 [[file:Biblio/Trie/Garc14.pdf][ACRH: Climats moyen âge]] 
+*** cite:Garc14 [[file:Biblio/Trie/Garc14.pdf][ACRH: Climats moyen âge]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Garc14,
@@ -11724,7 +11705,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
     
     Publication un peu plus sérieuse que les autres.
 
-*** cite:DChe15 [[file:Biblio/Trie/DChe15.pdf][Cyber : Dion vivant]] 
+*** cite:DChe15 [[file:Biblio/Trie/DChe15.pdf][Cyber : Dion vivant]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{DChe15,
@@ -11785,7 +11766,7 @@ print(xtable(yap, align= c("@{\\extracolsep{\\fill}} l", "l", "l", rep("X", 8)))
 }
 #+end_src
 
-*** cite:HJRV18 [[file:Biblio/Trie/HJRV18.pdf][UFUG : Mos cote d'or]] 
+*** cite:HJRV18 [[file:Biblio/Trie/HJRV18.pdf][UFUG : Mos cote d'or]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{HJRV18,
@@ -11819,7 +11800,7 @@ DOI = {10.5194/cp-2018-179}
 
 - yop
 
-*** cite:Ay19 [[file:WorkingPaper.pdf][AAWE: Geographical content]] 
+*** cite:Ay19   [[file:WorkingPaper.pdf][AAWE: Geographical content]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Ay19,
@@ -11830,7 +11811,7 @@ DOI = {10.5194/cp-2018-179}
 }
 #+end_src
 
-*** cite:Ay19 [[https://doi.org/10.15454/ZZWQMN][Data paper]]
+*** cite:Ay19   [[https://doi.org/10.15454/ZZWQMN][Data paper]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Ay19,
@@ -11879,6 +11860,24 @@ DOI = {10.5194/cp-2018-179}
 - Data paper mohamed
 
 ** Geographical Indications
+*** cite:CMoj96 [[file:Biblio/Trie/CMoj96.pdf][AJAE: label and market quality]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{CMoj96,
+  title={Using informational labeling to influence the market for
+                  quality in food products},
+  author={Caswell, Julie A and Mojduszka, Eliza M},
+  journal={American Journal of Agricultural Economics},
+  volume={78},
+  number={5},
+  pages={1248--1253},
+  year={1996},
+  publisher={JSTOR}
+}
+#+end_src
+
+- Link with credence goods and searchable attributes.
+
 *** cite:Coes98 [[file:Biblio/Trie/Coes98.pdf][AES: Certification]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -11912,6 +11911,20 @@ DOI = {10.5194/cp-2018-179}
 #+end_src
 
 - Choix d'adoption des grade
+
+*** cite:Lohr99 [[file:Biblio/Trie/Lohr99.pdf][WP: label proliferation]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@techreport{Lohr99,
+  title={Welfare Effects of Eco-label Proliferation: Too Much of a
+                  Good Thing?},
+  author={Lohr, Luanne},
+  year={1999},
+  institution={Food and Agricultural Marketing Consortium (FAMC)}
+}
+#+end_src
+
+- Trop de label tue les labels
 
 *** cite:MCSc99 [[file:Biblio/Trie/MCSc99.pdf][ERAE: Cartel welfare improving]]
 
@@ -11957,7 +11970,7 @@ DOI = {10.5194/cp-2018-179}
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{LPer00,
-  title={Une analyse {\'e}conomique des" signes de
+  title={Une analyse {\'e}conomique des "signes de
                   qualit{\'e}". Labels et certification des produits},
   author={Linnemer, Laurent and Perrot, Anne},
   journal={Revue {\'e}conomique},
@@ -11966,6 +11979,23 @@ DOI = {10.5194/cp-2018-179}
   pages={1397--1418},
   year={2000},
   publisher={Presses de Science Po}
+}
+#+end_src
+
+- yop
+
+*** cite:CMar01 [[file:Biblio/Trie/CMar01.pdf][AJAE: Financing labels]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{CMar01,
+  title={How should food safety certification be financed?},
+  author={Crespi, John M and Marette, St) phan},
+  journal={American Journal of Agricultural Economics},
+  volume={83},
+  number={4},
+  pages={852--861},
+  year={2001},
+  publisher={Wiley Online Library}
 }
 #+end_src
 
@@ -12076,6 +12106,24 @@ DOI = {10.5194/cp-2018-179}
   création des AOC en france, et la possibilité d'avoir des rentes.
 - Vision juridique
 
+*** cite:ZPic04 [[file:Biblio/Trie/ZPic04.pdf][JARE: Label policies]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{ZPic04,
+  title={Labeling policies in food markets: Private incentives, public
+                  intervention, and welfare effects},
+  author={Zago, Angelo M and Pick, Daniel},
+  journal={Journal of Agricultural and Resource Economics},
+  pages={150--165},
+  year={2004},
+  publisher={JSTOR}
+}
+#+end_src
+
+- Welfare effects of labeling policies through a model of vertical
+  differentiation
+- GIs for Credence goods
+
 *** cite:Stor05 [[file:Biblio/Trie/Stor05.pdf][JWR: OP wine quality]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12179,6 +12227,43 @@ DOI = {10.5194/cp-2018-179}
   quality signal, or alternatively, that the resources of the region
   may be captured as quality attributes.
 
+*** cite:LMHF07 [[file:Biblio/Trie/LMHF07.pdf][AJAE: Collective arrangements]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{LMHF07,
+  title={Collective marketing arrangements for geographically
+                  differentiated agricultural products: Welfare
+                  impacts and policy implications},
+  author={Lence, Sergio H and Marette, St{\'e}phan and Hayes, Dermot J
+                  and Foster, William},
+  journal={American Journal of Agricultural Economics},
+  volume={89},
+  number={4},
+  pages={947--963},
+  year={2007},
+  publisher={Oxford University Press}
+}
+#+end_src
+
+- Cost mutualization of GIs
+
+*** cite:BCon08 [[file:Biblio/Trie/BCon08.pdf][JRE: Label for credence]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BCon08,
+  title={On the use of labels in credence goods markets},
+  author={Bonroy, Olivier and Constantatos, Christos},
+  journal={Journal of Regulatory Economics},
+  volume={33},
+  number={3},
+  pages={237--252},
+  year={2008},
+  publisher={Springer}
+}
+#+end_src
+
+- Credence goods markets
+
 *** cite:MMPi08 [[file:Biblio/Trie/MMPi08.pdf][AJAE: GI to provide quality]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12196,6 +12281,8 @@ DOI = {10.5194/cp-2018-179}
 #+end_src
 
 - Positive welfare effects of GIs
+- The welfare effect of introducing the GI region operates solely
+  through the gains in consumer surplus
 
 *** cite:TBow08 [[file:Biblio/Trie/TBow08.pdf][GeoJourn: Learn from AOC]]
 
@@ -12370,8 +12457,20 @@ DOI = {10.5194/cp-2018-179}
 }
 #+end_src
 
-- Survey sur les effets économiques des labels de qualité, GI y
-  compris.
+- Survey on the economic effects of labels, according to market
+  structure, cost of certification, 
+- Although tailor-made (sur-mesure) certification of each product’s
+  quality is, in theory, the ideal means for providing information, in
+  practice it faces two challenges: credibility and efficiency.
+- Are labels good or bad for consumers, firms, and total welfare?
+- While we have found little work on the optimal number of
+  labels usually there are exogenously assumed to be one or two labels
+- Despite the enormous progress of the theory of labels during the
+  past ten years, we have identified at least two areas that require
+  urgent theoretical support: the impact of labels on the vertical
+  supply chain, and consumers’ misperceptions of information on labels
+  and/or the true nature of the product attribute to which a label
+  refers.
 
 *** cite:Brec14 [[file:Biblio/Trie/Brec14.pdf][REE: label profusion]]
 
@@ -12383,6 +12482,24 @@ DOI = {10.5194/cp-2018-179}
   journal={Resource and energy economics},
   volume={37},
   pages={64--84},
+  year={2014},
+  publisher={Elsevier}
+}
+#+end_src
+
+- Double différenciation des labels car on peut produire de la faible
+  qualité sous un certain label.
+
+*** cite:CLus14 [[file:Biblio/Trie/CLus14.pdf][FP: Stigmatization]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{CLus14,
+  title={The signaling effect of mandatory labels on genetically
+                  engineered food},
+  author={Costanigro, Marco and Lusk, Jayson L},
+  journal={Food Policy},
+  volume={49},
+  pages={259--267},
   year={2014},
   publisher={Elsevier}
 }
@@ -12406,6 +12523,20 @@ DOI = {10.5194/cp-2018-179}
   n'ont de signal que sur la qualité.
 - Ils se posent la question de l'extension de l'aire d'appellation et
   le process institutionnel qui permet de le déterminer.
+- Sur l'influence du lobbying, ils disent s'inspirer de Grossman,
+  M. and E. Helpman (1994) “Protection for Sale,” American Economic
+  Review 84(4), pp. 833-850. (used in other article from Swinen but
+  not for GIs)
+- Our definition of lobbying is different than DSwi14, we suppose
+  influential landowner in each GIs that do not change when GIs area
+  change.  Moreover, it is not simply about the acreage of GIs but it
+  is about the place in the vertical scheme.
+- Our model implicitly ignores what happens outside the GI region and
+  assumes that the expansion of the GI region does not affect producer
+  or consumer welfare in the market for the low-quality product made
+  outside the GI region.
+- They model the (fixed and variable) cost of GI management which lack
+  in our approaches.
 
 *** cite:Malt14 [[file:Biblio/Trie/Malt14.pdf][ASQ: Causality crus]]
 
@@ -12437,6 +12568,24 @@ DOI = {10.5194/cp-2018-179}
 - Effet des primes Bordeaux, avec exogénéité supposée des primes du
   fait de leur histoire.
 - Biased matching because of unobservables: IV
+
+*** cite:ACMa17 [[file:Biblio/Trie/ACMa17.pdf][ERE: Distance decay WTP]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{ACMa17,
+  title={Distance decay in the willingness to pay for wine:
+                  Disentangling local and organic attributes},
+  author={Ay, Jean-Sauveur and Chakir, Raja and Marette, Stephan},
+  journal={Environmental and Resource Economics},
+  volume={68},
+  number={4},
+  pages={997--1019},
+  year={2017},
+  publisher={Springer}
+}
+#+end_src
+
+- For the stigmatization of regular products
 
 *** cite:USTR17 [[file:Biblio/Trie/USTR17.pdf][Report Intellectual property]]
 
@@ -12485,7 +12634,7 @@ DOI = {10.5194/cp-2018-179}
   appréciations des autres régions viticoles à cette échelle. On a
   quelque part une sorte de modèle hiérarchiques à 2 étapes.
 
-*** cite:MCKa17 [[file:Biblio/Trie/MCKa17.pdf][AEPP: Food labeling]]
+*** cite:MCKa17 [[file:Biblio/Trie/MCKa17.pdf][AEPP: Suvey food labeling]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{MCKa17,
@@ -12576,7 +12725,7 @@ DOI = {10.5194/cp-2018-179}
 }
 #+end_src
 
-- 
+- The reasons for first GIs
 
 *** cite:CSCa19 [[file:Biblio/CSCa19.pdf][FP: Vertical differentiation and geographical indications]]
 
@@ -12593,6 +12742,22 @@ DOI = {10.5194/cp-2018-179}
 #+end_src
 
 ** Informational structure
+*** cite:Blac51 [[file:Biblio/Trie/Blac51.pdf][WP : Comparison of experiments]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Blac51,
+  title={Comparison of experiments},
+  journal={proceedings of the second berkeley symposium on
+                  mathematical statistics and probability},
+  author={Blackwell, David},
+  year={1951},
+  volume={ed. by J. Neyman, University of California Press, Berkeley},
+  pages={93-102}
+}
+#+end_src
+
+- Papier séminal sur le classement de l'information
+
 *** cite:Aker70 [[file:Biblio/Trie/Aker70.pdf][QJE: Market for lemons]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12674,6 +12839,41 @@ DOI = {10.5194/cp-2018-179}
 - Monopole et biais dans la provision de qualité
 - Papier très théorique
 
+*** cite:GDGr79 [[file:Biblio/Trie/GDGr79.pdf][AOS: Information measures]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{GDGr79,
+  title={Comparison of experiments and information measures},
+  author={Goel, Prem K and DeGroot, Morris H},
+  journal={The Annals of Statistics},
+  volume={7},
+  number={5},
+  pages={1066--1077},
+  year={1979},
+  publisher={Institute of Mathematical Statistics}
+}
+#+end_src
+
+- Link with variance?
+
+*** cite:Gros81 [[file:Biblio/Trie/Gros81.pdf][JLE : Information role]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Gros81,
+  title={The informational role of warranties and private disclosure
+                  about product quality},
+  author={Grossman, Sanford J},
+  journal={The Journal of Law and Economics},
+  volume={24},
+  number={3},
+  pages={461--483},
+  year={1981},
+  publisher={The University of Chicago Press}
+}
+#+end_src
+
+- L'information ne transite pas que dans les prix.
+
 *** cite:Shap82 [[file:Biblio/Trie/Shap82.pdf][BJE: Information and quality]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12752,6 +12952,51 @@ DOI = {10.5194/cp-2018-179}
   psychologie associée.
 - Only consumer welfare loss
 
+*** cite:Laff85 [[file:Biblio/Trie/Laff89.pdf][BOOK: Laffont information]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@book{Laff85,
+  title={Économie de l'incertain et de l'information},
+  author={Laffont, Jean-Jacques},
+  year={1985},
+  publisher={Economica}
+}
+#+end_src
+
+- Citation en Francais
+
+*** cite:Sobe85 [[file:Biblio/Trie/Sobe85.pdf][RES: Theory of credibility]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Sobe85,
+  title={A theory of credibility},
+  author={Sobel, Joel},
+  journal={The Review of Economic Studies},
+  volume={52},
+  number={4},
+  pages={557--573},
+  year={1985},
+  publisher={Wiley-Blackwell}
+}
+#+end_src
+
+- Seminal reference
+
+*** cite:BRio91 [[file:Biblio/Trie/BRio91.pdf][AER: High and declining prices]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BRio91,
+  title={High and declining prices signal product quality},
+  author={Bagwell, Kyle and Riordan, Michael H},
+  journal={The American Economic Review},
+  pages={224--239},
+  year={1991},
+  publisher={JSTOR}
+}
+#+end_src
+
+- Seminal reference
+
 *** cite:DNab91 [[file:Biblio/Trie/DNab91.pdf][EL: Efficient certification scheme]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12809,23 +13054,36 @@ DOI = {10.5194/cp-2018-179}
 - The information gain of discretizing a continuous signal,
   asymptotically.
 
-*** cite:CMoj96 [[file:Biblio/Trie/CMoj96.pdf][AJAE : label and market quality]]
+*** cite:Aust94 [[file:Biblio/Trie/Aust94.pdf][ECTA: Costly information]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
-@article{CMoj96,
-  title={Using informational labeling to influence the market for
-                  quality in food products},
-  author={Caswell, Julie A and Mojduszka, Eliza M},
-  journal={American Journal of Agricultural Economics},
-  volume={78},
-  number={5},
-  pages={1248--1253},
-  year={1996},
+@article{Aust94,
+  title={Strategic transmission of costly information},
+  author={Austen-Smith, David},
+  journal={Econometrica: Journal of the Econometric Society},
+  pages={955--963},
+  year={1994},
   publisher={JSTOR}
 }
 #+end_src
 
-- Lik with credence goods and searchable attributes.
+- The question of verifiability is important
+
+*** cite:GHel94 [[file:Biblio/Trie/GHel94.pdf][ARE: Lobbying seminal]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{GHel94,
+  title={Protection for Sale},
+  author={Grossman, Gene M and Helpman, Elhanan},
+  journal={The American Economic Review},
+  volume={84},
+  number={4},
+  pages={833--850},
+  year={1994}
+}
+#+end_src
+
+- The lobbying model used by Swinnen on GIs.
 
 *** cite:Tiro96 [[file:Biblio/Trie/Tiro96.pdf][RES: History vs stereotypes]]
 
@@ -12880,6 +13138,23 @@ DOI = {10.5194/cp-2018-179}
 
 - Seminal reference
 
+*** cite:Goss00 [[file:Biblio/Trie/Goss00.pdf][GEB: Comparison of information]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Goss00,
+  title={Comparison of information structures},
+  author={Gossner, Olivier},
+  journal={Games and Economic Behavior},
+  volume={30},
+  number={1},
+  pages={44--63},
+  year={2000},
+  publisher={Elsevier}
+}
+#+end_src
+
+- Why game theory?
+
 *** cite:ALiz01 [[file:Biblio/Trie/ALiz01.pdf][IER: Welfare certification]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12931,6 +13206,23 @@ DOI = {10.5194/cp-2018-179}
   certified (seller), a disclosure in the form of ordered ranking of
   levels is predicted.
 
+*** cite:BFel02 [[file:Biblio/Trie/BFel02.pdf][JPE: Lobbying legislature]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BFel02,
+  title={Lobbying legislatures},
+  author={Bennedsen, Morten and Feldmann, Sven E},
+  journal={Journal of Political Economy},
+  volume={110},
+  number={4},
+  pages={919--946},
+  year={2002},
+  publisher={The University of Chicago Press}
+}
+#+end_src
+
+- Application aux votes politiques
+
 *** cite:MShi02 [[file:Biblio/Trie/MShi02.pdf][AER: Public information]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12960,6 +13252,25 @@ DOI = {10.5194/cp-2018-179}
 - Je ne comprend pas l'équation 10 donc j'ai arrêté la lecture à ce
   point.
 
+*** cite:DKMC03 [[file:Biblio/Trie/DKMC03.pdf][JPE : Information decrease welfare]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{DKMC03,
+  title={Is more information better? The effects of “report cards” on
+                  health care providers},
+  author={Dranove, David and Kessler, Daniel and McClellan, Mark and
+                  Satterthwaite, Mark},
+  journal={Journal of Political Economy},
+  volume={111},
+  number={3},
+  pages={555--588},
+  year={2003},
+  publisher={The University of Chicago Press}
+}
+#+end_src
+
+- The case for hospital where an information valuable for consumer
+  produce induced effect for producer that decrease the welfare.
 *** cite:JLes03 [[file:Biblio/Trie/JLes03.pdf][QJE: Hygiene quality in restaurants]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -12977,6 +13288,41 @@ DOI = {10.5194/cp-2018-179}
 #+end_src
 
 - Un effet très fort de la qualité endogène à l'information
+
+*** cite:Prat05 [[file:Biblio/Trie/Prat05.pdf][AER : Wrong transparency]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Prat05,
+  title={The wrong kind of transparency},
+  author={Prat, Andrea},
+  journal={American Economic Review},
+  volume={95},
+  number={3},
+  pages={862--877},
+  year={2005}
+}
+#+end_src
+
+- Agent can become conformist if the information of the principal
+  increase, this could be detrimental for the principal that want to
+  commit about information
+
+*** cite:BFel06 [[file:Biblio/Trie/BFel06.pdf][JPE : Informational lobbying]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BFel06,
+  title={Informational lobbying and political contributions},
+  author={Bennedsen, Morten and Feldmann, Sven E},
+  journal={Journal of Public Economics},
+  volume={90},
+  number={4-5},
+  pages={631--656},
+  year={2006},
+  publisher={Elsevier}
+}
+#+end_src
+
+- Lobbying through information
 
 *** cite:JMya06 [[file:Biblio/Trie/JMya06.pdf][AER: simple advertising]]
 
@@ -13003,7 +13349,8 @@ DOI = {10.5194/cp-2018-179}
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Bake06,
-  title={Increasing risk and increasing informativeness: Equivalence theorems},
+  title={Increasing risk and increasing informativeness: Equivalence
+                  theorems},
   author={Baker, Erin},
   journal={Operations Research},
   volume={54},
@@ -13032,7 +13379,7 @@ DOI = {10.5194/cp-2018-179}
 
 - Revue de littérature sur les certifications de la qualité
 
-*** cite:GPen10 [[file:Biblio/Trie/GPen10.pdf][Econca: Signal ordering]]
+*** cite:GPen10 [[file:Biblio/Trie/GPen10.pdf][ECTA: Signal ordering]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{GPen10,
@@ -13061,6 +13408,20 @@ DOI = {10.5194/cp-2018-179}
 - A la fin de l'article il y a d'autres critères qui pourraient
   également rentrer dans notre comparaison pour le cas gaussien.
 
+*** cite:Vive10 [[file:Biblio/Trie/Vive10.pdf][BOOK: Information in markets]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@book{Vive10,
+  title={Information and learning in markets: the impact of market
+                  microstructure},
+  author={Vives, Xavier},
+  year={2010},
+  publisher={Princeton University Press}
+}
+#+end_src
+
+- The appendix are very good
+
 *** cite:WSor11 [[file:Biblio/Trie/WSor11.pdf][OS: Inflencing classifications]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -13077,7 +13438,7 @@ DOI = {10.5194/cp-2018-179}
 #+end_src
 
 - Certains inidivdus arrivent à influencer les classements
-- C'est observé sur des film par comparaison entre pays.
+- C'est observé sur des films par comparaison entre pays.
 
 *** cite:BSwa12 [[file:Biblio/Trie/BSwa12.pdf][PNAS: Information flows]]
 
@@ -13098,6 +13459,24 @@ DOI = {10.5194/cp-2018-179}
 - With supplementary Information [[file:Biblio/Trie/BSwa12a.pdf][here]] for the formula and the
   links with the information theory.
 - Multivariate variance decomposition.
+
+*** cite:BHVK13 [[file:Biblio/Trie/BHVK13.pdf][JET: Substitute or complement]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BHVK13,
+  title={When are signals complements or substitutes?},
+  author={B{\"o}rgers, Tilman and Hernando-Veciana, Angel and
+                  Kr{\"a}hmer, Daniel},
+  journal={Journal of Economic Theory},
+  volume={148},
+  number={1},
+  pages={165--195},
+  year={2013},
+  publisher={Elsevier}
+}
+#+end_src
+
+- yop
 
 *** cite:BDEV14 [[file:Biblio/Trie/BDEV14.pdf][JET : Information and dispersion]]
 
@@ -13191,7 +13570,7 @@ DOI = {10.5194/cp-2018-179}
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{Li17,
-  title={Expertise versus Bias in Evaluation: Evidence from the NIH},
+  title={Expertise versus Bias in Evaluation: Evidence from the {NIH}},
   author={Li, Danielle},
   journal={American Economic Journal: Applied Economics},
   volume={9},
@@ -13220,8 +13599,8 @@ DOI = {10.5194/cp-2018-179}
 
 - Lien avec la valeur de l'information
 
-*** cite:BZJL18 [[file:Biblio/Trie/BZJL18.pdf][AEJ: Countersignaling]]
-
+*** cite:BZJL18 [[file:Biblio/Trie/BZJL18.pdf][AEJ : Countersignaling]]
+    
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
 @article{BZJL18,
   title={Incomplete disclosure: Evidence of signaling and
@@ -13511,7 +13890,7 @@ DOI = {10.5194/cp-2018-179}
   (clusters). the proof are in the appendix.
 - Complementarity with Fielding 2004, same goal.
 
-*** cite:XXXXXX [[file:Biblio/Trie/JackXX.pdf][Cours: Ideal point and reparam]]
+*** Cours      [[file:Biblio/Trie/JackXX.pdf][Cours: Ideal point and reparam]]
 
 - Only the course of Jackman with the theory of ideal point. 
 - With two votes known thresholds (Krehbiel and Rivers), We need to
@@ -14382,6 +14761,26 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 - Sur les données climatiques et le prix des bordeaux, en utilisant
   les variations inter-annuelles.
 
+*** cite:LVis06a [[file:Biblio/Trie/LVis06a.pdf][JWE: Objective vs sensory]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{LVis06a,
+  title={What determines wine prices: Objective vs. sensory
+                  characteristics},
+  author={Lecocq, S{\'e}bastien and Visser, Michael},
+  journal={Journal of Wine Economics},
+  volume={1},
+  number={1},
+  pages={42--56},
+  year={2006},
+  publisher={Cambridge University Press}
+}
+#+end_src
+
+- Comparison Bordeaux Bourgogne, question the structure of the
+  different GIs ranking. 
+
+
 *** cite:DGre08 [[file:Biblio/Trie/DGre08.pdf][EJ: Introduction]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -14713,6 +15112,23 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
   vin. Remarquable en particulier par la structure en prime de la
   valeur des différentes réputations (échelles à vérifier).
 
+*** cite:Unwi99 [[file:Biblio/Trie/Unwi99.pdf][JWR: Critics of hedonic]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{Unwi99,
+  title={Hedonic price indexes and the qualities of wines},
+  author={Unwin, Tim},
+  journal={Journal of Wine Research},
+  volume={10},
+  number={2},
+  pages={95--104},
+  year={1999},
+  publisher={Taylor \& Francis}
+}
+#+end_src
+
+- Critique des modèles hédoniques sur les primes AOC
+
 *** cite:Oczk01 [[file:Biblio/Trie/Oczk01.pdf][ER: Hedonic measurement errors]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -14910,6 +15326,26 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 - Essai de définition de la qualité d'un vin, avec des références
   intrinsèques et extrinsèques.
 
+*** cite:BPSa09 [[file:Biblio/Trie/BPSa09.pdf][AE: Taste or reputation]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{BPSa09,
+  title={Taste or reputation: what drives market prices in the wine
+                  industry? Estimation of a hedonic model for Italian
+                  premium wines},
+  author={Benfratello, Luigi and Piacenza, Massimiliano and Sacchetto,
+                  Stefano},
+  journal={Applied Economics},
+  volume={41},
+  number={17},
+  pages={2197--2209},
+  year={2009},
+  publisher={Taylor \& Francis}
+}
+#+end_src
+
+- Model trade off between taste or reputation
+
 *** cite:MLSB10 [[file:Biblio/Trie/MLSB10.pdf][FQP: Back label information]]
 
 #+begin_src bibtex :tangle ./Biblio.bib :exports none
@@ -15040,6 +15476,42 @@ From [[file:Biblio/Trie/WoodSmooth.pdf][slides]] about smoothing choices
 
 - Deux niveaux d'information, qualité et GI, mais le premier est à la
   base une qualité endogène.
+
+*** cite:ODou15 [[file:Biblio/Trie/ODou15.pdf][AJAE: Meta regression]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{ODou15,
+  title={Wine prices and quality ratings: A meta-regression analysis},
+  author={Oczkowski, Edward and Doucouliagos, Hristos},
+  journal={American Journal of Agricultural Economics},
+  volume={97},
+  number={1},
+  pages={103--121},
+  year={2015},
+  publisher={Oxford University Press}
+}
+#+end_src
+
+- Meta analysis of 180 papers
+
+*** cite:GLSu16 [[file:Biblio/Trie/GLSu16.pdf][AE : Consumer sorting]]
+
+#+begin_src bibtex :tangle ./Biblio.bib :exports none
+@article{GLSu16,
+  title={Consumer sorting and hedonic valuation of wine attributes:
+                  exploiting data from a field experiment},
+  author={Gustafson, Christopher R and Lybbert, Travis J and Sumner,
+                  Daniel A},
+  journal={Agricultural economics},
+  volume={47},
+  number={1},
+  pages={91--103},
+  year={2016},
+  publisher={Wiley Online Library}
+}
+#+end_src
+
+- Consumers' sorting
 
 ** Wine ranking
 *** cite:AQua99 [[file:Biblio/Trie/AQua99.pdf][Chance: Jugement de Paris]]
