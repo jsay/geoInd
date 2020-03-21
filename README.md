@@ -1,6 +1,6 @@
 # English version
 
-This repo contains the material associated to the paper "The Informational Content of Geographical Indications" published in the *American Journal of Agricultural Economics*. Raw data and econometric estimations are on the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
+This repo contains the material associated to the paper "The Informational Content of Geographical Indications" forthcoming in the *American Journal of Agricultural Economics*. Raw data and econometric estimations are on the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
 
 You will find here :
 
