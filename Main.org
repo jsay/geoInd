@@ -50,8 +50,8 @@
     the /American Journal of Agricultural Economics/.  Raw data and
     econometric estimations are on the [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][Inrae dataverse server]].
 
-    You will find here:
-    - The last working paper with online appendix [[file:WorkingPaper.pdf][here]]
+    You will find here :
+    - The last  [[file:WorkingPaper.pdf][working paper]] with online appendix
     - The replication material in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]]
     - The Shiny apps for [[https://cesaer-datas.inra.fr/geoind][computer]] and [[https://cesaer-datas.inra.fr/geoind_phone][smartphone]]
 

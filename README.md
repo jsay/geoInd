@@ -2,9 +2,9 @@
 
 This repo contains the material associated to the paper "The Informational Content of Geographical Indications" published in the *American Journal of Agricultural Economics*. Raw data and econometric estimations are on the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
 
-You will find here:
+You will find here :
 
--   The last working paper with online appendix [here](WorkingPaper.pdf)
+-   The last [working paper](WorkingPaper.pdf) with online appendix
 -   The replication material in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md)
 -   The Shiny apps for [computer](https://cesaer-datas.inra.fr/geoind) and [smartphone](https://cesaer-datas.inra.fr/geoind_phone)
 
