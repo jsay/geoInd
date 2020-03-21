@@ -67,7 +67,7 @@
 *** Credits
 
     Bug reports, comments and suggestions by opening an issue on
-    [[https://github.com/jsay/geoInd][GitHub]] (preferred) or [[mailto:jsay@inra.fr][sending an email]].
+    [[https://github.com/jsay/geoInd/issues][GitHub]] (preferred) or [[mailto:jsay@inra.fr][sending an email]].
     
     Made on =emacs= with =org-mode= to juggle with =R=, =LaTex= and
     =Markdown=.

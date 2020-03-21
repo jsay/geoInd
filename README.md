@@ -16,7 +16,7 @@ La partie interactive de ce travail est en cours d'évaluation académique. Les 
 
 # Credits
 
-Bug reports, comments and suggestions by opening an issue on [GitHub](https://github.com/jsay/geoInd) (preferred) or [sending an email](mailto:jsay@inra.fr).
+Bug reports, comments and suggestions by opening an issue on [GitHub](https://github.com/jsay/geoInd/issues) (preferred) or [sending an email](mailto:jsay@inra.fr).
 
 Made on `emacs` with `org-mode` to juggle with `R`, `LaTex` and `Markdown`.
 
