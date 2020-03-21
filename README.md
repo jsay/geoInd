@@ -1,18 +1,17 @@
-# Classification statistique des vignobles de Côte d'Or
-
-
 # English version
 
-Modeling statistically the link between natural attributes of vineyards and the hierarchical scheme of *appellations d'origine contrôlée* (AOC) allows to correct *commune* effects and to estimate a continuous quality score for each vineyard plot.
+This repo contains the material associated to the paper "The Informational Content of Geographical Indications" published in the *American Journal of Agricultural Economics*. Raw data and econometric estimations are on the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
 
-This research is described in the [AAWE Working Paper XX](WorkingPaper.pdf) and the Reproducibility Material in [PDF](ReproPaper.pdf) or [Markdown](ReproPaper.md). Raw data are on the [INRA dataverse server](https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) and the results are accessible by a [Shiny application](https://geoind.shinyapps.io/application/) or only the [map](https://geoind-wine.firebaseapp.com).
+You will find here:
+
+-   The last working paper with online appendix [here](WorkingPaper.pdf)
+-   The replication material in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md)
+-   The Shiny apps for [computer](https://cesaer-datas.inra.fr/geoind) and [smartphone](https://cesaer-datas.inra.fr/geoind_phone)
 
 
 # Version Française
 
-La modélisation statistique des liens entre les attributs naturels des vignobles et la hiérarchie des appellations d'origine contrôlée permet d'estimer un score de qualité pour chaque parcelle et de corriger les effets communaux.
-
-Les détails de la construction des données et de l'estimation sont disponibles en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessibles sur [le serveur data de l'INRA](https://data.inra.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) et les résultats sont consultables par une [application](https://geoind.shinyapps.io/application/) ou une [carte](https://geoind-wine.firebaseapp.com).
+La partie interactive de ce travail est en cours d'évaluation académique. Les détails de la construction des données et des estimations sont disponibles en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) et les résultats sont consultables par des applications Shiny pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) ou [portables](https://cesaer-datas.inra.fr/geoind_phone).
 
 
 # Credits
