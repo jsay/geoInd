@@ -4623,7 +4623,7 @@ author: |
 #+end_export
 #+BEGIN_abstract
 This file contents the Replication Material (RM) associated to the
-article named in the title and published in the /American Journal of
+article named in the title and forthcoming in the /American Journal of
 Agricultural Economics/.  Data, code and prediction materials are
 under the copyright license GNU GPL V3, which means that license
 notices must be preserved.  Raw data are available from the Inrae
