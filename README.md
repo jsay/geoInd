@@ -4,9 +4,9 @@ This repo contains the material associated to the paper "The Informational Conte
 
 You will find here :
 
--   The last [working paper](WorkingPaper.pdf) with online appendix
+-   The last [working paper](WPfin.pdf) and [online appendix](WPsoi.pdf)
 -   The replication material in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md)
--   The Shiny apps for [computer](https://cesaer-datas.inra.fr/geoind) and [smartphone](https://cesaer-datas.inra.fr/geoind_phone)
+-   The Shiny app for [computer](https://cesaer-datas.inra.fr/geoind) and [smartphone](https://cesaer-datas.inra.fr/geoind_phone)
 
 
 # Version Française
