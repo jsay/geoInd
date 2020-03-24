@@ -51,9 +51,9 @@
     econometric estimations are on the [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][Inrae dataverse server]].
 
     You will find here :
-    - The last  [[file:WorkingPaper.pdf][working paper]] with online appendix
+    - The last [[file:WPfin.pdf][working paper]] and [[file:WPsoi.pdf][online appendix]]
     - The replication material in [[file:ReproPaper.pdf][PDF]] and [[file:ReproPaper.md][Markdown]]
-    - The Shiny apps for [[https://cesaer-datas.inra.fr/geoind][computer]] and [[https://cesaer-datas.inra.fr/geoind_phone][smartphone]]
+    - The Shiny app for [[https://cesaer-datas.inra.fr/geoind][computer]] and [[https://cesaer-datas.inra.fr/geoind_phone][smartphone]]
 
 *** Version Française
 
@@ -16834,3 +16834,27 @@ Thank you for this suggestion.
    
    bibliographystyle:../Softwares/latex/erae
    bibliography:Biblio.bib
+** Last cover letter
+
+   Dear Timothy,
+
+   Thank you very much for your advice in editing my paper and for
+   accepting it for publication in AJAE.
+
+   In accordance with your suggestions,
+   - I asked a native speaker to clean up the grammatical errors and
+     improve the style of my manuscript,
+   - I developed and grouped my contribution to the relevant
+     literature in an additional section after the introduction.
+
+   I share your policy concerning data. The data used in my paper are
+   freely available from an institutional server and I wrote a
+   Replication Material file with all the code used to obtain the
+   results presented. For the reader, access to this files is by a
+   GitHub Repository that I mention in the acknowledgments
+   (http://github.com/jsay/geoInd/). I will adapt this material when
+   my article will be accepted.
+
+   Sincerely, 
+
+   Jean-Sauveur Ay
