@@ -1,17 +1,17 @@
 # English version
 
-This repo contains the material associated to the paper "The Informational Content of Geographical Indications" forthcoming in the *American Journal of Agricultural Economics*. Raw data and econometric estimations are on the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
+This repo contains the material associated to the paper "The Informational Content of Geographical Indications" published in the *American Journal of Agricultural Economics* (Volume 103, Issue 2, March 2021, Pages 523-542, <https://doi.org/10.1111/ajae.12100>). Data and estimation results are available from the [Inrae dataverse server](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN).
 
-You will find here :
+You can find from here :
 
--   The last [working paper](WPfin.pdf) and [online appendix](WPsoi.pdf)
+-   The last [working paper](WPfin.pdf) and the [online appendix](WPsoi.pdf)
 -   The replication material in [PDF](ReproPaper.pdf) and [Markdown](ReproPaper.md)
--   The Shiny app for [computer](https://cesaer-datas.inra.fr/geoind) and [smartphone](https://cesaer-datas.inra.fr/geoind_phone)
+-   The Shiny application for [desktop](https://cesaer-datas.inra.fr/geoind) and [mobile](https://cesaer-datas.inra.fr/geoind_phone)
 
 
 # Version Française
 
-La partie interactive de ce travail est en cours d'évaluation académique. Les détails de la construction des données et des estimations sont disponibles en versions [PDF](DataPaper.pdf) et [Markdown](DataPaper.md). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) et les résultats sont consultables par des applications Shiny pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) ou [portables](https://cesaer-datas.inra.fr/geoind_phone).
+La construction des données et de l'application pour consulter les résultats sont décrits dans le *Data paper* "Les déterminants naturels et politiques des AOC viticoles de Côte-d'Or" publié par Cybergéo en 2021 (doi). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) qui contient également le matériel additionnel qui regroupe l'ensemble des codes. L'application Shiny est disponible pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) ou [téléphones portables](https://cesaer-datas.inra.fr/geoind_phone).
 
 
 # Credits
