@@ -61,8 +61,8 @@
     naturels et politiques des AOC viticoles de Côte-d'Or" publié par
     Cybergéo en 2021 (doi).  Les données sont accessibles sur [[https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN][le
     serveur data de l'Inrae]] qui contient également le matériel
-    additionnel qui regroupe l'ensemble des codes. L'application Shiny
-    est disponible pour [[https://cesaer-datas.inra.fr/geoind][ordinateurs]] ou [[https://cesaer-datas.inra.fr/geoind_phone][téléphones portables]].
+    additionnel avec l'ensemble des codes. L'application Shiny est
+    disponible pour [[https://cesaer-datas.inra.fr/geoind][ordinateurs]] et [[https://cesaer-datas.inra.fr/geoind_phone][téléphones portables]].
 
 *** Credits
 

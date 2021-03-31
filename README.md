@@ -11,7 +11,7 @@ You can find from here :
 
 # Version Française
 
-La construction des données et de l'application pour consulter les résultats sont décrits dans le *Data paper* "Les déterminants naturels et politiques des AOC viticoles de Côte-d'Or" publié par Cybergéo en 2021 (doi). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) qui contient également le matériel additionnel qui regroupe l'ensemble des codes. L'application Shiny est disponible pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) ou [téléphones portables](https://cesaer-datas.inra.fr/geoind_phone).
+La construction des données et de l'application pour consulter les résultats sont décrits dans le *Data paper* "Les déterminants naturels et politiques des AOC viticoles de Côte-d'Or" publié par Cybergéo en 2021 (doi). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) qui contient également le matériel additionnel avec l'ensemble des codes. L'application Shiny est disponible pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) et [téléphones portables](https://cesaer-datas.inra.fr/geoind_phone).
 
 
 # Credits
