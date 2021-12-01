@@ -11,7 +11,7 @@ You can find from here :
 
 # Version Française
 
-La construction des données et de l'application pour consulter les résultats sont décrits dans le *Data paper* "Les déterminants naturels et politiques des AOC viticoles de Côte-d'Or" publié par Cybergéo en 2021 (doi). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) qui contient également le matériel additionnel avec l'ensemble des codes. L'application Shiny est disponible pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) et [téléphones portables](https://cesaer-datas.inra.fr/geoind_phone).
+La construction des données et de l'application pour consulter les résultats sont décrits dans le *Data paper* "Les déterminants naturels et politiques des AOC viticoles de Côte-d'Or" publié par Cybergeo en 2021 (doi). Les données sont accessibles sur [le serveur data de l'Inrae](https://data.inrae.fr/dataset.xhtml?persistentId=doi:10.15454/ZZWQMN) qui contient également le matériel additionnel avec l'ensemble des codes. L'application Shiny est disponible pour [ordinateurs](https://cesaer-datas.inra.fr/geoind) et [téléphones portables](https://cesaer-datas.inra.fr/geoind_phone).
 
 
 # Credits
@@ -23,3 +23,5 @@ Made on `emacs` with `org-mode` to juggle with `R`, `LaTex` and `Markdown`.
 Special thanks to [Pauline Mialhe](https://fr.linkedin.com/in/pauline-mialhe), [Vincent Larmet](https://fr.linkedin.com/in/vincent-larmet-bba997144), and [Guillaume Royer](https://www2.dijon.inra.fr/cesaer/membres/guillaume-royer/) for their help with the application.
 
 Licence GNU GPL V3, copyright and licence notices must be preserved (see <https://www.gnu.org/licenses/gpl-3.0.en.html>)
+
+<a href="https://zenodo.org/badge/latestdoi/181148746"><img src="https://zenodo.org/badge/181148746.svg" alt="DOI"></a>
